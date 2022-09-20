@@ -1,0 +1,35 @@
+.log_in {
+    background-color: #FBE3DD;
+    color: #3F1F71;
+
+    margin-right: 20px;
+}
+
+.sign_up {
+    background-color: #3F1F71;
+    color: #FBE3DD;
+
+}
+
+.btn {
+    padding: 10px 23px;
+    font-weight: 400;
+    font-size: 1.2em;
+    line-height: 24px;
+    border-radius: 5px;
+    border-radius: 5px;
+}
+
+.alreadyHaveAccount {
+    opacity: 0;
+    transition: opacity 450ms;
+}
+
+.alreadyHaveAccount.onboarded {
+    opacity: 1;
+    transition: opacity 450ms;
+    transition-delay: 450ms;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}

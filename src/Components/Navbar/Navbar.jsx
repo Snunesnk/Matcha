@@ -3,7 +3,7 @@ import { Grid } from "@mui/material";
 import { useStoreContext } from "../../Reducer/StoreContext";
 import { PossibleState } from "../../constants";
 import Title from '../Title/Title'
-import LoggingBtn from "../LoggingButtons/LoggingBtn";
+import Button from "../Button/Button";
 import './Navbar.css';
 
 export default Navbar => {
@@ -24,7 +24,9 @@ export default Navbar => {
                 <Title></Title>
             </Grid>
             <Grid item xs={4} className={className} id="loggingBtnContainer">
-                <LoggingBtn></LoggingBtn>
+                <Button btnClass="log_in" text="Log in"></Button>
+                <Button btnClass="sign_up" text="Sign up"></Button>
+                <Button btnClass={className + " alreadyHaveAccount"} text="Log in"></Button>
             </Grid>
         </Grid>
     )
