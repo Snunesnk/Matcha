@@ -14,7 +14,7 @@ export default Onboarding => {
         <Grid container id='onboarding' className={onboardingClass}>
             <Grid item xs={6} id="cat_pic"></Grid>
             <Grid item xs={6} id="onboarding_content" className="centered_container">
-                <div id="has_account">Already have an account ?</div>
+                {/* <div id="has_account">Already have an account ?</div> */}
                 <Grid container id="form" className={onboardingClass}>
                     <Grid item xs={12} className="centered_container">Matcha</Grid>
                     <Grid item xs={12} className="centered_container">Find your catmate</Grid>

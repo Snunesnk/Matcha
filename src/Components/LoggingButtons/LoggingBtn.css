@@ -1,20 +1,21 @@
 #log_in {
     background-color: #FBE3DD;
-    border-radius: 5px;
     color: #3F1F71;
-    padding: 13px 32px;
-    font-weight: 400;
-    font-size: 1.2em;
-    line-height: 24px;
+
     margin-right: 20px;
 }
 
 #sign_in {
     background-color: #3F1F71;
-    border-radius: 5px;
     color: #FBE3DD;
-    padding: 13px 32px;
+
+}
+
+.loggingBtn {
+    padding: 10px 23px;
     font-weight: 400;
     font-size: 1.2em;
     line-height: 24px;
+    border-radius: 5px;
+    border-radius: 5px;
 }
