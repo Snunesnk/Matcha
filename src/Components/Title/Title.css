@@ -1,4 +1,12 @@
 #title_container a h1 {
     color: #FBE3DD;
-    box-shadow: black;
+    font-weight: 400;
+    font-size: 6rem;
+    line-height: 0;
+    letter-spacing: .2rem;
+    cursor: pointer;
+}
+
+#title_container a h1:hover {
+    color: white;
 }

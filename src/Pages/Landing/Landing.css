@@ -1,3 +1,7 @@
+#landing_container {
+    width: 100%;
+}
+
 .grid_item {
     display: flex;
     justify-content: center;
@@ -31,10 +35,6 @@
     border: 1px solid #FBE3DD;
     transition: transform 250ms;
     z-index: 1;
-}
-
-#shadow.sub {
-    background-color: transparent;
 }
 
 #main_button:hover {

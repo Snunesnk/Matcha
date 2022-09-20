@@ -24,7 +24,7 @@ export default Onboarding => {
                     <Grid item xs={12} className="centered_container input_container"><FormInput placeholder="Username"></FormInput></Grid>
                     <Grid item xs={12} className="centered_container input_container"><FormInput placeholder="Email"></FormInput></Grid>
                     <Grid item xs={12} className="centered_container input_container"><FormInput placeholder="Password"></FormInput></Grid>
-                    <Grid item xs={12} className="centered_container input_container"><MainButton></MainButton></Grid>
+                    <Grid item xs={12} className="centered_container button_container"><MainButton text="Create my account" shadowClass="sub"></MainButton></Grid>
                 </Grid>
             </Grid>
         </Grid>

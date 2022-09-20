@@ -65,3 +65,8 @@
 .input_container {
     max-height: 5vh;
 }
+
+.button_container {
+    margin-bottom: -15px;
+    align-items: center;
+}

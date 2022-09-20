@@ -1,6 +1,6 @@
 import { useState, useReducer } from 'react'
 import './App.css'
-import MainBtn from './Components/MainButton/MainBtn'
+import Landing from './Pages/Landing/Landing'
 import Navbar from './Components/Navbar/Navbar'
 import Onboarding from './Components/Onboarding/Onboarding'
 import { PossibleState } from './constants'
@@ -21,7 +21,7 @@ function App() {
       {
         state === PossibleState.landingPage &&
         (
-          <MainBtn></MainBtn>
+          <Landing></Landing>
         )
       }
 
