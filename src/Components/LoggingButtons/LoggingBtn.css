@@ -1,7 +1,7 @@
 #log_in {
     background-color: #FBE3DD;
     border-radius: 5px;
-    color: #5E0B4F;
+    color: #3F1F71;
     padding: 13px 32px;
     font-weight: 400;
     font-size: 1.2em;
@@ -10,7 +10,7 @@
 }
 
 #sign_in {
-    background-color: #5E0B4F;
+    background-color: #3F1F71;
     border-radius: 5px;
     color: #FBE3DD;
     padding: 13px 32px;
