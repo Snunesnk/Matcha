@@ -1,20 +1,23 @@
 #onboarding {
     position: absolute;
     bottom: 0;
-    top: 100vh;
     left: 0;
     width: 100%;
     height: 100%;
-    z-index: 10;
-    transition: all 750ms cubic-bezier(1, .06, .83, .67);
-    will-change: top;
-
     background: linear-gradient(154.03deg, #3F1F71 1.96%, #010101 98.95%);
 }
 
-#onboarding.transition {
+#onboarding.visible {
     top: 0;
-    transition: all 550ms ease-in-out;
+    transition: all 550ms ease;
+    will-change: top;
+}
+
+#onboarding.hidden {
+    top: 100vh;
+    /* transition: all 550ms cubic-bezier(1, .06, .83, .67); */
+    transition: all 550ms ease;
+    will-change: top;
 }
 
 #cat_pic {
@@ -29,14 +32,18 @@
 }
 
 #form {
-    opacity: 0;
-    transition: all 350ms cubic-bezier(1, .06, .83, .67);
-    transition-delay: 550ms;
     padding: 17%;
 }
 
-#form.transition {
+#form.visible {
     opacity: 1;
+    transition: all 350ms cubic-bezier(1, .06, .83, .67);
+    transition-delay: 450ms;
+}
+
+#form.hidden {
+    opacity: 0;
+    transition: all 250ms cubic-bezier(1, .06, .83, .67);
 }
 
 .centered_container {

@@ -1,51 +1,51 @@
-#landing_container {
+#landing_page {
+    position: absolute;
+    left: 0;
+    height: 100%;
     width: 100%;
+    background: no-repeat;
+    background-image: linear-gradient(65.48deg, rgba(63, 31, 113, 0.7) 29.09%, rgba(0, 0, 0, 0.6) 68.95%), url("/src/assets/kissing_cats.jpg");
+    background-size: cover;
+    /* filter: blur(5px);
+    -webkit-filter: blur(5px); */
+}
+
+#landing_page.visible {
+    bottom: 0;
+    opacity: 1;
+    transition: all 550ms ease;
+    will-change: bottom;
+}
+
+#landing_page.hidden {
+    bottom: 100vh;
+    opacity: 0;
+    transition: all 550ms cubic-bezier(1, .06, .83, .67);
+    will-change: bottom;
+}
+
+#landing_container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 25%;
+    margin-top: 25%;
+}
+
+#landing_page.visible #landing_container {
+    opacity: 1;
+    transition: all 550ms ease-in-out;
+    transition-delay: 450ms;
+    will-change: opacity;
+}
+
+#landing_page.hidden #landing_container {
+    opacity: 0;
+    transition: all 550ms cubic-bezier(1, .06, .83, .67);
+    will-change: opacity;
 }
 
 .grid_item {
     display: flex;
     justify-content: center;
-}
-
-#main_button {
-    background-color: #BA7300;
-    border-radius: 5px;
-    width: 265px;
-    height: 56px;
-    font-weight: 400;
-    font-size: 1.3em;
-    line-height: 24px;
-    color: #FBE3DD;
-    z-index: 2;
-    margin-bottom: 10px;
-    transition: transform 250ms;
-}
-
-#shadow {
-    background-color: #3F1F71;
-    border-radius: 5px;
-    width: 267px;
-    height: 58px;
-    margin-left: -256px;
-    margin-top: 10px;
-    font-weight: 400;
-    font-size: 1.3em;
-    line-height: 24px;
-    color: #3F1F71;
-    border: 1px solid #FBE3DD;
-    transition: transform 250ms;
-    z-index: 1;
-}
-
-#main_button:hover {
-    transform: translate(5px, 5px);
-    transition: transform 150ms;
-    border: 1px solid white;
-    color: white;
-    background-color: rgba(186, 115, 0, 0.7);
-}
-
-#main_button:hover~#shadow {
-    transform: translate(-5px, -6px);
-    transition: transform 150ms;
 }

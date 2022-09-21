@@ -21,15 +21,13 @@ function App() {
     dispatch
   }
 
-  if (state.currentState === PossibleState.landingPage)
-
-    return (
-      <StoreContext.Provider value={providerState}>
-        <Navbar></Navbar>
-        <Landing landingClass={state.landingClass}></Landing>
-        <Onboarding onBoardingClass={state.onBoardingClass}></Onboarding>
-      </StoreContext.Provider >
-    )
+  return (
+    <StoreContext.Provider value={providerState}>
+      <Navbar></Navbar>
+      <Landing landingClass={state.landingClass}></Landing>
+      <Onboarding onBoardingClass={state.onBoardingClass}></Onboarding>
+    </StoreContext.Provider >
+  )
 }
 
 export default App
