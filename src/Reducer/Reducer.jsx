@@ -1,12 +1,27 @@
-export const reducer = (state, action) => {
-    return action.type;
+import { PossibleState } from "../constants";
 
-    // switch (action.type) {
-    //     case 'increment':
-    //         return { count: state.count + 1 };
-    //     case 'decrement':
-    //         return { count: state.count - 1 };
-    //     default:
-    //         throw new Error();
-    // }
+export const reducer = (state, action) => {
+    if (action.type === state.currentState)
+        return state;
+
+    switch (action.type) {
+        case PossibleState.landingPage:
+            return {
+                ...state,
+                currentState: PossibleState.landingPage,
+                landingClass: "visible",
+                onBoardingClass: "hidden",
+            };
+
+        case PossibleState.onboarding:
+            return {
+                ...state,
+                currentState: PossibleState.onboarding,
+                landingClass: "hidden",
+                onBoardingClass: "visible",
+            };
+
+        default:
+            throw new Error();
+    }
 }

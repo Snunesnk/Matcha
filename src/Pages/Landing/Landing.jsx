@@ -5,10 +5,9 @@ import { PossibleState } from "../../constants";
 import MainButton from "../../Components/MainButton/MainBtn";
 import './Landing.css';
 
-export default LandingPage => {
-
+const LandingPage = ({ landingClass }) => {
     return (
-        <Grid container id='landing_container'>
+        <Grid container id='landing_container' className={landingClass}>
             <Grid item xs={12}>
                 <div className="grid_item">
                     <h1>Meet fluffy cats in you area!</h1>
@@ -20,3 +19,5 @@ export default LandingPage => {
         </Grid>
     )
 }
+
+export default LandingPage;

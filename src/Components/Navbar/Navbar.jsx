@@ -11,7 +11,7 @@ export default Navbar => {
     const { state, dispatch } = useStoreContext();
 
     useEffect(() => {
-        if (state === PossibleState.onboarding)
+        if (state.currentState === PossibleState.onboarding)
             setClass("onboarded");
         else
             setClass("");
