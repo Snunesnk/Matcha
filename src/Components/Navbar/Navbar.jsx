@@ -10,13 +10,6 @@ export default Navbar => {
     const [className, setClass] = useState("");
     const { state, dispatch } = useStoreContext();
 
-    useEffect(() => {
-        if (state.currentState === PossibleState.onboarding)
-            setClass("onboarded");
-        else
-            setClass("");
-    }, [state])
-
     return (
         <Grid container id='navbar'>
             <Grid item xs={4} className="center"></Grid>
@@ -24,9 +17,14 @@ export default Navbar => {
                 <Title></Title>
             </Grid>
             <Grid item xs={4} className={className} id="loggingBtnContainer">
-                <Button btnClass="log_in" text="Log in"></Button>
-                <Button btnClass="sign_up" text="Sign up"></Button>
-                <Button btnClass={className + " alreadyHaveAccount"} text="Log in"></Button>
+                <div id="log_in_sign_up" className={state.landingClass}>
+                    <Button btnClass="log_in" text="Log in"></Button>
+                    <Button btnClass="sign_up" text="Sign up"></Button>
+                </div>
+                <div id="already_have_account" className={state.onBoardingClass}>
+                    <p id="alreadyHaveLabel">Already have an account?</p>
+                    <Button btnClass={"alreadyHaveAccount " + state.onBoardingClass} text="Log in"></Button>
+                </div>
             </Grid>
         </Grid>
     )

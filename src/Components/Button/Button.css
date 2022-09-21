@@ -21,15 +21,17 @@
 }
 
 .alreadyHaveAccount {
-    opacity: 0;
+    background-color: transparent;
+    color: #BA7300;
+    border: 1px solid #BA7300
+}
+
+.alreadyHaveAccount.visible {
+    opacity: 1;
     transition: opacity 450ms;
 }
 
-.alreadyHaveAccount.onboarded {
-    opacity: 1;
+.alreadyHaveAccount.hidden {
+    opacity: 0;
     transition: opacity 450ms;
-    transition-delay: 450ms;
-    display: flex;
-    justify-content: end;
-    align-items: center;
 }

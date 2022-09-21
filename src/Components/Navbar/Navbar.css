@@ -29,3 +29,23 @@
     justify-content: center;
     align-items: center;
 }
+
+#already_have_account.visible {
+    display: block;
+}
+
+#already_have_account.hidden {
+    display: none;
+}
+
+#log_in_sign_up.visible {
+    display: block;
+}
+
+#log_in_sign_up.hidden {
+    display: none;
+}
+
+#alreadyHaveLabel {
+    color: #BA7300;
+}
