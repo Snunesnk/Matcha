@@ -9,6 +9,7 @@ import { reducer } from './Reducer/Reducer'
 
 const defaultState = {
   currentState: PossibleState.landingPage,
+  navbarClass: "visible",
   landingClass: "visible",
   onBoardingClass: "hidden",
 }
@@ -23,7 +24,7 @@ function App() {
 
   return (
     <StoreContext.Provider value={providerState}>
-      <Navbar></Navbar>
+      <Navbar navbarClass={state.navbarClass}></Navbar>
       <Landing landingClass={state.landingClass}></Landing>
       <Onboarding onBoardingClass={state.onBoardingClass}></Onboarding>
     </StoreContext.Provider >

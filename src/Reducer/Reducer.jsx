@@ -9,6 +9,7 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 currentState: PossibleState.landingPage,
+                navbarClass: "visible",
                 landingClass: "visible",
                 onBoardingClass: "hidden",
             };
@@ -17,6 +18,7 @@ export const reducer = (state, action) => {
             return {
                 ...state,
                 currentState: PossibleState.onboarding,
+                navbarClass: "hidden",
                 landingClass: "hidden",
                 onBoardingClass: "visible",
             };
