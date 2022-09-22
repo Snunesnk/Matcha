@@ -5,10 +5,17 @@
     margin-right: 20px;
 }
 
+.log_in:hover {
+    border: 1px solid #3F1F71;
+}
+
 .sign_up {
     background-color: #3F1F71;
     color: #FBE3DD;
+}
 
+.sign_up:hover {
+    border: 1px solid #FBE3DD;
 }
 
 .btn {

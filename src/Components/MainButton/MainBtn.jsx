@@ -1,18 +1,12 @@
 import React from "react";
-import { useStoreContext } from "../../Reducer/StoreContext";
-import { PossibleState } from "../../constants";
+
 import './MainBtn.css';
 
-const MainButton = ({ text, shadowClass = "" }) => {
-    const { state, dispatch } = useStoreContext();
-
-    const goToOnboarding = () => {
-        dispatch({ type: PossibleState.onboarding });
-    }
+const MainButton = ({ text, click, shadowClass = "" }) => {
 
     return (
         <div className="grid_item">
-            <button id="main_button" onClick={goToOnboarding}>
+            <button id="main_button" onClick={click}>
                 <span>{text}</span>
             </button>
             <button disabled id="shadow" className={shadowClass}>

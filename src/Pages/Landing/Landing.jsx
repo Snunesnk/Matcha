@@ -1,9 +1,17 @@
 import React from "react";
 import { Grid } from "@mui/material";
 import MainButton from "../../Components/MainButton/MainBtn";
+import { useStoreContext } from "../../Reducer/StoreContext";
+import { PossibleState } from "../../constants";
 import './Landing.css';
 
 const LandingPage = ({ landingClass }) => {
+    const { state, dispatch } = useStoreContext();
+
+    const goToOnboarding = () => {
+        dispatch({ type: PossibleState.onboarding });
+    }
+
     return (
         <div id="landing_page" className={landingClass}>
             <Grid container id="landing_container">
@@ -13,7 +21,7 @@ const LandingPage = ({ landingClass }) => {
                     </div>
                 </Grid>
                 <Grid item xs={12}>
-                    <MainButton text="Find your new catmate"></MainButton>
+                    <MainButton text="Find your new catmate" click={goToOnboarding}></MainButton>
                 </Grid>
             </Grid>
         </div>

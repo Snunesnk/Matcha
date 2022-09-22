@@ -34,24 +34,13 @@
     border-bottom-right-radius: 100px;
 }
 
-#form {
-    padding: 17%;
-}
-
-#form.visible {
-    opacity: 1;
-    transition: all 350ms cubic-bezier(1, .06, .83, .67);
-    transition-delay: 450ms;
-}
-
-#form.hidden {
-    opacity: 0;
-    transition: all 250ms cubic-bezier(1, .06, .83, .67);
-}
-
 .centered_container {
     display: flex;
     justify-content: center;
+}
+
+.onboarding_title {
+    color: #FBE3DD
 }
 
 .catch_phrase {
@@ -59,15 +48,6 @@
 }
 
 .center_align {
-    align-items: center;
-}
-
-.input_container {
-    max-height: 4.5vh;
-}
-
-.button_container {
-    margin-bottom: -15px;
     align-items: center;
 }
 
@@ -107,6 +87,10 @@
     margin-left: 10px;
 }
 
+.alreadyHaveButton:hover {
+    border: 1px solid #FBE3DD;
+}
+
 .onboardingBack {
     background-color: transparent;
     color: #FBE3DD;
@@ -127,11 +111,63 @@
 
 .onboardingBack.visible {
     opacity: 1;
-    transition: all 350ms cubic-bezier(1, .06, .83, .67);
-    transition-delay: 450ms;
+    transition: opacity 350ms cubic-bezier(1, .06, .83, .67) 450ms, transform 250ms ease-in-out;
 }
 
 .onboardingBack.hidden {
     opacity: 0;
+    transition: opacity 250ms cubic-bezier(1, .06, .83, .67);
+}
+
+.onboardingBack:hover {
+    color: white;
+    transform: scale(1.1);
+    transition: transform 250ms;
+    color: #FBE3DD;
+}
+
+.onboardingBackLabel {
+    cursor: pointer;
+}
+
+.onboardingBack .onboardingBackIcon {
+    transform: scale(1);
+    transition: transform 500ms ease-out;
+}
+
+.onboardingBack:hover .onboardingBackIcon {
+    transform: scale(7);
+    transition: transform 20000ms ease-out;
+}
+
+#onboarding_sign_up {
+    padding: 4%;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+}
+
+#onboarding_sign_up.visible {
+    opacity: 1;
+    transition: all 350ms cubic-bezier(1, .06, .83, .67);
+    transition-delay: 450ms;
+}
+
+#onboarding_sign_up.hidden {
+    opacity: 0;
     transition: all 250ms cubic-bezier(1, .06, .83, .67);
+}
+
+.input_container {
+    max-height: 4.5vh;
+    margin-top: 35px !important;
+}
+
+.button_container {
+    margin-top: 50px !important;
+    align-items: center;
+}
+
+.errorLabel {
+    color: red
 }
