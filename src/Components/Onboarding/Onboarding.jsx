@@ -10,6 +10,7 @@ import './Onboarding.css';
 
 const validationErrors = {
     fieldEmpty: "This field is required",
+    invalidEmail: "This is not a valid email adress"
 
 }
 
@@ -36,6 +37,14 @@ const Onboarding = ({ onBoardingClass }) => {
         dispatch({ type: PossibleState.landingPage });
     }
 
+    const isEmail = email => {
+        return String(email)
+            .toLowerCase()
+            .match(
+                /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+            );
+    }
+
     const checkAndSendAccountInfos = () => {
         // First name => Must not be empty
         if (firstName === "")
@@ -52,6 +61,18 @@ const Onboarding = ({ onBoardingClass }) => {
             setUsernameError(validationErrors.fieldEmpty);
         else
             setUsernameError("");
+
+        // Email => must not be empty
+        if (email === "")
+            setEmailError(validationErrors.fieldEmpty);
+        // Email => must also follow email's pattern
+        else if (!isEmail(email))
+            setEmailError(validationErrors.invalidEmail);
+        else
+            setEmailError("");
+
+        // Password
+
     }
 
     return (
@@ -72,36 +93,36 @@ const Onboarding = ({ onBoardingClass }) => {
                         </Grid>
                         <Grid container item id="onboarding_sign_up" className={onBoardingClass}>
                             <Grid item xs={12} className="centered_container onboarding_title center_align"><h1>MatChat</h1></Grid>
-                            <Grid item xs={12} className="centered_container catch_phrase center_align"><h2>Create your account to find your catmate</h2></Grid>
-                            <Grid item xs={12} className="centered_container input_container">
-                                <FormInput placeholder="First Name" value={firstName} updateValue={setFirstName}></FormInput>
+                            <Grid item xs={12} className="centered_container catch_phrase center_align"><h3>Create your account to find your catmate</h3></Grid>
+                            <Grid container item xs={12} className="centered_container input_container">
+                                <Grid item xs={12} className="centered_container"><FormInput placeholder="First Name" value={firstName} updateValue={setFirstName}></FormInput></Grid>
+                                {firstNameError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{firstNameError}</label></Grid>)}
                             </Grid>
-                            {firstNameError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{firstNameError}</label></Grid>)}
-                            <Grid item xs={12} className="centered_container input_container">
-                                <FormInput placeholder="Last Name" value={lastName} updateValue={setLastName}></FormInput>
+                            <Grid container item xs={12} className="centered_container input_container">
+                                <Grid item xs={12} className="centered_container"><FormInput placeholder="Last Name" value={lastName} updateValue={setLastName}></FormInput></Grid>
+                                {lastNameError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{lastNameError}</label></Grid>)}
                             </Grid>
-                            {lastNameError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{lastNameError}</label></Grid>)}
-                            <Grid item xs={12} className="centered_container input_container">
-                                <FormInput placeholder="Username" value={username} updateValue={setUsername}></FormInput>
+                            <Grid container item xs={12} className="centered_container input_container">
+                                <Grid item xs={12} className="centered_container"><FormInput placeholder="Username" value={username} updateValue={setUsername}></FormInput></Grid>
+                                {usernameError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{usernameError}</label></Grid>)}
                             </Grid>
-                            {usernameError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{usernameError}</label></Grid>)}
-                            <Grid item xs={12} className="centered_container input_container">
-                                <FormInput placeholder="Email" type="email" value={email} updateValue={setEmail}></FormInput>
+                            <Grid container item xs={12} className="centered_container input_container">
+                                <Grid item xs={12} className="centered_container"><FormInput placeholder="Email" type="email" value={email} updateValue={setEmail}></FormInput></Grid>
+                                {emailError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{emailError}</label></Grid>)}
                             </Grid>
-                            {emailError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{emailError}</label></Grid>)}
-                            <Grid item xs={12} className="centered_container input_container">
-                                <FormInput placeholder="Password" type="password" value={password} updateValue={setPassword}></FormInput>
+                            <Grid container item xs={12} className="centered_container input_container">
+                                <Grid item xs={12} className="centered_container"><FormInput placeholder="Password" type="password" value={password} updateValue={setPassword}></FormInput></Grid>
+                                {passwordError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{passwordError}</label></Grid>)}
                             </Grid>
-                            {passwordError !== "" && (<Grid item xs={12} className="centered_container"><label className="errorLabel">{passwordError}</label></Grid>)}
-                            <Grid item xs={12} className="centered_container button_container">
+                            <Grid container item xs={12} className="centered_container button_container">
                                 <MainButton text="Create my account" shadowClass="sub" click={checkAndSendAccountInfos}></MainButton>
                             </Grid>
                         </Grid>
-                    </Grid>
+                    </Grid >
 
-                </Grid>
-            </Grid>
-        </div>
+                </Grid >
+            </Grid >
+        </div >
     )
 }
 

@@ -1,12 +1,16 @@
 .form_input {
     background-color: transparent;
     color: #FBE3DD;
-    /* border: 1px solid #BA7300; */
     border: 1px solid #FBE3DD;
     min-width: 50%;
+    min-height: 40px;
     font-style: normal;
     font-weight: 400;
-    font-size: 1.2em;
-    line-height: 1em;
-    padding: 20px;
+    font-size: 1em;
+    padding: 6px 8px;
+    line-height: 16px;
+}
+
+.form_input::placeholder {
+    color: rgb(120, 120, 120);
 }
