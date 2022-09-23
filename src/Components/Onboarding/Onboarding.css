@@ -43,7 +43,8 @@
 }
 
 .catch_phrase {
-    color: #BA7300
+    color: #B5C9EA;
+    /* color: #BA7300; */
 }
 
 .center_align {
@@ -70,12 +71,12 @@
 }
 
 #alreadyHaveLabel {
-    color: #BA7300;
+    color: #B5C9EA;
 }
 
 .alreadyHaveButton {
     background-color: transparent;
-    color: #BA7300;
+    color: #B5C9EA;
     border: 1px solid #BA7300;
 
     padding: 8px 11px;
@@ -140,7 +141,6 @@
 }
 
 #onboarding_sign_up {
-    padding: 4%;
     display: flex;
     justify-content: center;
 }
@@ -161,7 +161,7 @@
 }
 
 .button_container {
-    margin-top: 50px !important;
+    margin-top: 100px !important;
     align-items: center;
 }
 

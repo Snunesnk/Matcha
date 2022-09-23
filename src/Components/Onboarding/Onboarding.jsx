@@ -10,7 +10,11 @@ import './Onboarding.css';
 
 const validationErrors = {
     fieldEmpty: "This field is required",
-    invalidEmail: "This is not a valid email adress"
+    invalidEmail: "This is not a valid email adress",
+    invalidPasswordLength: "At least 12 character required",
+    missingPasswordUppercase: "At least one uppercase letter is required",
+    missingPasswordLowercase: "At least one lowercase letter is required",
+    missingPasswordDigit: "At least one digit is required"
 
 }
 
@@ -37,13 +41,33 @@ const Onboarding = ({ onBoardingClass }) => {
         dispatch({ type: PossibleState.landingPage });
     }
 
-    const isEmail = email => {
+    function isEmail(email) {
         return String(email)
             .toLowerCase()
             .match(
                 /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
             );
     }
+
+    function hasUppercase(passwd) {
+        return passwd.toLowerCase() !== passwd;
+    }
+
+    function hasLowercase(passwd) {
+        console.log(passwd);
+        console.log(passwd.toUpperCase());
+        console.log(passwd.toUpperCase() !== passwd);
+        return passwd.toUpperCase() !== passwd;
+    }
+
+    function hasDigit(passwd) {
+        return String(passwd)
+            .match(
+                /\d/
+            );
+    }
+
+
 
     const checkAndSendAccountInfos = () => {
         // First name => Must not be empty
@@ -71,8 +95,23 @@ const Onboarding = ({ onBoardingClass }) => {
         else
             setEmailError("");
 
-        // Password
-
+        // Password => must not be empty
+        if (password === "")
+            setPasswordError(validationErrors.fieldEmpty);
+        // Password => must be at least 12 character long
+        if (password.length < 12)
+            setPasswordError(validationErrors.invalidPasswordLength);
+        // Password => must have at least 1 uppercase char
+        else if (!hasLowercase(password))
+            setPasswordError(validationErrors.missingPasswordLowercase);
+        // Password => must have at least 1 lowercase char
+        else if (!hasUppercase(password))
+            setPasswordError(validationErrors.missingPasswordUppercase);
+        // Password => must have at least 1 digit
+        else if (!hasDigit(password))
+            setPasswordError(validationErrors.missingPasswordUppercase);
+        else
+            setPasswordError("");
     }
 
     return (
