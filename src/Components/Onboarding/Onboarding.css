@@ -174,3 +174,25 @@
 .errorLabel {
     color: red
 }
+
+
+
+
+/**** ************ ****/
+/**** SIGN UP FORM ****/
+/**** ************ ****/
+#onboarding_email_validation {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    min-height: 50%;
+    font-size: 24px;
+    line-height: 35px;
+    text-align: center;
+}
+
+#onboarding_email_validation p b {
+    font-size: 1.2em;
+    color: white;
+}
