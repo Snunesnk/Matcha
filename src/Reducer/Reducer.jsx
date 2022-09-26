@@ -11,7 +11,7 @@ export const reducer = (state, action) => {
                 currentState: PossibleState.landingPage,
                 navbarClass: "visible",
                 landingClass: "visible",
-                onBoardingClass: "hidden",
+                OnboardingClass: "hidden",
             };
 
         case PossibleState.onboarding:
@@ -20,10 +20,24 @@ export const reducer = (state, action) => {
                 currentState: PossibleState.onboarding,
                 navbarClass: "hidden",
                 landingClass: "hidden",
-                onBoardingClass: "visible",
+                OnboardingClass: "visible",
             };
 
+        case "user:updateUserInfos":
+            console.log(action);
+            return {
+                ...state,
+                user: {
+                    firstName: action.payload.firstName,
+                    lastName: action.payload.lastName,
+                    username: action.payload.username,
+                    email: action.payload.email,
+                    password: action.payload.password
+                }
+            }
+
         default:
+            console.log("Error: No such method in reducer")
             throw new Error();
     }
 }

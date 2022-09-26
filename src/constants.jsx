@@ -9,3 +9,13 @@ export const PossibleState = {
     logIn: 3,
     mainPage: 4
 }
+
+export const validationErrors = {
+    fieldEmpty: "This field is required",
+    invalidEmail: "This is not a valid email adress",
+    invalidPasswordLength: "At least 12 characters required",
+    missingPasswordUppercase: "At least one uppercase letter is required",
+    missingPasswordLowercase: "At least one lowercase letter is required",
+    missingPasswordDigit: "At least one digit is required"
+
+}

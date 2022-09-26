@@ -11,7 +11,15 @@ const defaultState = {
   currentState: PossibleState.landingPage,
   navbarClass: "visible",
   landingClass: "visible",
-  onBoardingClass: "hidden",
+  OnboardingClass: "hidden",
+
+  user: {
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: "",
+  }
 }
 
 function App() {
@@ -26,7 +34,7 @@ function App() {
     <StoreContext.Provider value={providerState}>
       <Navbar navbarClass={state.navbarClass}></Navbar>
       <Landing landingClass={state.landingClass}></Landing>
-      <Onboarding onBoardingClass={state.onBoardingClass}></Onboarding>
+      <Onboarding OnboardingClass={state.OnboardingClass}></Onboarding>
     </StoreContext.Provider >
   )
 }
