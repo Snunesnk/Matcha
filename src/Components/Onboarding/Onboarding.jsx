@@ -50,14 +50,14 @@ const Onboarding = ({ onBoardingClass }) => {
     }
 
     function hasUppercase(passwd) {
-        return passwd.toLowerCase() !== passwd;
+        return passwd.toUpperCase() !== passwd;
     }
 
     function hasLowercase(passwd) {
         console.log(passwd);
         console.log(passwd.toUpperCase());
         console.log(passwd.toUpperCase() !== passwd);
-        return passwd.toUpperCase() !== passwd;
+        return passwd.toLowerCase() !== passwd;
     }
 
     function hasDigit(passwd) {
