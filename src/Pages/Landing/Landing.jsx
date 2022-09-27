@@ -17,7 +17,7 @@ const LandingPage = ({ landingClass }) => {
             <Grid container id="landing_container">
                 <Grid item xs={12}>
                     <div className="grid_item">
-                        <h1>Meet fluffy cats in you area!</h1>
+                        <h1>Meet fluffy cats in you area</h1>
                     </div>
                 </Grid>
                 <Grid item xs={12}>

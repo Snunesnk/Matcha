@@ -1,16 +1,17 @@
 .log_in {
-    background-color: #FBE3DD;
-    color: #3F1F71;
-
+    /* background-color: #FBE3DD; */
+    /* color: #B5C9EA; */
+    color: #FBE3DD;
     margin-right: 20px;
 }
 
 .log_in:hover {
-    border: 1px solid #3F1F71;
+    border: 1px solid #B5C9EA;
+    /* border: 1px solid #FBE3DD; */
 }
 
 .sign_up {
-    background-color: #3F1F71;
+    /* background-color: #3F1F71; */
     color: #FBE3DD;
 }
 
@@ -19,10 +20,10 @@
 }
 
 .btn {
-    padding: 10px 23px;
+    padding: 5px 15px;
     font-weight: 400;
-    font-size: 1.2em;
+    font-size: 1.1em;
     line-height: 24px;
-    border-radius: 5px;
-    border-radius: 5px;
+    border-radius: 15px;
+    background-color: transparent;
 }

@@ -196,3 +196,104 @@
     font-size: 1.2em;
     color: white;
 }
+
+
+
+
+/**** *************** ****/
+/**** WELCOME MESSAGE ****/
+/**** *************** ****/
+#onboarding_welcome_message {}
+
+#onboarding_next_button {
+    background-color: #BA7300;
+    color: #FBE3DD;
+    line-height: 30px;
+    font-size: 1.2em;
+    padding: 5px 13px;
+}
+
+#onboarding_next_button_label {
+    margin-left: 15px;
+}
+
+#welcome_catchphrase {
+    margin-top: 100px;
+}
+
+#welcome_message {
+    margin-top: 30px;
+    margin-bottom: 100px;
+}
+
+
+/**** ************ ****/
+/**** PROGRESS BAR ****/
+/**** ************ ****/
+#onboarding_progress_container {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 35px;
+    margin-bottom: 55px;
+}
+
+#progress_bar_container {
+    margin-right: 25px;
+}
+
+#progress_bar_container span {
+    font-size: 0.8em;
+}
+
+#progress_bar {
+    height: 3px;
+    width: 150px;
+    background-color: #FBE3DD;
+    border-radius: 1px;
+}
+
+#next_and_prev_button {
+    display: flex;
+    justify-content: space-between;
+}
+
+#next_and_prev_button a {
+    display: flex;
+    align-items: center;
+    background-color: #BA7300;
+    color: #FBE3DD;
+    cursor: pointer;
+    padding: 3px;
+}
+
+#next_and_prev_button a svg {
+    transition: transform 250ms;
+}
+
+#next_and_prev_button a:hover svg {
+    transform: scale(1.4);
+    transition: transform 150ms;
+}
+
+#next_and_prev_button a.disabled:hover svg {
+    transform: none;
+    transition: transform 150ms;
+}
+
+#onboarding_next {
+    border-right: 0.5px solid #FBE3DD;
+    border-radius: 2px 0px 0px 2px;
+}
+
+#onboarding_prev {
+    border-left: 0.5px solid #FBE3DD;
+    border-radius: 0px 2px 2px 0px;
+}
+
+.disabled {
+    color: grey !important;
+}

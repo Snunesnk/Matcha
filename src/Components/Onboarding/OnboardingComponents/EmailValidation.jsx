@@ -2,8 +2,12 @@ import React from "react";
 import "../Onboarding.css"
 import { useStoreContext } from "../../../Reducer/StoreContext";
 
-const EmailValidation = () => {
+const EmailValidation = ({ setOnboardingState }) => {
     const { state, dispatch } = useStoreContext();
+
+    setTimeout(() => {
+        setOnboardingState(2);
+    }, 1000);
 
     return (
         <div id="onboarding_email_validation">

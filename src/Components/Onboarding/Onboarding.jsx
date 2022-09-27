@@ -2,15 +2,19 @@ import React, { useState } from "react";
 import { Grid } from "@mui/material";
 import Button from "../Button/Button";
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { useStoreContext } from "../../Reducer/StoreContext";
 import { PossibleState } from "../../constants";
 import SignupForm from "./OnboardingComponents/SignupForm";
 import EmailValidation from "./OnboardingComponents/EmailValidation";
+import WelcomeMessage from "./OnboardingComponents/WelcomeMessage";
 import './Onboarding.css';
 
 const onboardingStateList = {
     signUp: 0,
     emailValidation: 1,
+    welcomeMessage: 2,
 }
 
 const Onboarding = ({ OnboardingClass }) => {
@@ -44,10 +48,23 @@ const Onboarding = ({ OnboardingClass }) => {
                         <SignupForm OnboardingClass={OnboardingClass} setOnboardingState={setOnboardingState}></SignupForm>
                     )}
                     {onboardingState === onboardingStateList.emailValidation && (
-                        <EmailValidation></EmailValidation>
+                        <EmailValidation setOnboardingState={setOnboardingState}></EmailValidation>
+                    )}
+                    {onboardingState === onboardingStateList.welcomeMessage && (
+                        <WelcomeMessage></WelcomeMessage>
                     )}
                 </Grid >
             </Grid >
+            <div id="onboarding_progress_container">
+                <div id="progress_bar_container">
+                    <span>0% completed</span>
+                    <div id="progress_bar" className="empty"></div>
+                </div>
+                <div id="next_and_prev_button">
+                    <a id="onboarding_next"><KeyboardArrowDownIcon></KeyboardArrowDownIcon></a>
+                    <a id="onboarding_prev"><KeyboardArrowUpIcon></KeyboardArrowUpIcon></a>
+                </div>
+            </div>
         </div >
     )
 }
