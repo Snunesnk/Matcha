@@ -1,12 +1,12 @@
 import React from "react";
-import "../Onboarding.css"
-import { useStoreContext } from "../../../Reducer/StoreContext";
+import "./OnboardingForm.css"
+import { useStoreContext } from "../../Reducer/StoreContext";
 
-const EmailValidation = ({ setOnboardingState }) => {
+const EmailValidation = ({ setOnboardingState, onboardingStateList }) => {
     const { state, dispatch } = useStoreContext();
 
     setTimeout(() => {
-        setOnboardingState(2);
+        setOnboardingState(onboardingStateList.welcomeMessage);
     }, 1000);
 
     return (

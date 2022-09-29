@@ -14,17 +14,17 @@ const LandingPage = ({ landingClass }) => {
 
     return (
         <div id="landing_page" className={landingClass}>
-            <Grid container id="landing_container">
-                <Grid item xs={12}>
+            <Grid container id="landing_container" direction="column" justifyContent="center">
+                <Grid item >
                     <div className="grid_item">
-                        <h1>Meet fluffy cats in you area</h1>
+                        <h1 id="landing_catch_phrase">Meet fluffy cats in you area</h1>
                     </div>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item >
                     <MainButton text="Find your new catmate" click={goToOnboarding}></MainButton>
                 </Grid>
             </Grid>
-        </div>
+        </div >
     )
 }
 

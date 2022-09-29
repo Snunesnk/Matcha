@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Grid } from "@mui/material";
-import MainButton from '../../MainButton/MainBtn';
-import FormInput from "../../FormInput/FormInput";
-import { validationErrors } from '../../../constants';
-import { useStoreContext } from "../../../Reducer/StoreContext";
-import "../Onboarding.css"
+import MainButton from '../MainButton/MainBtn';
+import FormInput from "../FormInput/FormInput";
+import { validationErrors } from '../../constants';
+import { useStoreContext } from "../../Reducer/StoreContext";
+import "./OnboardingForm.css"
 
-const SignupForm = ({ OnboardingClass, setOnboardingState }) => {
+const SignupForm = ({ OnboardingClass, setOnboardingState, onboardingStateList }) => {
     // Store potential errors
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -109,7 +109,7 @@ const SignupForm = ({ OnboardingClass, setOnboardingState }) => {
             setPasswordError("");
 
         if (!error) {
-            setOnboardingState(1);
+            setOnboardingState(onboardingStateList.emailValidation);
             dispatch({
                 type: "user:updateUserInfos",
                 payload: {
@@ -123,7 +123,7 @@ const SignupForm = ({ OnboardingClass, setOnboardingState }) => {
         }
         //// DEBUG !!! => TO REMOVE /////
         else {
-            setOnboardingState(1);
+            setOnboardingState(onboardingStateList.emailValidation);
         }
     }
 

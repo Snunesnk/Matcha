@@ -49,3 +49,9 @@
     display: flex;
     justify-content: center;
 }
+
+#landing_catch_phrase {
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    font-size: 2em;
+}
