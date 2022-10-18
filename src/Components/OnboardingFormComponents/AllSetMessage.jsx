@@ -6,9 +6,10 @@ const AllSetMessage = ({ setOnboardingState, onboardingStateList }) => {
     const { state, dispatch } = useStoreContext();
 
     return (
-        <div id="">
-            What is your all set message ?
-            <button id="onboarding_next_button" onClick={() => { setOnboardingState(onboardingStateList.allSetMessage) }}>Get set up</button>
+        <div id="gender_selection_container">
+            <p id="gender_selection_catch_phrase"><b>Fantastic, you're all set :)</b></p>
+            <p>Are you ready to find your catmate?</p>
+            <button id="onboarding_next_button" onClick={() => { setOnboardingState(onboardingStateList.allSetMessage) }}>Let the magic begin!</button>
         </div>
     );
 }

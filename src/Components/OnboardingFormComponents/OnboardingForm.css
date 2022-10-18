@@ -171,6 +171,8 @@
     line-height: 30px;
     font-size: 1.2em;
     padding: 5px 13px;
+    margin-top: 55px;
+    width: fit-content;
 }
 
 #onboarding_next_button_label {
@@ -272,56 +274,82 @@
     height: 60%;
 }
 
-.gender_choice_container {
-    background-color: rgba(251, 227, 221, 1);
-    color: rgba(63, 31, 113, 1);
-    border: 1px solid #FBE3DD;
-    box-shadow: 4px 4px 4px #3F1F71;
-    border-radius: 5px;
-    padding: 5px 10px;
-    width: 35%;
-    display: flex;
-    align-items: center;
-    transition: all 450ms;
-    cursor: pointer;
-}
-
-.gender_choice_container label {
-    margin-left: 10px;
-    cursor: pointer;
-}
-
-.gender_choice_container:hover {
-    background-color: #BA7300;
-    color: #FBE3DD;
-    transition: all 150ms;
-}
-
-.gender_choice_number {
-    background-color: rgba(145, 133, 190, 1);
-    color: rgba(63, 31, 113, 1);
-    width: fit-content;
-    padding: 0 5px;
-    font-weight: 600;
-    border: 1px solid #9185BE;
-    border-radius: 2px;
-    line-height: 21px;
-}
-
-#gender_selection_next_btn {
-    background-color: #BA7300;
-    color: #FBE3DD;
-    line-height: 30px;
-    font-size: 1.2em;
-    padding: 5px 13px;
-    width: fit-content;
-    margin-top: 100px
-}
-
 #choice_list {
     margin-top: 25px;
 }
 
 #gender_selection_catch_phrase {
     font-size: 1.6em;
+}
+
+
+
+
+/**** *********** ****/
+/**** DESCRIPTION ****/
+/**** *********** ****/
+#description_creation_input {
+    border: none;
+    border-bottom: 2px solid #FBE3DD;
+    background-color: transparent;
+    width: 50%;
+    font-size: 16px;
+    line-height: 20px;
+    margin-bottom: 55px;
+    margin-top: 15px;
+    transition: all 150ms cubic-bezier(1, .06, .83, .67);
+    background-color: rgba(181, 201, 234, 0.2);
+}
+
+#description_creation_input:focus-visible {
+    outline: none;
+    border-bottom-color: #BA7300;
+    transition: all 100ms cubic-bezier(1, .06, .83, .67);
+}
+
+
+
+
+/**** ************** ****/
+/**** TAGS INTERESTS ****/
+/**** ************** ****/
+#tags_autocomplete {
+    /* background: transparent;
+    color: #9185BE;
+    border: 1px solid #FBE3DD;
+    box-shadow: 4px 4px 4px #3F1F71;
+    border-radius: 5px; */
+}
+
+#tags_text_field {
+    color: #FBE3DD;
+}
+
+.MuiChip-root {
+    background: rgba(63, 31, 113, 0.1) !important;
+    border: 1px solid #9185BE !important;
+    border-radius: 5px !important;
+    margin-top: 5px !important;
+    font-size: 0.9rem;
+}
+
+.MuiInputBase-root {
+    border-bottom: none !important;
+    background: #D9D9D9 !important;
+    color: black !important;
+    /* box-shadow: 4px 4px 4px #3F1F71 !important; */
+    border-radius: 5px !important;
+    width: 80% !important;
+}
+
+label.Mui-focused {
+    color: #BA7300 !important;
+}
+
+.css-gjbq6i-MuiInputBase-root-MuiFilledInput-root.Mui-focused:after {
+    border-bottom: 2px solid #BA7300 !important;
+}
+
+.css-11v1qwh-MuiInputBase-root-MuiFilledInput-root:after {
+    border-bottom: 2px solid #BA7300 !important;
 }

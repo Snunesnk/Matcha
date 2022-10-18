@@ -1,0 +1,36 @@
+.list_choice_container {
+    background-color: rgba(251, 227, 221, 1);
+    color: rgba(63, 31, 113, 1);
+    border: 1px solid #FBE3DD;
+    box-shadow: 4px 4px 4px #3F1F71;
+    border-radius: 5px;
+    padding: 5px 10px;
+    width: 35%;
+    display: flex;
+    align-items: center;
+    transition: all 450ms;
+    cursor: pointer;
+}
+
+.list_choice_container label {
+    margin-left: 10px;
+    cursor: pointer;
+}
+
+.list_choice_container:hover {
+    background-color: #BA7300;
+    color: #FBE3DD;
+    transition: all 150ms;
+    border: 1px solid #3f1f71
+}
+
+.list_choice_number {
+    background-color: rgba(145, 133, 190, 1);
+    color: rgba(63, 31, 113, 1);
+    width: fit-content;
+    padding: 0 5px;
+    font-weight: 600;
+    border: 1px solid #9185BE;
+    border-radius: 2px;
+    line-height: 21px;
+}

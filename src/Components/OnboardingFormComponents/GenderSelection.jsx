@@ -2,38 +2,34 @@ import React from "react";
 import { Grid } from "@mui/material";
 import "./OnboardingForm.css"
 import { useStoreContext } from "../../Reducer/StoreContext";
+import ListChoice from "../ListChoice";
+
+const Genders = [
+    { number: 'A', label: 'Female' },
+    { number: 'B', label: 'Male' },
+    { number: 'C', label: 'Non-binary' },
+]
 
 const GenderSelection = ({ setOnboardingState, onboardingStateList }) => {
-    const { state, dispatch } = useStoreContext();
+    const OnGenderSelection = () => {
+        setOnboardingState(onboardingStateList.sexualOrientation)
+    }
 
     return (
         <div id="gender_selection_container">
             <p id="gender_selection_catch_phrase">What is <b>your gender?</b></p>
 
             <Grid container id="choice_list" rowGap={2}>
-                <Grid item xs={12}>
-                    <div className="gender_choice_container">
-                        <div class="gender_choice_number">A</div>
-                        <label>Female</label>
-                    </div>
-                </Grid>
-                <Grid item xs={12}>
-                    <div className="gender_choice_container">
-                        <div class="gender_choice_number">B</div>
-                        <label>Male</label>
-                    </div>
-                </Grid>
-                <Grid item xs={12}>
-                    <div className="gender_choice_container">
-                        <div class="gender_choice_number">C</div>
-                        <label>Non-binary</label>
-                    </div>
-                </Grid>
+                {Genders.map(gender => (
+                    <ListChoice
+                        number={gender.number}
+                        label={gender.label}
+                        key={gender.number}
+                        onclick={OnGenderSelection}></ListChoice>
+                ))}
             </Grid>
-
-            <button id="gender_selection_next_btn" onClick={() => { setOnboardingState(onboardingStateList.sexualOrientation) }}>OK</button>
         </div >
     );
 }
 
-export default GenderSelection
+export default GenderSelection;

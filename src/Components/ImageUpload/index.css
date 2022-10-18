@@ -1,0 +1,45 @@
+#image_upload_container {
+    background: #9185BE;
+    border: 2px dashed #FBE3DD;
+    border-radius: 5px;
+
+    width: 540px;
+    height: 300px;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+
+    margin-top: 55px;
+    margin-bottom: 55px;
+    padding: 30px;
+}
+
+.img_icon {
+    transform: scale(3);
+}
+
+.picture_upload_text {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.7rem;
+    line-height: 25px;
+    color: #3F1F71;
+}
+
+#picture_upload_btn {
+    display: none !important;
+}
+
+#upload_pictures_btn_label {
+    background: #3F1F71;
+    border-radius: 100px;
+    color: #FBE3DD;
+    padding: 13px;
+    font-size: 1.2rem;
+}
+
+#upload_pictures_btn_label:hover {
+    cursor: pointer;
+}
