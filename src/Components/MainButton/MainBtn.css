@@ -6,12 +6,12 @@
 #main_button {
     background-color: #BA7300;
     border-radius: 5px;
-    width: 265px;
-    height: 56px;
+    width: 247px;
+    height: 50px;
     font-weight: 400;
-    font-size: 1.3em;
+    font-size: 1.2em;
     line-height: 24px;
-    color: #FBE3DD;
+    color: white;
     z-index: 2;
     margin-bottom: 10px;
     transition: transform 250ms;
@@ -20,12 +20,12 @@
 #shadow {
     background-color: #3F1F71;
     border-radius: 5px;
-    width: 267px;
-    height: 58px;
-    margin-left: -256px;
+    width: 249px;
+    height: 52px;
+    margin-left: -238px;
     margin-top: 10px;
     font-weight: 400;
-    font-size: 1.3em;
+    font-size: 1.2em;
     line-height: 24px;
     color: #3F1F71;
     border: 1px solid #FBE3DD;

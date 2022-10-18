@@ -1,35 +1,29 @@
 .log_in {
-    background-color: #FBE3DD;
-    color: #3F1F71;
-
+    /* background-color: #FBE3DD; */
+    /* color: #B5C9EA; */
+    color: #FBE3DD;
     margin-right: 20px;
 }
 
-.sign_up {
-    background-color: #3F1F71;
-    color: #FBE3DD;
+.log_in:hover {
+    border: 1px solid #B5C9EA;
+    /* border: 1px solid #FBE3DD; */
+}
 
+.sign_up {
+    /* background-color: #3F1F71; */
+    color: #FBE3DD;
+}
+
+.sign_up:hover {
+    border: 1px solid #FBE3DD;
 }
 
 .btn {
-    padding: 10px 23px;
+    padding: 5px 15px;
     font-weight: 400;
-    font-size: 1.2em;
+    font-size: 1.1em;
     line-height: 24px;
-    border-radius: 5px;
-    border-radius: 5px;
-}
-
-.alreadyHaveAccount {
-    opacity: 0;
-    transition: opacity 450ms;
-}
-
-.alreadyHaveAccount.onboarded {
-    opacity: 1;
-    transition: opacity 450ms;
-    transition-delay: 450ms;
-    display: flex;
-    justify-content: end;
-    align-items: center;
+    border-radius: 15px;
+    background-color: transparent;
 }
