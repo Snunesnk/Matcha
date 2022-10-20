@@ -175,10 +175,6 @@
     width: fit-content;
 }
 
-#onboarding_next_button_label {
-    margin-left: 15px;
-}
-
 #welcome_catchphrase {
     margin-top: 100px;
 }
@@ -260,6 +256,16 @@
     color: grey !important;
 }
 
+#progress_bar::before {
+    content: '';
+    position: absolute;
+    border-color: #009933;
+    border-style: solid;
+    border-width: 0 0 0.3em 0;
+    height: 3px;
+    width: 0.5em;
+}
+
 
 
 
@@ -272,6 +278,7 @@
     flex-direction: column;
     justify-content: center;
     height: 60%;
+    width: 90%;
 }
 
 #choice_list {
@@ -292,7 +299,7 @@
     border: none;
     border-bottom: 2px solid #FBE3DD;
     background-color: transparent;
-    width: 50%;
+    width: 100%;
     font-size: 16px;
     line-height: 20px;
     margin-bottom: 55px;

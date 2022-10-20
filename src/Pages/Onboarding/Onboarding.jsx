@@ -29,6 +29,47 @@ const onboardingStateList = {
     allSetMessage: 8
 }
 
+const progressBarStatus = [
+    // Does not appear in signup and email validation
+    {
+        percent: "",
+        class: ""
+    },
+    {
+        percent: "",
+        class: ""
+    },
+    // Welcome message and gender selection are 0%
+    {
+        percent: "0",
+        class: "progress_zero"
+    },
+    {
+        percent: "0",
+        class: "progress_zero"
+    },
+    {
+        percent: "20",
+        class: "progress_twenty"
+    },
+    {
+        percent: "40",
+        class: "progress_forty"
+    },
+    {
+        percent: "60",
+        class: "progress_sixty"
+    },
+    {
+        percent: "80",
+        class: "progress_eighty"
+    },
+    {
+        percent: "100",
+        class: "progress_hundred"
+    },
+]
+
 const Onboarding = ({ OnboardingClass }) => {
     const { state, dispatch } = useStoreContext();
     const [onboardingState, setOnboardingState] = useState(0);
@@ -42,16 +83,26 @@ const Onboarding = ({ OnboardingClass }) => {
             setOnboardingState(onboardingStateList.emailValidation);
         // Else if email was validated, set it back to the first step of the form
         else if (onboardingState >= onboardingStateList.WelcomeMessage)
-            setOnboardingState(onboardingStateList.welcomeMessage);
+            setOnboardingState(onboardingStateList.allSetMessage);
 
         dispatch({ type: PossibleState.landingPage });
+    }
+
+    const goToNextState = () => {
+        if (onboardingState > onboardingStateList.welcomeMessage)
+            setOnboardingState(onboardingState - 1);
+    }
+
+    const goToPreviousState = () => {
+        if (onboardingState < onboardingStateList.allSetMessage)
+            setOnboardingState(onboardingState + 1);
     }
 
     return (
         <div id='onboarding' className={OnboardingClass}>
             <Grid container id="onboarding_grid">
-                <Grid item xs={6} id="cat_pic"></Grid>
-                <Grid item xs={6}>
+                <Grid item xs={0} md={6} id="cat_pic"></Grid>
+                <Grid item xs={12} md={6}>
                     <Grid container id="onboarding_content" className="centered_container">
                         <Grid item xs={12} id="onboarding_content_btn_container">
                             <a className={"onboardingBack " + OnboardingClass} onClick={goToLanding}>
@@ -96,12 +147,12 @@ const Onboarding = ({ OnboardingClass }) => {
             {onboardingState !== onboardingStateList.emailValidation && onboardingState !== onboardingStateList.signUp && (
                 <div id="onboarding_progress_container">
                     <div id="progress_bar_container">
-                        <span>0% completed</span>
-                        <div id="progress_bar" className="empty"></div>
+                        <span>{progressBarStatus[onboardingState].percent}% completed</span>
+                        <div id="progress_bar" className={progressBarStatus[onboardingState].class}></div>
                     </div>
                     <div id="next_and_prev_button">
-                        <a id="onboarding_next"><KeyboardArrowDownIcon></KeyboardArrowDownIcon></a>
-                        <a id="onboarding_prev"><KeyboardArrowUpIcon></KeyboardArrowUpIcon></a>
+                        <a id="onboarding_next" onClick={goToPreviousState}><KeyboardArrowDownIcon></KeyboardArrowDownIcon></a>
+                        <a id="onboarding_prev" onClick={goToNextState}><KeyboardArrowUpIcon></KeyboardArrowUpIcon></a>
                     </div>
                 </div>
 
