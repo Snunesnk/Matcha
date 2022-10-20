@@ -256,14 +256,39 @@
     color: grey !important;
 }
 
+
 #progress_bar::before {
     content: '';
     position: absolute;
-    border-color: #009933;
+    border-color: #BA7300;
     border-style: solid;
-    border-width: 0 0 0.3em 0;
-    height: 3px;
-    width: 0.5em;
+    border-width: 3px 0 0 0;
+    height: 0px;
+    width: 0;
+    transition: width 200ms;
+}
+
+.progress_twenty::before {
+
+    width: 30px !important;
+}
+
+.progress_forty::before {
+
+    width: 60px !important;
+}
+
+.progress_sixty::before {
+
+    width: 90px !important;
+}
+
+.progress_eighty::before {
+    width: 120px !important;
+}
+
+.progress_hundred::before {
+    width: 150px !important;
 }
 
 
