@@ -175,10 +175,6 @@
     width: fit-content;
 }
 
-#onboarding_next_button_label {
-    margin-left: 15px;
-}
-
 #welcome_catchphrase {
     margin-top: 100px;
 }
@@ -216,6 +212,7 @@
     width: 150px;
     background-color: #FBE3DD;
     border-radius: 1px;
+    color: #FBE3DD;
 }
 
 #next_and_prev_button {
@@ -227,9 +224,22 @@
     display: flex;
     align-items: center;
     background-color: #BA7300;
-    color: #FBE3DD;
-    cursor: pointer;
     padding: 3px;
+    color: #FBE3DD;
+}
+
+#next_and_prev_button a.disabled svg {
+    color: #BA7300 !important;
+    cursor: default;
+}
+
+#next_and_prev_button a.disabled {
+    color: #BA7300 !important;
+    cursor: default;
+}
+
+#next_and_prev_button a :not(disabled) {
+    cursor: pointer;
 }
 
 #next_and_prev_button a svg {
@@ -256,8 +266,38 @@
     border-radius: 0px 2px 2px 0px;
 }
 
-.disabled {
-    color: grey !important;
+#progress_bar::before {
+    content: '';
+    position: absolute;
+    border-color: #BA7300;
+    border-style: solid;
+    border-width: 3px 0 0 0;
+    height: 0px;
+    width: 0;
+    transition: width 200ms;
+}
+
+.progress_twenty::before {
+
+    width: 30px !important;
+}
+
+.progress_forty::before {
+
+    width: 60px !important;
+}
+
+.progress_sixty::before {
+
+    width: 90px !important;
+}
+
+.progress_eighty::before {
+    width: 120px !important;
+}
+
+.progress_hundred::before {
+    width: 150px !important;
 }
 
 
@@ -272,6 +312,7 @@
     flex-direction: column;
     justify-content: center;
     height: 60%;
+    width: 90%;
 }
 
 #choice_list {
@@ -292,7 +333,7 @@
     border: none;
     border-bottom: 2px solid #FBE3DD;
     background-color: transparent;
-    width: 50%;
+    width: 100%;
     font-size: 16px;
     line-height: 20px;
     margin-bottom: 55px;

@@ -31,7 +31,7 @@ const InterestsTags = ({ setOnboardingState, onboardingStateList }) => {
                 )}
             />
 
-            <button id="onboarding_next_button" onClick={() => { setOnboardingState(onboardingStateList.picturesUploading) }}>Get set up</button>
+            <button id="onboarding_next_button" onClick={() => { setOnboardingState(onboardingStateList.picturesUploading) }}>Next</button>
         </div>
     );
 }

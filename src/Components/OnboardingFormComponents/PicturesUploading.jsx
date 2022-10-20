@@ -9,7 +9,7 @@ const PicturesUploading = ({ setOnboardingState, onboardingStateList }) => {
 
             <ImageUpload></ImageUpload>
 
-            <button id="onboarding_next_button" onClick={() => { setOnboardingState(onboardingStateList.allSetMessage) }}>Get set up</button>
+            <button id="onboarding_next_button" onClick={() => { setOnboardingState(onboardingStateList.allSetMessage) }}>Finish</button>
         </div>
     );
 }

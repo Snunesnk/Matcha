@@ -15,7 +15,6 @@ const WelcomeMessage = ({ setOnboardingState, onboardingStateList }) => {
                 And it'll make your time with MatChat even better.
             </p>
             <button id="onboarding_next_button" onClick={() => { setOnboardingState(onboardingStateList.genderSelection) }}>Get set up</button>
-            <label id="onboarding_next_button_label" >press Enter ↵</label>
         </div>
     );
 }
