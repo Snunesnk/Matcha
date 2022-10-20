@@ -151,8 +151,8 @@ const Onboarding = ({ OnboardingClass }) => {
                         <div id="progress_bar" className={progressBarStatus[onboardingState].class}></div>
                     </div>
                     <div id="next_and_prev_button">
-                        <a id="onboarding_next" onClick={goToPreviousState}><KeyboardArrowDownIcon></KeyboardArrowDownIcon></a>
-                        <a id="onboarding_prev" onClick={goToNextState}><KeyboardArrowUpIcon></KeyboardArrowUpIcon></a>
+                        <a id="onboarding_next" className={onboardingState >= onboardingStateList.allSetMessage ? "disabled" : ""} onClick={goToPreviousState}><KeyboardArrowDownIcon></KeyboardArrowDownIcon></a>
+                        <a id="onboarding_prev" className={onboardingState <= onboardingStateList.welcomeMessage ? "disabled" : ""} onClick={goToNextState}><KeyboardArrowUpIcon></KeyboardArrowUpIcon></a>
                     </div>
                 </div>
 

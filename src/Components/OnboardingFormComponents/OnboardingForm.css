@@ -212,6 +212,7 @@
     width: 150px;
     background-color: #FBE3DD;
     border-radius: 1px;
+    color: #FBE3DD;
 }
 
 #next_and_prev_button {
@@ -223,9 +224,22 @@
     display: flex;
     align-items: center;
     background-color: #BA7300;
-    color: #FBE3DD;
-    cursor: pointer;
     padding: 3px;
+    color: #FBE3DD;
+}
+
+#next_and_prev_button a.disabled svg {
+    color: #BA7300 !important;
+    cursor: default;
+}
+
+#next_and_prev_button a.disabled {
+    color: #BA7300 !important;
+    cursor: default;
+}
+
+#next_and_prev_button a :not(disabled) {
+    cursor: pointer;
 }
 
 #next_and_prev_button a svg {
@@ -251,11 +265,6 @@
     border-left: 0.5px solid #FBE3DD;
     border-radius: 0px 2px 2px 0px;
 }
-
-.disabled {
-    color: grey !important;
-}
-
 
 #progress_bar::before {
     content: '';
