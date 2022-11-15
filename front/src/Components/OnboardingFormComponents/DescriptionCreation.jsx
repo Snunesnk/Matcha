@@ -1,9 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import "./OnboardingForm.css"
-import { useStoreContext } from "../../Reducer/StoreContext";
 
-const DescriptionCreation = ({ setOnboardingState, onboardingStateList }) => {
-    const { state, dispatch } = useStoreContext();
+const DescriptionCreation = () => {
+    const [value, setValue] = useState("");
+
+    const saveBio = () => {
+        console.log(value);
+    }
 
     return (
         <div id="gender_selection_container">
@@ -14,9 +18,13 @@ const DescriptionCreation = ({ setOnboardingState, onboardingStateList }) => {
                 placeholder="Enter your description here"
                 maxLength="100"
                 rows="8"
+                value={value}
+                onChange={(e) => setValue(e.target.value)}
             ></textarea>
 
-            <button id="onboarding_next_button" onClick={() => { setOnboardingState(onboardingStateList.interestsTags) }}>That's me !</button>
+            <Link to="/onboarding/interests">
+                <button id="onboarding_next_button" onClick={saveBio}>That's me !</button>
+            </Link>
         </div>
     );
 }

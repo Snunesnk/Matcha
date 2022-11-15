@@ -8,9 +8,13 @@
     background-size: cover;
     /* filter: blur(5px);
     -webkit-filter: blur(5px); */
+    bottom: 0;
+    opacity: 1;
+    transition: all 550ms ease;
+    will-change: bottom;
 }
 
-#landing_page.visible {
+/* #landing_page.visible {
     bottom: 0;
     opacity: 1;
     transition: all 550ms ease;
@@ -22,7 +26,7 @@
     opacity: 0;
     transition: all 550ms cubic-bezier(1, .06, .83, .67);
     will-change: bottom;
-}
+} */
 
 #landing_container {
     display: flex;

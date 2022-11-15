@@ -9,13 +9,13 @@
     display: flex;
 }
 
-#navbar.visible {
+/* #navbar.visible {
     opacity: 1;
 }
 
 #navbar.hidden {
     opacity: 0;
-}
+} */
 
 #loggingBtnContainer {
     opacity: 1;
