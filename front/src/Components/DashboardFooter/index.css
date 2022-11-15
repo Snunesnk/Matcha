@@ -1,0 +1,39 @@
+#dashboard_footer_container {
+    display: flex;
+    justify-content: center;
+}
+
+#dashboard_footer {
+    position: fixed;
+    bottom: 100px;
+    width: 500px;
+    height: 60px;
+    border-radius: 4px;
+    background-color: #FBE3DD;
+    color: #5E0B4F;
+}
+
+#dashboard_footer svg {
+    transform: scale(1.4);
+}
+
+#footer_grid .centered_container {
+    width: 100px;
+    height: 60px;
+    border-radius: 4px;
+    align-items: center;
+    cursor: pointer;
+    transition: all 100ms cubic-bezier(1, .06, .83, .67);
+}
+
+#footer_grid .centered_container:hover {
+    background-color: rgba(94, 11, 79, 0.3);
+    transition: all 100ms cubic-bezier(1, .06, .83, .67);
+}
+
+#footer_grid .centered_container.selected {
+    background-color: #5E0B4F;
+    color: #FBE3DD;
+    border-bottom: 7px solid #9185BE;
+    transition: all 150ms;
+}

@@ -1,11 +1,9 @@
 import {
     createBrowserRouter,
-    Route,
 } from "react-router-dom";
 
 // Main pages
 import Landing from '../Pages/Landing/Landing'
-import Navbar from '../Components/Navbar/Navbar'
 import Onboarding from '../Pages/Onboarding/Onboarding'
 import Dashboard from "../Pages/Dashboard/Dashboard";
 
@@ -26,7 +24,7 @@ import AllSetMessage from "../Components/OnboardingFormComponents/AllSetMessage"
 
 const router = createBrowserRouter([
     {
-        path: "/",
+        path: "/*",
         element: <Landing />,
         errorElement: <ErrorPage />,
     },
@@ -75,7 +73,7 @@ const router = createBrowserRouter([
         ]
     },
     {
-        path: "/dashboard",
+        path: "/dashboard/*",
         element: <Dashboard />,
         errorElement: <ErrorPage />,
     },
