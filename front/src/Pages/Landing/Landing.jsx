@@ -12,18 +12,6 @@ const LandingPage = ({ landingClass }) => {
         dispatch({ type: PossibleState.onboarding });
     }
 
-    var request = {
-        method: 'GET',
-        headers: {
-            "Content-Type": "application/json"
-        },
-    };
-
-    fetch("http://localhost:8080/api/user/", request).then(data => {
-        console.log("data received: ");
-        console.log(data);
-    })
-
     return (
         <div id="landing_page" className={landingClass}>
             <Grid container id="landing_container" direction="column" justifyContent="center">
