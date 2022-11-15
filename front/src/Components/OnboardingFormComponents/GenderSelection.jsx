@@ -1,8 +1,7 @@
 import React from "react";
 import { Grid } from "@mui/material";
-import "./OnboardingForm.css"
-import { useStoreContext } from "../../Reducer/StoreContext";
 import ListChoice from "../ListChoice";
+import "./OnboardingForm.css"
 
 const Genders = [
     { number: 'A', label: 'Female' },
@@ -10,9 +9,9 @@ const Genders = [
     { number: 'C', label: 'Non-binary' },
 ]
 
-const GenderSelection = ({ setOnboardingState, onboardingStateList }) => {
-    const OnGenderSelection = () => {
-        setOnboardingState(onboardingStateList.sexualOrientation)
+const GenderSelection = () => {
+    const onGenderSelection = (e, number, label) => {
+        localStorage.setItem("gender", label);
     }
 
     return (
@@ -25,7 +24,9 @@ const GenderSelection = ({ setOnboardingState, onboardingStateList }) => {
                         number={gender.number}
                         label={gender.label}
                         key={gender.number}
-                        onclick={OnGenderSelection}></ListChoice>
+                        onclick={onGenderSelection}
+                        to="/onboarding/preferences"
+                    />
                 ))}
             </Grid>
         </div >

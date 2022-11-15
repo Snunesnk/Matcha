@@ -3,8 +3,11 @@
     border: 2px dashed #FBE3DD;
     border-radius: 5px;
 
-    width: 540px;
-    height: 300px;
+    /* width: 540px;
+    height: 300px; */
+
+    height: fit-content;
+    width: fit-content;
 
     display: flex;
     flex-direction: column;
@@ -42,4 +45,17 @@
 
 #upload_pictures_btn_label:hover {
     cursor: pointer;
+}
+
+.img_uploaded {
+    border: 1px solid white;
+    height: auto;
+    width: 100px;
+}
+
+.img_container {
+    display: flex;
+    align-items: center;
+    /* Overwrite grid default margin */
+    margin: 5px !important;
 }
