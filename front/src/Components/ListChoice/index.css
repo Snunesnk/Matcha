@@ -22,8 +22,21 @@
     background-color: #BA7300;
     color: #FBE3DD;
     transition: all 150ms;
-    border: 1px solid #3f1f71
+    border: 1px solid #9185BE;
+    transform: scale(0.98);
 }
+
+.list_choice_container.selected {
+    background-color: #BA7300;
+    color: #FBE3DD;
+    transition: all 150ms;
+    border: 1px solid #FBE3DD
+}
+
+.list_choice_container.selected .list_choice_number {
+    background-color: #FBE3DD;
+}
+
 
 .list_choice_number {
     background-color: rgba(145, 133, 190, 1);

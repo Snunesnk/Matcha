@@ -1,10 +1,15 @@
 import React from "react";
 import "./OnboardingForm.css"
-import { useStoreContext } from "../../Reducer/StoreContext";
 import { Autocomplete, Chip, TextField } from "@mui/material";
+import { Link } from "react-router-dom";
 
-const InterestsTags = ({ setOnboardingState, onboardingStateList }) => {
-    const { state, dispatch } = useStoreContext();
+const InterestsTags = () => {
+    let tags;
+
+    const saveTags = () => {
+        /// Save tags in local storage
+        localStorage.setItem("interests", tags);
+    }
 
     return (
         <div id="gender_selection_container">
@@ -15,10 +20,13 @@ const InterestsTags = ({ setOnboardingState, onboardingStateList }) => {
                 id="tags_autocomplete"
                 options={top100Films.map((option) => option.title)}
                 freeSolo
-                renderTags={(value, getTagProps) =>
-                    value.map((option, index) => (
+                renderTags={(value, getTagProps) => {
+                    tags = value;
+
+                    return value.map((option, index) => (
                         <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                    ))
+                    ));
+                }
                 }
                 renderInput={(params) => (
                     <TextField
@@ -31,7 +39,9 @@ const InterestsTags = ({ setOnboardingState, onboardingStateList }) => {
                 )}
             />
 
-            <button id="onboarding_next_button" onClick={() => { setOnboardingState(onboardingStateList.picturesUploading) }}>Next</button>
+            <Link to="/onboarding/pictures">
+                <button id="onboarding_next_button" onClick={saveTags}>Next</button>
+            </Link>
         </div>
     );
 }

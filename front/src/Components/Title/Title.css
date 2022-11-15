@@ -1,4 +1,4 @@
-#title_container a h1 {
+#title_container h1 {
     color: #FBE3DD;
     font-weight: 400;
     font-size: 6rem;
@@ -7,6 +7,6 @@
     cursor: pointer;
 }
 
-#title_container a h1:hover {
+#title_container h1:hover {
     color: white;
 }
