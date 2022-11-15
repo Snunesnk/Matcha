@@ -5,9 +5,14 @@
     height: 100%;
     background: linear-gradient(154.03deg, #3F1F71 1.96%, #010101 98.95%);
     z-index: 3;
+
+    top: 0;
+    transition: all 550ms ease;
+    will-change: top;
+    overflow: auto;
 }
 
-#onboarding.visible {
+/* #onboarding.visible {
     top: 0;
     transition: all 550ms ease;
     will-change: top;
@@ -18,7 +23,7 @@
     top: 100vh;
     transition: all 550ms ease;
     will-change: top;
-}
+} */
 
 #onboarding_grid {
     width: 100%;

@@ -1,52 +1,60 @@
 import React, { useState } from "react";
 import "./index.css"
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
+import { Grid } from "@mui/material";
 
 const ImageUpload = ({ }) => {
     const [imgs, setImgs] = useState([]);
+    const imgList = [];
 
-    function allowDrop(e) {
-        e.preventDefault();
+    const saveBase64 = (file) => {
+        var reader = new FileReader();
+        reader.readAsDataURL(file);
+        reader.onload = function () {
+            console.log(reader.result);
+            imgList.push(reader.result.base64);
+        };
+        reader.onerror = function (error) {
+            console.log('Error: ', error);
+        };
     }
 
-    function drop(e) {
-        e.preventDefault();
-        const file = e.dataTransfer.files[0];
-        //Create instance 
-        let fileReader = new FileReader();
-        //Register event listeners
-        fileReader.onload = () => {
-            console.log("IMAGE LOADED: ", fileReader.result);
+    const onChange = (e) => {
+        const fileList = e.target.files;
 
-            //Read the file as a Data URL (which gonna give you a base64 encoded image data)
+        for (let i = 0; i < fileList.length; i++) {
+            saveBase64(fileList[i]);
+
             setImgs((prev) => {
-                prev.push(fileReader.result);
-
-                return [...prev];
+                return [...prev, URL.createObjectURL(fileList[i])];
             });
-        }
-        //Operation Aborted 
-        fileReader.onabort = () => {
-            alert("Reading Aborted");
-        }
-        //Error when loading 
-        fileReader.onerror = () => {
-            alert("Reading ERROR!");
         }
     }
 
     return (
-        <div id="image_upload_container" onDrop={e => drop(e)} onDragOver={e => allowDrop(e)}>
+        <div id="image_upload_container" >
             {imgs.length === 0 && (
                 <InsertPhotoIcon className="img_icon"></InsertPhotoIcon>)}
-            {imgs.length >= 0 && imgs.map((img, i) => (
-                <div key={i}>
-                    <img source={img}></img>
-                </div>
-            ))}
-            <p className="picture_upload_text">Drag and drop an image to upload, or</p>
-            <label htmlFor="picture_upload_btn" id="upload_pictures_btn_label">Browse computer</label>
-            <input id="picture_upload_btn" type="file" value="" onChange={() => { }}></input>
+            <Grid container>
+                {imgs.length > 0 && imgs.map((img, i) => (
+                    <Grid item className="img_container" key={i}>
+                        <img src={img} className="img_uploaded"></img>
+                    </Grid>
+                ))}
+            </Grid>
+            <p className="picture_upload_text">Show everyone how beautiful you are</p>
+
+            <label htmlFor="picture_upload_btn" id="upload_pictures_btn_label">Choose image</label>
+
+            <input
+                multiple
+                id="picture_upload_btn"
+                type="file"
+                value=""
+                accept="image/png, image/jpeg"
+                onChange={onChange}
+                disabled={imgs.length >= 5}
+            ></input>
         </div >
     );
 }

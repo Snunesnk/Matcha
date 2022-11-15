@@ -11,7 +11,8 @@ export const reducer = (state, action) => {
                 currentState: PossibleState.landingPage,
                 navbarClass: "visible",
                 landingClass: "visible",
-                OnboardingClass: "hidden",
+                onboardingClass: "hidden",
+                dashboardClass: "hidden",
             };
 
         case PossibleState.onboarding:
@@ -20,7 +21,18 @@ export const reducer = (state, action) => {
                 currentState: PossibleState.onboarding,
                 navbarClass: "hidden",
                 landingClass: "hidden",
-                OnboardingClass: "visible",
+                onboardingClass: "visible",
+                dashboardClass: "hidden",
+            };
+
+        case PossibleState.onboarding:
+            return {
+                ...state,
+                currentState: PossibleState.onboarding,
+                navbarClass: "hidden",
+                landingClass: "hidden",
+                onboardingClass: "hidden",
+                dashboardClass: "visible",
             };
 
         case "user:updateUserInfos":
