@@ -1,8 +1,17 @@
 import React from "react";
+import { Routes, Route } from "react-router-dom";
 import { Grid } from "@mui/material";
 import Title from '../Title/Title'
 import Button from "../Button/Button";
 import './Navbar.css';
+
+const LogInBtn = () => {
+    return (
+        <Grid item xs={4} id="loggingBtnContainer">
+            <Button btnClass="log_in" text="Log in"></Button>
+        </Grid>
+    )
+}
 
 const Navbar = () => {
     return (
@@ -11,10 +20,11 @@ const Navbar = () => {
             <Grid item xs={4} className="center">
                 <Title></Title>
             </Grid>
-            <Grid item xs={4} id="loggingBtnContainer">
-                <Button btnClass="log_in" text="Log in"></Button>
-                <Button btnClass="sign_up" text="Sign up"></Button>
-            </Grid>
+
+            <Routes>
+                <Route path="" element={<LogInBtn />} />
+            </Routes>
+
         </Grid>
     )
 }
