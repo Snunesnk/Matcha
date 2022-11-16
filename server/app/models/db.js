@@ -15,8 +15,9 @@ const connectWithRetry = () => {
         if (error) {
             console.log("Failed to connect to database, wll retry in 5 seconds");
             setTimeout(connectWithRetry, 5000)
-        };
-        console.log("Successfully connected to the database.");
+        } else {
+            console.log("Successfully connected to the database.");
+        }
     });
 }
 connectWithRetry();
