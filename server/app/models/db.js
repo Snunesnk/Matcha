@@ -9,10 +9,17 @@ const connection = mysql.createConnection({
     database: dbConfig.DB,
 });
 
-// open the MySQL connection
-connection.connect(error => {
-    if (error) throw error;
-    console.log("Successfully connected to the database.");
-});
+const connectWithRetry = () => {
+    // open the MySQL connection
+    connection.connect(error => {
+        if (error) {
+            console.log("Failed to connect to database, wll retry in 5 seconds");
+            setTimeout(connectWithRetry, 5000)
+        };
+        console.log("Successfully connected to the database.");
+    });
+}
+connectWithRetry();
+
 
 module.exports = connection;
