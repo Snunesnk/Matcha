@@ -1,0 +1,55 @@
+.profile_card {
+    width: 200px;
+    height: 300px;
+    background-color: #FBE3DD;
+    color: #5E0B4F;
+
+    border-radius: 4px;
+
+    margin: 10px;
+    overflow: hidden;
+}
+
+.card_img_container {
+    height: 60%;
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card_img_container img {
+    height: 100%;
+    width: auto;
+}
+
+.card_info_container {
+    height: 40%;
+    width: 100%;
+}
+
+.card_like {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    color: #BA7300;
+    cursor: pointer;
+}
+
+.card_like svg {
+    transform: scale(1.4);
+}
+
+.name_and_age {
+    margin: 0.5em;
+    font-weight: 700;
+}
+
+.card_bio {
+    margin: 0.5em;
+    font-size: 0.7em;
+    max-height: 24px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}

@@ -20,7 +20,7 @@
 #footer_grid .centered_container {
     width: 100px;
     height: 60px;
-    border-radius: 4px;
+    border-radius: 3px;
     align-items: center;
     cursor: pointer;
     transition: all 100ms cubic-bezier(1, .06, .83, .67);
