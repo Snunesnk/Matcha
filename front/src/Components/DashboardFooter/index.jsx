@@ -17,41 +17,39 @@ const DashboardFooter = () => {
         <div id="dashboard_footer_container">
             <div id="dashboard_footer">
                 <Grid container id="footer_grid">
-                    <Grid item
+                    <Link to="overview"
                         className={selectedIcon !== 0 ? "centered_container" : "centered_container selected"}
                         onClick={() => setSelectedIcon(0)}
                     >
-                        <Link to="overview">
-                            <GridViewIcon />
-                        </Link>
-                    </Grid>
-                    <Grid item
+                        <GridViewIcon />
+                    </Link>
+                    <Link to="search"
                         className={selectedIcon !== 1 ? "centered_container" : "centered_container selected"}
                         onClick={() => setSelectedIcon(1)}
                     >
                         <SearchIcon />
-                    </Grid>
-                    <Grid item
+                    </Link>
+                    <Link to="chat"
                         className={selectedIcon !== 2 ? "centered_container" : "centered_container selected"}
                         onClick={() => setSelectedIcon(2)}
                     >
                         <ChatBubbleIcon />
-                    </Grid>
-                    <Grid item
+                    </Link>
+                    <Link to="notifications"
                         className={selectedIcon !== 3 ? "centered_container" : "centered_container selected"}
                         onClick={() => setSelectedIcon(3)}
                     >
                         <NotificationsIcon />
-                    </Grid>
-                    <Grid item
+                    </Link>
+                    <Link to="settings"
                         className={selectedIcon !== 4 ? "centered_container" : "centered_container selected"}
                         onClick={() => setSelectedIcon(4)}
                     >
                         <SettingsIcon />
-                    </Grid>
+                    </Link>
                 </Grid>
             </div>
-        </div>
+        </div >
     )
 }
 
