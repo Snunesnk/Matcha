@@ -7,6 +7,7 @@ import Navbar from "../../Components/Navbar/Navbar";
 
 
 const LandingPage = () => {
+
     return (
         <div id="landing_page">
             <Navbar />
