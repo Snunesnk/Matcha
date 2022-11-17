@@ -1,5 +1,15 @@
 #dashboard {
-    background-color: black;
+    background-color: #9185BE2c;
+    /* background-color: #FBE3DD; */
     width: 100vw;
     height: 100vh;
+    overflow: auto;
+}
+
+.dashboard_title {
+    color: #5E0B4F;
+    text-align: center;
+    width: 100%;
+    font-size: 4em;
+    margin-top: 0;
 }

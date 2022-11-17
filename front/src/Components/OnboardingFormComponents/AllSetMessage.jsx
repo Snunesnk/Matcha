@@ -12,7 +12,7 @@ const AllSetMessage = () => {
             <p id="gender_selection_catch_phrase"><b>Fantastic, you're all set :)</b></p>
             <p>Are you ready to find your catmate?</p>
 
-            <Link to="/dashboard">
+            <Link to="/dashboard/overview">
                 <button id="onboarding_next_button" onClick={sendForm}>Let the magic begin!</button>
             </Link>
         </div>

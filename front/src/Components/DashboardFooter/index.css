@@ -9,7 +9,8 @@
     width: 500px;
     height: 60px;
     border-radius: 4px;
-    background-color: #FBE3DD;
+    background-color: white;
+    box-shadow: 0 0 6px -1px rgb(0 0 0 / 20%)
 }
 
 #dashboard_footer svg {
@@ -38,5 +39,5 @@
 }
 
 #footer_grid .centered_container.selected svg {
-    color: #FBE3DD;
+    color: white;
 }
