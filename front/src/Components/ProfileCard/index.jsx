@@ -5,10 +5,12 @@ import "./index.css";
 
 const ProfileCard = () => {
     const [liked, setLiked] = useState(false);
+    const [city, setCity] = useState("Paris");
 
     function getLocation() {
         if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(showPosition, showPositionEvenIfDisabled)
+            navigator.geolocation.watchPosition(showPosition, showPositionEvenIfDisabled)
+            showPositionEvenIfDisabled();
         }
         else {
             console.log("Geolocation is not supported by this browser.");
@@ -19,9 +21,11 @@ const ProfileCard = () => {
         console.log(position);
     }
 
-    function showPositionEvenIfDisabled(error) {
+    function showPositionEvenIfDisabled() {
         console.log("Alright, let's do this the hard way");
-        fetch('https://ipapi.co/json/').then(res => res.json()).then(json => console.log(json));
+        // fetch('https://ipapi.co/json/')
+        //     .then(res => res.json())
+        //     .then(json => setCity(json.city));
     }
 
     getLocation();
@@ -33,12 +37,12 @@ const ProfileCard = () => {
             </div>
             <div className="card_info_container">
                 <div className="text_info">
-                    <p className="name_and_age">
+                    <div className="name_and_age">
                         Jon the cat, 7
-                    </p>
-                    <p className="card_bio">
-                        Hey this is me Jon the cat my name is Jon and I am a cat please to meet you
-                    </p>
+                    </div>
+                    <div className="card_city">
+                        {city}
+                    </div>
                 </div>
                 <div className="card_like">
                     {liked && (

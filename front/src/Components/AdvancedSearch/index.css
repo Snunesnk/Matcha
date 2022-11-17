@@ -1,0 +1,28 @@
+#advanced_search {
+    width: 100%;
+    height: 100%;
+
+    box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%);
+    border-radius: 25px;
+
+    padding: 25px;
+}
+
+#advanced_search_header {
+    display: flex;
+    justify-content: space-between;
+}
+
+#filters_reset_btn {
+    color: #5E0B4F;
+    padding: 1px 10px;
+    background-color: transparent;
+    border: 1px solid #5E0B4F;
+    border-radius: 4px;
+}
+
+#filters_reset:hover {
+    background-color: rgba(94, 11, 79, 0.3);
+}
+
+#apply_filters_btn {}

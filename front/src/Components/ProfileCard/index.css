@@ -1,17 +1,18 @@
 .profile_card {
-    width: 200px;
-    height: 300px;
-    background-color: #FBE3DD;
+    width: 250px;
+    height: 350px;
+    background-color: white;
     color: #5E0B4F;
 
     border-radius: 4px;
 
-    margin: 10px;
     overflow: hidden;
+
+    box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%)
 }
 
 .card_img_container {
-    height: 60%;
+    height: 65%;
     width: 100%;
     overflow: hidden;
     display: flex;
@@ -25,31 +26,40 @@
 }
 
 .card_info_container {
-    height: 40%;
+    height: 35%;
     width: 100%;
 }
 
+.text_info {
+    height: 50%;
+}
+
+.name_and_age {
+    margin-left: 10px;
+    margin-top: 0.5em;
+    margin-bottom: 0;
+    font-weight: 700;
+    font-size: 1.25em;
+}
+
+.card_city {
+    margin-left: 10px;
+    margin-top: 0;
+    font-size: 0.8em;
+    max-height: 24px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
 .card_like {
+    height: 30%;
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    color: #BA7300;
+    color: #FF9D00;
     cursor: pointer;
 }
 
 .card_like svg {
-    transform: scale(1.4);
-}
-
-.name_and_age {
-    margin: 0.5em;
-    font-weight: 700;
-}
-
-.card_bio {
-    margin: 0.5em;
-    font-size: 0.7em;
-    max-height: 24px;
-    text-overflow: ellipsis;
-    overflow: hidden;
+    transform: scale(1.8);
 }
