@@ -1,6 +1,6 @@
-const sql = require("./db.js");
+import { sql, request } from "../services/db-request.service.js";
 
-class User {
+export class User {
     constructor(data) {
         const user = typeof data === 'object' ? data : {};
 
@@ -11,71 +11,61 @@ class User {
         this.surname = user.surname;
     }
 
-    static create(newUser) {
-        return new Promise((resolve, reject) => {
-            sql.query("INSERT INTO user SET ?", newUser, (err, res) => {
-                if (err) {
-                    console.log("error: ", err);
-                    reject(err);
-                    return ;
-                }
-                console.log("created user: ", { login: res.insertLogin, ...newUser });
-                resolve({ login: res.insertLogin, ...newUser });
-            });  
-        })
+    static async create(newUser) {
+        // Can check for password
+        // Can check for email
+        // etc.
+        return request.create('user', newUser)
     }
 
-    static findByLogin(login) {
-        console.log(`looking for user: ${login}`);
-        return new Promise((resolve, reject) => {
-            sql.query(`SELECT * FROM user WHERE login LIKE '%${login}'`, (err, res) => {
-                if (err) {
-                    reject(err);
-                    return ;
-                }
+    static async getAll() {
+        return request.read('user', {});
+        // return new Promise((resolve, reject) => {
+        //     sql.query(
+        //         query,
+        //         (err, res) => {
+        //             if (err) {
+        //                 reject(err);
+        //                 return ;
+        //             }
+        //             resolve(res);
+        //         }
+        //     )
+        // })
+    }
+
+    // static async findByLogin(login) {
+        // console.log(`looking for user: ${login}`);
+        // return new Promise((resolve, reject) => {
+        //     sql.query(`SELECT * FROM user WHERE login LIKE '%${login}'`, (err, res) => {
+        //         if (err) {
+        //             reject(err);
+        //             return ;
+        //         }
     
-                if (res.length === 0) {    
-                    // could not find User with given id
-                    reject({ kind: "not_found" });
-                    return ;
-                }
+        //         if (res.length === 0) {    
+        //             // could not find User with given id
+        //             reject({ kind: "not_found" });
+        //             return ;
+        //         }
 
-                resolve(res[0]);
-            });
-        });
-    }
+        //         resolve(res[0]);
+        //     });
+        // });
+    // }
 
-    static getAll(gender, result) {
-        let query = "SELECT * FROM user";
+    // static getAllVerified(result) {
+    //     sql.query("SELECT * FROM user WHERE verified LIKE '%true'", (err, res) => {
+    //         if (err) {
+    //             console.log("error: ", err);
+    //             result(null, err);
+    //             return;
+    //         }
 
-        if (gender) {
-            query += ` WHERE gender LIKE '%${gender}%'`;
-        }
-
-        sql.query(query, (err, res) => {
-            if (err) {
-                console.log("error: ", err);
-                result(null, err);
-                return;
-            }
-
-            console.log("users: ", res);
-            result(null, res);
-        });
-    }
-
-    static getAllVerified(result) {
-        sql.query("SELECT * FROM user WHERE verified LIKE '%true'", (err, res) => {
-            if (err) {
-                console.log("error: ", err);
-                result(null, err);
-                return;
-            }
-
-            console.log("users: ", res);
-            result(null, res);
-        });
-    }
+    //         console.log("users: ", res);
+    //         result(null, res);
+    //     });
+    // }
 
     static updateByLogin(login, user, result) {
         sql.query(
@@ -142,5 +132,3 @@ class User {
         });
     }
 }
-
-module.exports = User;
