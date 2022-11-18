@@ -1,7 +1,8 @@
-version: "3.7"
+version: "3.8"
 
 services:
-    backend:
+    matcha_backend:
+        container_name: matcha_backend
         build:
             context: server
         command: npm run dev
@@ -11,7 +12,7 @@ services:
         volumes:
             - ./server:/server/app
         environment:
-            MYSQL_HOST: mysql
+            MYSQL_HOST: matcha_db
             MYSQL_USER: root
             MYSQL_PASSWORD: brichard
             MYSQL_DB: matcha_db
@@ -19,19 +20,22 @@ services:
             - public
             - private
         depends_on:
-            - mysql
-    mysql:
-        image: mysql:5.7
+            - matcha_db
+    matcha_db:
+        container_name: matcha_db
+        build:
+            context: ./mysql
+            dockerfile: ./Dockerfile
         restart: always
         volumes:
-            - ./matcha-mysql-data:/var/lib/mysql
-            - ./server/db-scripts:/docker-entrypoint-initdb.d
+            - matcha-mysql-data:/var/lib/mysql
         networks:
             - private
         environment:
             MYSQL_ROOT_PASSWORD: brichard
             MYSQL_DATABASE: matcha_db
-    frontend:
+    matcha_frontend:
+        container_name: matcha_frontend
         build:
             context: front
         ports:
@@ -42,7 +46,7 @@ services:
         networks:
             - public
         depends_on:
-            - backend
+            - matcha_backend
 
 networks:
     public:
