@@ -1,0 +1,16 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug 'front'",
+        "type": "node",
+        "request": "attach",
+        "port": 5173,
+        "address": "localhost",
+        "localRoot": "${workspaceFolder}",
+        "remoteRoot": "/home/node/app",
+        "skipFiles": ["/home/node/app/node_modules/**/*.js", "<node_internals>/**"]
+      }
+    ]
+  }
+  

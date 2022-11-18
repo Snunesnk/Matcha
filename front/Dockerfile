@@ -1,4 +1,4 @@
-FROM node
+FROM node:16
 
 WORKDIR /front
 COPY package.json .

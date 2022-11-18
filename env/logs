@@ -1,0 +1,8 @@
+#!/bin/bash
+
+VAR=$1
+if test $VAR; then
+    docker logs $VAR -f;
+else
+    echo 'Missing argument !'
+fi;
