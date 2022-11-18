@@ -1,33 +1,21 @@
-.card_container {
-    width: fit-content;
-    overflow: hidden;
-    transition: all 100ms ease-out;
-}
-
-.card_container:hover {
-    transform: scale(1.05);
-    transition: all 100ms ease-out
-}
-
 .overview_top_phrase {
     font-weight: 600;
     font-size: 1.1em;
     color: black;
 }
 
-.cards_header {
-    display: flex;
-    justify-content: start;
-    width: 100%;
-}
-
 .dashboard_overview {
     display: flex;
     justify-content: center;
     color: black;
+    height: 80%;
 }
 
 .overview_sort {
     color: #BA7300;
     margin-left: 50px;
+}
+
+#advanced_search_container {
+    padding: 10px;
 }

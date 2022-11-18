@@ -16,7 +16,7 @@ const Dashboard = () => {
             <Routes>
                 <Route path="overview" element={<DashboardOverview />}></Route>
             </Routes>
-            <DashboardFooter />
+            {/* <DashboardFooter /> */}
         </div >
     )
 }

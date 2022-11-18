@@ -2,6 +2,7 @@ import { Grid } from "@mui/material";
 import React from "react";
 import AdvancedSearch from "../AdvancedSearch";
 import ProfileCard from "../ProfileCard";
+import ProfileMatching from "../ProfileMatching";
 import './index.css';
 
 const DashboardOverview = () => {
@@ -40,13 +41,13 @@ const DashboardOverview = () => {
 
         <div className="dashboard_overview">
             <Grid container>
-                <Grid item xs={4}>
+                <Grid item xs={3} id="advanced_search_container">
                     <AdvancedSearch />
                 </Grid>
-                <Grid item xs={4}>
-                    Profile Matching
+                <Grid item xs={6}>
+                    <ProfileMatching />
                 </Grid>
-                <Grid item xs={4}>
+                <Grid item xs={3}>
                     Messages
                 </Grid>
             </Grid>
