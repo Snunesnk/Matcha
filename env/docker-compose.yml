@@ -1,0 +1,63 @@
+version: "3.3"
+
+services:
+    matcha_backend:
+        container_name: matcha_backend
+        build:
+            context: ../server
+        ports:
+            - 8080:8080
+            - 2424:2424
+        working_dir: /server/src
+        volumes:
+            - ../server:/server/src
+        env_file: ../server/.env
+        networks:
+            - public
+            - private
+        healthcheck:
+            test: "curl --fail http://localhost:$$NODE_DOCKER_PORT/isHealthy || exit 1"
+            interval: 5s
+            retries: 20
+            start_period: 5s
+            timeout: 5s
+        depends_on:
+            matcha_db:
+                condition: service_healthy
+    matcha_db:
+        container_name: matcha_db
+        build:
+            context: ../mysql
+            dockerfile: ./Dockerfile
+        restart: always
+        volumes:
+            - matcha-mysql-data:/var/lib/mysql
+        networks:
+            - private
+        env_file: ../server/.env
+        healthcheck:
+            test: "mysqladmin ping -h $$MYSQL_HOST -p$$MYSQL_ROOT_PASSWORD"
+            interval: 5s
+            retries: 20
+            start_period: 5s
+            timeout: 2s
+    matcha_frontend:
+        container_name: matcha_frontend
+        build:
+            context: ../front
+        ports:
+            - 5173:5173
+        working_dir: /front/src
+        volumes:
+            - ../front:/front/src
+        networks:
+            - public
+        depends_on:
+            matcha_backend:
+                condition: service_healthy
+
+networks:
+    public:
+    private:
+volumes:
+    matcha-mysql-data:

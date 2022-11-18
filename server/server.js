@@ -1,6 +1,8 @@
-const express = require("express");
-const cors = require("cors");
-require("dotenv").config();
+import express, { json, urlencoded } from "express";
+import cors from "cors";
+import dotenv from "dotenv"
+
+dotenv.config();
 
 const app = express();
 
@@ -9,23 +11,21 @@ var corsOptions = {
 };
 
 app.use(cors(corsOptions));
-
 // parse requests of content-type - application/json
-app.use(express.json());
+app.use(json());
 
 // parse requests of content-type - application/x-www-form-urlencoded
-app.use(express.urlencoded({ extended: true }));
+app.use(urlencoded({ extended: true }));
 
-// simple route
-app.get("/", (req, res) => {
-  res.json({ message: "Welcome to brichard application." });
-});
+// Setting /api routes
+import userRoute from "./app/routes/user.routes.js";
 
-require("./app/routes/user.routes.js")(app);
-require("./app/routes/link.routes.js")(app);
-// require("./app/routes/user_tag.routes.js")(app);
-// require("./app/routes/tag.routes.js")(app);
-// require("./app/routes/view.routes.js")(app);
+app.use("/api", userRoute)
+
+// Docker health check
+app.use("/isHealthy", express.Router().get("", (req, res) => {
+  res.status(200).send("I'm healthy !");
+}));
 
 // set port, listen for requests
 const PORT = process.env.NODE_DOCKER_PORT || 8080;
