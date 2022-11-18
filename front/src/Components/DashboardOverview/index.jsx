@@ -1,6 +1,7 @@
 import { Grid } from "@mui/material";
 import React from "react";
 import AdvancedSearch from "../AdvancedSearch";
+import ChatList from "../ChatList";
 import ProfileCard from "../ProfileCard";
 import ProfileMatching from "../ProfileMatching";
 import './index.css';
@@ -48,7 +49,7 @@ const DashboardOverview = () => {
                     <ProfileMatching />
                 </Grid>
                 <Grid item xs={3}>
-                    Messages
+                    <ChatList />
                 </Grid>
             </Grid>
 
