@@ -33,11 +33,12 @@ export default class {
   }
 
   // Retrieve all Users from the database (with condition).
-  static findAll = async (req, res) => {
+  static getAllUsers = async (req, res) => {
     // res.header("Access-Control-Allow-Origin", "*");
+    const filters = req.body.filters || {};
 
     try {
-      const data = await User.getAll();
+      const data = await User.getAllUsers(filters);
       res.send(
         data.map((user) => {
           return { ...user };
@@ -51,7 +52,7 @@ export default class {
   };
 
   // Find a single User with a login
-  static findOne = async (req, res) => {
+  static getUserByLogin = async (req, res) => {
     const login = req.params.login;
 
     if (!login) {
@@ -62,7 +63,7 @@ export default class {
     }
 
     try {
-      const data = await User.findByLogin(login);
+      const data = await User.getUserByLogin(login);
 
       if (data.length === 0) {
         res.status(404).send({
@@ -70,29 +71,28 @@ export default class {
         });
         return ;
       }
-      res.send({ ...data });
+      res.send(data[0]);
     } catch (error) {
       res.status(500).send({
         message: `Error retrieving User with login: ${login}`,
       });
-      return ;
     }
   };
 
   // find all published Users
-  static findAllVerified = (req, res) => {
-    User.getAllVerified((err, data) => {
-      if (err)
-        res.status(500).send({
-          message: err.message || "Some error occurred while retrieving users.",
-        });
-      else
+  static getAllVerified = async (req, res) => {
+      try {
+        const data = await User.getAllVerified();
         res.send(
           data.map((user) => {
             return { ...user };
           })
         );
-    });
+      } catch (error) {
+        res.status(500).send({
+          message: error.message || "Some error occurred while retrieving users.",
+        });
+      }
   };
 
   // Update a User identified by the login in the request

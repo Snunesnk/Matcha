@@ -1,16 +1,16 @@
-version: "3.8"
+version: "3.3"
 
 services:
     matcha_backend:
         container_name: matcha_backend
         build:
-            context: server
+            context: ../server
         command: npm run dev
         ports:
             - 8080:8080
         working_dir: /server/app
         volumes:
-            - ./server:/server/app
+            - ../server:/server/app
         environment:
             MYSQL_HOST: matcha_db
             MYSQL_USER: root
@@ -24,7 +24,7 @@ services:
     matcha_db:
         container_name: matcha_db
         build:
-            context: ./mysql
+            context: ../mysql
             dockerfile: ./Dockerfile
         restart: always
         volumes:
@@ -37,12 +37,12 @@ services:
     matcha_frontend:
         container_name: matcha_frontend
         build:
-            context: front
+            context: ../front
         ports:
             - 5173:5173
         working_dir: /front/src
         volumes:
-            - ./front:/front/src
+            - ../front:/front/src
         networks:
             - public
         depends_on:

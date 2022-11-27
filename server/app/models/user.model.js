@@ -18,26 +18,17 @@ export class User {
         return DbRequestService.create('user', newUser)
     }
 
-    static async getAll() {
-        return DbRequestService.read('user', {});
+    static async getAllUsers(filters = {}) {
+        return DbRequestService.read('user', filters);
     }
 
-    static async findByLogin(login) {
-        return DbRequestService.read('user', {login: 'toto'});
+    static async getUserByLogin(login) {
+        return DbRequestService.read('user', { login: `${login}`});
     }
 
-    // static getAllVerified(result) {
-    //     sql.query("SELECT * FROM user WHERE verified LIKE '%true'", (err, res) => {
-    //         if (err) {
-    //             console.log("error: ", err);
-    //             result(null, err);
-    //             return;
-    //         }
-
-    //         console.log("users: ", res);
-    //         result(null, res);
-    //     });
-    // }
+    static async getAllVerified() {
+        return DbRequestService.read('user', { verified: `true`});
+    }
 
     static updateByLogin(login, user, result) {
         sql.query(

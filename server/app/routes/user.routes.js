@@ -7,19 +7,19 @@ const router = express.Router();
 router.post("/user/", userHandler.create);
 
 // Retrieve all Users
-router.get("/user/", userHandler.findAll);
+router.get("/user/", userHandler.getAllUsers);
 
 // Retrieve all verified Users
-router.get("/user/verified", userHandler.findAllVerified);
+router.get("/user/verified", userHandler.getAllVerified);
 
 // Retrieve a single User with login
-router.get("/user/:login", userHandler.findOne);
+router.get("/user/login/:login", userHandler.getUserByLogin);
 
 // Update a User with login
-router.put("/user/:login", userHandler.update);
+router.put("/user/login/:login", userHandler.update);
 
 // Delete a User with login
-router.delete("/user/:login", userHandler.delete);
+router.delete("/user/login/:login", userHandler.delete);
 
 // Delete all Users
 router.delete("/user/", userHandler.deleteAll);

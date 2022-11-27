@@ -10,25 +10,25 @@ const connection = mysql.createConnection({
     database: DB,
 });
 
-// Used to ensure our dynamically forged request won't break trying to reach for a table that does not exist
-const allowedTableUse = [
-    "user",
-    "tag",
-    "view",
-    "user_preferences",
-    "user_tag",
-    "user_pictures",
-    "user_tag",
-]
-
 // temporary, will be removed after I'm done with coding agnostic db requests
 export const sql = connection
 
 export class DbRequestService {
+// Used to ensure our dynamically forged request won't break trying to reach for a table that does not exist
+    static allowedTableUse = [
+        "user",
+        "tag",
+        "view",
+        "user_preferences",
+        "user_tag",
+        "user_pictures",
+        "user_tag",
+    ];
+
     static async create(tableName, objectToAdd) {
         return new Promise((resolve, reject) => {
 
-            if (!allowedTableUse.includes(tableName)) {
+            if (!this.allowedTableUse.includes(tableName)) {
                 reject(new Error("Table does not exist in database"))
             }
 
@@ -47,27 +47,25 @@ export class DbRequestService {
 
     static async read(tableName, filters = {}) {
         return new Promise((resolve, reject) => {
-            if (!allowedTableUse.includes(tableName)) {
+            if (!this.allowedTableUse.includes(tableName)) {
                 reject(new Error("Table does not exist in database"))
             }
 
-            const query = `SELECT * FROM ${tableName}`;
-            console.log("🚀 ~brichard | file: db-request.service.js ~brichard | line 55 ~brichard | request ~brichard | returnnewPromise ~brichard | query", query)
-            const queryFilters = _.toPairs(filters).forEach((keyValue, index) => {
-                console.log("🚀 ~brichard | file: db-request.service.js ~brichard | line 56 ~brichard | request ~brichard | queryFilters ~brichard | keyValue", keyValue)
+            let query = `SELECT * FROM ${tableName}`;
+            const queryFilters = _.transform(_.toPairs(filters), (result, keyValue, index) => {
                 const field = keyValue[0];
-                const value = keyValue[1];
+                let value = keyValue[1];
                 const startsWith = index === 0 ? 'WHERE' : 'AND';
 
-                // In case of a boolean, mysql requires the '%' to inteerprete it correctly
+                // In case of a boolean, mysql requires the '%' to interprete it correctly
                 if (value === 'false' || value === 'true') {
                     value = `%${value}`
                 }
-                return `${startsWith} ${field} LIKE ${value}`
-            }) || "";
-            console.log("🚀 ~brichard | file: db-request.service.js ~brichard | line 66 ~brichard | request ~brichard | queryFilters ~brichard | queryFilters", queryFilters)
+                query += ` ${startsWith} ${field} LIKE ?`
+                result.push(value);
+            }, []);
 
-            connection.query(query + queryFilters, (err, res) => {
+            connection.query(query, queryFilters, (err, res) => {
                 if (err) {
                     reject(err);
                     return ;

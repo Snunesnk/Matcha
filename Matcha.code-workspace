@@ -1,6 +1,10 @@
 {
 	"folders": [
 		{
+			"name": "env",
+			"path": "./env",
+		},
+		{
 			"name": "server",
 			"path": "./server"
 		},
@@ -13,5 +17,7 @@
 			"path": "./front"
 		}
 	],
-	"settings": {}
+	"settings": {
+		
+	}
 }
