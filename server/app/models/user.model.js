@@ -1,4 +1,4 @@
-import { sql, request } from "../services/db-request.service.js";
+import { sql, DbRequestService } from "../services/db-request.service.js";
 
 export class User {
     constructor(data) {
@@ -15,44 +15,16 @@ export class User {
         // Can check for password
         // Can check for email
         // etc.
-        return request.create('user', newUser)
+        return DbRequestService.create('user', newUser)
     }
 
     static async getAll() {
-        return request.read('user', {});
-        // return new Promise((resolve, reject) => {
-        //     sql.query(
-        //         query,
-        //         (err, res) => {
-        //             if (err) {
-        //                 reject(err);
-        //                 return ;
-        //             }
-        //             resolve(res);
-        //         }
-        //     )
-        // })
+        return DbRequestService.read('user', {});
     }
 
-    // static async findByLogin(login) {
-        // console.log(`looking for user: ${login}`);
-        // return new Promise((resolve, reject) => {
-        //     sql.query(`SELECT * FROM user WHERE login LIKE '%${login}'`, (err, res) => {
-        //         if (err) {
-        //             reject(err);
-        //             return ;
-        //         }
-    
-        //         if (res.length === 0) {    
-        //             // could not find User with given id
-        //             reject({ kind: "not_found" });
-        //             return ;
-        //         }
-
-        //         resolve(res[0]);
-        //     });
-        // });
-    // }
+    static async findByLogin(login) {
+        return DbRequestService.read('user', {login: 'toto'});
+    }
 
     // static getAllVerified(result) {
     //     sql.query("SELECT * FROM user WHERE verified LIKE '%true'", (err, res) => {

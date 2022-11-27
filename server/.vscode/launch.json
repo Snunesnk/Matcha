@@ -1,0 +1,26 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "name": "Debug 'server'",
+        "type": "node",
+        "request": "attach",
+        "port": 8080,
+        "address": "localhost",
+        "localRoot": "${workspaceFolder}",
+        "remoteRoot": "/home/node/app",
+        "skipFiles": [
+          "/home/node/app/node_modules/**/*.js",
+          "<node_internals>/**"
+        ]
+      },
+      {
+        "name": "Docker Node.js Launch",
+        "type": "docker",
+        "request": "launch",
+        "preLaunchTask": "docker-run: debug",
+        "platform": "node"
+      }
+    ]
+  }
+  

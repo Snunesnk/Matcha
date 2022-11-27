@@ -23,7 +23,6 @@ export default class {
     try {
       // Save User in the database
       const result = await User.create(user);
-      console.log("🚀 ~brichard | file: user.handler.js ~brichard | line 26 ~brichard | create ~brichard | result", result)
       res.send({ ...result });
     } catch (error) {
       res.status(500).send({
@@ -41,7 +40,6 @@ export default class {
       const data = await User.getAll();
       res.send(
         data.map((user) => {
-          console.log("🚀 ~brichard | file: user.handler.js ~brichard | line 44 ~brichard | data.map ~brichard | user", user)
           return { ...user };
         })
       );
@@ -65,20 +63,19 @@ export default class {
 
     try {
       const data = await User.findByLogin(login);
-      res.send({ ...data });
-    } catch (error) {
-      if (error.kind === "not_found") {
+
+      if (data.length === 0) {
         res.status(404).send({
           message: `Could not find User with login ${req.params.login}.`,
         });
         return ;
       }
-      else {
-        res.status(500).send({
-          message: `Error retrieving User with login: ${login}`,
-        });
-        return ;
-      }
+      res.send({ ...data });
+    } catch (error) {
+      res.status(500).send({
+        message: `Error retrieving User with login: ${login}`,
+      });
+      return ;
     }
   };
 
