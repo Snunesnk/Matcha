@@ -3,7 +3,7 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import "./index.css";
 
-const ProfileCard = () => {
+const ProfileCard = ({ url, name, age, className }) => {
     const [liked, setLiked] = useState(false);
     const [city, setCity] = useState("Paris");
 
@@ -56,11 +56,11 @@ const ProfileCard = () => {
         //     </div>
         // </div>
 
-        <div className="card_img_container">
-            <img src="/src/assets/cat_profile.jpg" />
+        <div className={"card_img_container " + className}>
+            <img src={url} />
             <div className="name_and_age_container">
                 <div className="name_and_age">
-                    Jon the cat, 7
+                    {name}, {age}
                 </div>
             </div>
         </div>

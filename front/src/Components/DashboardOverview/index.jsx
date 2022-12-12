@@ -42,13 +42,13 @@ const DashboardOverview = () => {
 
         <div className="dashboard_overview">
             <Grid container>
-                <Grid item xs={3} id="advanced_search_container">
+                <Grid item xs={3}>
                     <AdvancedSearch />
                 </Grid>
                 <Grid item xs={6}>
                     <ProfileMatching />
                 </Grid>
-                <Grid item xs={3}>
+                <Grid item xs={3} id="chat_list_container">
                     <ChatList />
                 </Grid>
             </Grid>
