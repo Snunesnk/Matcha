@@ -9,6 +9,7 @@
 .card_container {
     display: flex;
     justify-content: center;
+    position: relative;
 }
 
 .profile_matching_btn_container {

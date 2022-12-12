@@ -1,13 +1,25 @@
 .card_img_container {
-    height: 450px;
-    width: 550px;
+    height: 600px;
+    width: 732px;
     overflow: hidden;
     display: flex;
     justify-content: center;
     align-items: center;
     position: relative;
     border-radius: 4px;
-    box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%)
+    box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%);
+    transition: all 100ms;
+    opacity: 1;
+}
+
+.card_img_container.liked {
+    transition: all 100ms;
+    opacity: 0;
+}
+
+.card_img_container.disliked {
+    transition: all 100ms;
+    height: 0;
 }
 
 .name_and_age_container {
