@@ -20,6 +20,8 @@ import DescriptionCreation from "../Components/OnboardingFormComponents/Descript
 import InterestsTags from "../Components/OnboardingFormComponents/InterestsTags";
 import PicturesUploading from "../Components/OnboardingFormComponents/PicturesUploading";
 import AllSetMessage from "../Components/OnboardingFormComponents/AllSetMessage";
+import DashboardOverview, { OverviewComponent } from "../Components/DashboardOverview";
+import ChatComponent from "../Components/ChatComponent";
 
 
 const router = createBrowserRouter([
@@ -85,6 +87,25 @@ const router = createBrowserRouter([
         path: "/dashboard/*",
         element: <Dashboard />,
         errorElement: <ErrorPage />,
+        children: [
+            {
+                path: "overview",
+                element: <DashboardOverview />,
+                errorElement: <ErrorPage />,
+                children: [
+                    {
+                        path: "",
+                        element: <OverviewComponent />,
+                        errorElement: <ErrorPage />,
+                    },
+                    {
+                        path: "messages/:id",
+                        element: <ChatComponent />,
+                        errorElement: <ErrorPage />,
+                    },
+                ]
+            },
+        ]
     },
 ]);
 

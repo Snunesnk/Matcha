@@ -7,7 +7,6 @@ const ProfileCard = ({ url, name, age, className }) => {
     const [liked, setLiked] = useState(false);
     const [city, setCity] = useState("Paris");
 
-    console.log("Profile card");
     // function getLocation() {
     //     if (navigator.geolocation) {
     //         navigator.geolocation.watchPosition(showPosition, showPositionEvenIfDisabled)
@@ -32,31 +31,6 @@ const ProfileCard = ({ url, name, age, className }) => {
     // getLocation();
 
     return (
-        // <div>
-        //         <div className="card_img_container">
-        //             <img src="/src/assets/cat_profile.jpg" />
-        //         </div>
-        //         <div className="card_info_container">
-        //             <div className="text_info">
-        //                 <div className="name_and_age">
-        //                     Jon the cat, 7
-        //                 </div>
-        //                 <div className="card_city">
-        //                     {city}
-        //                 </div>
-        //             </div>
-        //         </div>
-        //     </div>
-        //     <div className="card_like">
-        //         {liked && (
-        //             <FavoriteIcon onClick={() => setLiked(false)} />
-        //         )}
-        //         {!liked && (
-        //             <FavoriteBorderIcon onClick={() => setLiked(true)} />
-        //         )}
-        //     </div>
-        // </div>
-
         <div className={"card_img_container " + className} style={{
             background: "url(" + url + ") 50% 50% / cover no-repeat",
         }}>

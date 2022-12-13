@@ -1,5 +1,5 @@
 import React from "react";
-import { Route, Routes } from "react-router-dom";
+import { Outlet, Route, Routes } from "react-router-dom";
 import DashboardOverview from "../../Components/DashboardOverview";
 import ErrorPage from "../ErrorPage";
 
@@ -12,10 +12,8 @@ const Dashboard = () => {
             <h1 className="dashboard_title">
                 MatChat
             </h1>
-            <Routes>
-                <Route path="overview" element={<DashboardOverview />} errorElement={<ErrorPage />}></Route>
-            </Routes>
-            {/* <DashboardFooter /> */}
+
+            <Outlet />
         </div >
     )
 }
