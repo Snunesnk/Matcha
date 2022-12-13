@@ -37,38 +37,47 @@ const router = createBrowserRouter([
                 path: "signup",
                 element: <SignupForm />,
                 action: signupAction,
+                errorElement: <ErrorPage />,
             },
             {
                 path: "validation",
                 element: <EmailValidation />,
+                errorElement: <ErrorPage />,
             },
             {
                 path: "welcome",
                 element: <WelcomeMessage />,
+                errorElement: <ErrorPage />,
             },
             {
                 path: "gender",
                 element: <GenderSelection />,
+                errorElement: <ErrorPage />,
             },
             {
                 path: "preferences",
                 element: <SexualPreferences />,
+                errorElement: <ErrorPage />,
             },
             {
                 path: "bio",
                 element: <DescriptionCreation />,
+                errorElement: <ErrorPage />,
             },
             {
                 path: "interests",
                 element: <InterestsTags />,
+                errorElement: <ErrorPage />,
             },
             {
                 path: "pictures",
                 element: <PicturesUploading />,
+                errorElement: <ErrorPage />,
             },
             {
                 path: "done",
                 element: <AllSetMessage />,
+                errorElement: <ErrorPage />,
             },
         ]
     },
