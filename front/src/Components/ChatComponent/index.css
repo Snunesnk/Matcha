@@ -1,0 +1,87 @@
+#messages_container {
+    width: 100%;
+    height: 100%;
+
+    box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%);
+
+    border-radius: 4px;
+
+    background-color: white;
+
+    overflow: hidden;
+    position: relative;
+}
+
+.close_messages_btn {
+    background-color: #5E0B4F;
+    color: white;
+    box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%);
+    border-radius: 40px;
+    padding: 1px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 100ms;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+}
+
+.close_messages_btn:hover {
+    transition: all 100ms;
+    color: black;
+    background-color: #BA7300;
+}
+
+.close_messages_btn:active {
+    transform: scale(0.9);
+    transition: all 100ms;
+}
+
+.close_messages_btn svg {
+    width: 30px;
+    height: 30px;
+}
+
+.close_messages_btn:hover {
+    transition: all 100ms;
+}
+
+#messages_input {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    right: 10px;
+    border: 1px solid #BA7300;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 4px;
+    transition: all 100ms;
+    font-size: 1em;
+    padding-right: 50px;
+}
+
+#messages_input:focus-visible {
+    outline: solid #BA7300 1px;
+    border: 1px solid #BA7300;
+    transition: all 100ms;
+}
+
+.messages_send_icon {
+    position: absolute;
+    bottom: 20px;
+    right: 20px;
+    color: #5E0B4F;
+    transition: all 100ms;
+    cursor: pointer;
+}
+
+.messages_send_icon:hover {
+    transform: scale(1.2);
+    transition: all 100ms;
+}
+
+.messages_send_icon:active {
+    transform: scale(0.9);
+    transition: all 100ms;
+}

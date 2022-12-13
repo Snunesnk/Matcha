@@ -1,10 +1,21 @@
 import { Grid } from "@mui/material";
 import React from "react";
+import { Outlet, Route, Routes } from "react-router-dom";
 import AdvancedSearch from "../AdvancedSearch";
 import ChatList from "../ChatList";
 import ProfileCard from "../ProfileCard";
 import ProfileMatching from "../ProfileMatching";
 import './index.css';
+
+export const OverviewComponent = () => (
+    <Grid item container xs={9}>
+        <Grid item xs={4}>
+            <AdvancedSearch />
+        </Grid>
+        <Grid item xs={8}>
+            <ProfileMatching />
+        </Grid>
+    </Grid>);
 
 const DashboardOverview = () => {
     let results = [];
@@ -15,39 +26,14 @@ const DashboardOverview = () => {
                 <ProfileCard />
             </Grid>
         ));
-
     }
 
     return (
-        // <div className="dashboard_overview">
-        //     <Grid item xs={4}>
-        //         <div>Age</div>
-        //     </Grid>
-        //     <Grid item xs={8} container>
-        //         <div className="cards_header">
-        //             <div className="overview_top_phrase">
-        //                 Profiles that you might like
-        //             </div>
-        //             <div className="overview_sort">
-        //                 Sort by
-        //             </div>
-        //         </div>
-        //         <div className="overview_grid_container">
-        //             <Grid container  >
-        //                 {results}
-        //             </Grid>
-        //         </div>
-        //     </Grid>
-        // </div >
-
         <div className="dashboard_overview">
             <Grid container>
-                <Grid item xs={3}>
-                    <AdvancedSearch />
-                </Grid>
-                <Grid item xs={6}>
-                    <ProfileMatching />
-                </Grid>
+
+                <Outlet />
+
                 <Grid item xs={3} id="chat_list_container">
                     <ChatList />
                 </Grid>
