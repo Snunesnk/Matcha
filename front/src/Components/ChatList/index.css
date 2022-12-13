@@ -4,8 +4,8 @@
 
     box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%);
 
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
+    border-top-left-radius: 4px;
+    border-bottom-left-radius: 4px;
 
     background-color: white;
 
@@ -27,6 +27,14 @@
 
 .chat_message_container {
     padding: 10px;
+    transition: all 200ms ease-out;
+}
+
+.chat_message_container:hover {
+    background-color: rgba(94, 11, 79, 0.28);
+    transition: all 200ms ease-out;
+    cursor: pointer;
+    margin-left: -10px;
 }
 
 .chat_img_container {
