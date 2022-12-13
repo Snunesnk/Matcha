@@ -2,33 +2,39 @@ import { Grid } from "@mui/material";
 import React, { useState } from "react";
 import ProfileCard from "../ProfileCard";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
-import FavoriteIcon from '@mui/icons-material/Favorite';
 import ClearIcon from '@mui/icons-material/Clear';
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import "./index.css"
 
+let profileCards = [
+    {
+        url: "/src/assets/cat_profile.jpg",
+        name: "Jon the cat",
+        age: "7"
+    },
+    {
+        url: "/src/assets/cat_glasses.jpg",
+        name: "Marc the bg",
+        age: "5"
+    }
+];
+
 const ProfileMatching = () => {
     const [cardState, setCardState] = useState("");
-    const [profileCards, setProfileCards] = useState([
-        {
-            url: "/src/assets/cat_profile.jpg",
-            name: "Jon the cat",
-            age: "7"
-        },
-        {
-            url: "/src/assets/cat_profile.jpg",
-            name: "Jon the cat",
-            age: "7"
-        },]);
+    const [actualCard, setactualCard] = useState({
+        url: "/src/assets/cat_profile.jpg",
+        name: "Jon the cat",
+        age: "7"
+    });
+
     let transitioning = false;
 
     const displayNextCard = () => {
-        console.log("shifting");
-        setProfileCards(prev => {
-            return prev.shift();
-        })
+        console.log(actualCard);
+        setactualCard(profileCards.shift());
 
         transitioning = false;
+        setCardState("");
     }
 
     const setCardLiked = () => {
@@ -47,18 +53,18 @@ const ProfileMatching = () => {
         <div id="profile_matching">
             <Grid container>
                 <Grid item xs={12} className="card_container">
-                    {profileCards.length > 0 && (
+                    {actualCard && (
                         <ProfileCard
-                            url={profileCards[0].url}
-                            name={profileCards[0].name}
-                            age={profileCards[0].age}
+                            url={actualCard.url}
+                            name={actualCard.name}
+                            age={actualCard.age}
                             className={cardState}
                         />)}
-                    {profileCards.length == 0 && (
+                    {!actualCard && (
                         "We're sorry, we can't find anymore corresponding profiles"
                     )}
                 </Grid>
-                {profileCards.length > 0 && (
+                {actualCard && (
 
                     <Grid item xs={12}>
                         <div className="profile_matching_btn_container">

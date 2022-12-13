@@ -7,6 +7,7 @@ const ProfileCard = ({ url, name, age, className }) => {
     const [liked, setLiked] = useState(false);
     const [city, setCity] = useState("Paris");
 
+    console.log("Profile card");
     // function getLocation() {
     //     if (navigator.geolocation) {
     //         navigator.geolocation.watchPosition(showPosition, showPositionEvenIfDisabled)
@@ -56,14 +57,15 @@ const ProfileCard = ({ url, name, age, className }) => {
         //     </div>
         // </div>
 
-        <div className={"card_img_container " + className}>
-            <img src={url} />
+        <div className={"card_img_container " + className} style={{
+            background: "url(" + url + ") 50% 50% / cover no-repeat",
+        }}>
             <div className="name_and_age_container">
                 <div className="name_and_age">
                     {name}, {age}
                 </div>
             </div>
-        </div>
+        </div >
     )
 }
 

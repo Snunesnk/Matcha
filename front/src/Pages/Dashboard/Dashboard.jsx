@@ -1,8 +1,7 @@
 import React from "react";
 import { Route, Routes } from "react-router-dom";
-import DashboardFooter from "../../Components/DashboardFooter";
 import DashboardOverview from "../../Components/DashboardOverview";
-import Title from "../../Components/Title/Title";
+import ErrorPage from "../ErrorPage";
 
 import './Dashboard.css';
 
@@ -14,7 +13,7 @@ const Dashboard = () => {
                 MatChat
             </h1>
             <Routes>
-                <Route path="overview" element={<DashboardOverview />}></Route>
+                <Route path="overview" element={<DashboardOverview />} errorElement={<ErrorPage />}></Route>
             </Routes>
             {/* <DashboardFooter /> */}
         </div >
