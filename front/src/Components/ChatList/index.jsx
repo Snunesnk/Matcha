@@ -1,10 +1,11 @@
 import { Grid } from "@mui/material";
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import "./index.css"
 
 const ChatList = () => {
     const navigate = useNavigate();
+    const params = useParams();
 
     const navigateToConv = (id) => {
         navigate("/dashboard/overview/messages/" + id);
@@ -21,7 +22,7 @@ const ChatList = () => {
                 <Grid container className="chat">
                     {messages.map((message, i) => {
                         return (
-                            <Grid container item xs={12} className="chat_message_container" key={i} onClick={() => navigateToConv(message.id)}>
+                            <Grid container item xs={12} className={"chat_message_container" + (params.id && params.id == message.id ? " chat_active" : "")} key={i} onClick={() => navigateToConv(message.id)}>
                                 <Grid item xs={3}>
                                     <div className="chat_img_container">
                                         <img src={message.profile_pic}></img>
