@@ -5,12 +5,12 @@ services:
         container_name: matcha_backend
         build:
             context: ../server
-        command: npm run dev
         ports:
             - 8080:8080
-        working_dir: /server/app
+            - 4242:4242
+        working_dir: /server/src
         volumes:
-            - ../server:/server/app
+            - ../server:/server/src
         environment:
             MYSQL_HOST: matcha_db
             MYSQL_USER: root
