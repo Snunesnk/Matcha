@@ -37,3 +37,26 @@ requires a user as payload:
 
 
 To be continued ...
+
+
+PS: For now, some usefull curl cmd:
+
+- create user:
+curl --location --request POST 'localhost:8080/api/user' \--header 'Content-Type: application/json' \
+--data-raw '{"name":"Canavaggio","email":"bastien.richardcana@gmail.com","surname":"Bastien","login":"SuperMAIL", "password":"azerty"}'
+
+- get all verified users:
+curl --location --request GET "localhost:8080/api/user/verified"
+
+- update a user:
+curl --location --request PUT "http://localhost:8080/api/user/SuperMAIL" \
+--header 'Content-Type: application/json' \
+--data-raw '{"user":{"name":"Canavaggio","email":"bastien.richardcana@gmail.com","surname":"Bastien","login":"SuperMAIL", "password":"azerty"}}'
+
+- delete a user:
+curl --location --request DELETE 'localhost:8080/api/user/SuperMAIL'
+
+- login:
+curl --location --request POST 'localhost:8080/api/user/login' \
+--header 'Content-Type: application/json' \
+--data-raw '{"login":"SuperMAIL", "password":"azerty"}'
