@@ -1,9 +1,9 @@
-import React from "react";
-import { Routes, Route } from "react-router-dom";
-import { Grid } from "@mui/material";
+import React from 'react'
+import { Routes, Route } from 'react-router-dom'
+import { Grid } from '@mui/material'
 import Title from '../Title/Title'
-import Button from "../Button/Button";
-import './Navbar.css';
+import Button from '../Button/Button'
+import './Navbar.css'
 
 const LogInBtn = () => {
     return (
@@ -15,16 +15,16 @@ const LogInBtn = () => {
 
 const Navbar = () => {
     return (
-        <Grid container id='navbar'>
+        <Grid container id="navbar">
             <Grid item xs={4} className="center"></Grid>
             <Grid item xs={4} className="center">
-                <Title></Title>
+                {/* <Title></Title> */}
+                <h1 className="navTitle">MatChat</h1>
             </Grid>
 
-            <Routes>
+            {/* <Routes>
                 <Route path="" element={<LogInBtn />} />
-            </Routes>
-
+            </Routes> */}
         </Grid>
     )
 }
