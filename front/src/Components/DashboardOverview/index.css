@@ -8,14 +8,9 @@
     display: flex;
     justify-content: center;
     color: black;
-    height: 80%;
 }
 
 .overview_sort {
-    color: #BA7300;
+    color: #ba7300;
     margin-left: 50px;
-}
-
-#chat_list_container {
-    height: 100%;
 }
