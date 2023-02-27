@@ -8,7 +8,7 @@ import './Dashboard.css'
 const Dashboard = () => {
     return (
         <div className="dashboard_overview">
-            <Grid container>
+            <Grid container className="dashboard_container">
                 <Outlet />
 
                 <Grid item xs={3} id="chat_list_container">
