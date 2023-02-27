@@ -4,11 +4,11 @@
 }
 
 #main_button {
-    background-color: #BA7300;
+    background-color: #ba7300;
     border-radius: 5px;
     width: 247px;
     height: 50px;
-    font-weight: 400;
+    font-weight: 700;
     font-size: 1.2em;
     line-height: 24px;
     color: white;
@@ -18,7 +18,7 @@
 }
 
 #shadow {
-    background-color: #3F1F71;
+    background-color: #3f1f71;
     border-radius: 5px;
     width: 249px;
     height: 52px;
@@ -27,8 +27,8 @@
     font-weight: 400;
     font-size: 1.2em;
     line-height: 24px;
-    color: #3F1F71;
-    border: 1px solid #FBE3DD;
+    color: #3f1f71;
+    border: 1px solid #fbe3dd;
     transition: transform 250ms;
     z-index: 1;
 }
@@ -45,7 +45,7 @@
     background-color: rgba(186, 115, 0, 0.7);
 }
 
-#main_button:hover~#shadow {
+#main_button:hover ~ #shadow {
     transform: translate(-5px, -6px);
     transition: transform 150ms;
 }

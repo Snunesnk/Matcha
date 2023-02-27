@@ -1,30 +1,21 @@
 import React from 'react'
-import { Routes, Route } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { Grid } from '@mui/material'
-import Title from '../Title/Title'
-import Button from '../Button/Button'
 import './Navbar.css'
-
-const LogInBtn = () => {
-    return (
-        <Grid item xs={4} id="loggingBtnContainer">
-            <Button btnClass="log_in" text="Log in"></Button>
-        </Grid>
-    )
-}
+import { AlreadyHaveAccountBtn } from '../Button/Button'
 
 const Navbar = () => {
     return (
         <Grid container id="navbar">
             <Grid item xs={4} className="center"></Grid>
             <Grid item xs={4} className="center">
-                {/* <Title></Title> */}
-                <h1 className="navTitle">MatChat</h1>
+                <Link to="/">
+                    <h1 className="navTitle">MatChat</h1>
+                </Link>
             </Grid>
-
-            {/* <Routes>
-                <Route path="" element={<LogInBtn />} />
-            </Routes> */}
+            <Grid item xs={4} className="center log-in-btn-container">
+                <AlreadyHaveAccountBtn />
+            </Grid>
         </Grid>
     )
 }

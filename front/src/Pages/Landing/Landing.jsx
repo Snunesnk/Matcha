@@ -8,16 +8,14 @@ const LandingPage = () => {
     return (
         <div id="landing_page">
             <div id="background_landing_img"></div>
-            <div id="landing_container">
-                <div>
-                    <h1 id="landing_catch_phrase">
-                        Meet fluffy cats in you area
-                    </h1>
-                </div>
-                <Link to="/onboarding/signup">
-                    <MainButton text="Find your new catmate"></MainButton>
-                </Link>
+            <div id="landing_catch_phrase_container">
+                <h1 id="landing_catch_phrase">
+                    Ready to meet fluffy cats in you area ?
+                </h1>
             </div>
+            <Link to="/onboarding/signup">
+                <MainButton text="Find your new catmate"></MainButton>
+            </Link>
             {/* <Grid
                 container
                 id="landing_container"
