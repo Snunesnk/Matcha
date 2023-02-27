@@ -1,39 +1,30 @@
 #landing_page {
-    position: absolute;
-    left: 0;
-    height: 100%;
     width: 100%;
-    background: no-repeat;
-    background-image: linear-gradient(65.48deg, rgba(63, 31, 113, 0.7) 29.09%, rgba(0, 0, 0, 0.6) 68.95%), url("/src/assets/kissing_cats.jpg");
+    height: 100%;
+}
+
+#background_landing_img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(
+            65.48deg,
+            rgba(255, 255, 255, 0.6) 29.09%,
+            rgba(63, 31, 113, 0.7) 68.95%
+        ),
+        url('/src/assets/kissing_cats.jpg');
     background-size: cover;
-    /* filter: blur(5px);
-    -webkit-filter: blur(5px); */
-    bottom: 0;
-    opacity: 1;
-    transition: all 550ms ease;
-    will-change: bottom;
+    background-attachment: fixed;
 }
-
-/* #landing_page.visible {
-    bottom: 0;
-    opacity: 1;
-    transition: all 550ms ease;
-    will-change: bottom;
-}
-
-#landing_page.hidden {
-    bottom: 100vh;
-    opacity: 0;
-    transition: all 550ms cubic-bezier(1, .06, .83, .67);
-    will-change: bottom;
-} */
 
 #landing_container {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 25%;
-    margin-top: 25%;
+    /* width: 100%;
+    height: 100%; */
 }
 
 #landing_page.visible #landing_container {
@@ -45,7 +36,7 @@
 
 #landing_page.hidden #landing_container {
     opacity: 0;
-    transition: all 550ms cubic-bezier(1, .06, .83, .67);
+    transition: all 550ms cubic-bezier(1, 0.06, 0.83, 0.67);
     will-change: opacity;
 }
 

@@ -1,12 +1,7 @@
 #advanced_search {
-    width: 100%;
-    height: 100%;
-
     box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%);
     border-radius: 0 4px 4px 0;
-
     padding: 2em;
-
     background-color: white;
 }
 
@@ -17,16 +12,16 @@
 }
 
 #filters_reset_btn {
-    color: #5E0B4F;
+    color: #5e0b4f;
     padding: 1px 10px;
     background-color: transparent;
-    border: 1px solid #5E0B4F;
+    border: 1px solid #5e0b4f;
     border-radius: 4px;
     transition: all 100ms;
 }
 
 #filters_reset_btn:hover {
-    background-color: #5E0B4F2C;
+    background-color: #5e0b4f2c;
     transition: all 100ms;
 }
 
@@ -36,13 +31,13 @@
 }
 
 #advanced_search_title {
-    color: #5E0B4F;
+    color: #5e0b4f;
     font-weight: 500;
     font-size: 1.6em;
 }
 
 .slider_range_display {
-    color: #BA7300;
+    color: #ba7300;
     text-align: center;
     font-size: 1.2em;
     font-weight: 600;
@@ -54,7 +49,7 @@
 
 #apply_filters_btn {
     color: white;
-    background-color: #5E0B4F;
+    background-color: #5e0b4f;
     width: 100%;
     font-size: 1.2em;
     font-weight: 500;
@@ -64,7 +59,7 @@
 }
 
 #apply_filters_btn:hover {
-    background-color: #BA7300;
+    background-color: #ba7300;
     transition: all 100ms;
 }
 
@@ -79,9 +74,9 @@
 
 /* MUI customization */
 .MuiSlider-thumb.MuiSlider-thumbColorPrimary.MuiSlider-thumbSizeMedium.css-eg0mwd-MuiSlider-thumb.Mui-focusVisible {
-    box-shadow: 0 0 0 8px #BA73005C;
+    box-shadow: 0 0 0 8px #ba73005c;
 }
 
 .css-eg0mwd-MuiSlider-thumb:hover {
-    box-shadow: 0 0 0 8px #BA73005C !important;
+    box-shadow: 0 0 0 8px #ba73005c !important;
 }

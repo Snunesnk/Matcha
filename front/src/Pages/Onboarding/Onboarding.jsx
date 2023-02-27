@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { Link, Outlet, useNavigate, Route, Routes } from "react-router-dom";
-import { Grid } from "@mui/material";
-import Button from "../../Components/Button/Button";
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
-import './Onboarding.css';
-import ProgressBar from "../../Components/ProgressBar";
+import React, { useState } from 'react'
+import { Link, Outlet, useNavigate, Route, Routes } from 'react-router-dom'
+import { Grid } from '@mui/material'
+import Button from '../../Components/Button/Button'
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
+import './Onboarding.css'
+import ProgressBar from '../../Components/ProgressBar'
 
 const onboardingStateList = {
     signUp: 0,
@@ -15,13 +15,13 @@ const onboardingStateList = {
     descriptionCreation: 5,
     interestsTags: 6,
     picturesUploading: 7,
-    allSetMessage: 8
+    allSetMessage: 8,
 }
 
 const Onboarding = () => {
     // const { state, dispatch } = useStoreContext();
-    const [onboardingState, setOnboardingState] = useState(0);
-    const navigate = useNavigate();
+    const [onboardingState, setOnboardingState] = useState(0)
+    const navigate = useNavigate()
 
     // // Here I need to add a check in the reducer, if the user is logged in
     // // then I need to redirect it to the main page
@@ -38,42 +38,107 @@ const Onboarding = () => {
     // }
 
     return (
-        <div id='onboarding'>
+        <div id="onboarding">
             <Grid container id="onboarding_grid">
                 <Grid item xs={0} md={6} id="cat_pic"></Grid>
                 <Grid item xs={12} md={6}>
-                    <Grid container id="onboarding_content" className="centered_container">
-                        <Grid item xs={12} id="onboarding_content_btn_container">
+                    <Grid
+                        container
+                        id="onboarding_content"
+                        className="centered_container"
+                    >
+                        <Grid
+                            item
+                            xs={12}
+                            id="onboarding_content_btn_container"
+                        >
                             <Link to="/">
-                                <a className={"onboardingBack "}>
-                                    <KeyboardArrowLeftIcon className="onboardingBackIcon"></KeyboardArrowLeftIcon>
-                                    <label className="onboardingBackLabel">Quit</label>
-                                </a>
+                                {/* <a className={"onboardingBack "}> */}
+                                <KeyboardArrowLeftIcon className="onboardingBackIcon"></KeyboardArrowLeftIcon>
+                                <label className="onboardingBackLabel">
+                                    Quit
+                                </label>
+                                {/* </a> */}
                             </Link>
-                            <div id="already_have_account" >
-                                <label id="alreadyHaveLabel">Already have an account?</label>
-                                <Button btnClass="alreadyHaveButton" text="Log in"></Button>
+                            <div id="already_have_account">
+                                <label id="alreadyHaveLabel">
+                                    Already have an account?
+                                </label>
+                                <Button
+                                    btnClass="alreadyHaveButton"
+                                    text="Log in"
+                                ></Button>
                             </div>
                         </Grid>
-                    </Grid >
+                    </Grid>
 
                     {/* Onboarding children */}
                     <Outlet />
-
-                </Grid >
-            </Grid >
+                </Grid>
+            </Grid>
 
             <Routes>
-                <Route path="welcome" element={<ProgressBar percentage="0" prev="" next="gender" />} />
-                <Route path="gender" element={<ProgressBar percentage="0" prev="welcome" next="preferences" />} />
-                <Route path="preferences" element={<ProgressBar percentage="20" prev="gender" next="bio" />} />
-                <Route path="bio" element={<ProgressBar percentage="40" prev="preferences" next="interests" />} />
-                <Route path="interests" element={<ProgressBar percentage="60" prev="bio" next="pictures" />} />
-                <Route path="pictures" element={<ProgressBar percentage="80" prev="interests" next="done" />} />
-                <Route path="done" element={<ProgressBar percentage="100" prev="pictures" next="" />} />
+                <Route
+                    path="welcome"
+                    element={
+                        <ProgressBar percentage="0" prev="" next="gender" />
+                    }
+                />
+                <Route
+                    path="gender"
+                    element={
+                        <ProgressBar
+                            percentage="0"
+                            prev="welcome"
+                            next="preferences"
+                        />
+                    }
+                />
+                <Route
+                    path="preferences"
+                    element={
+                        <ProgressBar percentage="20" prev="gender" next="bio" />
+                    }
+                />
+                <Route
+                    path="bio"
+                    element={
+                        <ProgressBar
+                            percentage="40"
+                            prev="preferences"
+                            next="interests"
+                        />
+                    }
+                />
+                <Route
+                    path="interests"
+                    element={
+                        <ProgressBar
+                            percentage="60"
+                            prev="bio"
+                            next="pictures"
+                        />
+                    }
+                />
+                <Route
+                    path="pictures"
+                    element={
+                        <ProgressBar
+                            percentage="80"
+                            prev="interests"
+                            next="done"
+                        />
+                    }
+                />
+                <Route
+                    path="done"
+                    element={
+                        <ProgressBar percentage="100" prev="pictures" next="" />
+                    }
+                />
             </Routes>
-        </div >
+        </div>
     )
 }
 
-export default Onboarding;
+export default Onboarding
