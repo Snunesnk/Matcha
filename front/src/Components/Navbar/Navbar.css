@@ -37,3 +37,11 @@
     justify-content: center;
     align-items: center;
 }
+
+.navTitle {
+    color: #5e0b4f;
+    text-align: center;
+    width: 100%;
+    font-size: 4em;
+    margin-top: 0;
+}
