@@ -4,12 +4,6 @@
     color: black;
 }
 
-.dashboard_overview {
-    display: flex;
-    justify-content: center;
-    color: black;
-}
-
 .overview_sort {
     color: #ba7300;
     margin-left: 50px;

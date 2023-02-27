@@ -4,7 +4,11 @@
     border-bottom-left-radius: 4px;
     background-color: white;
     overflow: hidden;
-    /* height: 750px; */
+    height: 750px;
+}
+
+.chat {
+    height: 750px;
 }
 
 #chat_list_title {
