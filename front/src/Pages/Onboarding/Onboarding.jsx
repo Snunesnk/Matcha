@@ -1,8 +1,10 @@
 import React, { useState } from 'react'
-import { Link, Outlet, useNavigate, Route, Routes } from 'react-router-dom'
+import { Outlet, useNavigate, Route, Routes } from 'react-router-dom'
 import { Grid } from '@mui/material'
-import Button from '../../Components/Button/Button'
-import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
+import {
+    AlreadyHaveAccountBtn,
+    QuitOnboarding,
+} from '../../Components/Button/Button'
 import './Onboarding.css'
 import ProgressBar from '../../Components/ProgressBar'
 
@@ -52,23 +54,8 @@ const Onboarding = () => {
                             xs={12}
                             id="onboarding_content_btn_container"
                         >
-                            <Link to="/">
-                                {/* <a className={"onboardingBack "}> */}
-                                <KeyboardArrowLeftIcon className="onboardingBackIcon"></KeyboardArrowLeftIcon>
-                                <label className="onboardingBackLabel">
-                                    Quit
-                                </label>
-                                {/* </a> */}
-                            </Link>
-                            <div id="already_have_account">
-                                <label id="alreadyHaveLabel">
-                                    Already have an account?
-                                </label>
-                                <Button
-                                    btnClass="alreadyHaveButton"
-                                    text="Log in"
-                                ></Button>
-                            </div>
+                            <QuitOnboarding />
+                            <AlreadyHaveAccountBtn />
                         </Grid>
                     </Grid>
 
