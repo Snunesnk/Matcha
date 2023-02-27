@@ -1,0 +1,23 @@
+{
+	"folders": [
+		{
+			"name": "env",
+			"path": "./env",
+		},
+		{
+			"name": "server",
+			"path": "./server"
+		},
+		{
+			"name": "mysql",
+			"path": "./mysql"
+		},
+		{
+			"name": "front",
+			"path": "./front"
+		}
+	],
+	"settings": {
+		
+	}
+}
