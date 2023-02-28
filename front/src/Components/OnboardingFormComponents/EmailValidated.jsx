@@ -1,9 +1,7 @@
 import React from 'react'
 import './OnboardingForm.css'
-// import { useNavigate } from 'react-router-dom'
 
 const setListenerForValidation = () => {
-    console.log('got something')
     // transfers sessionStorage from one tab to another
     var sessionStorage_transfer = function (event) {
         if (!event.newValue) return // do nothing if no value to work with
@@ -21,50 +19,32 @@ const setListenerForValidation = () => {
             for (var key in data) {
                 sessionStorage.setItem(key, data[key])
             }
-
-            console.log('Session storage: ' + JSON.stringify(sessionStorage))
         }
     }
 
     window.addEventListener('storage', sessionStorage_transfer, false)
 }
 
-const EmailValidation = () => {
-    // Get email and name
-    const email = sessionStorage.getItem('email')
-    const name = sessionStorage.getItem('name')
-
-    const resendMail = () => {
-        const login = sessionStorage.getItem('login')
-
-        fetch('http://localhost:8080/api/user/verify/' + login, {
-            method: 'POST',
-        })
+const EmailValidated = () => {
+    const setValidation = () => {
+        console.log('set validation')
+        localStorage.setItem('sessionStorage', 'validated')
     }
-    /// ONLY FOR DEBUG
-    // const navigate = useNavigate()
-    // setTimeout(() => {
-    //     navigate('/onboarding/welcome')
-    // }, 1000)
 
     setListenerForValidation()
 
     return (
         <div id="onboarding_email_validation">
-            {/* <h2>Hi {state.user.username},</h2> */}
-            <h2>Hi {name},</h2>
             <p>
-                {/* We sent an email to <b>{state.user.email}</b> */}
-                We sent an email to <b>{email}</b>
-                <br />
-                Please check your inbox to activate your account.
+                Your email is validated, you can now close this tab and
+                continue.
             </p>
             <h6 className="send-email-again-msg">
-                Did not receive it ? You can{' '}
-                <a onClick={resendMail}>send it again</a>
+                Set cookie validation
+                <a onClick={setValidation}>send it again</a>
             </h6>
         </div>
     )
 }
 
-export default EmailValidation
+export default EmailValidated

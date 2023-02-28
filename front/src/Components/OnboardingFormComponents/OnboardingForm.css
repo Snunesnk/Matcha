@@ -73,6 +73,18 @@
     color: white;
 }
 
+.send-email-again-msg {
+    font-weight: 300;
+}
+.send-email-again-msg a {
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: underline;
+}
+.send-email-again-msg a:hover {
+    color: #ba7300;
+}
+
 /**** *************** ****/
 /**** WELCOME MESSAGE ****/
 /**** *************** ****/

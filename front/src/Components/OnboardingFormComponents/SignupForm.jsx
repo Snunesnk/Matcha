@@ -72,10 +72,6 @@ export async function action({ request }) {
     const passwordError = checkPassword(data.password)
 
     if (passwordError === '') {
-        /// Save email and name to be able to use it later
-        localStorage.setItem('email', data.email)
-        localStorage.setItem('name', data.surname)
-
         data.password = await hashPassword(data.password)
 
         // Send data to controller to create an user
@@ -86,11 +82,16 @@ export async function action({ request }) {
             },
             body: JSON.stringify(data),
         }
-        fetch('http://localhost:8080/api/user', options)
+        await fetch('http://localhost:8080/api/user', options)
             .then((response) => response.json())
-            .then((response) => console.log(response))
-        // return redirect('/onboarding/validation')
-        return 'All good'
+            .then((response) => {
+                /// Save email and name to be able to use it later
+                sessionStorage.setItem('email', response.email)
+                sessionStorage.setItem('name', response.surname)
+                sessionStorage.setItem('login', response.login)
+            })
+
+        return redirect('/onboarding/validation')
     }
 
     return passwordError
