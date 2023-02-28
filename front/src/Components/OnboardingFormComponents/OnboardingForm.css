@@ -2,11 +2,11 @@
 /**** SIGN UP FORM ****/
 /**** ************ ****/
 .onboarding_title {
-    color: #FBE3DD
+    color: #fbe3dd;
 }
 
 .catch_phrase {
-    color: #B5C9EA;
+    color: #b5c9ea;
     /* color: #BA7300; */
 }
 
@@ -14,93 +14,15 @@
     align-items: center;
 }
 
-#onboarding_content_btn_container {
-    display: flex;
-    justify-content: space-between;
-
-    padding: 30px;
-
-}
-
 #already_have_account.visible {
     opacity: 1;
-    transition: all 350ms cubic-bezier(1, .06, .83, .67);
+    transition: all 350ms cubic-bezier(1, 0.06, 0.83, 0.67);
     transition-delay: 450ms;
 }
 
 #already_have_account.hidden {
     opacity: 0;
-    transition: all 250ms cubic-bezier(1, .06, .83, .67);
-}
-
-#alreadyHaveLabel {
-    color: #B5C9EA;
-}
-
-.alreadyHaveButton {
-    background-color: transparent;
-    color: #B5C9EA;
-    border: 1px solid #BA7300;
-
-    padding: 8px 11px;
-    font-size: 0.9em;
-    line-height: 15px;
-    border-radius: 5px;
-
-    margin-left: 10px;
-}
-
-.alreadyHaveButton:hover {
-    border: 1px solid #FBE3DD;
-}
-
-.onboardingBack {
-    background-color: transparent;
-    color: #FBE3DD;
-    border: 1px solid #FBE3DD;
-
-    padding: 8px 0px;
-    padding-right: 9px;
-    font-size: 1em;
-    line-height: 15px;
-    border-radius: 5px;
-
-    display: flex;
-    align-items: center;
-    justify-content: start;
-
-    cursor: pointer;
-}
-
-.onboardingBack.visible {
-    opacity: 1;
-    transition: opacity 350ms cubic-bezier(1, .06, .83, .67) 450ms, transform 250ms ease-in-out;
-}
-
-.onboardingBack.hidden {
-    opacity: 0;
-    transition: opacity 250ms cubic-bezier(1, .06, .83, .67);
-}
-
-.onboardingBack:hover {
-    color: white;
-    transform: scale(1.1);
-    transition: transform 250ms;
-    color: #FBE3DD;
-}
-
-.onboardingBackLabel {
-    cursor: pointer;
-}
-
-.onboardingBack .onboardingBackIcon {
-    transform: scale(1);
-    transition: transform 500ms ease-out;
-}
-
-.onboardingBack:hover .onboardingBackIcon {
-    transform: scale(7);
-    transition: transform 20000ms ease-out;
+    transition: all 250ms cubic-bezier(1, 0.06, 0.83, 0.67);
 }
 
 #onboarding_sign_up {
@@ -129,11 +51,8 @@
 }
 
 .errorLabel {
-    color: red
+    color: red;
 }
-
-
-
 
 /**** ************ ****/
 /**** SIGN UP FORM ****/
@@ -154,8 +73,17 @@
     color: white;
 }
 
-
-
+.send-email-again-msg {
+    font-weight: 300;
+}
+.send-email-again-msg a {
+    cursor: pointer;
+    font-weight: 700;
+    text-decoration: underline;
+}
+.send-email-again-msg a:hover {
+    color: #ba7300;
+}
 
 /**** *************** ****/
 /**** WELCOME MESSAGE ****/
@@ -166,8 +94,8 @@
 }
 
 #onboarding_next_button {
-    background-color: #BA7300;
-    color: #FBE3DD;
+    background-color: #ba7300;
+    color: #fbe3dd;
     line-height: 30px;
     font-size: 1.2em;
     padding: 5px 13px;
@@ -183,9 +111,6 @@
     margin-top: 30px;
     margin-bottom: 100px;
 }
-
-
-
 
 /**** **************** ****/
 /**** GENDER SELECTION ****/
@@ -207,33 +132,27 @@
     font-size: 1.6em;
 }
 
-
-
-
 /**** *********** ****/
 /**** DESCRIPTION ****/
 /**** *********** ****/
 #description_creation_input {
     border: none;
-    border-bottom: 2px solid #FBE3DD;
+    border-bottom: 2px solid #fbe3dd;
     width: 100%;
     font-size: 16px;
     line-height: 20px;
     margin-bottom: 55px;
     margin-top: 15px;
-    transition: all 150ms cubic-bezier(1, .06, .83, .67);
+    transition: all 150ms cubic-bezier(1, 0.06, 0.83, 0.67);
     background-color: rgba(181, 201, 234, 0.2);
-    color: #FBE3DD;
+    color: #fbe3dd;
 }
 
 #description_creation_input:focus-visible {
     outline: none;
-    border-bottom-color: #BA7300;
-    transition: all 100ms cubic-bezier(1, .06, .83, .67);
+    border-bottom-color: #ba7300;
+    transition: all 100ms cubic-bezier(1, 0.06, 0.83, 0.67);
 }
-
-
-
 
 /**** ************** ****/
 /**** TAGS INTERESTS ****/
@@ -247,12 +166,12 @@
 }
 
 #tags_text_field {
-    color: #FBE3DD;
+    color: #fbe3dd;
 }
 
 .MuiChip-root {
     background: rgba(63, 31, 113, 0.1) !important;
-    border: 1px solid #9185BE !important;
+    border: 1px solid #9185be !important;
     border-radius: 5px !important;
     margin-top: 5px !important;
     font-size: 0.9rem;
@@ -260,7 +179,7 @@
 
 .MuiInputBase-root {
     border-bottom: none !important;
-    background: #D9D9D9 !important;
+    background: #d9d9d9 !important;
     color: black !important;
     /* box-shadow: 4px 4px 4px #3F1F71 !important; */
     border-radius: 5px !important;
@@ -268,13 +187,13 @@
 }
 
 label.Mui-focused {
-    color: #BA7300 !important;
+    color: #ba7300 !important;
 }
 
 .css-gjbq6i-MuiInputBase-root-MuiFilledInput-root.Mui-focused:after {
-    border-bottom: 2px solid #BA7300 !important;
+    border-bottom: 2px solid #ba7300 !important;
 }
 
 .css-11v1qwh-MuiInputBase-root-MuiFilledInput-root:after {
-    border-bottom: 2px solid #BA7300 !important;
+    border-bottom: 2px solid #ba7300 !important;
 }

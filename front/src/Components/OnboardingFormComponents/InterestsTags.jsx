@@ -1,19 +1,20 @@
-import React from "react";
-import "./OnboardingForm.css"
-import { Autocomplete, Chip, TextField } from "@mui/material";
-import { Link } from "react-router-dom";
+import React from 'react'
+import './OnboardingForm.css'
+import { Autocomplete, Chip, TextField } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 const InterestsTags = () => {
-    let tags;
+    let tags
 
     const saveTags = () => {
-        /// Save tags in local storage
-        localStorage.setItem("interests", tags);
+        sessionStorage.setItem('interests', tags)
     }
 
     return (
         <div id="gender_selection_container">
-            <p id="gender_selection_catch_phrase">What are <b>your interests?</b></p>
+            <p id="gender_selection_catch_phrase">
+                What are <b>your interests?</b>
+            </p>
 
             <Autocomplete
                 multiple
@@ -21,13 +22,16 @@ const InterestsTags = () => {
                 options={top100Films.map((option) => option.title)}
                 freeSolo
                 renderTags={(value, getTagProps) => {
-                    tags = value;
+                    tags = value
 
                     return value.map((option, index) => (
-                        <Chip variant="outlined" label={option} {...getTagProps({ index })} />
-                    ));
-                }
-                }
+                        <Chip
+                            variant="outlined"
+                            label={option}
+                            {...getTagProps({ index })}
+                        />
+                    ))
+                }}
                 renderInput={(params) => (
                     <TextField
                         {...params}
@@ -40,10 +44,12 @@ const InterestsTags = () => {
             />
 
             <Link to="/onboarding/pictures">
-                <button id="onboarding_next_button" onClick={saveTags}>Next</button>
+                <button id="onboarding_next_button" onClick={saveTags}>
+                    Next
+                </button>
             </Link>
         </div>
-    );
+    )
 }
 
 export default InterestsTags
@@ -173,4 +179,4 @@ const top100Films = [
     { title: 'Snatch', year: 2000 },
     { title: '3 Idiots', year: 2009 },
     { title: 'Monty Python and the Holy Grail', year: 1975 },
-];
+]

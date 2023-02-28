@@ -1,22 +1,18 @@
 .log_in {
-    /* background-color: #FBE3DD; */
-    /* color: #B5C9EA; */
-    color: #FBE3DD;
+    color: #fbe3dd;
     margin-right: 20px;
 }
 
 .log_in:hover {
-    border: 1px solid #B5C9EA;
-    /* border: 1px solid #FBE3DD; */
+    border: 1px solid #b5c9ea;
 }
 
 .sign_up {
-    /* background-color: #3F1F71; */
-    color: #FBE3DD;
+    color: #fbe3dd;
 }
 
 .sign_up:hover {
-    border: 1px solid #FBE3DD;
+    border: 1px solid #fbe3dd;
 }
 
 .btn {
@@ -26,4 +22,73 @@
     line-height: 24px;
     border-radius: 15px;
     background-color: transparent;
+}
+
+#alreadyHaveLabel {
+    color: white;
+}
+
+.alreadyHaveButton {
+    background-color: transparent;
+    color: white;
+    border: 1px solid #ba7300;
+
+    padding: 8px 11px;
+    font-size: 0.9em;
+    line-height: 15px;
+    border-radius: 5px;
+
+    margin-left: 10px;
+}
+
+.alreadyHaveButton:hover {
+    border: 1px solid #fbe3dd;
+}
+
+.onboardingBack {
+    background-color: transparent;
+    color: #fbe3dd;
+    border: 1px solid #fbe3dd;
+
+    padding: 8px 11px;
+    font-size: 1em;
+    line-height: 15px;
+    border-radius: 5px;
+
+    display: flex;
+    align-items: center;
+    justify-content: start;
+
+    cursor: pointer;
+}
+
+.onboardingBack.visible {
+    opacity: 1;
+    transition: opacity 350ms cubic-bezier(1, 0.06, 0.83, 0.67) 450ms,
+        transform 250ms ease-in-out;
+}
+
+.onboardingBack.hidden {
+    opacity: 0;
+    transition: opacity 250ms cubic-bezier(1, 0.06, 0.83, 0.67);
+}
+
+.onboardingBack:hover {
+    color: white;
+    transition: transform 250ms;
+    border: 1px solid #ba7300;
+}
+
+.onboardingBackLabel {
+    cursor: pointer;
+}
+
+.onboardingBack .onboardingBackIcon {
+    transform: scale(1);
+    transition: transform 500ms ease-out;
+}
+
+.onboardingBack:hover .onboardingBackIcon {
+    transform: scale(7);
+    transition: transform 20000ms ease-out;
 }

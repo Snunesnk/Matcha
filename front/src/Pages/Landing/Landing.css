@@ -1,61 +1,31 @@
 #landing_page {
-    position: absolute;
-    left: 0;
-    height: 100%;
     width: 100%;
-    background: no-repeat;
-    background-image: linear-gradient(65.48deg, rgba(63, 31, 113, 0.7) 29.09%, rgba(0, 0, 0, 0.6) 68.95%), url("/src/assets/kissing_cats.jpg");
-    background-size: cover;
-    /* filter: blur(5px);
-    -webkit-filter: blur(5px); */
-    bottom: 0;
-    opacity: 1;
-    transition: all 550ms ease;
-    will-change: bottom;
-}
-
-/* #landing_page.visible {
-    bottom: 0;
-    opacity: 1;
-    transition: all 550ms ease;
-    will-change: bottom;
-}
-
-#landing_page.hidden {
-    bottom: 100vh;
-    opacity: 0;
-    transition: all 550ms cubic-bezier(1, .06, .83, .67);
-    will-change: bottom;
-} */
-
-#landing_container {
+    flex-grow: 1;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 25%;
-    margin-top: 25%;
 }
 
-#landing_page.visible #landing_container {
-    opacity: 1;
-    transition: all 550ms ease-in-out;
-    transition-delay: 450ms;
-    will-change: opacity;
-}
-
-#landing_page.hidden #landing_container {
-    opacity: 0;
-    transition: all 550ms cubic-bezier(1, .06, .83, .67);
-    will-change: opacity;
-}
-
-.grid_item {
-    display: flex;
-    justify-content: center;
+#background_landing_img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: linear-gradient(to bottom, #3f1f719c, #3f1f719c),
+        url('/src/assets/kissing_cats.jpg');
+    background-size: cover;
+    background-attachment: fixed;
+    filter: brightness(0.6);
 }
 
 #landing_catch_phrase {
     font-weight: 400;
     letter-spacing: 0.1em;
     font-size: 2em;
+}
+
+#landing_catch_phrase_container {
+    z-index: 2;
 }
