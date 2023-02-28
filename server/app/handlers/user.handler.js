@@ -74,10 +74,10 @@ export default class {
       res.status(500).send({
         message: "COULD_NOT_SEND_EMAIL",
       });
-    }
-    catch (error) {
+    } catch (error) {
       res.status(500).send({
-        message: error.message || "Error occurred while sending verification mail.",
+        message:
+          error.message || "Error occurred while sending verification mail.",
       });
     }
   }
@@ -115,7 +115,7 @@ export default class {
       const result = await User.create(user);
       if (result !== null) {
         User.sendVerificationMail(result);
-        res.status(200).send(user);
+        res.status(200).send(result);
         return;
       }
       res.status(500).send({
@@ -157,7 +157,10 @@ export default class {
         return;
       }
 
-      const result = await User.updateByLogin(login, new User({verified: true, token: null}));
+      const result = await User.updateByLogin(
+        login,
+        new User({ verified: true, token: null })
+      );
       if (result !== null) {
         res.status(200).send({
           message: "User verified successfully.",
@@ -168,8 +171,7 @@ export default class {
       res.status(500).send({
         message: "COULD_NOT_VERIFY",
       });
-    }
-    catch (error) {
+    } catch (error) {
       res.status(500).send({
         message: error.message || "Error occurred while verifying the User.",
       });
@@ -223,7 +225,7 @@ export default class {
     req.body.filters = {
       ...req.body.filters,
       verified: true,
-    }
+    };
     return await this.getAllUsers(req, res);
   };
 

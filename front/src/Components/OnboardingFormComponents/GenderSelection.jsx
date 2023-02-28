@@ -1,7 +1,7 @@
-import React from "react";
-import { Grid } from "@mui/material";
-import ListChoice from "../ListChoice";
-import "./OnboardingForm.css"
+import React from 'react'
+import { Grid } from '@mui/material'
+import ListChoice from '../ListChoice'
+import './OnboardingForm.css'
 
 const Genders = [
     { number: 'A', label: 'Female' },
@@ -11,15 +11,17 @@ const Genders = [
 
 const GenderSelection = () => {
     const onGenderSelection = (e, number, label) => {
-        localStorage.setItem("gender", label);
+        sessionStorage.setItem('gender', label)
     }
 
     return (
         <div id="gender_selection_container">
-            <p id="gender_selection_catch_phrase">What is <b>your gender?</b></p>
+            <p id="gender_selection_catch_phrase">
+                What is <b>your gender?</b>
+            </p>
 
             <Grid container id="choice_list" rowGap={2}>
-                {Genders.map(gender => (
+                {Genders.map((gender) => (
                     <ListChoice
                         number={gender.number}
                         label={gender.label}
@@ -29,8 +31,8 @@ const GenderSelection = () => {
                     />
                 ))}
             </Grid>
-        </div >
-    );
+        </div>
+    )
 }
 
-export default GenderSelection;
+export default GenderSelection

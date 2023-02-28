@@ -23,6 +23,7 @@ import AllSetMessage from '../Components/OnboardingFormComponents/AllSetMessage'
 import DashboardOverview from '../Components/DashboardOverview'
 import ChatComponent from '../Components/ChatComponent'
 import Root from '../Pages/Root/Root'
+import EmailValidated from '../Components/OnboardingFormComponents/EmailValidated'
 
 const router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ const router = createBrowserRouter([
                     {
                         path: 'validation',
                         element: <EmailValidation />,
+                    },
+                    {
+                        path: 'validated',
+                        element: <EmailValidated />,
                     },
                     {
                         path: 'welcome',
