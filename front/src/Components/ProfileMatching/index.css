@@ -1,0 +1,67 @@
+#profile_matching {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card_container {
+    display: flex;
+    justify-content: center;
+    position: relative;
+}
+
+.profile_matching_btn_container {
+    display: flex;
+    justify-content: center;
+    margin-top: 42px;
+}
+
+.profile_matching_btn {
+    background-color: white;
+    color: #5e0b4f;
+    box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%);
+    border-radius: 40px;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 100ms;
+}
+
+.profile_matching_btn:hover {
+    transform: scale(1.2);
+    transition: all 100ms;
+}
+
+.profile_matching_btn:active {
+    transform: scale(0.9);
+    transition: all 100ms;
+}
+
+.profile_matching_btn svg {
+    width: 30px;
+    height: 30px;
+}
+
+.profile_matching_like:hover {
+    background-color: #ff9d00;
+    transition: all 100ms;
+    color: white;
+}
+
+.profile_matching_more {
+    margin-left: 110px;
+    margin-right: 110px;
+}
+
+.profile_matching_more:hover {
+    background-color: #5e0b4f;
+    transition: all 100ms;
+    color: white;
+}
+
+.profile_matching_dislike:hover {
+    background-color: #ff0000df;
+    transition: all 100ms;
+    color: white;
+}

@@ -1,0 +1,10 @@
+.overview_top_phrase {
+    font-weight: 600;
+    font-size: 1.1em;
+    color: black;
+}
+
+.overview_sort {
+    color: #ba7300;
+    margin-left: 50px;
+}

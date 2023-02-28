@@ -1,10 +1,10 @@
-import React from "react";
-import "./OnboardingForm.css"
-import { Link } from "react-router-dom";
+import React from 'react'
+import './OnboardingForm.css'
+import { Link } from 'react-router-dom'
 
 const WelcomeMessage = () => {
     // DEBUG, I shoud be getting it from the email link directly
-    const name = localStorage.getItem("name");
+    const name = sessionStorage.getItem('name')
 
     return (
         <div id="onboarding_welcome_message">
@@ -17,10 +17,10 @@ const WelcomeMessage = () => {
                 And it'll make your time with MatChat even better.
             </p>
             <Link to="/onboarding/gender">
-                <button id="onboarding_next_button" >Get set up</button>
+                <button id="onboarding_next_button">Get set up</button>
             </Link>
         </div>
-    );
+    )
 }
 
 export default WelcomeMessage

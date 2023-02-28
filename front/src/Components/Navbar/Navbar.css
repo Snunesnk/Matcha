@@ -1,21 +1,12 @@
 #navbar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
     padding: 10px 30px;
     z-index: 2;
     transition: all 200ms;
     display: flex;
+    align-items: center;
+    position: absolute;
+    top: 0;
 }
-
-/* #navbar.visible {
-    opacity: 1;
-}
-
-#navbar.hidden {
-    opacity: 0;
-} */
 
 #loggingBtnContainer {
     opacity: 1;
@@ -27,13 +18,25 @@
     padding: 13px;
 }
 
-#loggingBtnContainer.onboarded {
-    opacity: 0;
-    transition: opacity 450ms;
-}
-
 .center {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.navTitle {
+    color: white;
+    text-align: center;
+    font-size: 4em;
+    margin: 0;
+}
+
+button.btn-log-in {
+    color: white;
+}
+
+.log-in-btn-container {
+    display: flex;
+    align-items: center;
+    justify-content: right;
 }

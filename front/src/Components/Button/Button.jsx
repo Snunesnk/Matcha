@@ -1,10 +1,25 @@
-import React from "react";
-import './Button.css';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft'
+
+import './Button.css'
+
+export const AlreadyHaveAccountBtn = () => (
+    <div id="already_have_account">
+        <label id="alreadyHaveLabel">Already have an account?</label>
+        <Button btnClass="alreadyHaveButton" text="Log in"></Button>
+    </div>
+)
+
+export const QuitOnboarding = () => (
+    <Link to="/" className="onboardingBack">
+        <KeyboardArrowLeftIcon className="onboardingBackIcon"></KeyboardArrowLeftIcon>
+        <label className="onboardingBackLabel">Quit</label>
+    </Link>
+)
 
 const Button = ({ text, btnClass }) => {
-    return (
-        <button className={btnClass + " btn"}>{text}</button>
-    )
+    return <button className={btnClass + ' btn'}>{text}</button>
 }
 
 export default Button

@@ -1,19 +1,20 @@
-import React from "react";
-import { Grid } from "@mui/material";
-import Title from '../Title/Title'
-import Button from "../Button/Button";
-import './Navbar.css';
+import React from 'react'
+import { Link } from 'react-router-dom'
+import { Grid } from '@mui/material'
+import './Navbar.css'
+import { AlreadyHaveAccountBtn } from '../Button/Button'
 
 const Navbar = () => {
     return (
-        <Grid container id='navbar'>
+        <Grid container id="navbar" className="fw">
             <Grid item xs={4} className="center"></Grid>
             <Grid item xs={4} className="center">
-                <Title></Title>
+                <Link to="/">
+                    <h1 className="navTitle fw">MatChat</h1>
+                </Link>
             </Grid>
-            <Grid item xs={4} id="loggingBtnContainer">
-                <Button btnClass="log_in" text="Log in"></Button>
-                <Button btnClass="sign_up" text="Sign up"></Button>
+            <Grid item xs={4} className="center log-in-btn-container">
+                <AlreadyHaveAccountBtn />
             </Grid>
         </Grid>
     )
