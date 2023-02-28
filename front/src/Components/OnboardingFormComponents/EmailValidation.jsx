@@ -1,38 +1,24 @@
 import React from 'react'
+import { redirect } from 'react-router'
 import './OnboardingForm.css'
-// import { useNavigate } from 'react-router-dom'
 
 const setListenerForValidation = () => {
-    console.log('got something')
-    // transfers sessionStorage from one tab to another
-    var sessionStorage_transfer = function (event) {
-        if (!event.newValue) return // do nothing if no value to work with
-        if (event.key == 'getSessionStorage') {
-            // another tab asked for the sessionStorage -> send it
-            localStorage.setItem(
-                'sessionStorage',
-                JSON.stringify(sessionStorage)
-            )
-            // the other tab should now have it, so we're done with it.
-            localStorage.removeItem('sessionStorage') // <- could do short timeout as well.
-        } else if (event.key == 'sessionStorage' && !sessionStorage.length) {
-            // another tab sent data <- get it
-            var data = JSON.parse(event.newValue)
-            for (var key in data) {
-                sessionStorage.setItem(key, data[key])
-            }
+    const verifChannel = new BroadcastChannel('email_verification')
 
-            console.log('Session storage: ' + JSON.stringify(sessionStorage))
+    verifChannel.onmessage = (e) => {
+        if (e.data === 'verified') {
+            console.log('User verified')
+            redirect('/onboarding/welcome')
         }
     }
-
-    window.addEventListener('storage', sessionStorage_transfer, false)
 }
 
 const EmailValidation = () => {
     // Get email and name
     const email = sessionStorage.getItem('email')
     const name = sessionStorage.getItem('name')
+
+    setListenerForValidation()
 
     const resendMail = () => {
         const login = sessionStorage.getItem('login')
@@ -41,13 +27,6 @@ const EmailValidation = () => {
             method: 'POST',
         })
     }
-    /// ONLY FOR DEBUG
-    // const navigate = useNavigate()
-    // setTimeout(() => {
-    //     navigate('/onboarding/welcome')
-    // }, 1000)
-
-    setListenerForValidation()
 
     return (
         <div id="onboarding_email_validation">

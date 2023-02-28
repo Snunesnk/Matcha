@@ -82,16 +82,36 @@ export async function action({ request }) {
             },
             body: JSON.stringify(data),
         }
-        await fetch('http://localhost:8080/api/user', options)
-            .then((response) => response.json())
-            .then((response) => {
-                /// Save email and name to be able to use it later
-                sessionStorage.setItem('email', response.email)
-                sessionStorage.setItem('name', response.surname)
-                sessionStorage.setItem('login', response.login)
-            })
+        await fetch('http://localhost:8080/api/user', options).then(
+            (response) => {
+                let error = ''
 
-        return redirect('/onboarding/validation')
+                switch (response.status) {
+                    case 400:
+                        error = 'missing data'
+                        break
+
+                    default:
+                    case 500:
+                        error =
+                            'An error occured while created your profile, please try later'
+                        break
+
+                    case 200:
+                        const res = response.json()
+                        sessionStorage.setItem('email', res.email)
+                        sessionStorage.setItem('name', res.surname)
+                        sessionStorage.setItem('login', res.login)
+                        break
+                }
+
+                if (error === '') {
+                    return redirect('/onboarding/validation')
+                }
+
+                return error
+            }
+        )
     }
 
     return passwordError
