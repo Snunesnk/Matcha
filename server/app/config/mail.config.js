@@ -3,4 +3,5 @@ export const
     FROM = process.env.EMAIL_FROM,
     PORT = process.env.EMAIL_PORT,
     USER = process.env.EMAIL_USER,
-    PASS = process.env.EMAIL_PASS
+    PASS = process.env.EMAIL_PASS,
+    TEST_MODE = process.env.MAIL_TEST_MODE === "false" ? false : true;;
