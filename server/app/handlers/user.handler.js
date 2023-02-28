@@ -1,39 +1,83 @@
 import { User } from "../models/user.model.js";
-import { cryptPassword, comparePassword } from "../services/password.service.js";
+import { cryptPassword } from "../services/password.service.js";
 
 export default class {
   static async login(req, res) {
     const { login, password } = req.body;
     if (!login || !password) {
       res.status(400).send({
-        message: "Content can not be empty!",
+        message: "MISSING_DATA",
       });
-      return ;
+      return;
     }
 
     try {
-      const user = await User.getUserByLogin(login);
-      if (user.length === 0) {
+      const user = await User.getFullUserByLogin(login);
+      if (user === null) {
         res.status(404).send({
-          message: "User not found.",
+          message: "WRONG_CREDENTIALS",
         });
-        return ;
+        return;
       }
 
-      const isPasswordMatch = await comparePassword(password, user[0].password);
-      if (isPasswordMatch) {
-        res.status(200).send({
-          message: "User logged in successfully.",
+      if (user.verified !== true) {
+        res.status(401).send({
+          message: "EMAIL_NOT_VERIFIED",
         });
-        return ;
+        return;
       }
 
-      res.status(401).send({
-        message: "Invalid password.",
+      const isPasswordMatch = await user.passwordMatch(password);
+      if (!isPasswordMatch) {
+        res.status(401).send({
+          message: "WRONG_CREDENTIALS",
+        });
+        return;
+      }
+
+      res.status(200).send({
+        message: "User logged in successfully.",
       });
     } catch (error) {
       res.status(500).send({
         message: error.message || "Error occurred while logging in.",
+      });
+    }
+  }
+
+  // Send a verification mail to the User
+  static async resendVerificationMail(req, res) {
+    const login = req.params.login;
+    try {
+      const user = await User.getUserByLogin(login);
+      if (user === null) {
+        res.status(404).send({
+          message: "USER_NOT_FOUND",
+        });
+        return;
+      }
+
+      if (user.verified === true) {
+        res.status(400).send({
+          message: "EMAIL_ALREADY_VERIFIED",
+        });
+        return;
+      }
+
+      const result = await User.sendVerificationMail(user);
+      if (result === true) {
+        res.status(200).send({
+          message: "Verification mail sent successfully.",
+        });
+        return;
+      }
+      res.status(500).send({
+        message: "COULD_NOT_SEND_EMAIL",
+      });
+    }
+    catch (error) {
+      res.status(500).send({
+        message: error.message || "Error occurred while sending verification mail.",
       });
     }
   }
@@ -43,18 +87,18 @@ export default class {
     // Validate request
     if (!req.body) {
       res.status(400).send({
-        message: "Content can not be empty!",
+        message: "MISSING_DATA",
       });
-      return ;
+      return;
     }
 
     // TODO - test password strength
     const password = await cryptPassword(req.body.password);
     if (password === null) {
       res.status(500).send({
-        message: "Error occurred while hashing user's password.",
+        message: "PASSWORD_ENCRYPTION_ERROR",
       });
-      return ;
+      return;
     }
 
     // Create a User
@@ -69,16 +113,65 @@ export default class {
     try {
       // Save User in the database
       const result = await User.create(user);
-      if (result && result.affectedRows > 0) {
-        res.status(200).send({ ...user, password: 'XXXXX' });
+      if (result !== null) {
+        User.sendVerificationMail(result);
+        res.status(200).send(user);
         return;
       }
       res.status(500).send({
-        message: "Failed to add user to database without throwing error",
+        message: "COULD_NOT_CREATE",
       });
     } catch (error) {
       res.status(500).send({
         message: error.message || "Error occurred while creating the User.",
+      });
+    }
+  }
+
+  // Verify User's mail
+  static async verifyUser(req, res) {
+    const login = req.params.login;
+    const token = req.params.token;
+
+    if (!login || !token) {
+      res.status(400).send({
+        message: "MISSING_DATA",
+      });
+
+      return;
+    }
+
+    try {
+      const user = await User.getUserByLogin(login);
+      if (user === null) {
+        res.status(404).send({
+          message: "USER_NOT_FOUND",
+        });
+        return;
+      }
+
+      if (user.token !== token) {
+        res.status(401).send({
+          message: "WRONG_TOKEN",
+        });
+        return;
+      }
+
+      const result = await User.updateByLogin(login, new User({verified: true, token: null}));
+      if (result !== null) {
+        res.status(200).send({
+          message: "User verified successfully.",
+        });
+        return;
+      }
+
+      res.status(500).send({
+        message: "COULD_NOT_VERIFY",
+      });
+    }
+    catch (error) {
+      res.status(500).send({
+        message: error.message || "Error occurred while verifying the User.",
       });
     }
   }
@@ -89,14 +182,7 @@ export default class {
 
     try {
       const data = await User.getAllUsers(filters);
-      res.send(
-        data.map((user) => {
-          return {
-            ...user,
-            password: 'XXXXX',
-          };
-        })
-      );
+      res.send(data);
     } catch (error) {
       res.status(500).send({
         message: error.message || "Some error occurred while retrieving users.",
@@ -111,20 +197,20 @@ export default class {
     if (!login) {
       res.status(400).send({
         message: `Missing login`,
-      })
-      return ;
+      });
+      return;
     }
 
     try {
       const data = await User.getUserByLogin(login);
 
-      if (data.length === 0) {
+      if (data === null) {
         res.status(404).send({
           message: `Could not find User with login ${req.params.login}.`,
         });
-        return ;
+        return;
       }
-      res.send(data[0]);
+      res.send(data);
     } catch (error) {
       res.status(500).send({
         message: `Error retrieving User with login: ${login}`,
@@ -149,21 +235,23 @@ export default class {
     if (!login || Object.keys(user).length === 0) {
       res.status(400).send({
         message: `Missing data`,
-      })
-      return ;
+      });
+      return;
     }
 
     try {
-      const data = await User.updateByLogin(login, user);
-      if (data.affectedRows === 0) {
+      const data = await User.updateByLogin(login, new User(user));
+      if (data === null) {
         // not found User with the login
         res.status(404).send({
           message: `Could not find User with login ${login}.`,
         });
+        return;
       }
-      res.status(200).send({ ...user, password: 'XXX' });
+      res.status(200).send(data);
     } catch (error) {
       res.status(500).send({
+        error: { ...error },
         message: `Error updating User with login: ${login}`,
       });
     }
@@ -176,8 +264,8 @@ export default class {
     if (!login) {
       res.status(400).send({
         message: `Missing login`,
-      })
-      return ;
+      });
+      return;
     }
 
     try {
@@ -187,6 +275,7 @@ export default class {
         res.status(404).send({
           message: `Could not find User with login ${login}.`,
         });
+        return;
       }
       res.status(200).send({ message: "User was deleted successfully!" });
     } catch (error) {
