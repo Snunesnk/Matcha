@@ -73,3 +73,17 @@ button {
     box-sizing: border-box; /* 1 */
     background-repeat: no-repeat; /* 2 */
 }
+
+.not-visible {
+    visibility: hidden;
+}
+
+/* Full width */
+.fw {
+    width: 100%;
+}
+
+/* Full height */
+.fh {
+    height: 100%;
+}

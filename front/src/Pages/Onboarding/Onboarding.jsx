@@ -55,6 +55,9 @@ const Onboarding = () => {
                             id="onboarding_content_btn_container"
                         >
                             <QuitOnboarding />
+                            {/* Putting title on "Not visible", so I can have the same padding between the two 
+                            "AlreadyHaveAccountBtn" without having to use the navbar */}
+                            <h1 className="navTitle not-visible">MatChat</h1>
                             <AlreadyHaveAccountBtn />
                         </Grid>
                     </Grid>

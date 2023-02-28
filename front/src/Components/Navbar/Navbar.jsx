@@ -6,11 +6,11 @@ import { AlreadyHaveAccountBtn } from '../Button/Button'
 
 const Navbar = () => {
     return (
-        <Grid container id="navbar">
+        <Grid container id="navbar" className="fw">
             <Grid item xs={4} className="center"></Grid>
             <Grid item xs={4} className="center">
                 <Link to="/">
-                    <h1 className="navTitle">MatChat</h1>
+                    <h1 className="navTitle fw">MatChat</h1>
                 </Link>
             </Grid>
             <Grid item xs={4} className="center log-in-btn-container">
