@@ -45,10 +45,13 @@ export class DbRequestService {
 
     static _computeQueryCommand(updatedObject, objectModel) {
         let queryCommand = "";
-        const querySetters = _.transform(_.toPairs(updatedObject), (result, keyValue, index) => {
+        const querySetters = _.transform(_.toPairs(updatedObject.toJSON()), (result, keyValue, index) => {
             const field = keyValue[0];
             const value = keyValue[1];
-            const startsWith = index === 0 ? 'SET' : ',';
+            if (field === undefined || value === undefined) {
+                return ;
+            }
+            const startsWith = result.length === 0 ? 'SET' : ',';
 
             if (objectModel.includes(field)) {
                 // In case of a boolean, mysql requires the '%' to interprete it correctly
@@ -74,7 +77,7 @@ export class DbRequestService {
             }
 
             const query = `INSERT INTO ${tableName} SET ?`;
-            const params = [objectToAdd];
+            const params = _.pick(objectToAdd, Object.getOwnPropertyNames(objectToAdd).map((prop) => prop.replace("_", "")));
 
             connection.query(query, params, (err, res) => {
                 if (err) {
@@ -106,7 +109,8 @@ export class DbRequestService {
         });
     }
 
-    static async update(tableName, updatedObject, objectModel = [], filters = {}) {
+    static async update(tableName, updatedObject, filters = {}) {
+        const objectModel = Object.getOwnPropertyNames(updatedObject).map((prop) => prop.replace("_", ""));
         return new Promise((resolve, reject) => {
             if (!this.allowedTableUse.includes(tableName)) {
                 reject(new Error("Table does not exist in database"))
