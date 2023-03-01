@@ -108,6 +108,7 @@ export default class {
       email: req.body.email,
       name: req.body.name,
       surname: req.body.surname,
+      dateOfBirth: req.body.dateOfBirth,
     });
 
     try {

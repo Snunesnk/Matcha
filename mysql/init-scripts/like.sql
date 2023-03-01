@@ -1,6 +1,6 @@
 create table `like`
 (
-    receiver varchar(50) not null comment 'type user_login',
-    issuer   varchar(50) not null comment 'type user_login'
+    receiver varchar(50) not null comment 'type userLogin',
+    issuer   varchar(50) not null comment 'type userLogin'
 );
 

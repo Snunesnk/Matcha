@@ -2,69 +2,33 @@ import { DbRequestService } from "../services/db-request.service.js";
 import { comparePassword } from "../services/password.service.js";
 import rand from "rand-token";
 import { sendEmail } from "../services/send-mail.service.js";
+import { UserChunk } from "./user-chunk.model.js";
+import { UserTag } from "./user-tag.model.js";
+import { Tag } from "./tag.model.js";
+import _ from "lodash";
 
-export class User {
+export class User extends UserChunk {
   constructor(obj = {}) {
-    this.login = obj.login;
-    this.password = obj.password;
-    this.email = obj.email;
-    this.name = obj.name;
-    this.surname = obj.surname;
+    super(obj);
+
+    this.bio = obj.bio;
+    this.gender = obj.gender;
+
     this.verified = obj.verified;
-    this.token = obj.token;
+
+    this.prefMale = obj.preferences;
+    this.prefFemale = obj.preferences;
+    this.prefEnby = obj.preferences;
+
+    this.imgA = obj.pictures;
+    this.imgB = obj.pictures;
+    this.imgC = obj.pictures;
+    this.imgD = obj.pictures;
+    this.imgE = obj.pictures;
+
+    this.tags = obj.tags;
   }
 
-  get login() {
-    return this._login;
-  }
-
-  set login(login) {
-    this._login = login;
-  }
-
-  get password() {
-    return this._password;
-  }
-
-  set password(password) {
-    this._password = password;
-  }
-
-  get token() {
-    return this._token;
-  }
-
-  set token(token) {
-    if (token === undefined) {
-      this._token = rand.suid(16);
-      return;
-    }
-    this._token = token;
-  }
-
-  get email() {
-    return this._email;
-  }
-
-  set email(email) {
-    this._email = email;
-  }
-
-  get name() {
-    return this._name;
-  }
-
-  set name(name) {
-    this._name = name;
-  }
-
-  get surname() {
-    return this._surname;
-  }
-
-  set surname(surname) {
-    this._surname = surname;
-  }
 
   get verified() {
     return this._verified;
@@ -75,7 +39,125 @@ export class User {
       this._verified = true;
       return;
     }
-    this._verified = false;
+    if (verified === false || verified === "false" || verified === 0) {
+      this._verified = false;
+      return;
+    }
+  }
+
+  get bio() {
+    return this._bio;
+  }
+
+  set bio(bio) {
+    this._bio = bio;
+  }
+
+  get gender() {
+    return this._gender;
+  }
+
+  set gender(gender) {
+    this._gender = gender;
+  }
+
+  get prefMale() {
+    return this._prefMale;
+  }
+
+  set prefMale(prefMale) {
+    if (prefMale === true || prefMale === "true" || prefMale === 1) {
+      this._prefMale = true;
+      return;
+    }
+    if (prefMale === false || prefMale === "false" || prefMale === 0) {
+      this._prefMale = false;
+      return;
+    }
+  }
+
+  get prefFemale() {
+    return this._prefFemale;
+  }
+
+  set prefFemale(prefFemale) {
+    if (prefFemale === true || prefFemale === "true" || prefFemale === 1) {
+      this._prefFemale = true;
+      return;
+    }
+    if (prefFemale === false || prefFemale === "false" || prefFemale === 0) {
+      this._prefFemale = false;
+      return;
+    }
+  }
+
+  get prefEnby() {
+    return this._prefEnby;
+  }
+
+  set prefEnby(prefEnby) {
+    if (prefEnby === true || prefEnby === "true" || prefEnby === 1) {
+      this._prefEnby = true;
+      return;
+    }
+    if (prefEnby === false || prefEnby === "false" || prefEnby === 0) {
+      this._prefEnby = false;
+      return;
+    }
+  }
+
+  get imgA() {
+    return this._imgA;
+  }
+
+  set imgA(imgA) {
+    this._imgA = imgA;
+  }
+
+  get imgB() {
+    return this._imgB;
+  }
+
+  set imgB(imgB) {
+    this._imgB = imgB;
+  }
+
+  get imgC() {
+    return this._imgC;
+  }
+
+  set imgC(imgC) {
+    this._imgC = imgC;
+  }
+
+  get imgD() {
+    return this._imgD;
+  }
+
+  set imgD(imgD) {
+    this._imgD = imgD;
+  }
+
+  get imgE() {
+    return this._imgE;
+  }
+
+  set imgE(imgE) {
+    this._imgE = imgE;
+  }
+
+  get tags() {
+    return this._tags;
+  }
+
+  set tags(tags) {
+    if (tags !== undefined) {
+      if (tags === null) {
+        this._tags = [];
+      } else {
+        this._tags = tags.map((tag) => new Tag(tag));
+      }
+    }
   }
 
   async passwordMatch(password) {
@@ -96,7 +178,7 @@ export class User {
   }
 
   static async create(newUser) {
-    const data = await DbRequestService.create("user", newUser);
+    const data = await DbRequestService.create("user", new UserChunk(newUser));
     if (data.affectedRows === 0) {
       return null;
     }
@@ -109,12 +191,12 @@ export class User {
   }
 
   static async getUserByLogin(login) {
-    const data = await DbRequestService.read("user", { login: `${login}` });
-    if (data.length === 0) {
+    const user = await User.getFullUserByLogin(login);
+    if (user === null) {
       return null;
     }
     return new User({
-      ...data[0],
+      ...user.toJSON(),
       password: "XXXXX",
     });
   }
@@ -124,9 +206,20 @@ export class User {
     if (data.length === 0) {
       return null;
     }
-    return new User({
+    let tags = [];
+    try {
+      const userTags = await UserTag.getUserTagsByLogin(login);
+      if (_.isArray(userTags)) {
+        tags = userTags.map((userTag) => ({bwid: userTag.tagBwid}));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    const user = {
       ...data[0],
-    });
+      tags,
+    };
+    return new User(user);
   }
 
   static async getAllVerified() {
@@ -138,11 +231,17 @@ export class User {
       user.verified = false;
       user.token = rand.suid(16);
     }
-    const data = await DbRequestService.update("user", user, {
+    const data = await DbRequestService.update("user", new UserChunk(user), {
       login: `${login}`,
     });
     if (data.affectedRows === 0) {
       return null;
+    }
+    if (_.isArray(user.tags)) {
+      await UserTag.deleteByLogin(login);
+      user.tags.forEach(async tag => {
+        await UserTag.create(new UserTag({ userLogin: user.login, tagBwid: tag.bwid }));
+      });
     }
     if (user.email !== undefined) {
       await User.sendVerificationMail(user);
@@ -156,13 +255,19 @@ export class User {
 
   toJSON() {
     return {
-      login: this.login,
-      password: this.password,
-      email: this.email,
-      name: this.name,
-      surname: this.surname,
+      ...super.toJSON(),
       verified: this.verified,
-      token: this.token,
+      bio: this.bio,
+      gender: this.gender,
+      prefMale: this.prefMale,
+      prefFemale: this.prefFemale,
+      prefEnby: this.prefEnby,
+      imgA: this.imgA,
+      imgB: this.imgB,
+      imgC: this.imgC,
+      imgD: this.imgD,
+      imgE: this.imgE,
+      tags: this.tags,
     };
   }
 }

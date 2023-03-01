@@ -4,9 +4,10 @@ VAR=$1
 if test $VAR; then
     docker stop $VAR;
     docker-compose rm $VAR -f;
+    docker image rm env-$VAR;
     docker-compose up -d $VAR;
 else
-    docker stop $(docker ps -a -q);
+    docker-compose rm -sf;
     docker rm $(docker ps -a -q);
     docker volume rm $(docker volume ls -q)
     docker-compose up -d;
