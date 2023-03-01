@@ -11,15 +11,13 @@ const connection = mysql.createConnection({
 });
 
 export class DbRequestService {
-// Used to ensure our dynamically forged request won't break trying to reach for a table that does not exist
+    // Used to ensure our dynamically forged request won't break trying to reach for a table that does not exist
     static allowedTableUse = [
         "user",
         "tag",
         "view",
-        "user_preferences",
-        "user_tag",
-        "user_pictures",
-        "user_tag",
+        "userTag",
+        "like"
     ];
 
     /*
@@ -40,7 +38,7 @@ export class DbRequestService {
             queryCondition += ` ${startsWith} ${field} LIKE ?`
             result.push(value);
         }, []);
-        return {queryCondition, queryFilters};
+        return { queryCondition, queryFilters };
     }
 
     static _computeQueryCommand(updatedObject, objectModel) {
@@ -49,7 +47,7 @@ export class DbRequestService {
             const field = keyValue[0];
             const value = keyValue[1];
             if (field === undefined || value === undefined) {
-                return ;
+                return;
             }
             const startsWith = result.length === 0 ? 'SET' : ',';
 
@@ -62,7 +60,7 @@ export class DbRequestService {
                 result.push(value);
             }
         }, []);
-        return {queryCommand, querySetters};
+        return { queryCommand, querySetters };
     }
 
     /*
@@ -82,30 +80,30 @@ export class DbRequestService {
             connection.query(query, params, (err, res) => {
                 if (err) {
                     reject(err);
-                    return ;
+                    return;
                 }
                 resolve(res);
-            });  
+            });
         });
     }
 
     static async read(tableName, filters = {}) {
         return new Promise((resolve, reject) => {
             if (!this.allowedTableUse.includes(tableName)) {
-                reject(new Error("Table does not exist in database"))
+                reject(new Error("Table is not allowed to be used"))
             }
 
-            const {queryCondition, queryFilters} = this._computeQueryCondition(filters);
+            const { queryCondition, queryFilters } = this._computeQueryCondition(filters);
             const query = `SELECT * FROM ${tableName}` + queryCondition;
 
 
             connection.query(query, queryFilters, (err, res) => {
                 if (err) {
                     reject(err);
-                    return ;
+                    return;
                 }
                 resolve(res);
-            });  
+            });
         });
     }
 
@@ -116,39 +114,39 @@ export class DbRequestService {
                 reject(new Error("Table does not exist in database"))
             }
 
-            
-            const {queryCommand, querySetters} = this._computeQueryCommand(updatedObject, objectModel);
-            const {queryCondition, queryFilters} = this._computeQueryCondition(filters);
+
+            const { queryCommand, querySetters } = this._computeQueryCommand(updatedObject, objectModel);
+            const { queryCondition, queryFilters } = this._computeQueryCondition(filters);
             const query = `UPDATE ${tableName}` + queryCommand + queryCondition;
             const settersAndFilters = querySetters.concat(queryFilters);
-    
+
             connection.query(query, settersAndFilters, (err, res) => {
                 if (err) {
                     reject(err);
-                    return ;
+                    return;
                 }
                 resolve(res);
-            });  
+            });
         });
     }
 
     static async delete(tableName, condition) {
         return new Promise((resolve, reject) => {
-    
+
             if (!this.allowedTableUse.includes(tableName)) {
                 reject(new Error("Table does not exist in database"))
             }
-    
+
             const query = `DELETE FROM ${tableName} WHERE ?`;
             const params = [condition];
-    
+
             connection.query(query, params, (err, res) => {
                 if (err) {
                     reject(err);
-                    return ;
+                    return;
                 }
                 resolve(res);
-            });  
+            });
         });
     }
 }

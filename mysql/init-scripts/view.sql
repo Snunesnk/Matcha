@@ -1,7 +1,7 @@
 create table view
 (
-    user_viewed  int                                 not null comment 'type user_id',
-    user_viewer  int                                 not null comment 'type user_id',
-    last_updated timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP
+    userViewed  int                                 not null comment 'type userId',
+    userViewer  int                                 not null comment 'type userId',
+    lastUpdated timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP
 );
 

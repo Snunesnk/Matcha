@@ -1,7 +1,11 @@
 import nodemailer from "nodemailer";
-import { HOST, FROM, PORT, USER, PASS } from "../config/mail.config.js";
+import { HOST, FROM, PORT, USER, PASS, TEST_MODE } from "../config/mail.config.js";
 
 export async function sendEmail(email, subject, text) {
+    if (TEST_MODE) {
+        console.log("TESTMODE - email not sent");
+        return true
+    }
     try {
         const transporter = nodemailer.createTransport({
             host: HOST,
