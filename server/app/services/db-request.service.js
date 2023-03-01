@@ -24,7 +24,9 @@ export class DbRequestService {
     ** UTILS
     */
 
-    static _computeQueryCondition(filters) {
+    static _computeQueryCondition(whereLike = {}, whereNotLike = {}) {
+        const filters = { ...whereLike, ...whereNotLike };
+        const whereLikeSize = Object.keys(whereLike).length;
         let queryCondition = "";
         const queryFilters = _.transform(_.toPairs(filters), (result, keyValue, index) => {
             const field = keyValue[0];
@@ -35,7 +37,8 @@ export class DbRequestService {
             if (value === 'false' || value === 'true') {
                 value = `%${value}`
             }
-            queryCondition += ` ${startsWith} ${field} LIKE ?`
+            const likeOrNot = index < whereLikeSize ? 'LIKE' : 'NOT LIKE';
+            queryCondition += ` ${startsWith} ${field} ${likeOrNot} ?`
             result.push(value);
         }, []);
         return { queryCondition, queryFilters };
@@ -87,13 +90,13 @@ export class DbRequestService {
         });
     }
 
-    static async read(tableName, filters = {}) {
+    static async read(tableName, whereLike = {}, whereNotLike = {}) {
         return new Promise((resolve, reject) => {
             if (!this.allowedTableUse.includes(tableName)) {
                 reject(new Error("Table is not allowed to be used"))
             }
 
-            const { queryCondition, queryFilters } = this._computeQueryCondition(filters);
+            const { queryCondition, queryFilters } = this._computeQueryCondition(whereLike, whereNotLike);
             const query = `SELECT * FROM ${tableName}` + queryCondition;
 
 
