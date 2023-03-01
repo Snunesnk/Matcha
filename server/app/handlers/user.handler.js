@@ -114,7 +114,13 @@ export default class {
       // Save User in the database
       const result = await User.create(user);
       if (result !== null) {
-        User.sendVerificationMail(result);
+        //// DEBUG ////
+        // User.sendVerificationMail(result);
+        console.log(
+          `${process.env.FRONT_URL}/onboarding/verify/?login=${result.login}&token=${result.token}`
+        );
+        //// DEBUG ////
+
         res.status(200).send(result);
         return;
       }

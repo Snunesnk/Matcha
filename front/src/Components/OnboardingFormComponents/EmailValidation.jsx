@@ -1,40 +1,45 @@
-import React from 'react'
-import { redirect } from 'react-router'
+import React, { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
+import { redirect, useNavigate } from 'react-router'
+import { USER_STATE_ACTIONS } from '../../constants'
 import './OnboardingForm.css'
 
-const setListenerForValidation = () => {
+const setListenerForValidation = (setVerified) => {
     const verifChannel = new BroadcastChannel('email_verification')
 
     verifChannel.onmessage = (e) => {
         if (e.data === 'verified') {
-            console.log('User verified')
-            redirect('/onboarding/welcome')
+            setVerified(true)
         }
     }
 }
 
 const EmailValidation = () => {
-    // Get email and name
-    const email = sessionStorage.getItem('email')
-    const name = sessionStorage.getItem('name')
+    const userInfos = useSelector((state) => state.userState.userInfos)
+    const [verified, setVerified] = useState(false)
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
 
-    setListenerForValidation()
+    setListenerForValidation(setVerified)
+
+    useEffect(() => {
+        if (verified == true) {
+            dispatch({ type: USER_STATE_ACTIONS.VERIFY })
+            navigate('/onboarding/welcome')
+        }
+    }, [verified])
 
     const resendMail = () => {
-        const login = sessionStorage.getItem('login')
-
-        fetch('http://localhost:8080/api/user/verify/' + login, {
+        fetch('http://localhost:8080/api/user/verify/' + userInfos.login, {
             method: 'POST',
         })
     }
 
     return (
         <div id="onboarding_email_validation">
-            {/* <h2>Hi {state.user.username},</h2> */}
-            <h2>Hi {name},</h2>
+            <h2>Hi {userInfos.name},</h2>
             <p>
-                {/* We sent an email to <b>{state.user.email}</b> */}
-                We sent an email to <b>{email}</b>
+                We sent an email to <b>{userInfos.email}</b>
                 <br />
                 Please check your inbox to activate your account.
             </p>
