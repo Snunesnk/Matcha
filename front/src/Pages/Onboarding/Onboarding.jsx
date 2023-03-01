@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Outlet, useNavigate, Route, Routes } from 'react-router-dom'
+import React from 'react'
+import { Outlet, Route, Routes } from 'react-router-dom'
 import { Grid } from '@mui/material'
 import {
     AlreadyHaveAccountBtn,
@@ -7,37 +7,10 @@ import {
 } from '../../Components/Button/Button'
 import './Onboarding.css'
 import ProgressBar from '../../Components/ProgressBar'
-
-const onboardingStateList = {
-    signUp: 0,
-    emailValidation: 1,
-    welcomeMessage: 2,
-    genderSelection: 3,
-    sexualOrientation: 4,
-    descriptionCreation: 5,
-    interestsTags: 6,
-    picturesUploading: 7,
-    allSetMessage: 8,
-}
+import { useSelector } from 'react-redux'
 
 const Onboarding = () => {
-    // const { state, dispatch } = useStoreContext();
-    const [onboardingState, setOnboardingState] = useState(0)
-    const navigate = useNavigate()
-
-    // // Here I need to add a check in the reducer, if the user is logged in
-    // // then I need to redirect it to the main page
-    // const goToLanding = () => {
-    //     // Reset onboarding state first
-    //     // If an email was sent, but not validated, then stay on this page
-    //     if (onboardingState === onboardingStateList.emailValidation)
-    //         setOnboardingState(onboardingStateList.emailValidation);
-    //     // Else if email was validated, set it back to the first step of the form
-    //     else if (onboardingState >= onboardingStateList.WelcomeMessage)
-    //         setOnboardingState(onboardingStateList.allSetMessage);
-
-    //     // dispatch({ type: PossibleState.landingPage });
-    // }
+    const loggedIn = useSelector((state) => state.userState.userStatus.loggedIn)
 
     return (
         <div id="onboarding">
@@ -54,11 +27,13 @@ const Onboarding = () => {
                             xs={12}
                             id="onboarding_content_btn_container"
                         >
-                            <QuitOnboarding />
-                            {/* Putting title on "Not visible", so I can have the same padding between the two 
-                            "AlreadyHaveAccountBtn" without having to use the navbar */}
+                            {loggedIn == false && <QuitOnboarding />}
+                            {/* Putting title on "Not visible", so I can have
+                                the same padding between the two 
+                                "AlreadyHaveAccountBtn" without having to use
+                                the navbar */}
                             <h1 className="navTitle not-visible">MatChat</h1>
-                            <AlreadyHaveAccountBtn />
+                            {loggedIn == false && <AlreadyHaveAccountBtn />}
                         </Grid>
                     </Grid>
 
