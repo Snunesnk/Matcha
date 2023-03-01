@@ -29,7 +29,7 @@ const DescriptionCreation = () => {
 
             <Link to="/onboarding/interests">
                 <button id="onboarding_next_button" onClick={saveBio}>
-                    That's me !
+                    That's me!
                 </button>
             </Link>
         </div>

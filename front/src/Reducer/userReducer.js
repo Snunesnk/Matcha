@@ -8,6 +8,7 @@ const checkForSessionCreds = () => {
         bio: '',
         tags: [],
         pictures: {},
+        birthDate: '',
     }
     const verified = sessionStorage.getItem('verified') ? true : false
     const onboarded = sessionStorage.getItem('onboarded') ? true : false
@@ -98,6 +99,15 @@ const userReducer = (state = initialState, action) => {
                 userSettings: {
                     ...state.userSettings,
                     pictures: { ...action.payload },
+                },
+            }
+
+        case USER_STATE_ACTIONS.UPDATE_BIRTHDATE:
+            return {
+                ...state,
+                userSettings: {
+                    ...state.userSettings,
+                    birthDate: action.payload,
                 },
             }
 
