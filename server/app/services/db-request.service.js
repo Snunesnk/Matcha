@@ -96,7 +96,6 @@ export class DbRequestService {
             const { queryCondition, queryFilters } = this._computeQueryCondition(filters);
             const query = `SELECT * FROM ${tableName}` + queryCondition;
 
-
             connection.query(query, queryFilters, (err, res) => {
                 if (err) {
                     reject(err);

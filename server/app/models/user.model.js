@@ -17,8 +17,8 @@ export class User extends UserChunk {
     this.verified = obj.verified;
 
     this.prefMale = obj.prefMale;
-    this.prefFemale = obj.prefMale;
-    this.prefEnby = obj.prefMale;
+    this.prefFemale = obj.prefFemale;
+    this.prefEnby = obj.prefEnby;
 
     this.imgA = obj.imgA;
     this.imgB = obj.imgB;
