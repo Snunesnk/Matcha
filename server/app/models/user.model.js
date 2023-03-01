@@ -86,7 +86,7 @@ export class User {
     const token = user.token;
     const login = user.login;
     const email = user.email;
-    const message = `${process.env.BASE_URL}/api/user/verify/${login}/${token}`;
+    const message = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${token}`;
 
     try {
       return await sendEmail(email, "Verify your email", message);
