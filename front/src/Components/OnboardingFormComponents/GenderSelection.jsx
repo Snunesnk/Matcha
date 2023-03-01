@@ -1,7 +1,9 @@
 import React from 'react'
 import { Grid } from '@mui/material'
 import ListChoice from '../ListChoice'
+import { useDispatch } from 'react-redux'
 import './OnboardingForm.css'
+import { USER_STATE_ACTIONS } from '../../constants'
 
 const Genders = [
     { number: 'A', label: 'Female' },
@@ -10,8 +12,10 @@ const Genders = [
 ]
 
 const GenderSelection = () => {
+    const dispatch = useDispatch()
+
     const onGenderSelection = (e, number, label) => {
-        sessionStorage.setItem('gender', label)
+        dispatch({ type: USER_STATE_ACTIONS.UPDATE_GENDER, payload: label })
     }
 
     return (

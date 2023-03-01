@@ -1,4 +1,4 @@
-import { createBrowserRouter, redirect } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom'
 
 // Main pages
 import Landing from '../Pages/Landing/Landing'
@@ -24,7 +24,12 @@ import DashboardOverview from '../Components/DashboardOverview'
 import ChatComponent from '../Components/ChatComponent'
 import Root from '../Pages/Root/Root'
 import EmailVerify from '../Components/OnboardingFormComponents/EmailVerify'
-import { checkIfLogged, checkIfOnboarded, checkIfVerified } from './loaders'
+import {
+    checkIfLogged,
+    checkIfOnboarded,
+    checkIfVerified,
+    redirectToSignup,
+} from './loaders'
 
 const getRouterWithStore = (store) => {
     return createBrowserRouter([
@@ -42,6 +47,11 @@ const getRouterWithStore = (store) => {
                     path: 'onboarding/*',
                     element: <Onboarding />,
                     children: [
+                        {
+                            path: '',
+                            element: <></>,
+                            loader: redirectToSignup,
+                        },
                         {
                             path: 'signup',
                             element: <SignupForm />,

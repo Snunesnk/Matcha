@@ -23,9 +23,9 @@
 #progress_bar {
     height: 3px;
     width: 150px;
-    background-color: #FBE3DD;
+    background-color: #fbe3dd;
     border-radius: 1px;
-    color: #FBE3DD;
+    color: #fbe3dd;
 }
 
 #next_and_prev_button {
@@ -36,18 +36,18 @@
 #next_and_prev_button a {
     display: flex;
     align-items: center;
-    background-color: #BA7300;
+    background-color: #ba7300;
     padding: 3px;
-    color: #FBE3DD;
+    color: #fbe3dd;
 }
 
 #next_and_prev_button a.disabled svg {
-    color: #BA7300 !important;
+    color: #ba7300 !important;
     cursor: default;
 }
 
 #next_and_prev_button a.disabled {
-    color: #BA7300 !important;
+    color: #ba7300 !important;
     cursor: default;
     display: none;
 }
@@ -71,19 +71,19 @@
 }
 
 #progress_next {
-    border-right: 0.5px solid #FBE3DD;
+    border-right: 0.5px solid #fbe3dd;
     border-radius: 2px 0px 0px 2px;
 }
 
 #progress_prev {
-    border-left: 0.5px solid #FBE3DD;
+    border-left: 0.5px solid #fbe3dd;
     border-radius: 0px 2px 2px 0px;
 }
 
 #progress_bar::before {
     content: '';
     position: absolute;
-    border-color: #BA7300;
+    border-color: #ba7300;
     border-style: solid;
     border-width: 3px 0 0 0;
     height: 0px;
@@ -92,17 +92,14 @@
 }
 
 .progress_twenty::before {
-
     width: 30px !important;
 }
 
 .progress_forty::before {
-
     width: 60px !important;
 }
 
 .progress_sixty::before {
-
     width: 90px !important;
 }
 
