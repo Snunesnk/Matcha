@@ -16,15 +16,15 @@ export class User extends UserChunk {
 
     this.verified = obj.verified;
 
-    this.prefMale = obj.preferences;
-    this.prefFemale = obj.preferences;
-    this.prefEnby = obj.preferences;
+    this.prefMale = obj.prefMale;
+    this.prefFemale = obj.prefMale;
+    this.prefEnby = obj.prefMale;
 
-    this.imgA = obj.pictures;
-    this.imgB = obj.pictures;
-    this.imgC = obj.pictures;
-    this.imgD = obj.pictures;
-    this.imgE = obj.pictures;
+    this.imgA = obj.imgA;
+    this.imgB = obj.imgB;
+    this.imgC = obj.imgC;
+    this.imgD = obj.imgD;
+    this.imgE = obj.imgE;
 
     this.tags = obj.tags;
   }

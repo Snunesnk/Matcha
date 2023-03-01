@@ -248,6 +248,20 @@ export default class {
       return;
     }
 
+    if (user.preferences) {
+      user.prefMale = user.preferences.prefMale;
+      user.prefFemale = user.preferences.prefFemale;
+      user.prefEnby = user.preferences.prefEnby;
+    }
+
+    if (user.pictures) {
+      user.imagA = user.pictures.imagA[0].path;
+      user.imagB = user.pictures.imagB[0].path;
+      user.imagC = user.pictures.imagC[0].path;
+      user.imagD = user.pictures.imagD[0].path;
+      user.imagE = user.pictures.imagE[0].path;
+    }
+
     try {
       const data = await User.updateByLogin(login, new User(user));
       if (data === null) {
