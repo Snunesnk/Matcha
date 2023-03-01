@@ -18,3 +18,7 @@ export const checkIfOnboarded = (store) => {
 
     if (userStatus.onboarded) return redirect('/dashboard')
 }
+
+export const redirectToSignup = () => {
+    return redirect('/onboarding/signup')
+}
