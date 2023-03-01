@@ -19,7 +19,7 @@ export const validationErrors = {
     missingPasswordDigit: 'At least one digit is required',
     missingData: 'Please fill-in all fields',
     genericProfileCreationError:
-        'An error occured while created your profile, please try later',
+        'An error occured while created your profile, please try again later',
     noValidationError: 'NONE',
 }
 

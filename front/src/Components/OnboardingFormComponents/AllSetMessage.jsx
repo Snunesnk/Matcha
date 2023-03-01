@@ -6,11 +6,23 @@ import './OnboardingForm.css'
 
 const AllSetMessage = () => {
     const dispatch = useDispatch()
-    const userState = useSelector((state) => state.userState.userSettings)
+    const userState = useSelector((state) => state.userState)
+    const login = useSelector((state) => state.userState.userInfos.login)
 
     const sendForm = () => {
         console.log(userState)
         // dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
+
+        const options = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ user: userState.userSettings }),
+        }
+        fetch('http://localhost:8080/api/user/' + login, options).then(
+            (response) => {
+                console.log(response)
+            }
+        )
     }
 
     return (
@@ -20,11 +32,11 @@ const AllSetMessage = () => {
             </p>
             <p>Are you ready to find your catmate?</p>
 
-            <Link to="/dashboard">
-                <button id="onboarding_next_button" onClick={sendForm}>
-                    Let the magic begin!
-                </button>
-            </Link>
+            {/* <Link to="/dashboard"> */}
+            <button id="onboarding_next_button" onClick={sendForm}>
+                Let the magic begin!
+            </button>
+            {/* </Link> */}
         </div>
     )
 }

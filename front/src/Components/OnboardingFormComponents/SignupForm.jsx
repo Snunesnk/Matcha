@@ -70,6 +70,7 @@ export async function action({ request }) {
         surname: formData.get('firstName'),
         login: formData.get('username'),
         password: formData.get('password'),
+        dateOfBirth: '2000-01-01',
     }
     let error = checkPassword(data.password)
 
