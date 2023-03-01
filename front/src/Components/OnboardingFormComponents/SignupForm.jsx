@@ -1,8 +1,10 @@
-import { Form, useActionData, redirect } from 'react-router-dom'
+import { Form, useActionData, useNavigate } from 'react-router-dom'
 import { Grid } from '@mui/material'
 import MainButton from '../MainButton/MainBtn'
 import FormInput from '../FormInput/FormInput'
-import { validationErrors } from '../../constants'
+import { USER_STATE_ACTIONS, validationErrors } from '../../constants'
+import { useDispatch } from 'react-redux'
+import { useEffect } from 'react'
 import './OnboardingForm.css'
 
 const checkPassword = (password) => {
@@ -68,10 +70,9 @@ export async function action({ request }) {
         login: formData.get('username'),
         password: formData.get('password'),
     }
+    let error = checkPassword(data.password)
 
-    const passwordError = checkPassword(data.password)
-
-    if (passwordError === '') {
+    if (error === '') {
         data.password = await hashPassword(data.password)
 
         // Send data to controller to create an user
@@ -84,41 +85,48 @@ export async function action({ request }) {
         }
         await fetch('http://localhost:8080/api/user', options).then(
             (response) => {
-                let error = ''
-
                 switch (response.status) {
                     case 400:
-                        error = 'missing data'
+                        error = validationErrors.missingData
                         break
 
                     default:
                     case 500:
-                        error =
-                            'An error occured while created your profile, please try later'
+                        error = validationErrors.genericProfileCreationError
                         break
 
                     case 200:
-                        const res = response.json()
-                        sessionStorage.setItem('email', res.email)
-                        sessionStorage.setItem('name', res.surname)
-                        sessionStorage.setItem('login', res.login)
+                        error = validationErrors.noValidationError
                         break
                 }
-
-                if (error === '') {
-                    return redirect('/onboarding/validation')
-                }
-
-                return error
             }
         )
     }
 
-    return passwordError
+    return { ...data, error }
 }
 
 const SignupForm = () => {
-    const passwordError = useActionData()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const formResult = useActionData()
+
+    useEffect(() => {
+        if (
+            formResult &&
+            formResult.error === validationErrors.noValidationError
+        ) {
+            dispatch({
+                type: USER_STATE_ACTIONS.LOG_IN,
+                payload: {
+                    email: formResult.email,
+                    name: formResult.name,
+                    login: formResult.login,
+                },
+            })
+            navigate('/onboarding/validation')
+        }
+    }, [formResult])
 
     return (
         <Form method="post">
@@ -208,13 +216,15 @@ const SignupForm = () => {
                             required={true}
                         />
                     </Grid>
-                    {passwordError && (
-                        <Grid item xs={12} className="centered_container">
-                            <label className="errorLabel">
-                                {passwordError}
-                            </label>
-                        </Grid>
-                    )}
+                    {formResult &&
+                        formResult.error !==
+                            validationErrors.noValidationError && (
+                            <Grid item xs={12} className="centered_container">
+                                <label className="errorLabel">
+                                    {formResult.error}
+                                </label>
+                            </Grid>
+                        )}
                 </Grid>
                 <Grid
                     container

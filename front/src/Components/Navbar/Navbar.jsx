@@ -1,10 +1,13 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import { Grid } from '@mui/material'
 import './Navbar.css'
 import { AlreadyHaveAccountBtn } from '../Button/Button'
+import { useSelector } from 'react-redux'
 
 const Navbar = () => {
+    const loggedIn = useSelector((state) => state.userState.userStatus.loggedIn)
+
     return (
         <Grid container id="navbar" className="fw">
             <Grid item xs={4} className="center"></Grid>
@@ -14,7 +17,7 @@ const Navbar = () => {
                 </Link>
             </Grid>
             <Grid item xs={4} className="center log-in-btn-container">
-                <AlreadyHaveAccountBtn />
+                {loggedIn == false && <AlreadyHaveAccountBtn />}
             </Grid>
         </Grid>
     )
