@@ -50,6 +50,10 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 userStatus: { ...state.userStatus, verified: false },
             }
+
+        case USER_STATE_ACTIONS.UPDATE_GENDER:
+            console.log(action.payload)
+
         default:
             return state
     }
