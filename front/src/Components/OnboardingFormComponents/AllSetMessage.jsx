@@ -1,15 +1,16 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { USER_STATE_ACTIONS } from '../../constants'
 import './OnboardingForm.css'
 
 const AllSetMessage = () => {
     const dispatch = useDispatch()
+    const userState = useSelector((state) => state.userState.userSettings)
 
     const sendForm = () => {
-        dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
-        // Send form to controller
+        console.log(userState)
+        // dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
     }
 
     return (

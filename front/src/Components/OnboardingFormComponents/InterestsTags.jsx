@@ -2,12 +2,26 @@ import React from 'react'
 import './OnboardingForm.css'
 import { Autocomplete, Chip, TextField } from '@mui/material'
 import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { USER_STATE_ACTIONS } from '../../constants'
 
 const InterestsTags = () => {
     let tags
+    const dispatch = useDispatch()
 
     const saveTags = () => {
-        sessionStorage.setItem('interests', tags)
+        const formatedTags = []
+        console.log(tags)
+
+        for (let i = 0; i < tags.length; i++) {
+            formatedTags.push({
+                bwid: tags[i],
+            })
+        }
+        dispatch({
+            type: USER_STATE_ACTIONS.UPDATE_TAGS,
+            payload: formatedTags,
+        })
     }
 
     return (

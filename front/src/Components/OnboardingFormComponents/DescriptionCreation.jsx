@@ -1,17 +1,22 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
-import "./OnboardingForm.css"
+import React, { useState } from 'react'
+import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { USER_STATE_ACTIONS } from '../../constants'
+import './OnboardingForm.css'
 
 const DescriptionCreation = () => {
-    const [value, setValue] = useState("");
+    const [value, setValue] = useState('')
+    const dispatch = useDispatch()
 
     const saveBio = () => {
-        console.log(value);
+        dispatch({ type: USER_STATE_ACTIONS.UPDATE_BIO, payload: value })
     }
 
     return (
         <div id="gender_selection_container">
-            <p id="gender_selection_catch_phrase">Tell us more about <b>yourself</b> (max 100 char)</p>
+            <p id="gender_selection_catch_phrase">
+                Tell us more about <b>yourself</b> (max 100 char)
+            </p>
 
             <textarea
                 id="description_creation_input"
@@ -23,10 +28,12 @@ const DescriptionCreation = () => {
             ></textarea>
 
             <Link to="/onboarding/interests">
-                <button id="onboarding_next_button" onClick={saveBio}>That's me !</button>
+                <button id="onboarding_next_button" onClick={saveBio}>
+                    That's me !
+                </button>
             </Link>
         </div>
-    );
+    )
 }
 
 export default DescriptionCreation
