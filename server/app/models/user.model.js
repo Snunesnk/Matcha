@@ -231,17 +231,21 @@ export class User extends UserChunk {
       user.verified = false;
       user.token = rand.suid(16);
     }
-    const data = await DbRequestService.update("user", new UserChunk(user), {
+    const data = await DbRequestService.update("user", new User({...user, tags: undefined}), {
       login: `${login}`,
     });
     if (data.affectedRows === 0) {
       return null;
     }
-    if (_.isArray(user.tags)) {
-      await UserTag.deleteByLogin(login);
-      user.tags.forEach(async tag => {
-        await UserTag.create(new UserTag({ userLogin: user.login, tagBwid: tag.bwid }));
-      });
+    try {
+      if (_.isArray(user.tags)) {
+        await UserTag.deleteByLogin(login);
+        user.tags.forEach(async tag => {
+          await UserTag.create(new UserTag({ userLogin: login, tagBwid: tag.bwid }));
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
     if (user.email !== undefined) {
       await User.sendVerificationMail(user);

@@ -102,14 +102,14 @@ export default class {
     }
 
     // Create a User
-    const user = new User({
+    const user = {
       login: req.body.login,
       password: password,
       email: req.body.email,
       name: req.body.name,
       surname: req.body.surname,
       dateOfBirth: req.body.dateOfBirth,
-    });
+    };
 
     try {
       // Save User in the database
@@ -166,7 +166,7 @@ export default class {
 
       const result = await User.updateByLogin(
         login,
-        new User({ verified: true, token: null })
+        { verified: true, token: null }
       );
       if (result !== null) {
         res.status(200).send({
@@ -263,7 +263,7 @@ export default class {
     }
 
     try {
-      const data = await User.updateByLogin(login, new User(user));
+      const data = await User.updateByLogin(login, user);
       if (data === null) {
         // not found User with the login
         res.status(404).send({

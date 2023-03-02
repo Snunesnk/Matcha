@@ -30,6 +30,10 @@ export class UserChunk {
         this._password = password;
     }
 
+    get token() {
+        return this._token;
+    }
+
     set token(token) {
         if (token === undefined) {
             this._token = rand.suid(16);
@@ -38,16 +42,12 @@ export class UserChunk {
         this._token = token;
     }
 
-    get token() {
-        return this._token;
+    get dateOfBirth() {
+        return this._dateOfBirth;
     }
 
     set dateOfBirth(dateOfBirth) {
         this._dateOfBirth = dateOfBirth;
-    }
-
-    get dateOfBirth() {
-        return this._dateOfBirth;
     }
 
     get email() {
