@@ -8,6 +8,8 @@ import './Dashboard.css'
 const Dashboard = () => {
     return (
         <div className="dashboard_overview">
+            <div className="background_dashboard"></div>
+
             <Grid container className="dashboard_container">
                 <Outlet />
 

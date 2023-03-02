@@ -1,15 +1,30 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { USER_STATE_ACTIONS } from '../../constants'
 import './OnboardingForm.css'
 
 const AllSetMessage = () => {
     const dispatch = useDispatch()
+    const userState = useSelector((state) => state.userState)
+    const login = useSelector((state) => state.userState.userInfos.login)
 
     const sendForm = () => {
+        console.log(userState)
         dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
-        // Send form to controller
+
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user: userState.userSettings }),
+        }
+        fetch('http://localhost:8080/api/user/' + login, options).then(
+            (response) => {
+                console.log(response)
+            }
+        )
     }
 
     return (

@@ -1,3 +1,4 @@
+import React from 'react'
 import { Form, useActionData, useNavigate } from 'react-router-dom'
 import { Grid } from '@mui/material'
 import MainButton from '../MainButton/MainBtn'
@@ -5,6 +6,10 @@ import FormInput from '../FormInput/FormInput'
 import { USER_STATE_ACTIONS, validationErrors } from '../../constants'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
+import TextField from '@mui/material/TextField'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
+import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import './OnboardingForm.css'
 
 const checkPassword = (password) => {
@@ -69,6 +74,7 @@ export async function action({ request }) {
         surname: formData.get('firstName'),
         login: formData.get('username'),
         password: formData.get('password'),
+        dateOfBirth: '2000-01-01',
     }
     let error = checkPassword(data.password)
 
@@ -110,6 +116,7 @@ const SignupForm = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const formResult = useActionData()
+    const [date, setDate] = React.useState('')
 
     useEffect(() => {
         if (
@@ -225,6 +232,22 @@ const SignupForm = () => {
                                 </label>
                             </Grid>
                         )}
+                </Grid>
+                <Grid
+                    item
+                    xs={12}
+                    className="centered_container input_container"
+                >
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                        <DatePicker
+                            label="Date of birth"
+                            value={date}
+                            onChange={(newDate) => {
+                                setDate(newDate)
+                            }}
+                            renderInput={(params) => <TextField {...params} />}
+                        />
+                    </LocalizationProvider>
                 </Grid>
                 <Grid
                     container

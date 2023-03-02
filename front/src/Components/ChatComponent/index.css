@@ -13,7 +13,7 @@
 }
 
 .close_messages_btn {
-    background-color: #5E0B4F;
+    background-color: #5e0b4f;
     color: white;
     box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%);
     border-radius: 40px;
@@ -27,7 +27,7 @@
 .close_messages_btn:hover {
     transition: all 100ms;
     color: black;
-    background-color: #BA7300;
+    background-color: #ba7300;
 }
 
 .close_messages_btn:active {
@@ -45,7 +45,7 @@
 }
 
 #messages_input {
-    border: 1px solid #BA7300;
+    border: 1px solid #ba7300;
     color: black;
     padding: 10px 15px;
     border-radius: 4px;
@@ -55,13 +55,13 @@
 }
 
 #messages_input:focus-visible {
-    outline: solid #BA7300 1px;
-    border: 1px solid #BA7300;
+    outline: solid #ba7300 1px;
+    border: 1px solid #ba7300;
     transition: all 100ms;
 }
 
 .messages_send_icon {
-    color: #5E0B4F;
+    color: #5e0b4f;
     transition: all 100ms;
     cursor: pointer;
     transform: scale(1.2);
@@ -79,7 +79,7 @@
 }
 
 #chat_header {
-    background-color: #B5C9EA;
+    background-color: #b5c9ea;
     height: fit-content;
     padding: 10px;
     display: flex;
@@ -123,8 +123,8 @@
     justify-content: flex-end;
 }
 
-.messsage_line.self>.message {
-    background-color: #BA7300;
+.messsage_line.self > .message {
+    background-color: #ba7300;
     color: white;
 }
 
@@ -132,8 +132,8 @@
     justify-content: flex-start;
 }
 
-.messsage_line.other>.message {
-    background-color: #B5C9EA;
+.messsage_line.other > .message {
+    background-color: #b5c9ea;
 }
 
 .chat_img_container_message {

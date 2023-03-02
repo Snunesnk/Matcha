@@ -19,7 +19,7 @@ export const validationErrors = {
     missingPasswordDigit: 'At least one digit is required',
     missingData: 'Please fill-in all fields',
     genericProfileCreationError:
-        'An error occured while created your profile, please try later',
+        'An error occured while created your profile, please try again later',
     noValidationError: 'NONE',
 }
 
@@ -29,4 +29,10 @@ export const USER_STATE_ACTIONS = {
     VERIFY: 'USER_VERIFY',
     UNVERIFY: 'USER_UNVERIFY',
     ONBOARDED: 'USER_ONBOARDED',
+    UPDATE_GENDER: 'UPDATE_GENDER',
+    UPADTE_PREFERENCES: 'UPDATE_PREFERENCES',
+    UPDATE_BIO: 'UPDATE_BIO',
+    UPDATE_TAGS: 'UPDATE_TAGS',
+    UPDATE_PICTURES: 'UPDATE_PICTURES',
+    UPDATE_BIRTHDATE: 'UPDATE_BIRTHDATE',
 }
