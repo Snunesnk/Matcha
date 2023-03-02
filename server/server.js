@@ -19,7 +19,9 @@ app.use(urlencoded({ extended: true }));
 
 // Setting /api routes
 import userRoute from "./app/routes/user.routes.js";
+import tagRoute from "./app/routes/tag.routes.js";
 
+app.use("/api", tagRoute)
 app.use("/api", userRoute)
 
 // Docker health check
