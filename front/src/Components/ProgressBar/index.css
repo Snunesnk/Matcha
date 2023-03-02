@@ -76,8 +76,7 @@
 #progress_bar::before {
     content: '';
     position: absolute;
-    border-color: #ba7300;
-    border-style: solid;
+    border: solid #ba7300;
     border-width: 3px 0 0 0;
     height: 0px;
     width: 0;
