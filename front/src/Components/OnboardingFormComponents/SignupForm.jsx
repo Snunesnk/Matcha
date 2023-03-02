@@ -86,9 +86,6 @@ const checkDate = (date) => {
             if (today.getDate() < userDate.getDate())
                 return validationErrors.userTooYoung
         }
-        // Too old, chances of cardiac arrest are too high
-    } else if (userAge > 100) {
-        return validationErrors.userTooOld
     }
 
     return validationErrors.noValidationError

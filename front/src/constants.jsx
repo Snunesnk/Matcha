@@ -20,7 +20,6 @@ export const validationErrors = {
         'Password: at least one lowercase letter is required',
     missingPasswordDigit: 'Password: at least one digit is required',
     invalidDate: 'Error: invalid date',
-    userTooOld: 'Sorry, you must be under 100 years old to use this app',
     userTooYoung: 'Sorry, you must be at least 18 years old to use this app',
     missingData: 'Please fill-in all fields',
     genericProfileCreationError:
