@@ -2,16 +2,10 @@ import React, { useState } from 'react'
 import './OnboardingForm.css'
 import { Link } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import TextField from '@mui/material/TextField'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
-import { Grid } from '@mui/material'
 import { USER_STATE_ACTIONS } from '../../constants'
 
 const WelcomeMessage = () => {
     const login = useSelector((state) => state.userState.userInfos.login)
-    const [date, setDate] = useState('')
     const dispatch = useDispatch()
 
     const saveBirthDate = () => {

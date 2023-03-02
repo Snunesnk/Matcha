@@ -5,21 +5,32 @@ import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 
+const getMatchingTags = (userInput, setMatchingTags) => {
+    fetch('http://localhost:8080/api/tag?prefix=' + userInput, {
+        method: 'GET',
+    })
+        .then((response) => response.json())
+        .then((data) => {
+            // Add user input if not empty so it is always a choice
+            if (
+                userInput !== '' &&
+                !data.some((tag) => tag.bwid === userInput)
+            ) {
+                setMatchingTags([{ bwid: userInput }, ...data])
+            } else setMatchingTags(data)
+        })
+}
+
+const DEBOUNCE_DELAY = 100
+
 const InterestsTags = () => {
     const [userInput, setUserInput] = useState('')
-    const [matchingTags, setMatchingTags] = useState([
-        {
-            bwid: 'test',
-        },
-        {
-            bwid: 'test2',
-        },
-        {
-            bwid: 'test3',
-        },
-    ])
-    let tags
+    const [matchingTags, setMatchingTags] = useState([])
+    let tags = []
     const dispatch = useDispatch()
+    // Debounce
+    let timer = new Date()
+    let interval = null
 
     const saveTags = () => {
         // dispatch({
@@ -29,14 +40,16 @@ const InterestsTags = () => {
     }
 
     useEffect(() => {
-        // const options = {
-        //     method: 'GET',
-        // }
-        // fetch('http://localhost:8080/api/tag?prefix=' + userInput, options)
-        //     .then((response) => response.json())
-        //     .then((data) => {
-        //         setMatchingTags(data)
-        //     })
+        if (interval !== null) clearInterval(interval)
+        if (new Date() - timer < DEBOUNCE_DELAY) {
+            interval = setTimeout(() => {
+                timer = new Date()
+                getMatchingTags(userInput, setMatchingTags)
+            }, DEBOUNCE_DELAY)
+        } else {
+            timer = new Date()
+            getMatchingTags(userInput, setMatchingTags)
+        }
     }, [userInput])
 
     return (
@@ -61,9 +74,13 @@ const InterestsTags = () => {
                         <Chip
                             variant="outlined"
                             label={item}
+                            key={index}
                             {...getTagProps({ index })}
                         />
                     ))
+                }}
+                onInputChange={(event, newInputValue) => {
+                    setUserInput(newInputValue)
                 }}
                 renderInput={(params) => (
                     <TextField
@@ -72,7 +89,6 @@ const InterestsTags = () => {
                         label="Interests tags"
                         placeholder="+ Add tags"
                         variant="filled"
-                        value={(e) => setUserInput(e.target.value)}
                     />
                 )}
             />

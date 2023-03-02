@@ -66,7 +66,7 @@ const getRouterWithStore = (store) => {
                         {
                             path: 'verify',
                             element: <EmailVerify />,
-                            loader: () => checkIfVerified(store),
+                            loader: () => checkIfLogged(store),
                         },
                         {
                             path: 'welcome',
