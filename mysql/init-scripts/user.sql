@@ -14,6 +14,8 @@ create table user (
     imgC varchar(200) default '' null,
     imgD varchar(200) default '' null,
     imgE varchar(200) default '' null,
+    isOnline tinyint(1) default 0 not null,
+    lastOnline timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
     verified tinyint(1) default 0 null,
     rating float default 100 null comment 'profile rating /100',
     login varchar(50) not null primary key,

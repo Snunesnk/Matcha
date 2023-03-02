@@ -15,6 +15,8 @@ export class User extends UserChunk {
     this.gender = obj.gender;
 
     this.verified = obj.verified;
+    this.isOnline = obj.isOnline;
+    this.lastOnline = obj.lastOnline;
 
     this.prefMale = obj.prefMale;
     this.prefFemale = obj.prefFemale;
@@ -29,6 +31,25 @@ export class User extends UserChunk {
     this.tags = obj.tags;
   }
 
+  get isOnline() {
+    return this._isOnline;
+  }
+
+  set isOnline(isOnline) {
+    if (isOnline === true || isOnline === "true" || isOnline === 1) { 
+      this._isOnline = true;
+      return;
+    }
+    this._isOnline = false;
+  }
+
+  get lastOnline() {
+    return this._lastOnline;
+  }
+
+  set lastOnline(lastOnline) {
+    this._lastOnline = lastOnline;
+  }
 
   get verified() {
     return this._verified;
@@ -254,7 +275,11 @@ export class User extends UserChunk {
   }
 
   static async deleteByLogin(login) {
-    return DbRequestService.delete("user", { login: `${login}` });
+    const data = DbRequestService.delete("user", { login: `${login}` });
+    if (data.affectedRows === 0) {
+      return null;
+    }
+    return true;
   }
 
   toJSON() {
@@ -272,6 +297,8 @@ export class User extends UserChunk {
       imgD: this.imgD,
       imgE: this.imgE,
       tags: this.tags,
+      isOnline: this.isOnline,
+      lastOnline: this.lastOnline,
     };
   }
 }

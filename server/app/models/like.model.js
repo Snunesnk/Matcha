@@ -23,7 +23,7 @@ export class Like {
     }
 
     static async create(newLike) {
-        const data = await DbRequestService.create('like', newLike)
+        const data = await DbRequestService.create('like', new Like(newLike));
         if (data.affectedRows === 0) {
             return null;
         }
@@ -91,8 +91,12 @@ export class Like {
         return filtered;
     }
 
-    static async deleteById(receiver, issuer) {
-        return DbRequestService.delete('like', { receiver: `${receiver}`, issuer: `${issuer}` });
+    static async delete(receiver, issuer) {
+        const data = DbRequestService.delete('like', { receiver: `${receiver}`, issuer: `${issuer}` });
+        if (data.affectedRows === 0) {
+            return null;
+        }
+        return true;
     }
 
 
