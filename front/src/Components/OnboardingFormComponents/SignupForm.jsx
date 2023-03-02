@@ -116,6 +116,7 @@ const SignupForm = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const formResult = useActionData()
+    const [date, setDate] = React.useState('')
 
     useEffect(() => {
         if (
@@ -240,10 +241,10 @@ const SignupForm = () => {
                     <LocalizationProvider dateAdapter={AdapterDayjs}>
                         <DatePicker
                             label="Date of birth"
-                            // value={date}
-                            // onChange={(newDate) => {
-                            //     setDate(newDate)
-                            // }}
+                            value={date}
+                            onChange={(newDate) => {
+                                setDate(newDate)
+                            }}
                             renderInput={(params) => <TextField {...params} />}
                         />
                     </LocalizationProvider>
