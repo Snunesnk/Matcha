@@ -1,0 +1,59 @@
+#messages_component_container {
+    background-color: #200518;
+    color: #fffdfc;
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.message-feed-selection-container {
+    display: flex;
+    align-items: center;
+    padding: 40px 0 15px 0;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#messages_component_container::-webkit-scrollbar {
+    display: none;
+}
+
+.messages-category-btn {
+    background-color: transparent;
+    color: #fffdfc;
+    border-radius: 30px;
+    width: 35%;
+    display: flex;
+    justify-content: center;
+    transition: all 200ms ease-out;
+}
+.messages-category-btn:not(.selected):hover {
+    background-color: #4c3746;
+    transition: all 200ms ease-out;
+}
+
+.messages-category-btn.selected {
+    background-color: #fffdfc;
+    color: #dc21b8;
+}
+
+.chat-category {
+    color: #fffdfc;
+    font-weight: 600;
+    margin-left: 15px;
+}
+
+#chat_display_container {
+    display: flex;
+    flex-direction: column;
+    height: 75vh;
+}
+
+#chat {
+    overflow: auto;
+    flex: 0 1 auto;
+    scrollbar-width: none;
+}
+#chat::-webkit-scrollbar {
+    display: none;
+}

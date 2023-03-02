@@ -30,6 +30,7 @@ import {
     checkIfVerified,
     redirectToSignup,
 } from './loaders'
+import MessagesContainer from '../Components/MessagesContainer/MessagesContainer'
 
 const getRouterWithStore = (store) => {
     return createBrowserRouter([
@@ -114,8 +115,14 @@ const getRouterWithStore = (store) => {
                             element: <DashboardOverview />,
                         },
                         {
-                            path: 'messages/:id',
-                            element: <ChatComponent />,
+                            path: 'messages',
+                            element: <MessagesContainer />,
+                            children: [
+                                {
+                                    path: ':id',
+                                    element: <ChatComponent />,
+                                },
+                            ],
                         },
                     ],
                 },

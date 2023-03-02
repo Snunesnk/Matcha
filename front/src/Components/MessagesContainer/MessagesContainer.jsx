@@ -1,65 +1,61 @@
 import { Grid } from '@mui/material'
-import React from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
-import './index.css'
+import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Message from '../Message/Message'
 
-const ChatList = () => {
+import './MessagesContainer.css'
+
+const MessagesContainer = () => {
+    const [showNotifications, setShowNotifications] = useState(false)
     const navigate = useNavigate()
-    const params = useParams()
-
-    const navigateToConv = (id) => {
-        navigate('messages/' + id)
-    }
 
     return (
-        <div id="chat_list">
-            <div id="chat_list_title">
-                <div>Messages</div>
-            </div>
-            <div id="chat_display_container">
-                <Grid container className="chat">
-                    {messages.map((message, i) => {
-                        return (
-                            <Grid
-                                container
-                                item
-                                xs={12}
+        <>
+            <Grid container id="messages_component_container">
+                <Grid item xs={4} id="chat_list_container">
+                    <div>
+                        <Grid
+                            item
+                            container
+                            xs={12}
+                            className="message-feed-selection-container"
+                        >
+                            <button
                                 className={
-                                    'chat_message_container' +
-                                    (params.id && params.id == message.id
-                                        ? ' chat_active'
-                                        : '')
+                                    'messages-category-btn' +
+                                    (showNotifications ? ' selected' : '')
                                 }
-                                key={i}
-                                onClick={() => navigateToConv(message.id)}
+                                onClick={() => {
+                                    setShowNotifications(true)
+                                    navigate(
+                                        '/dashboard/messages/notifications'
+                                    )
+                                }}
                             >
-                                <Grid item xs={3}>
-                                    <div className="chat_img_container">
-                                        <img src={message.profile_pic}></img>
-                                    </div>
-                                </Grid>
-                                <Grid
-                                    item
-                                    xs={7}
-                                    className="chat_username_message_container"
-                                >
-                                    <div className="chat_username">
-                                        {message.username}
-                                    </div>
-                                    <div className="chat_last_message">
-                                        {message.last_msg}
-                                    </div>
-                                </Grid>
+                                Show notifications
+                            </button>
+                        </Grid>
+                        <div id="chat_display_container">
+                            <Grid container id="chat">
+                                {messages.map((message, i) => {
+                                    return (
+                                        <Message
+                                            message={message}
+                                            key={i}
+                                            showNotif={setShowNotifications}
+                                        />
+                                    )
+                                })}
                             </Grid>
-                        )
-                    })}
+                        </div>
+                    </div>
                 </Grid>
-            </div>
-        </div>
+            </Grid>
+        </>
     )
 }
 
-export default ChatList
+export default MessagesContainer
 
 const messages = [
     {
