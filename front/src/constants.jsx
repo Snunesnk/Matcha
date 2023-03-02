@@ -13,10 +13,14 @@ export const PossibleState = {
 export const validationErrors = {
     fieldEmpty: 'This field is required',
     invalidEmail: 'This is not a valid email adress',
-    invalidPasswordLength: 'At least 12 characters required',
-    missingPasswordUppercase: 'At least one uppercase letter is required',
-    missingPasswordLowercase: 'At least one lowercase letter is required',
-    missingPasswordDigit: 'At least one digit is required',
+    invalidPasswordLength: 'Password: at least 12 characters required',
+    missingPasswordUppercase:
+        'Password: at least one uppercase letter is required',
+    missingPasswordLowercase:
+        'Password: at least one lowercase letter is required',
+    missingPasswordDigit: 'Password: at least one digit is required',
+    invalidDate: 'Error: invalid date',
+    userTooYoung: 'Sorry, you must be at least 18 years old to use this app',
     missingData: 'Please fill-in all fields',
     genericProfileCreationError:
         'An error occured while created your profile, please try again later',

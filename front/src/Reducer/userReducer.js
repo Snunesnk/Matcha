@@ -102,15 +102,6 @@ const userReducer = (state = initialState, action) => {
                 },
             }
 
-        case USER_STATE_ACTIONS.UPDATE_BIRTHDATE:
-            return {
-                ...state,
-                userSettings: {
-                    ...state.userSettings,
-                    birthDate: action.payload,
-                },
-            }
-
         default:
             return state
     }

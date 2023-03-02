@@ -34,7 +34,7 @@ const checkPassword = (password) => {
         return validationErrors.missingPasswordDigit
     }
 
-    return ''
+    return validationErrors.noValidationError
 }
 
 function hasUppercase(passwd) {
@@ -66,6 +66,31 @@ const hashPassword = async (password) => {
     return hashHex
 }
 
+const checkDate = (date) => {
+    const today = new Date()
+    const userDate = new Date(date)
+    const userAge = today.getFullYear() - userDate.getFullYear()
+
+    // do not accept future dates
+    if (userDate.getTime() > today.getTime()) {
+        return validationErrors.invalidDate
+    }
+
+    // Too young
+    if (userAge < 18) return validationErrors.userTooYoung
+    // Same year, so check if user is already 18 or not
+    else if (userAge === 18) {
+        if (today.getMonth() < userDate.getMonth())
+            return validationErrors.userTooYoung
+        else if (today.getMonth() === userDate.getMonth()) {
+            if (today.getDate() < userDate.getDate())
+                return validationErrors.userTooYoung
+        }
+    }
+
+    return validationErrors.noValidationError
+}
+
 export async function action({ request }) {
     const formData = await request.formData()
     const data = {
@@ -74,11 +99,12 @@ export async function action({ request }) {
         surname: formData.get('firstName'),
         login: formData.get('username'),
         password: formData.get('password'),
-        dateOfBirth: '2000-01-01',
+        dateOfBirth: formData.get('dateOfBirth'),
     }
     let error = checkPassword(data.password)
+    error = checkDate(data.dateOfBirth)
 
-    if (error === '') {
+    if (error === validationErrors.noValidationError) {
         data.password = await hashPassword(data.password)
 
         // Send data to controller to create an user
@@ -116,7 +142,6 @@ const SignupForm = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const formResult = useActionData()
-    const [date, setDate] = React.useState('')
 
     useEffect(() => {
         if (
@@ -195,6 +220,18 @@ const SignupForm = () => {
                     </Grid>
                 </Grid>
                 <Grid
+                    item
+                    xs={12}
+                    className="centered_container input_container"
+                >
+                    <FormInput
+                        placeholder="Birth date"
+                        type="date"
+                        name="dateOfBirth"
+                        required={true}
+                    />
+                </Grid>
+                <Grid
                     container
                     item
                     xs={12}
@@ -232,22 +269,6 @@ const SignupForm = () => {
                                 </label>
                             </Grid>
                         )}
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <LocalizationProvider dateAdapter={AdapterDayjs}>
-                        <DatePicker
-                            label="Date of birth"
-                            value={date}
-                            onChange={(newDate) => {
-                                setDate(newDate)
-                            }}
-                            renderInput={(params) => <TextField {...params} />}
-                        />
-                    </LocalizationProvider>
                 </Grid>
                 <Grid
                     container
