@@ -40,19 +40,7 @@
     padding: 3px;
     color: #fbe3dd;
 }
-
-#next_and_prev_button a.disabled svg {
-    color: #ba7300 !important;
-    cursor: default;
-}
-
-#next_and_prev_button a.disabled {
-    color: #ba7300 !important;
-    cursor: default;
-    display: none;
-}
-
-#next_and_prev_button a :not(disabled) {
+#next_and_prev_button a:not(disabled) {
     cursor: pointer;
 }
 
@@ -63,6 +51,11 @@
 #next_and_prev_button a:hover svg {
     transform: scale(1.4);
     transition: transform 150ms;
+}
+
+#next_and_prev_button a.disabled {
+    background-color: grey;
+    cursor: default;
 }
 
 #next_and_prev_button a.disabled:hover svg {

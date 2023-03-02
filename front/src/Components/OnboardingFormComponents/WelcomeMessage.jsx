@@ -30,20 +30,9 @@ const WelcomeMessage = () => {
                 <br />
                 And it'll make your time with MatChat even better.
             </p>
-            <h3>First, please tell us how old are you:</h3>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DatePicker
-                    label="Date of birth"
-                    value={date}
-                    onChange={(newDate) => {
-                        setDate(newDate)
-                    }}
-                    renderInput={(params) => <TextField {...params} />}
-                />
-            </LocalizationProvider>
             <Link to="/onboarding/gender">
                 <button id="onboarding_next_button" onClick={saveBirthDate}>
-                    Continue
+                    Get set up
                 </button>
             </Link>
         </div>
