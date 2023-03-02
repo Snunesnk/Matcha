@@ -1,4 +1,5 @@
 import { Like } from "../models/like.model.js";
+import { User } from "../models/user.model.js";
 
 export default class {
     // Create and Save a new Like
@@ -11,11 +12,23 @@ export default class {
             return;
         }
 
+        const issuer = req.body.issuer;
+        const receiver = req.body.receiver;
+
+        const userIssuer = await User.getUserByLogin(receiver);
+        const userReceiver = await User.getUserByLogin(issuer);
+        if (userIssuer === null || userReceiver === null) {
+            res.status(404).send({
+                message: `Could not find user with login ${receiver} or ${issuer}`,
+            });
+            return;
+        }
+
         // Create a Like
-        const like = new Like({
-            issuer: req.body.issuer,
-            receiver: req.body.receiver,
-        });
+        const like = {
+            issuer: issuer,
+            receiver: receiver,
+        };
 
         try {
             // Save Like in the database
@@ -46,6 +59,14 @@ export default class {
             return;
         }
 
+        const user = await User.getUserByLogin(receiver);
+        if (user === null) {
+            res.status(404).send({
+                message: `Could not find user with login ${receiver}`,
+            });
+            return;
+        }
+
         try {
             const data = await Like.getReceivedLikes(receiver);
 
@@ -66,10 +87,18 @@ export default class {
     // Find a single Like with a login
     static getMatches = async (req, res) => {
         const receiver = req.params.receiver;
-
+        
         if (!receiver) {
             res.status(400).send({
                 message: `Missing receiver`,
+            });
+            return;
+        }
+
+        const user = await User.getUserByLogin(receiver);
+        if (user === null) {
+            res.status(404).send({
+                message: `Could not find user with login ${receiver}`,
             });
             return;
         }
@@ -105,7 +134,7 @@ export default class {
 
         try {
             const data = await Like.delete(issuer, receiver);
-            if (data.affectedRows === 0) {
+            if (data === null) {
                 res.status(404).send({
                     message: `Could not find Like with for issuer ${issuer} and receiver ${receiver}`,
                 });

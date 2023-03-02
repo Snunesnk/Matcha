@@ -293,8 +293,7 @@ export default class {
 
     try {
       const data = await User.deleteByLogin(login);
-      if (data.affectedRows === 0) {
-        // not found User with the login
+      if (data === null) {
         res.status(404).send({
           message: `Could not find User with login ${login}.`,
         });
