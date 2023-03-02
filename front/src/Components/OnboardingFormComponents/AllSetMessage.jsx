@@ -11,19 +11,20 @@ const AllSetMessage = () => {
 
     const sendForm = () => {
         console.log(userState)
-        // dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
+        dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
 
-        // const options = {
-        //     method: 'POST',
-        //     body: new Blob([JSON.stringify({ user: userState.userSettings })], {
-        //         type: 'application/json',
-        //     }),
-        // }
-        // fetch('http://localhost:8080/api/user/' + login, options).then(
-        //     (response) => {
-        //         console.log(response)
-        //     }
-        // )
+        const options = {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user: userState.userSettings }),
+        }
+        fetch('http://localhost:8080/api/user/' + login, options).then(
+            (response) => {
+                console.log(response)
+            }
+        )
     }
 
     return (
@@ -33,11 +34,11 @@ const AllSetMessage = () => {
             </p>
             <p>Are you ready to find your catmate?</p>
 
-            {/* <Link to="/dashboard"> */}
-            <button id="onboarding_next_button" onClick={sendForm}>
-                Let the magic begin!
-            </button>
-            {/* </Link> */}
+            <Link to="/dashboard">
+                <button id="onboarding_next_button" onClick={sendForm}>
+                    Let the magic begin!
+                </button>
+            </Link>
         </div>
     )
 }

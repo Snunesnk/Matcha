@@ -33,10 +33,10 @@ const InterestsTags = () => {
     let interval = null
 
     const saveTags = () => {
-        // dispatch({
-        //     type: USER_STATE_ACTIONS.UPDATE_TAGS,
-        //     payload: tags,
-        // })
+        dispatch({
+            type: USER_STATE_ACTIONS.UPDATE_TAGS,
+            payload: tags,
+        })
     }
 
     useEffect(() => {
