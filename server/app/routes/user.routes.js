@@ -1,9 +1,8 @@
 import express from "express";
-import userHandler from "../handlers/user.handler.js"
+import userHandler from "../handlers/user.handler.js";
 import picturesUpload from "../middlewares/pictures-upload.js";
 
 const router = express.Router();
-
 
 // Create a new User
 router.post("/user/", userHandler.create);
@@ -27,9 +26,9 @@ router.post("/user/login", userHandler.login);
 router.get("/user/:login", userHandler.getUserByLogin);
 
 // Update a User with login (first uploads user's 5 images)
-router.put("/user/:login", picturesUpload, userHandler.update);
+router.post("/user/:login", picturesUpload, userHandler.update);
 
 // Delete a User with login
 router.delete("/user/:login", userHandler.delete);
 
-export default router
+export default router;

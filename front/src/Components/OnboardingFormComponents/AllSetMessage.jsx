@@ -13,16 +13,17 @@ const AllSetMessage = () => {
         console.log(userState)
         // dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
 
-        const options = {
-            method: 'PUT',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ user: userState.userSettings }),
-        }
-        fetch('http://localhost:8080/api/user/' + login, options).then(
-            (response) => {
-                console.log(response)
-            }
-        )
+        // const options = {
+        //     method: 'POST',
+        //     body: new Blob([JSON.stringify({ user: userState.userSettings })], {
+        //         type: 'application/json',
+        //     }),
+        // }
+        // fetch('http://localhost:8080/api/user/' + login, options).then(
+        //     (response) => {
+        //         console.log(response)
+        //     }
+        // )
     }
 
     return (
