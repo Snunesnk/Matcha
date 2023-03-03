@@ -59,7 +59,12 @@ export class DbRequestService {
                 if (value === 'false' || value === 'true') {
                     value = `%${value}`
                 }
-                queryCommand += ` ${startsWith} ${field} = ?`
+                // if value has mysql function like POINT(), we don't want to add quotes
+                if (typeof value === 'string' && value.includes('POINT')) {
+                    queryCommand += ` ${startsWith} ${field} = ST_GeomFromText(?)`
+                } else {
+                    queryCommand += ` ${startsWith} ${field} = ?`
+                }
                 result.push(value);
             }
         }, []);

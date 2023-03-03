@@ -30,24 +30,45 @@ export class User extends UserChunk {
 
     this.tags = obj.tags;
 
-    this._latitude = obj.latitude;
-    this._longitude = obj.longitude;
+    this.latitude = obj.coordinate;
+    this.longitude = obj.coordinate;
+    this.coordinate = obj.coordinate;
+  }
+
+  get coordinate() {
+    return this._coordinate;
+  }
+
+  set coordinate(coordinate) {
+    if (coordinate !== null && this._latitude !== undefined && this._longitude !== undefined) {
+      this._coordinate = `POINT(${this._latitude} ${this._longitude})`;
+    } else {
+      this._coordinate = coordinate;
+    }
   }
 
   get latitude() {
     return this._latitude;
   }
 
-  set latitude(latitude) {
-    this._latitude = latitude;
+  set latitude(coordinate) {
+    if (_.isObject(coordinate) && coordinate !== null && coordinate.x !== undefined && coordinate.y !== undefined) {
+      this._latitude = coordinate.y;
+    } else {
+      this._latitude = undefined;
+    }
   }
 
   get longitude() {
     return this._longitude;
   }
 
-  set longitude(longitude) {
-    this._longitude = longitude;
+  set longitude(coordinate) {
+    if (_.isObject(coordinate) && coordinate !== null && coordinate.x !== undefined && coordinate.y !== undefined) {
+      this._longitude = coordinate.x;
+    } else {
+      this._longitude = undefined;
+    }
   }
 
   get isOnline() {
@@ -235,10 +256,8 @@ export class User extends UserChunk {
     if (user === null) {
       return null;
     }
-    return new User({
-      ...user.toJSON(),
-      password: "XXXXX",
-    });
+    user.password = "XXXXX";
+    return user
   }
 
   static async getFullUserByLogin(login) {
@@ -318,6 +337,7 @@ export class User extends UserChunk {
       tags: this.tags,
       isOnline: this.isOnline,
       lastOnline: this.lastOnline,
+      coordinate: this.coordinate,
       latitude: this.latitude,
       longitude: this.longitude,
     };

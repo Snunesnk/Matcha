@@ -7,8 +7,8 @@ if test $VAR; then
     docker image rm env-$VAR;
     docker-compose up -d $VAR;
 else
-    docker-compose rm -sf;
-    docker rm $(docker ps -a -q);
-    docker volume rm $(docker volume ls -q)
+    docker-compose down;
+    docker system prune --all -f;
+    docker volume rm $(docker volume ls -q);
     docker-compose up -d;
 fi;

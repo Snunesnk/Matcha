@@ -18,8 +18,9 @@ create table user (
     lastOnline timestamp default CURRENT_TIMESTAMP null on update CURRENT_TIMESTAMP,
     verified tinyint(1) default 0 null,
     rating float default 100 null comment 'profile rating /100',
-    latitude float default 0 null,
-    longitude float default 0 null,
+    coordinate POINT null,
+    latitude decimal null,
+    longitude decimal null,
     login varchar(50) not null primary key,
     password varchar(100) not null,
     constraint login unique (email)
