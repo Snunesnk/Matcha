@@ -14,6 +14,8 @@ export class User extends UserChunk {
     this.bio = obj.bio;
     this.gender = obj.gender;
 
+    this.rating = obj.rating;
+
     this.verified = obj.verified;
     this.isOnline = obj.isOnline;
     this.lastOnline = obj.lastOnline;
@@ -34,6 +36,15 @@ export class User extends UserChunk {
     this.longitude = obj.coordinate;
     this.coordinate = obj.coordinate;
   }
+
+  get rating() {
+    return this._rating;
+  }
+
+  set rating(rating) {
+    this._rating = rating;
+  }
+
 
   get coordinate() {
     return this._coordinate;
@@ -76,7 +87,7 @@ export class User extends UserChunk {
   }
 
   set isOnline(isOnline) {
-    if (isOnline === true || isOnline === "true" || isOnline === 1) { 
+    if (isOnline === true || isOnline === "true" || isOnline === 1) {
       this._isOnline = true;
       return;
     }
@@ -246,6 +257,14 @@ export class User extends UserChunk {
     return await User.getUserByLogin(newUser.login);
   }
 
+  static async getPotentialMatches(login) {
+    const data = await DbRequestService.computePotentialMatches(login);
+    if (data.length === 0) {
+      return null;
+    }
+    return data.map((user) => new User({ ...user, password: "XXXXX" }));
+  }
+
   static async getAllUsers(filters = {}) {
     const data = await DbRequestService.read("user", filters);
     return data.map((user) => new User({ ...user, password: "XXXXX" }));
@@ -269,7 +288,7 @@ export class User extends UserChunk {
     try {
       const userTags = await UserTag.getUserTagsByLogin(login);
       if (_.isArray(userTags)) {
-        tags = userTags.map((userTag) => ({bwid: userTag.tagBwid}));
+        tags = userTags.map((userTag) => ({ bwid: userTag.tagBwid }));
       }
     } catch (error) {
       console.log(error);
@@ -286,11 +305,13 @@ export class User extends UserChunk {
   }
 
   static async updateByLogin(login, user) {
+    // We don't want to update the login EVER, it might ruin our DB
+    user.login = undefined;
     if (user.email !== undefined) {
       user.verified = false;
       user.token = rand.suid(16);
     }
-    const data = await DbRequestService.update("user", new User({...user, tags: undefined}), {
+    const data = await DbRequestService.update("user", new User({ ...user, tags: undefined }), {
       login: `${login}`,
     });
     if (data.affectedRows === 0) {
@@ -326,6 +347,7 @@ export class User extends UserChunk {
       verified: this.verified,
       bio: this.bio,
       gender: this.gender,
+      rating: this.rating,
       prefMale: this.prefMale,
       prefFemale: this.prefFemale,
       prefEnby: this.prefEnby,

@@ -20,13 +20,15 @@ app.use(urlencoded({ extended: true }));
 // Setting /api routes
 import userRoute from "./app/routes/user.routes.js";
 import tagRoute from "./app/routes/tag.routes.js";
-import likeRoute from "./app/routes/like.routes.js";
+import likeRoute from "./app/routes/likes.routes.js";
 import viewRoute from "./app/routes/view.routes.js";
+import blockRoute from "./app/routes/block.routes.js";
 
 app.use("/api", tagRoute)
 app.use("/api", userRoute)
 app.use("/api", likeRoute)
 app.use("/api", viewRoute)
+app.use("/api", blockRoute)
 
 // Docker health check
 app.use("/isHealthy", express.Router().get("", (req, res) => {

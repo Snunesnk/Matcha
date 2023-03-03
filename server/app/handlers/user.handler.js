@@ -1,5 +1,6 @@
 import { User } from "../models/user.model.js";
 import { cryptPassword } from "../services/password.service.js";
+import RatingService from "../services/rating.service.js";
 
 export default class {
   static async login(req, res) {
@@ -185,6 +186,36 @@ export default class {
     }
   }
 
+  // Retrieve all potential matches for a User
+  static async getPotentialMatches(req, res) {
+    const login = req.params.login;
+
+    if (!login) {
+      res.status(400).send({
+        message: "MISSING_DATA",
+      });
+      return;
+    }
+
+    try {
+      const user = await User.getUserByLogin(login);
+      if (user === null) {
+        res.status(404).send({
+          message: "USER_NOT_FOUND",
+        });
+        return;
+      }
+
+      const data = await User.getPotentialMatches(login);
+      res.status(200).send(data);
+    } catch (error) {
+      res.status(500).send({
+        message:
+          error.message || "Error occurred while retrieving potential matches.",
+      });
+    }
+  }
+
   // Retrieve all Users from the database (with condition).
   static getAllUsers = async (req, res) => {
     const filters = req.body.filters || {};
@@ -271,6 +302,7 @@ export default class {
         });
         return;
       }
+      await RatingService.computeUserRating(login);
       res.status(200).send(data);
     } catch (error) {
       res.status(500).send({

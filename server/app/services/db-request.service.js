@@ -17,7 +17,7 @@ export class DbRequestService {
         "tag",
         "view",
         "userTag",
-        "like"
+        "likes"
     ];
 
     /*
@@ -59,7 +59,7 @@ export class DbRequestService {
                 if (value === 'false' || value === 'true') {
                     value = `%${value}`
                 }
-                // if value has mysql function like POINT(), we don't want to add quotes
+                // if value has mysql function likes POINT(), we don't want to add quotes
                 if (typeof value === 'string' && value.includes('POINT')) {
                     queryCommand += ` ${startsWith} ${field} = ST_GeomFromText(?)`
                 } else {
@@ -146,6 +146,46 @@ export class DbRequestService {
 
             const query = `DELETE FROM ${tableName} WHERE ?`;
             const params = [condition];
+
+            connection.query(query, params, (err, res) => {
+                if (err) {
+                    reject(err);
+                    return;
+                }
+                resolve(res);
+            });
+        });
+    }
+
+    /*
+    ** CUSTOM
+    */
+
+    static orderByFieldsAllowed = ['login', 'rating', 'distance', 'age', 'tags'];
+
+    static async computePotentialMatches(login, filters = { tags: [], age: {low: 18, up: 100}, rating: {low: 50, up: 100}, radius: 1000 }, orderBy = { field: 'rating', order: 'DESC' }) {
+        return new Promise((resolve, reject) => {
+            if (!this.orderByFieldsAllowed.includes(orderBy.field)) {
+                reject(new Error("Order by field is not allowed"))
+            }
+            if (!['ASC', 'DESC'].includes(orderBy.order)) {
+                orderBy.order = 'DESC';
+            }
+
+            const query = `SELECT * FROM user
+                LEFT JOIN userTag ON userTag.userLogin = user.login
+                LEFT JOIN tag ON tag.bwid = userTag.tagBwid
+                ${filters.tags.length > 0 ? `WHERE tag.bwid IN (${filters.tags.map(() => '?').join(',')})` : ''}
+                GROUP BY user.login
+                HAVING COUNT(user.login) = ${filters.tags.length}
+                WHERE user.login NOT IN (SELECT receiver FROM likes WHERE issuer = ?)
+                AND user.login NOT IN (SELECT receiver FROM block WHERE issuer = ?)
+                AND user.login != ?
+                AND (SELECT DATE_FORMAT(FROM_DAYS(DATEDIFF(NOW(),'user.dateOfBirth')), '%Y') + 0 as age) BETWEEN ? AND ?
+                AND user.rating BETWEEN ? AND ?
+                AND ( ST_Distance_Sphere(user.coordinate, (SELECT coordinate FROM user WHERE login = ?)) as distance) < ?
+                ORDER BY ${['login', 'rating'].includes(orderBy.field) ? 'user.'+ orderBy.field : orderBy.field } ${orderBy.order}`;
+            const params = filters.tags.concat([login, login, login, filters.age.low, filters.age.up, filters.rating.low, filters.rating.up, login, filters.radius]);
 
             connection.query(query, params, (err, res) => {
                 if (err) {

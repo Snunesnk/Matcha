@@ -13,6 +13,9 @@ router.get("/user/verify/:login/:token", userHandler.verifyUser);
 // Resend verification mail
 router.post("/user/verify/:login", userHandler.resendVerificationMail);
 
+// Retrieve all potential matches for a User
+router.get("/user/:login/matches", userHandler.getPotentialMatches);
+
 // Retrieve all Users
 router.get("/user/", userHandler.getAllUsers);
 
