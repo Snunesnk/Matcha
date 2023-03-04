@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ChatComponent from '../ChatComponent'
 import Conversation from '../Conversation/Conversation'
+import UserProfile from '../UserProfile/UserProfile'
 
 import './MessagesContainer.css'
 
@@ -55,7 +56,9 @@ const MessagesContainer = () => {
                 <Grid item xs={6} id="chat_container">
                     <ChatComponent />
                 </Grid>
-                <Grid item xs={3} id="user_info_container"></Grid>
+                <Grid item xs={3} id="user_info_container">
+                    <UserProfile />
+                </Grid>
             </Grid>
         </div>
     )
