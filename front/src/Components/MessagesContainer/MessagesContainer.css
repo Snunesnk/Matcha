@@ -7,7 +7,7 @@
     height: 100%;
     background-color: #200518;
     color: #fffdfc;
-    border: 1px solid #dc21b890;
+    box-shadow: 0 0 7px 4px #ffffff90;
     border-radius: 4px;
 }
 
@@ -21,14 +21,14 @@
     display: flex;
     align-items: center;
     justify-content: space-around;
-    padding: 15px 0;
-    border-bottom: 1px solid #4c3746;
+    border-bottom: 1px solid #ffffff20;
+    min-height: 70px;
+    max-height: 70px;
 }
 
 .messages-category-btn {
     background-color: #4c3746;
     color: #fffdfc;
-    /* border-radius: 15px 15px 0 0; */
     border-radius: 30px;
     width: 45%;
     display: flex;
@@ -67,11 +67,6 @@
 
 #chat_container {
     /* background-color: red; */
-    border-left: 2px solid #4c3746;
-    border-right: 2px solid #4c3746;
-}
-
-#user_info_container {
-    /* background-color: blue; */
-    /* border: 1px solid #fffdfc; */
+    border-left: 1px solid #ffffff90;
+    border-right: 1px solid #ffffff90;
 }

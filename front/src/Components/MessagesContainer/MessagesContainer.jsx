@@ -1,7 +1,8 @@
 import { Grid } from '@mui/material'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import Message from '../Message/Message'
+import ChatComponent from '../ChatComponent'
+import Conversation from '../Conversation/Conversation'
 
 import './MessagesContainer.css'
 
@@ -40,10 +41,10 @@ const MessagesContainer = () => {
                         </button>
                     </div>
                     <Grid container id="chat_display_container">
-                        {messages.map((message, i) => {
+                        {conversations.map((conversation, i) => {
                             return (
-                                <Message
-                                    message={message}
+                                <Conversation
+                                    conversation={conversation}
                                     key={i}
                                     showNotif={setShowNotifications}
                                 />
@@ -51,7 +52,9 @@ const MessagesContainer = () => {
                         })}
                     </Grid>
                 </Grid>
-                <Grid item xs={6} id="chat_container"></Grid>
+                <Grid item xs={6} id="chat_container">
+                    <ChatComponent />
+                </Grid>
                 <Grid item xs={3} id="user_info_container"></Grid>
             </Grid>
         </div>
@@ -60,7 +63,7 @@ const MessagesContainer = () => {
 
 export default MessagesContainer
 
-const messages = [
+const conversations = [
     {
         id: 1,
         profile_pic: '/src/assets/cat_profile.jpg',

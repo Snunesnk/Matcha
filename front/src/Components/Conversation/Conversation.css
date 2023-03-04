@@ -15,6 +15,9 @@
     background-color: #fffdfc;
     color: #dc21b8;
 }
+.chat_message_container.chat_active .chat_last_message {
+    color: black;
+}
 
 .chat_message_container.chat_active,
 .chat_message_container:hover {
