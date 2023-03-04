@@ -13,12 +13,7 @@ const MessagesContainer = () => {
         <div id="message-pannel">
             <Grid container id="messages_component_container">
                 <Grid item xs={3} id="chat_list_container">
-                    <Grid
-                        item
-                        container
-                        xs={12}
-                        className="message-feed-selection-container"
-                    >
+                    <div className="message-feed-selection-container">
                         <button
                             className={
                                 'messages-category-btn' +
@@ -43,7 +38,7 @@ const MessagesContainer = () => {
                         >
                             Feed
                         </button>
-                    </Grid>
+                    </div>
                     <Grid container id="chat_display_container">
                         {messages.map((message, i) => {
                             return (

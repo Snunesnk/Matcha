@@ -4,6 +4,7 @@
     display: flex;
     flex-direction: column;
     border-radius: 15px;
+    overflow: hidden;
 }
 
 .chat_message_container:hover {
@@ -44,6 +45,7 @@
     justify-content: left;
     align-content: center;
     margin-left: 15px;
+    width: calc(100% - 145px) !important;
 }
 
 .chat_username_message_container {
