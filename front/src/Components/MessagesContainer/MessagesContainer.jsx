@@ -10,48 +10,56 @@ const MessagesContainer = () => {
     const navigate = useNavigate()
 
     return (
-        <>
+        <div id="message-pannel">
             <Grid container id="messages_component_container">
-                <Grid item xs={4} id="chat_list_container">
-                    <div>
-                        <Grid
-                            item
-                            container
-                            xs={12}
-                            className="message-feed-selection-container"
+                <Grid item xs={3} id="chat_list_container">
+                    <Grid
+                        item
+                        container
+                        xs={12}
+                        className="message-feed-selection-container"
+                    >
+                        <button
+                            className={
+                                'messages-category-btn' +
+                                (showNotifications ? '' : ' selected')
+                            }
+                            onClick={() => {
+                                setShowNotifications(false)
+                                navigate('/dashboard/messages/chat')
+                            }}
                         >
-                            <button
-                                className={
-                                    'messages-category-btn' +
-                                    (showNotifications ? ' selected' : '')
-                                }
-                                onClick={() => {
-                                    setShowNotifications(true)
-                                    navigate(
-                                        '/dashboard/messages/notifications'
-                                    )
-                                }}
-                            >
-                                Show notifications
-                            </button>
-                        </Grid>
-                        <div id="chat_display_container">
-                            <Grid container id="chat">
-                                {messages.map((message, i) => {
-                                    return (
-                                        <Message
-                                            message={message}
-                                            key={i}
-                                            showNotif={setShowNotifications}
-                                        />
-                                    )
-                                })}
-                            </Grid>
-                        </div>
-                    </div>
+                            Messages
+                        </button>
+                        <button
+                            className={
+                                'messages-category-btn' +
+                                (showNotifications ? ' selected' : '')
+                            }
+                            onClick={() => {
+                                setShowNotifications(true)
+                                navigate('/dashboard/messages/notifications')
+                            }}
+                        >
+                            Feed
+                        </button>
+                    </Grid>
+                    <Grid container id="chat_display_container">
+                        {messages.map((message, i) => {
+                            return (
+                                <Message
+                                    message={message}
+                                    key={i}
+                                    showNotif={setShowNotifications}
+                                />
+                            )
+                        })}
+                    </Grid>
                 </Grid>
+                <Grid item xs={6} id="chat_container"></Grid>
+                <Grid item xs={3} id="user_info_container"></Grid>
             </Grid>
-        </>
+        </div>
     )
 }
 

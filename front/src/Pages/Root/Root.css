@@ -8,3 +8,8 @@
     display: flex;
     flex-flow: column;
 }
+
+#main {
+    flex: 1;
+    height: calc(100% - 115px);
+}

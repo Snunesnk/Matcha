@@ -1,11 +1,14 @@
 .dashboard_overview {
     width: 100%;
+    height: 100%;
     color: black;
 }
 
 .dashboard_container {
     display: flex;
     align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 .background_dashboard {

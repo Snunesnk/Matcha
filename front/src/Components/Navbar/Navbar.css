@@ -4,6 +4,7 @@
     transition: all 200ms;
     display: flex;
     align-items: center;
+    height: 90px;
 }
 
 #loggingBtnContainer {
