@@ -36,36 +36,43 @@
 }
 
 #messages_input {
-    border: 1px solid #ba7300;
-    color: black;
+    border: none;
+    background-color: #4c3746;
+    color: white;
     padding: 10px 15px;
-    border-radius: 4px;
-    transition: all 100ms;
+    border-radius: 15px;
     font-size: 1em;
-    width: 90%;
+    width: 100%;
+    transition: all 100ms;
+}
+
+#messages_input::placeholder {
+    /* Chrome, Firefox, Opera, Safari 10.1+ */
+    color: #ffffff90;
+    opacity: 1; /* Firefox */
 }
 
 #messages_input:focus-visible {
-    outline: solid #ba7300 1px;
-    border: 1px solid #ba7300;
+    filter: brightness(1.2);
+    outline: none;
     transition: all 100ms;
 }
 
 .messages_send_icon {
-    color: #5e0b4f;
+    color: #dc21b8;
     transition: all 100ms;
     cursor: pointer;
-    transform: scale(1.2);
     margin-left: 15px;
+    font-size: 35px !important;
 }
 
 .messages_send_icon:hover {
-    transform: scale(1.4);
+    filter: brightness(1.5);
     transition: all 100ms;
 }
 
 .messages_send_icon:active {
-    transform: scale(1);
+    transform: scale(0.8);
     transition: all 100ms;
 }
 
