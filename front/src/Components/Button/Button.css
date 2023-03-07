@@ -31,7 +31,7 @@
 .alreadyHaveButton {
     background-color: transparent;
     color: white;
-    border: 1px solid #ba7300;
+    border: 1px solid #4AC0FC;
 
     padding: 8px 11px;
     font-size: 0.9em;
@@ -42,7 +42,7 @@
 }
 
 .alreadyHaveButton:hover {
-    border: 1px solid #fbe3dd;
+    border: 1px solid white;
 }
 
 .onboardingBack {

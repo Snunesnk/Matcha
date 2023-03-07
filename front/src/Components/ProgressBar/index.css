@@ -23,9 +23,9 @@
 #progress_bar {
     height: 3px;
     width: 150px;
-    background-color: #fbe3dd;
+    background-color: white;
     border-radius: 1px;
-    color: #fbe3dd;
+    color: white;
 }
 
 #next_and_prev_button {
@@ -36,9 +36,8 @@
 #next_and_prev_button a {
     display: flex;
     align-items: center;
-    background-color: #ba7300;
+    background-color: #4AC0FC;
     padding: 3px;
-    color: #fbe3dd;
 }
 #next_and_prev_button a:not(disabled) {
     cursor: pointer;
@@ -64,19 +63,19 @@
 }
 
 #progress_next {
-    border-right: 0.5px solid #fbe3dd;
+    border-right: 0.5px solid white;
     border-radius: 2px 0px 0px 2px;
 }
 
 #progress_prev {
-    border-left: 0.5px solid #fbe3dd;
+    border-left: 0.5px solid ;
     border-radius: 0px 2px 2px 0px;
 }
 
 #progress_bar::before {
     content: '';
     position: absolute;
-    border: solid #ba7300;
+    border: solid #DC21B8;
     border-width: 3px 0 0 0;
     height: 0px;
     width: 0;

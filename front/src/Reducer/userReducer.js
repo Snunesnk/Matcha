@@ -59,6 +59,11 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 userStatus: { ...state.userStatus, verified: false },
             }
+        case USER_STATE_ACTIONS.ONBOARDED:
+            return {
+                ...state,
+                userStatus: { ...state.userStatus, onboarded: true },
+            }
 
         case USER_STATE_ACTIONS.UPDATE_GENDER:
             return {

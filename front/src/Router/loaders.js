@@ -6,6 +6,8 @@ export const checkIfLogged = (store) => {
     if (userStatus.onboarded) return redirect('/dashboard')
     if (userStatus.verified) return redirect('/onboarding/welcome')
     if (userStatus.loggedIn) return redirect('/onboarding/validation')
+
+    return null
 }
 export const checkIfVerified = (store) => {
     const userStatus = store.getState().userState.userStatus
@@ -14,6 +16,8 @@ export const checkIfVerified = (store) => {
     if (userStatus.verified) return redirect('/onboarding/welcome')
 
     if (!userStatus.loggedIn) return redirect('/')
+
+    return null
 }
 export const checkIfOnboarded = (store) => {
     const userStatus = store.getState().userState.userStatus
@@ -22,6 +26,7 @@ export const checkIfOnboarded = (store) => {
 
     if (!userStatus.loggedIn) return redirect('/')
     if (!userStatus.verified) return redirect('/onboarding/validation')
+    return null
 }
 
 export const redirectToSignup = () => {

@@ -49,7 +49,9 @@ const MENU = {
 }
 
 const Navbar = () => {
-    const loggedIn = useSelector((state) => state.userState.userStatus.loggedIn)
+    const userStatus = useSelector((state) => state.userState.userStatus)
+    const loggedIn = userStatus.loggedIn
+    const onboarded = userStatus.onboarded
     const [selectedMenu, setSelectedMenu] = useState(1)
 
     return (
@@ -59,37 +61,45 @@ const Navbar = () => {
                     <h1 className="navTitle fw">MatChat</h1>
                 </Link>
             </Grid>
-            <Grid item xs={4} display="flex" justifyContent="space-between">
-                <Link
-                    to="/dashboard/messages"
-                    className={
-                        'navbar-menu-icon chat-icon' +
-                        (selectedMenu == MENU.chat ? ' selected' : '')
-                    }
-                    onClick={() => setSelectedMenu(MENU.chat)}
-                >
-                    <GradientMessageIcon />
-                </Link>
-                <Link
-                    to="/dashboard/"
-                    className={
-                        'navbar-menu-icon pet-icon' +
-                        (selectedMenu == MENU.dashboard ? ' selected' : '')
-                    }
-                    onClick={() => setSelectedMenu(MENU.dashboard)}
-                >
-                    <GradientDashboardIcon />
-                </Link>
-                <Link
-                    to="/dashboard/userSettings"
-                    className={
-                        'navbar-menu-icon user-icon' +
-                        (selectedMenu == MENU.userSettings ? ' selected' : '')
-                    }
-                    onClick={() => setSelectedMenu(MENU.userSettings)}
-                >
-                    <GradientUserIcon />
-                </Link>
+            <Grid item xs={4}>
+                {onboarded && (
+                    <div className="nav-menu-icons">
+                        <Link
+                            to="/dashboard/messages"
+                            className={
+                                'navbar-menu-icon chat-icon' +
+                                (selectedMenu == MENU.chat ? ' selected' : '')
+                            }
+                            onClick={() => setSelectedMenu(MENU.chat)}
+                        >
+                            <GradientMessageIcon />
+                        </Link>
+                        <Link
+                            to="/dashboard/"
+                            className={
+                                'navbar-menu-icon pet-icon' +
+                                (selectedMenu == MENU.dashboard
+                                    ? ' selected'
+                                    : '')
+                            }
+                            onClick={() => setSelectedMenu(MENU.dashboard)}
+                        >
+                            <GradientDashboardIcon />
+                        </Link>
+                        <Link
+                            to="/dashboard/userSettings"
+                            className={
+                                'navbar-menu-icon user-icon' +
+                                (selectedMenu == MENU.userSettings
+                                    ? ' selected'
+                                    : '')
+                            }
+                            onClick={() => setSelectedMenu(MENU.userSettings)}
+                        >
+                            <GradientUserIcon />
+                        </Link>
+                    </div>
+                )}
             </Grid>
             <Grid
                 item

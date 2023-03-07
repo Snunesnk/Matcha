@@ -71,3 +71,10 @@ button.btn-log-in {
 .navbar-menu-icon.user-icon svg {
     font-size: 33px;
 }
+.nav-menu-icons {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    padding: 0 30px;
+}

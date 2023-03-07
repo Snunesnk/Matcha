@@ -5,6 +5,7 @@
     flex-direction: column;
     border-radius: 15px;
     overflow: hidden;
+    margin-top: 10px !important
 }
 
 .chat_message_container:hover {
@@ -27,10 +28,10 @@
 }
 
 .chat_img_container {
-    height: 90px;
-    min-height: 90px;
-    width: 90px;
-    min-width: 90px;
+    height: 60px;
+    min-height: 60px;
+    width: 60px;
+    min-width: 60px;
     border-radius: 50%;
     overflow: hidden;
     display: flex;
@@ -40,7 +41,7 @@
 }
 
 .chat_img_container img {
-    width: 120px;
+    width: 90px;
 }
 
 .chat-infos-container {
@@ -61,7 +62,7 @@
 
 .chat_username {
     width: 100%;
-    font-size: 1.3em;
+    font-size: 1em;
     font-weight: 700;
 }
 
@@ -70,6 +71,6 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    font-size: 0.82em;
+    font-size: 0.7em;
     font-weight: 300;
 }

@@ -1,13 +1,8 @@
 /**** ************ ****/
 /**** SIGN UP FORM ****/
 /**** ************ ****/
-.onboarding_title {
-    color: #fbe3dd;
-}
-
 .catch_phrase {
-    color: #b5c9ea;
-    /* color: #BA7300; */
+    color: #4AC0FC;
 }
 
 .center_align {
@@ -29,17 +24,6 @@
     display: flex;
     justify-content: center;
 }
-
-/* #onboarding_sign_up.visible {
-    opacity: 1;
-    transition: all 350ms cubic-bezier(1, .06, .83, .67);
-    transition-delay: 450ms;
-}
-
-#onboarding_sign_up.hidden {
-    opacity: 0;
-    transition: all 250ms cubic-bezier(1, .06, .83, .67);
-} */
 
 .input_container {
     margin-bottom: 15px !important;
@@ -82,7 +66,7 @@
     text-decoration: underline;
 }
 .send-email-again-msg a:hover {
-    color: #ba7300;
+    color: #4AC0FC;
 }
 
 /**** *************** ****/
@@ -94,13 +78,17 @@
 }
 
 #onboarding_next_button {
-    background-color: #ba7300;
-    color: #fbe3dd;
+    background-color: #DC21B8;
+    color: white;
     line-height: 30px;
-    font-size: 1.2em;
-    padding: 5px 13px;
+    font-size: 1.1em;
+    padding: 5px 20px;
     margin-top: 55px;
     width: fit-content;
+    width: -moz-fit-content;
+    font-weight: 300;
+    letter-spacing: 1px;
+    border-radius: 4px;
 }
 
 #welcome_catchphrase {
@@ -187,13 +175,13 @@
 }
 
 label.Mui-focused {
-    color: #ba7300 !important;
+    color: #4AC0FC !important;
 }
 
 .css-gjbq6i-MuiInputBase-root-MuiFilledInput-root.Mui-focused:after {
-    border-bottom: 2px solid #ba7300 !important;
+    border-bottom: 2px solid #4AC0FC !important;
 }
 
 .css-11v1qwh-MuiInputBase-root-MuiFilledInput-root:after {
-    border-bottom: 2px solid #ba7300 !important;
+    border-bottom: 2px solid #4AC0FC !important;
 }

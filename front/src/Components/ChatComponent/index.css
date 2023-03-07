@@ -128,5 +128,6 @@
     padding: 10px 15px;
 
     width: fit-content;
+    width: -moz-fit-content;
     max-width: 60%;
 }
