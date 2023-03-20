@@ -1,35 +1,123 @@
+import React, { useState } from 'react'
 import './UserProfile.css'
 
 const DUMMY_USER = {
     firstname: 'John',
     surname: 'Doe',
+    gender: 'f',
     dateOfBirth: '2000-01-10',
     email: 'john.doe@test.com',
     login: 'john.doe',
-    bio: 'my biiiioooooo',
-    gender: 'f',
-    imgA: 'https://picsum.photos/200/300',
-    imgB: 'https://picsum.photos/200/300',
-    imgC: 'https://picsum.photos/200/300',
-    imgD: 'https://picsum.photos/200/300',
-    imgE: 'https://picsum.photos/200/300',
+    bio: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    imgA: 'https://picsum.photos/200/300?random=1',
+    imgB: 'https://picsum.photos/200/300?random=2',
+    imgC: 'https://picsum.photos/200/300?random=3',
+    imgD: 'https://picsum.photos/200/300?random=4',
+    imgE: 'https://picsum.photos/200/300?random=5',
     tags: [
-        { bwid: 'tag1' },
-        { bwid: 'tag2' },
-        { bwid: 'tag3' },
-        { bwid: 'tag4' },
+        { bwid: 'pizza' },
+        { bwid: 'workout' },
+        { bwid: 'video games' },
+        { bwid: 'hiking' },
     ],
 }
 
 const UserProfile = () => {
+    const [selectedPicture, setSelectedPicture] = useState(-1)
+    const imgs = []
+    const userAge =
+        new Date().getFullYear() -
+        new Date(DUMMY_USER.dateOfBirth).getFullYear()
+
+    if (DUMMY_USER.imgA) imgs.push(DUMMY_USER.imgA)
+    if (DUMMY_USER.imgB) imgs.push(DUMMY_USER.imgB)
+    if (DUMMY_USER.imgC) imgs.push(DUMMY_USER.imgC)
+    if (DUMMY_USER.imgD) imgs.push(DUMMY_USER.imgD)
+    if (DUMMY_USER.imgE) imgs.push(DUMMY_USER.imgE)
+
+    const prevPicture = () => {
+        if (selectedPicture === 0) {
+            setSelectedPicture(imgs.length - 1)
+        } else {
+            setSelectedPicture(selectedPicture - 1)
+        }
+    }
+    const nextPicture = () => {
+        if (selectedPicture === imgs.length - 1) {
+            setSelectedPicture(0)
+        } else {
+            setSelectedPicture(selectedPicture + 1)
+        }
+    }
+
     return (
         <div id="user-profile-container">
-            <div id="user-profile-main-picture">
-                <img src={DUMMY_USER.imgA}></img>
+            <div id="user-picture-with-infos">
+                <div id="center-user-main-photo">
+                    <div
+                        id="user-profile-main-picture"
+                        style={{
+                            background: 'url(' + DUMMY_USER.imgA + ') center',
+                        }}
+                    ></div>
+                </div>
+                <div id="user-profile-name">
+                    <h3>
+                        {DUMMY_USER.firstname} {DUMMY_USER.surname}, {userAge},{' '}
+                        <span>{DUMMY_USER.gender}</span>
+                    </h3>
+                </div>
+                <i id="user-login">@{DUMMY_USER.login}</i>
+                <i id="user-email">{DUMMY_USER.email}</i>
+                <div id="user-profile-bio">{DUMMY_USER.bio}</div>
             </div>
-            <div id="user-profile-name"></div>
-            <div id="user-profile-infos"></div>
-            <div id="user-profile-pictures"></div>
+            <div id="user-profile-pictures-container">
+                {imgs.map((img, i) => (
+                    <div
+                        key={i}
+                        className="user-profile-picture"
+                        style={{ background: 'url(' + img + ') center' }}
+                        onClick={() => setSelectedPicture(i)}
+                    ></div>
+                ))}
+            </div>
+            <div id="user-profile-tags">
+                {DUMMY_USER.tags.map((tag, i) => (
+                    <div key={i} className="user-profile-tag">
+                        <i>#</i>
+                        {tag.bwid}
+                    </div>
+                ))}
+            </div>
+
+            <div
+                id="display-user-picture"
+                className={
+                    selectedPicture !== -1 ? 'mignify-picture' : 'hidden'
+                }
+            >
+                <div id="user-pictures-navigator">
+                    <div
+                        className="user-picture-nav user-picture-prev"
+                        onClick={prevPicture}
+                    >
+                        {'<'}
+                    </div>
+                    <img src={imgs[selectedPicture]}></img>
+                    <div
+                        className="user-picture-nav user-picture-prev"
+                        onClick={nextPicture}
+                    >
+                        {'>'}
+                    </div>
+                </div>
+                <button
+                    id="btn-close-magnify-picture"
+                    onClick={() => setSelectedPicture(-1)}
+                >
+                    Close
+                </button>
+            </div>
         </div>
     )
 }
