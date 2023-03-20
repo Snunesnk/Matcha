@@ -31,6 +31,7 @@ import {
     redirectToSignup,
 } from './loaders'
 import MessagesContainer from '../Components/MessagesContainer/MessagesContainer'
+import UserSettings from '../Components/UserSettings/UserSettings'
 
 const getRouterWithStore = (store) => {
     return createBrowserRouter([
@@ -123,6 +124,10 @@ const getRouterWithStore = (store) => {
                                     element: <ChatComponent />,
                                 },
                             ],
+                        },
+                        {
+                            path: 'userSettings',
+                            element: <UserSettings />,
                         },
                     ],
                 },

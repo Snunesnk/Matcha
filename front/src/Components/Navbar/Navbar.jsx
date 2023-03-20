@@ -8,7 +8,7 @@ import PetsIcon from '@mui/icons-material/Pets'
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble'
 import PersonIcon from '@mui/icons-material/Person'
 
-const GradientMessageIcon = () => (
+const GradientMessageIcon = ({ selected }) => (
     <>
         <svg width={0} height={0}>
             <linearGradient id="messagesColors" x1={1} y1={0} x2={1} y2={1}>
@@ -16,10 +16,11 @@ const GradientMessageIcon = () => (
                 <stop offset={0.8} stopColor="#dc21b8" />
             </linearGradient>
         </svg>
-        <ChatBubbleIcon sx={{ fill: 'url(#messagesColors)' }} />
+        {!selected && <ChatBubbleIcon sx={{ fill: 'white' }} />}
+        {selected && <ChatBubbleIcon sx={{ fill: 'url(#messagesColors)' }} />}
     </>
 )
-const GradientDashboardIcon = () => (
+const GradientDashboardIcon = ({ selected }) => (
     <>
         <svg width={0} height={0}>
             <linearGradient id="dashboardColors" x1={1} y1={0} x2={1} y2={1}>
@@ -27,10 +28,11 @@ const GradientDashboardIcon = () => (
                 <stop offset={1.2} stopColor="#dc21b8" />
             </linearGradient>
         </svg>
-        <PetsIcon sx={{ fill: 'url(#dashboardColors)' }} />
+        {!selected && <PetsIcon sx={{ fill: 'white' }} />}
+        {selected && <PetsIcon sx={{ fill: 'url(#dashboardColors)' }} />}
     </>
 )
-const GradientUserIcon = () => (
+const GradientUserIcon = ({ selected }) => (
     <>
         <svg width={0} height={0}>
             <linearGradient id="userColors" x1={1} y1={0} x2={1} y2={1}>
@@ -38,7 +40,8 @@ const GradientUserIcon = () => (
                 <stop offset={1} stopColor="#dc21b8" />
             </linearGradient>
         </svg>
-        <PersonIcon sx={{ fill: 'url(#userColors)' }} />
+        {!selected && <PersonIcon sx={{ fill: 'white' }} />}
+        {selected && <PersonIcon sx={{ fill: 'url(#userColors)' }} />}
     </>
 )
 
@@ -68,35 +71,41 @@ const Navbar = () => {
                             to="/dashboard/messages"
                             className={
                                 'navbar-menu-icon chat-icon' +
-                                (selectedMenu == MENU.chat ? ' selected' : '')
+                                (selectedMenu !== MENU.chat ? ' selected' : '')
                             }
                             onClick={() => setSelectedMenu(MENU.chat)}
                         >
-                            <GradientMessageIcon />
+                            <GradientMessageIcon
+                                selected={selectedMenu == MENU.chat}
+                            />
                         </Link>
                         <Link
                             to="/dashboard/"
                             className={
                                 'navbar-menu-icon pet-icon' +
-                                (selectedMenu == MENU.dashboard
+                                (selectedMenu !== MENU.dashboard
                                     ? ' selected'
                                     : '')
                             }
                             onClick={() => setSelectedMenu(MENU.dashboard)}
                         >
-                            <GradientDashboardIcon />
+                            <GradientDashboardIcon
+                                selected={selectedMenu == MENU.dashboard}
+                            />
                         </Link>
                         <Link
                             to="/dashboard/userSettings"
                             className={
                                 'navbar-menu-icon user-icon' +
-                                (selectedMenu == MENU.userSettings
+                                (selectedMenu !== MENU.userSettings
                                     ? ' selected'
                                     : '')
                             }
                             onClick={() => setSelectedMenu(MENU.userSettings)}
                         >
-                            <GradientUserIcon />
+                            <GradientUserIcon
+                                selected={selectedMenu == MENU.userSettings}
+                            />
                         </Link>
                     </div>
                 )}
