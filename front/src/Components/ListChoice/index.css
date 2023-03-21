@@ -18,23 +18,23 @@
 }
 
 .list_choice_container:hover {
-    background-color: #DC21B8;
+    background-color: #dc21b8;
     color: white;
     transition: all 150ms;
     transform: scale(0.98);
-    border: 1px solid #DC21B8;
+    border: 1px solid #dc21b8;
 }
 
 .list_choice_container.selected {
-    background-color: #DC21B8;
+    background-color: #dc21b8;
     color: #fbe3dd;
     transition: all 150ms;
-    border: 1px solid #DC21B8;
+    border: 1px solid #dc21b8;
 }
 
 .list_choice_number {
-    background-color: #DC21B89C;
-    color: #200518;
+    background-color: #dc21b89c;
+    color: #200618;
     width: fit-content;
     width: -moz-fit-content;
     padding: 2px 7px;

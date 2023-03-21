@@ -2,7 +2,7 @@
 /**** SIGN UP FORM ****/
 /**** ************ ****/
 .catch_phrase {
-    color: #4AC0FC;
+    color: #4ac0fc;
 }
 
 .center_align {
@@ -66,7 +66,7 @@
     text-decoration: underline;
 }
 .send-email-again-msg a:hover {
-    color: #4AC0FC;
+    color: #4ac0fc;
 }
 
 /**** *************** ****/
@@ -78,7 +78,7 @@
 }
 
 #onboarding_next_button {
-    background-color: #DC21B8;
+    background-color: #dc21b8;
     color: white;
     line-height: 30px;
     font-size: 1.1em;
@@ -145,43 +145,3 @@
 /**** ************** ****/
 /**** TAGS INTERESTS ****/
 /**** ************** ****/
-#tags_autocomplete {
-    /* background: transparent;
-    color: #9185BE;
-    border: 1px solid #FBE3DD;
-    box-shadow: 4px 4px 4px #3F1F71;
-    border-radius: 5px; */
-}
-
-#tags_text_field {
-    color: #fbe3dd;
-}
-
-.MuiChip-root {
-    background: rgba(63, 31, 113, 0.1) !important;
-    border: 1px solid #9185be !important;
-    border-radius: 5px !important;
-    margin-top: 5px !important;
-    font-size: 0.9rem;
-}
-
-.MuiInputBase-root {
-    border-bottom: none !important;
-    background: #d9d9d9 !important;
-    color: black !important;
-    /* box-shadow: 4px 4px 4px #3F1F71 !important; */
-    border-radius: 5px !important;
-    width: 80% !important;
-}
-
-label.Mui-focused {
-    color: #4AC0FC !important;
-}
-
-.css-gjbq6i-MuiInputBase-root-MuiFilledInput-root.Mui-focused:after {
-    border-bottom: 2px solid #4AC0FC !important;
-}
-
-.css-11v1qwh-MuiInputBase-root-MuiFilledInput-root:after {
-    border-bottom: 2px solid #4AC0FC !important;
-}

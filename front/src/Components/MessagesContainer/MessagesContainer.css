@@ -1,11 +1,11 @@
 #message-pannel {
     height: 100%;
-    padding: 50px;
+    padding: 5px;
 }
 
 #messages_component_container {
     height: 100%;
-    background-color: #200518;
+    background-color: #200618;
     color: #fffdfc;
     box-shadow: 0 0 7px 4px #ffffff90;
     border-radius: 4px;

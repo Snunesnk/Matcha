@@ -16,12 +16,49 @@
 }
 
 .btn {
-    padding: 5px 15px;
-    font-weight: 400;
-    font-size: 1.1em;
-    line-height: 24px;
-    border-radius: 15px;
-    background-color: transparent;
+    color: #fffdfc;
+    border-radius: 30px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    height: fit-content;
+    transition: all 0.2s;
+}
+
+.btn.pink {
+    background-color: #dc21b8;
+}
+.btn.pink:hover {
+    filter: brightness(1.4);
+}
+
+.btn.grey {
+    background-color: #4c3746;
+}
+.btn.grey:hover {
+    background-color: #dc21b8;
+    color: #fffdfc;
+}
+
+.btn.white {
+    background-color: #fffdfc;
+    color: #dc21b8;
+}
+.btn.white:hover {
+    background-color: #dc21b8;
+    color: #fffdfc;
+}
+
+.btn.mrg-top-5 {
+    margin-top: 5px;
+}
+
+.btn.mrg-top-15 {
+    margin-top: 15px;
+}
+
+.btn.mrg-top-30 {
+    margin-top: 30px;
 }
 
 #alreadyHaveLabel {
@@ -31,7 +68,7 @@
 .alreadyHaveButton {
     background-color: transparent;
     color: white;
-    border: 1px solid #4AC0FC;
+    border: 1px solid #4ac0fc;
 
     padding: 8px 11px;
     font-size: 0.9em;

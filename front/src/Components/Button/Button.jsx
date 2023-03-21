@@ -19,7 +19,7 @@ export const QuitOnboarding = () => (
 )
 
 const Button = ({ text, btnClass }) => {
-    return <button className={btnClass + ' btn'}>{text}</button>
+    return <button className={'btn ' + btnClass}>{text}</button>
 }
 
 export default Button
