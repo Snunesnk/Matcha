@@ -1,72 +1,88 @@
 import { style } from '@mui/system'
 import React, { useState } from 'react'
+import DualRangeSlider from '../DualRangeSlider/DualRangeSlider'
+import RangeSlider from '../RangeSlider/RangeSlider'
 import './UserSettings.css'
 
 const DIST_MIN = 1
 const DIST_MAX = 100
+const AGE_MIN = 18
+const AGE_MAX = 55
+const FAME_MIN = 0
+const FAME_MAX = 100
 
 const UserSettings = () => {
-    const [maxDistance, setMaxDistance] = useState(50)
-    const [distRatio, setDistRatio] = useState(0.5)
-    const [ageRange, setAgeRange] = useState(18)
-    const [ageRatio, setageRatio] = useState(0.5)
-
-    const updateDistRatio = (e) => {
-        const newRatio =
-            ((e.target.value - DIST_MIN) * 100) / (DIST_MAX - DIST_MIN)
-
-        setDistRatio(newRatio)
-    }
+    const [maxDistance, setMaxDistance] = useState(DIST_MAX)
+    const [ageMin, setAgeMin] = useState(AGE_MIN)
+    const [ageMax, setAgeMax] = useState(AGE_MAX)
+    const [fameMin, setFameMin] = useState(FAME_MIN)
+    const [fameMax, setFameMax] = useState(FAME_MAX)
 
     return (
         <div id="user-settings">
-            <h1>Discovery settings</h1>
-            <div className="setting">
-                <div>Show me</div>
-                <button>Female {'>'}</button>
-            </div>
-            <div className="setting range-setting">
-                <div>
-                    <div>Maximum distance</div>
-                    <div>{maxDistance} km</div>
+            <div id="settings-container">
+                <div className="settings-divider"></div>
+                <h3>Discovery settings</h3>
+                <div className="setting">
+                    <div>Show me</div>
+                    <button>Female {'>'}</button>
                 </div>
-                <input
-                    className="slider"
-                    type="range"
-                    min={DIST_MIN}
-                    max={DIST_MAX}
-                    value={maxDistance}
-                    onChange={(e) => {
-                        setMaxDistance(e.target.value)
-                        updateDistRatio(e)
-                    }}
-                    style={{ backgroundSize: { distRatio } + '% 100%' }}
-                />
-            </div>
-            <div className="setting range-setting">
-                <div>
-                    <div>Age range</div>
-                    <div>18-99</div>
+                <div className="setting range-setting">
+                    <div>
+                        <div>Maximum distance</div>
+                        <div>{maxDistance} km</div>
+                    </div>
+                    <RangeSlider
+                        min={DIST_MIN}
+                        max={DIST_MAX}
+                        onChange={({ value }) => setMaxDistance(value)}
+                    />
                 </div>
-                <input
-                    className="slider"
-                    type="range"
-                    min="1"
-                    max="100"
-                    value={ageRange}
-                    onChange={(e) => setAgeRange(e.target.value)}
-                />
+                <div className="setting range-setting">
+                    <div>
+                        <div>Age range</div>
+                        <div>
+                            {ageMin}-{ageMax}
+                            {+ageMax === AGE_MAX ? '+' : ''}
+                        </div>
+                    </div>
+                    <DualRangeSlider
+                        min={AGE_MIN}
+                        max={AGE_MAX}
+                        onChange={({ min, max }) => {
+                            setAgeMin(min)
+                            setAgeMax(max)
+                        }}
+                    />
+                </div>
+                <div className="setting">Interests</div>
+                <div className="setting range-setting">
+                    <div>
+                        <div>Popularity range</div>
+                        <div>
+                            {fameMin}%-{fameMax}%
+                        </div>
+                    </div>
+                    <DualRangeSlider
+                        min={FAME_MIN}
+                        max={FAME_MAX}
+                        onChange={({ min, max }) => {
+                            setFameMin(min)
+                            setFameMax(max)
+                        }}
+                    />
+                </div>
+                <div className="settings-divider"></div>
+                <h3>Personal infos</h3>
+                <div className="setting">My gender</div>
+                <div className="setting">Who am I</div>
+                <div className="setting">Topics I'm interested in</div>
+                <div className="setting">My pictures</div>
+                <div className="setting">Last name</div>
+                <div className="setting">First name</div>
+                <div className="setting">Email adress</div>
+                <div className="settings-divider"></div>
             </div>
-            <div className="setting">Interests</div>
-            <div className="setting">Popularity</div>
-            <h1>User settings</h1>
-            <div className="setting">Gender</div>
-            <div className="setting">Biography</div>
-            <div className="setting">Interests</div>
-            <div className="setting">Pictures</div>
-            <div className="setting">Last name</div>
-            <div className="setting">First name</div>
-            <div className="setting">Email adress</div>
         </div>
     )
 }
