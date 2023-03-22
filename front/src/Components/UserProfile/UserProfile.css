@@ -12,10 +12,13 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    position: relative;
     border-radius: 4px;
     transition: all 100ms;
     opacity: 1;
+
+    height: calc(100vw * 1.42857);
+    width: 100%;
+    position: absolute;
 }
 
 .name_and_age_container {
@@ -163,4 +166,14 @@
 #btn-close-magnify-picture:hover {
     color: white;
     background-color: #dc21b8;
+}
+
+@media screen and (min-width: 601px) {
+    .card_img_container {
+        height: calc(600px * 1.42857);
+    }
+    .name_and_age_container {
+        width: calc(100% + 40px);
+        padding-top: calc(600px * 1.42857 + 10px);
+    }
 }
