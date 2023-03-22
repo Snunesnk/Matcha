@@ -1,26 +1,18 @@
 #navbar {
-    padding: 10px 30px;
+    padding: 0 20px;
     z-index: 2;
     transition: all 200ms;
     display: flex;
     align-items: center;
+    justify-content: space-between;
     height: 90px;
+    position: relative;
 }
 
-#loggingBtnContainer {
-    opacity: 1;
-    transition: opacity 450ms;
-    display: flex;
-    justify-content: end;
-    align-items: start;
-    transition: opacity 450ms;
-    padding: 13px;
-}
-
-.center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+@media screen and (max-width: 1141px) {
+    .nav-title-container {
+        display: none;
+    }
 }
 
 .navTitle {
@@ -30,14 +22,32 @@
     margin: 0;
 }
 
-button.btn-log-in {
-    color: white;
+.nav-menu-icons-container {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.log-in-btn-container {
+.nav-menu-icons {
+    height: 100%;
     display: flex;
+    justify-content: space-around;
     align-items: center;
-    justify-content: right;
+}
+
+@media screen and (max-width: 1141px) {
+    .nav-menu-icons {
+        width: 100%;
+    }
+}
+
+@media screen and (min-width: 1141px) {
+    .nav-menu-icons {
+        width: 33%;
+    }
 }
 
 .navbar-menu-icon {
@@ -71,10 +81,19 @@ button.btn-log-in {
 .navbar-menu-icon.user-icon svg {
     font-size: 33px;
 }
-.nav-menu-icons {
+
+.log-in-btn-container {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 100%;
-    padding: 0 30px;
+    justify-content: right;
+}
+
+button.btn-log-in {
+    color: white;
+}
+
+.center {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }

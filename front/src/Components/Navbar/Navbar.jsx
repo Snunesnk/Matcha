@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { Grid } from '@mui/material'
 import './Navbar.css'
 import { AlreadyHaveAccountBtn } from '../Button/Button'
 import { useSelector } from 'react-redux'
@@ -58,14 +57,14 @@ const Navbar = () => {
     const [selectedMenu, setSelectedMenu] = useState(1)
 
     return (
-        <Grid container id="navbar" className="fw">
-            <Grid item xs={4} display="flex" justifyContent="left">
+        <div id="navbar" className="fw">
+            <div className="nav-title-container">
                 <Link to="/">
                     <h1 className="navTitle fw">MatChat</h1>
                 </Link>
-            </Grid>
-            <Grid item xs={4}>
-                {onboarded && (
+            </div>
+            {onboarded && (
+                <div className="nav-menu-icons-container">
                     <div className="nav-menu-icons">
                         <Link
                             to="/dashboard/messages"
@@ -108,17 +107,12 @@ const Navbar = () => {
                             />
                         </Link>
                     </div>
-                )}
-            </Grid>
-            <Grid
-                item
-                xs={4}
-                className="log-in-btn-container"
-                justifyContent="right"
-            >
+                </div>
+            )}
+            <div className="log-in-btn-container">
                 {loggedIn == false && <AlreadyHaveAccountBtn />}
-            </Grid>
-        </Grid>
+            </div>
+        </div>
     )
 }
 

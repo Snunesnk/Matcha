@@ -65,15 +65,20 @@
 #user-profile-pictures-container {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
+    grid-gap: 15px;
     margin-top: 40px;
+    width: 100%;
 }
 
 .user-profile-picture {
-    width: 5vw;
-    height: 6vw;
+    width: 7vw;
+    height: 10vw;
     border-radius: 10px;
-    margin: 10px;
     transition: all 100ms ease-out;
+    min-width: 100px;
+    min-height: 142px;
+    background-size: cover !important;
+    background-position: center !important;
 }
 
 .user-profile-picture:hover {

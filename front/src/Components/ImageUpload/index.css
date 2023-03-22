@@ -37,11 +37,11 @@
 
 .user-setting-picture {
     width: 7vw;
-    height: 11vw;
+    height: 10vw;
     border-radius: 10px;
     transition: all 100ms ease-out;
-    min-width: 85%;
-    min-height: 160px;
+    min-width: 100px;
+    min-height: 142px;
     background-size: cover !important;
     background-position: center !important;
 }

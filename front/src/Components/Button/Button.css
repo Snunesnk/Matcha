@@ -61,6 +61,13 @@
     margin-top: 30px;
 }
 
+#already_have_account {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
+}
+
 #alreadyHaveLabel {
     color: white;
 }
@@ -70,7 +77,9 @@
     color: white;
     border: 1px solid #4ac0fc;
 
-    padding: 8px 11px;
+    width: fit-content;
+
+    padding: 8px 13px;
     font-size: 0.9em;
     line-height: 15px;
     border-radius: 5px;

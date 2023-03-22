@@ -20,7 +20,6 @@ import DescriptionCreation from '../Components/OnboardingFormComponents/Descript
 import InterestsTags from '../Components/OnboardingFormComponents/InterestsTags'
 import PicturesUploading from '../Components/OnboardingFormComponents/PicturesUploading'
 import AllSetMessage from '../Components/OnboardingFormComponents/AllSetMessage'
-import DashboardOverview from '../Components/DashboardOverview'
 import ChatComponent from '../Components/ChatComponent'
 import Root from '../Pages/Root/Root'
 import EmailVerify from '../Components/OnboardingFormComponents/EmailVerify'
@@ -32,6 +31,7 @@ import {
 } from './loaders'
 import MessagesContainer from '../Components/MessagesContainer/MessagesContainer'
 import UserSettings from '../Components/UserSettings/UserSettings'
+import ProfileMatching from '../Components/ProfileMatching'
 
 const getRouterWithStore = (store) => {
     return createBrowserRouter([
@@ -113,7 +113,7 @@ const getRouterWithStore = (store) => {
                     children: [
                         {
                             index: true,
-                            element: <DashboardOverview />,
+                            element: <ProfileMatching />,
                         },
                         {
                             path: 'messages',
