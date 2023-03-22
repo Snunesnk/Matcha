@@ -15,8 +15,8 @@ const GradientMessageIcon = ({ selected }) => (
                 <stop offset={0.8} stopColor="#dc21b8" />
             </linearGradient>
         </svg>
-        {!selected && <ChatBubbleIcon sx={{ fill: 'white' }} />}
-        {selected && <ChatBubbleIcon sx={{ fill: 'url(#messagesColors)' }} />}
+        {selected && <ChatBubbleIcon sx={{ fill: 'white' }} />}
+        {!selected && <ChatBubbleIcon sx={{ fill: 'url(#messagesColors)' }} />}
     </>
 )
 const GradientDashboardIcon = ({ selected }) => (
@@ -27,8 +27,8 @@ const GradientDashboardIcon = ({ selected }) => (
                 <stop offset={1.2} stopColor="#dc21b8" />
             </linearGradient>
         </svg>
-        {!selected && <PetsIcon sx={{ fill: 'white' }} />}
-        {selected && <PetsIcon sx={{ fill: 'url(#dashboardColors)' }} />}
+        {selected && <PetsIcon sx={{ fill: 'white' }} />}
+        {!selected && <PetsIcon sx={{ fill: 'url(#dashboardColors)' }} />}
     </>
 )
 const GradientUserIcon = ({ selected }) => (
@@ -39,8 +39,8 @@ const GradientUserIcon = ({ selected }) => (
                 <stop offset={1} stopColor="#dc21b8" />
             </linearGradient>
         </svg>
-        {!selected && <PersonIcon sx={{ fill: 'white' }} />}
-        {selected && <PersonIcon sx={{ fill: 'url(#userColors)' }} />}
+        {selected && <PersonIcon sx={{ fill: 'white' }} />}
+        {!selected && <PersonIcon sx={{ fill: 'url(#userColors)' }} />}
     </>
 )
 
@@ -70,7 +70,7 @@ const Navbar = () => {
                             to="/dashboard/messages"
                             className={
                                 'navbar-menu-icon chat-icon' +
-                                (selectedMenu !== MENU.chat ? ' selected' : '')
+                                (selectedMenu == MENU.chat ? ' selected' : '')
                             }
                             onClick={() => setSelectedMenu(MENU.chat)}
                         >
@@ -82,7 +82,7 @@ const Navbar = () => {
                             to="/dashboard/"
                             className={
                                 'navbar-menu-icon pet-icon' +
-                                (selectedMenu !== MENU.dashboard
+                                (selectedMenu == MENU.dashboard
                                     ? ' selected'
                                     : '')
                             }
@@ -96,7 +96,7 @@ const Navbar = () => {
                             to="/dashboard/userSettings"
                             className={
                                 'navbar-menu-icon user-icon' +
-                                (selectedMenu !== MENU.userSettings
+                                (selectedMenu == MENU.userSettings
                                     ? ' selected'
                                     : '')
                             }

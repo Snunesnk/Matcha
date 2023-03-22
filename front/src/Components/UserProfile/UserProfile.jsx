@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import PlaceIcon from '@mui/icons-material/Place'
 import './UserProfile.css'
 
 const DUMMY_USER = {
@@ -8,7 +9,7 @@ const DUMMY_USER = {
     dateOfBirth: '2000-01-10',
     email: 'john.doe@test.com',
     login: 'john.doe',
-    bio: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+    bio: 'A happy go lucky girl with a sharp tongue and wise eyes.',
     imgA: 'https://picsum.photos/200/300?random=1',
     imgB: 'https://picsum.photos/200/300?random=2',
     imgC: 'https://picsum.photos/200/300?random=3',
@@ -28,6 +29,7 @@ const UserProfile = () => {
     const userAge =
         new Date().getFullYear() -
         new Date(DUMMY_USER.dateOfBirth).getFullYear()
+    const [cardState, setCardState] = useState('')
 
     if (DUMMY_USER.imgA) imgs.push(DUMMY_USER.imgA)
     if (DUMMY_USER.imgB) imgs.push(DUMMY_USER.imgB)
@@ -52,25 +54,31 @@ const UserProfile = () => {
 
     return (
         <div id="user-profile-container">
-            <div id="user-picture-with-infos">
-                <div id="center-user-main-photo">
-                    <div
-                        id="user-profile-main-picture"
-                        style={{
-                            background: 'url(' + DUMMY_USER.imgA + ') center',
-                        }}
-                    ></div>
+            <div
+                className={'card_img_container ' + cardState}
+                style={{
+                    background:
+                        'url(' +
+                        DUMMY_USER.imgA +
+                        ') 50% 50% / cover no-repeat',
+                }}
+            ></div>
+
+            <div className="name_and_age_container">
+                <button className="info-chip">Info</button>
+                <div className="name_and_age">
+                    {DUMMY_USER.firstname}, {userAge}
                 </div>
-                <div id="user-profile-name">
-                    <h3>
-                        {DUMMY_USER.firstname} {DUMMY_USER.surname}, {userAge},{' '}
-                        <span>{DUMMY_USER.gender}</span>
-                    </h3>
+                <div className="user-location-infos">
+                    <PlaceIcon /> 19km away
                 </div>
+
                 <i id="user-login">@{DUMMY_USER.login}</i>
                 <i id="user-email">{DUMMY_USER.email}</i>
-                <div id="user-profile-bio">{DUMMY_USER.bio}</div>
             </div>
+
+            <div id="user-profile-bio">{DUMMY_USER.bio}</div>
+
             <div id="user-profile-pictures-container">
                 {imgs.map((img, i) => (
                     <div
@@ -81,6 +89,7 @@ const UserProfile = () => {
                     ></div>
                 ))}
             </div>
+
             <div id="user-profile-tags">
                 {DUMMY_USER.tags.map((tag, i) => (
                     <div key={i} className="user-profile-tag">
@@ -89,7 +98,6 @@ const UserProfile = () => {
                     </div>
                 ))}
             </div>
-
             <div
                 id="display-user-picture"
                 className={
