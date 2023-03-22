@@ -3,7 +3,9 @@ import { style } from '@mui/system'
 import React, { useEffect, useState } from 'react'
 import Button from '../Button/Button'
 import DualRangeSlider from '../DualRangeSlider/DualRangeSlider'
+import ImageUpload from '../ImageUpload'
 import RangeSlider from '../RangeSlider/RangeSlider'
+import Select from '../Select/Select'
 import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
 import './UserSettings.css'
 
@@ -28,6 +30,8 @@ const UserSettings = () => {
     const [ageMax, setAgeMax] = useState(AGE_MAX)
     const [fameMin, setFameMin] = useState(FAME_MIN)
     const [fameMax, setFameMax] = useState(FAME_MAX)
+    const [discoveryGender, setDiscoveryGender] = useState('Female')
+    const [personalGender, setPersonalGender] = useState('Female')
     const [tags, setTags] = useState(['test'])
 
     return (
@@ -37,7 +41,11 @@ const UserSettings = () => {
                 <h2>Discovery settings</h2>
                 <div className="setting">
                     <div>Show me</div>
-                    <button>Female {'>'}</button>
+                    <Select
+                        options={['Female', 'Male', 'Non-binary']}
+                        defaultSelected={discoveryGender}
+                        onChange={(e) => setDiscoveryGender(e.target.value)}
+                    ></Select>
                 </div>
                 <div className="setting complex-setting">
                     <div className="setting-infos">
@@ -97,7 +105,11 @@ const UserSettings = () => {
                 <h2>Personal infos</h2>
                 <div className="setting">
                     <div>You indentify yourself as a</div>
-                    <button>Female {'>'}</button>
+                    <Select
+                        options={['Female', 'Male', 'Non-binary']}
+                        defaultSelected={personalGender}
+                        onChange={(e) => setPersonalGender(e.target.value)}
+                    ></Select>
                 </div>
                 <div className="setting complex-setting">
                     <div className="setting-infos">Your biography</div>
@@ -109,32 +121,7 @@ const UserSettings = () => {
                         onChange={(e, tagsList) => setTags(tagsList)}
                     />
                 </div>
-                <div className="setting complex-setting">
-                    <div className="setting-infos">
-                        <div>Your pictures</div>
-                        <div>
-                            <button>Upload</button>
-                        </div>
-                    </div>
-                    <div id="user-settings-pictures-container">
-                        {pictures.map((src, i) => (
-                            <div className="setting-picture-container" key={i}>
-                                <div
-                                    className="user-setting-picture"
-                                    style={{
-                                        background: 'url(' + src + ') center',
-                                    }}
-                                    // onClick={() => setSelectedPicture(i)}
-                                ></div>
-                                <div className="setting-picture-delete">
-                                    <button className="setting-picture-delete-btn">
-                                        Delete
-                                    </button>
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                </div>
+                <ImageUpload defaultImages={pictures}></ImageUpload>
                 <div className="setting">
                     <div>Last name</div>
                     <input className="setting-input" />

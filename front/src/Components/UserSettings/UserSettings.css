@@ -43,7 +43,7 @@
 .setting {
     border: 1px solid #4b3244;
     border-radius: 4px;
-    padding: 15px;
+    padding: 20px;
     margin-top: 25px;
     display: flex;
     justify-content: space-between;
@@ -60,14 +60,14 @@
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 14px;
+    margin-bottom: 20px;
 }
 
 .setting.complex-setting .setting-infos div {
     min-width: fit-content;
 }
 
-.setting button:not(.setting-picture-delete-btn) {
+.setting input[type='file'] {
     background-color: transparent;
     color: #dc21b8;
     padding: 0;
@@ -81,7 +81,7 @@
 
 .setting-biography {
     width: 100%;
-    background-color: #4b32445c;
+    background-color: #4b3244;
     border-radius: 4px;
     border: none;
     outline: none;
@@ -90,97 +90,31 @@
     resize: none;
     height: 150px;
     transition: all 0.2s;
-}
-
-.setting.personal-setting .MuiInputBase-root:not(.Mui-focused) {
-    background-color: #4b32445c !important;
-    transition: all 0.2s;
+    border: 1px solid #4b3244;
 }
 
 .setting-biography:focus {
-    background-color: #4b3244;
+    border: 1px solid #4ac0fc;
 }
 
-#user-settings-pictures-container {
-    display: grid;
-    width: 100%;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
-}
-
-.setting-picture-container {
-    position: relative;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 10px;
-    transition: all 100ms ease-out;
-    animation: slideUp 0.5s;
-    overflow: hidden;
-}
-
-.user-setting-picture {
-    width: 8vw;
-    height: 12vw;
-    border-radius: 10px;
-    transition: all 100ms ease-out;
-    min-width: 100%;
-    min-height: 160px;
-}
-
-.setting-picture-container:hover .user-setting-picture {
-    transform: scale(0.99);
-    filter: grayscale(100%);
-    -webkit-filter: grayscale(100%);
-    transition: all 100ms;
-    cursor: zoom-out;
-    cursor: -moz-zoom-out;
-    cursor: -webkit-zoom-out;
-}
-
-.user-setting-picture:hover + .setting-picture-delete,
-.setting-picture-delete:hover {
-    bottom: 0;
-    transition: all 200ms;
-    cursor: zoom-out;
-    cursor: -moz-zoom-out;
-    cursor: -webkit-zoom-out;
-}
-
-.setting-picture-delete {
-    position: absolute;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    bottom: -100%;
-}
-
-.setting-picture-delete-btn {
-    background-color: white;
-    color: #dc21b8;
-    padding: 5px;
-    border-radius: 4px;
-}
-.setting-picture-delete-btn:hover {
-    background-color: #dc21b8;
-    color: white;
+.setting.personal-setting .MuiInputBase-root:not(.Mui-focused) {
+    background-color: #4b3244 !important;
+    transition: all 0.2s;
 }
 
 .setting-input {
     width: 75%;
     padding: 7px;
-    background-color: #4b32445c;
+    background-color: #4b3244;
     color: white;
     border: none;
     outline: none;
     border-radius: 4px;
     font-size: 1rem;
-    border: 1px solid #4b32445c;
+    border: 1px solid #4b3244;
     transition: all 0.2s;
 }
 
 .setting-input:focus {
-    background-color: #4b3244;
     border: 1px solid #4ac0fc;
 }
