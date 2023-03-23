@@ -8,6 +8,7 @@
     align-items: center;
     justify-content: center;
     height: 100%;
+    overflow: auto;
 }
 
 .background_dashboard {

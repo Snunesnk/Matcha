@@ -60,21 +60,22 @@ const UserProfile = () => {
                     background:
                         'url(' +
                         DUMMY_USER.imgA +
+                        // '/src/assets/cat_profile.jpg' +
                         ') 50% 50% / cover no-repeat',
                 }}
-            ></div>
+            >
+                <div className="name_and_age_container">
+                    <button className="info-chip">Info</button>
+                    <div className="name_and_age">
+                        {DUMMY_USER.firstname}, {userAge}
+                    </div>
+                    <div className="user-location-infos">
+                        <PlaceIcon /> 19km away
+                    </div>
 
-            <div className="name_and_age_container">
-                <button className="info-chip">Info</button>
-                <div className="name_and_age">
-                    {DUMMY_USER.firstname}, {userAge}
+                    <i id="user-login">@{DUMMY_USER.login}</i>
+                    <i id="user-email">{DUMMY_USER.email}</i>
                 </div>
-                <div className="user-location-infos">
-                    <PlaceIcon /> 19km away
-                </div>
-
-                <i id="user-login">@{DUMMY_USER.login}</i>
-                <i id="user-email">{DUMMY_USER.email}</i>
             </div>
 
             <div id="user-profile-bio">{DUMMY_USER.bio}</div>

@@ -8,6 +8,14 @@
     align-items: center;
 }
 
+#user-profile-container .card_img_container {
+    width: calc(100% + 40px);
+}
+
+#user-profile-container #user-profile-tags {
+    padding-bottom: 50px;
+}
+
 .card_img_container {
     display: flex;
     justify-content: center;
@@ -16,21 +24,24 @@
     transition: all 100ms;
     opacity: 1;
 
-    height: calc(100vw * 1.42857);
-    width: 100%;
-    position: absolute;
+    min-height: calc(90vh - 50px);
+    width: calc(100% + 40px);
+    position: relative;
 }
 
 .name_and_age_container {
-    width: calc(100% + 40px);
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
     display: flex;
     flex-direction: column;
     align-items: start;
-    /* background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 0%, #200618 100%); */
-    padding: 20px;
-    padding-top: calc(100vw * 1.42857 + 10px);
+    justify-content: end;
     z-index: 2;
-    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 16%, #200618 80%);
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0) 16%, #200618 95%);
+    height: 100%;
+    padding: 20px;
 }
 
 .info-chip {
@@ -74,19 +85,21 @@
 
 #user-profile-pictures-container {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 8vw));
     grid-gap: 15px;
     margin-top: 40px;
     width: 100%;
+    justify-content: center;
+    align-items: center;
 }
 
 .user-profile-picture {
-    width: 7vw;
-    height: 10vw;
+    width: 8vw;
+    height: 11.42vw;
     border-radius: 10px;
     transition: all 100ms ease-out;
-    min-width: 100px;
-    min-height: 142px;
+    min-width: 150px;
+    min-height: 214px;
     background-size: cover !important;
     background-position: center !important;
 }
@@ -168,12 +181,9 @@
     background-color: #dc21b8;
 }
 
-@media screen and (min-width: 601px) {
+@media screen and (min-width: 450px) {
     .card_img_container {
-        height: calc(600px * 1.42857);
-    }
-    .name_and_age_container {
-        width: calc(100% + 40px);
-        padding-top: calc(600px * 1.42857 + 10px);
+        min-height: calc(70.86vh - 50px);
+        width: 100%;
     }
 }

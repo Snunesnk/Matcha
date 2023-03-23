@@ -14,7 +14,7 @@
     display: none;
 }
 
-@media screen and (max-width: 480px) {
+@media screen and (max-width: 800px) {
     #settings-container {
         min-width: 100%;
         max-width: 100%;
@@ -26,10 +26,10 @@
     }
 }
 
-@media screen and (max-width: 1141px) and (min-width: 481px) {
+@media screen and (max-width: 1141px) and (min-width: 801px) {
     #settings-container {
-        min-width: 50%;
-        max-width: 50%;
+        min-width: 75%;
+        max-width: 75%;
     }
 }
 

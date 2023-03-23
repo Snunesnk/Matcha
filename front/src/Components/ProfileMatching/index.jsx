@@ -60,23 +60,25 @@ const ProfileMatching = () => {
     if (actualCard) {
         return (
             <div id="profile_matching">
+                {/* <div id="teeest"> */}
                 <div id="profile_matching-container">
                     <UserProfile />
+                    <div className="profile_matching_btn_container">
+                        <button
+                            className="profile_matching_btn profile_matching_dislike"
+                            onClick={setCardDisiked}
+                        >
+                            <GradientCross />
+                        </button>
+                        <button
+                            className="profile_matching_btn profile_matching_like"
+                            onClick={setCardLiked}
+                        >
+                            <Favorite />
+                        </button>
+                    </div>
                 </div>
-                <div className="profile_matching_btn_container">
-                    <button
-                        className="profile_matching_btn profile_matching_dislike"
-                        onClick={setCardDisiked}
-                    >
-                        <GradientCross />
-                    </button>
-                    <button
-                        className="profile_matching_btn profile_matching_like"
-                        onClick={setCardLiked}
-                    >
-                        <Favorite />
-                    </button>
-                </div>
+                {/* </div> */}
             </div>
         )
     } else return "We're sorry, we can't find anymore corresponding profiles"
