@@ -60,7 +60,6 @@ const ProfileMatching = () => {
     if (actualCard) {
         return (
             <div id="profile_matching">
-                {/* <div id="teeest"> */}
                 <div id="profile_matching-container">
                     <UserProfile />
                     <div className="profile_matching_btn_container">
@@ -78,7 +77,6 @@ const ProfileMatching = () => {
                         </button>
                     </div>
                 </div>
-                {/* </div> */}
             </div>
         )
     } else return "We're sorry, we can't find anymore corresponding profiles"

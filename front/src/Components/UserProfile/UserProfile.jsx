@@ -59,8 +59,8 @@ const UserProfile = () => {
                 style={{
                     background:
                         'url(' +
-                        DUMMY_USER.imgA +
-                        // '/src/assets/cat_profile.jpg' +
+                        // DUMMY_USER.imgA +
+                        '/src/assets/cat_profile.jpg' +
                         ') 50% 50% / cover no-repeat',
                 }}
             >
@@ -72,13 +72,13 @@ const UserProfile = () => {
                     <div className="user-location-infos">
                         <PlaceIcon /> 19km away
                     </div>
-
-                    <i id="user-login">@{DUMMY_USER.login}</i>
-                    <i id="user-email">{DUMMY_USER.email}</i>
                 </div>
             </div>
 
             <div id="user-profile-bio">{DUMMY_USER.bio}</div>
+
+            <i id="user-login">@{DUMMY_USER.login}</i>
+            <i id="user-email">{DUMMY_USER.email}</i>
 
             <div id="user-profile-pictures-container">
                 {imgs.map((img, i) => (

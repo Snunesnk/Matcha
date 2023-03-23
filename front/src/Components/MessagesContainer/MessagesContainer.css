@@ -27,17 +27,17 @@
 }
 
 .messages-category-btn {
-    background-color: #4c3746;
+    background-color: #ffffff40;
     color: #fffdfc;
     border-radius: 30px;
     width: 45%;
     display: flex;
     justify-content: center;
-    transition: all 200ms ease-out;
+    transition: all 100ms ease-out;
     height: fit-content;
 }
 .messages-category-btn:not(.selected):hover {
-    transition: all 200ms ease-out;
+    transition: all 100ms ease-out;
     filter: brightness(1.6);
 }
 
@@ -74,4 +74,8 @@
 #user_info_container {
     overflow: auto;
     height: 100%;
+}
+
+#user_info_container #user-profile-tags {
+    padding-bottom: 50px;
 }

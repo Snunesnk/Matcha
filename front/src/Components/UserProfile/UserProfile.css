@@ -12,15 +12,10 @@
     width: calc(100% + 40px);
 }
 
-#user-profile-container #user-profile-tags {
-    padding-bottom: 50px;
-}
-
 .card_img_container {
     display: flex;
     justify-content: center;
     align-items: center;
-    border-radius: 4px;
     transition: all 100ms;
     opacity: 1;
 
@@ -85,7 +80,7 @@
 
 #user-profile-pictures-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 8vw));
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     grid-gap: 15px;
     margin-top: 40px;
     width: 100%;
@@ -94,11 +89,10 @@
 }
 
 .user-profile-picture {
-    width: 8vw;
     height: 11.42vw;
     border-radius: 10px;
     transition: all 100ms ease-out;
-    min-width: 150px;
+    min-width: 100%;
     min-height: 214px;
     background-size: cover !important;
     background-position: center !important;

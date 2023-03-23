@@ -37,7 +37,7 @@
 
 #messages_input {
     border: none;
-    background-color: #4c3746;
+    background-color: #ffffff40;
     color: white;
     padding: 10px 15px;
     border-radius: 15px;
@@ -108,7 +108,7 @@
 }
 
 .messsage_line > .message {
-    background-color: #4c3746;
+    background-color: #ffffff40;
     color: white;
     border-radius: 15px 2px 15px 15px;
 }
