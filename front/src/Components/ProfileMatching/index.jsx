@@ -30,7 +30,7 @@ const GradientCross = () => (
 )
 
 const ProfileMatching = () => {
-    const [cardState, setCardState] = useState('')
+    const [evaluation, setEvaluation] = useState('')
     const [actualCard, setactualCard] = useState({
         url: '/src/assets/cat_profile.jpg',
         name: 'Jon the cat',
@@ -48,20 +48,40 @@ const ProfileMatching = () => {
     }
 
     const setCardLiked = () => {
-        setCardState('liked')
-        if (!transitioning) setTimeout(displayNextCard, 500)
+        setEvaluation('liked')
+        setTimeout(() => setEvaluation((prev) => prev + ' transition'), 200)
+        // if (!transitioning) setTimeout(displayNextCard, 500)
+        setTimeout(() => setEvaluation(''), 500)
     }
 
     const setCardDisiked = () => {
-        setCardState('disliked')
-        if (!transitioning) setTimeout(displayNextCard, 500)
+        setEvaluation('disliked')
+        setTimeout(() => setEvaluation((prev) => prev + ' transition'), 200)
+        // if (!transitioning) setTimeout(displayNextCard, 500)
+        setTimeout(() => setEvaluation(''), 500)
     }
 
     if (actualCard) {
         return (
             <div id="profile_matching">
-                <div id="profile_matching-container">
+                <div id="profile_matching-container" className={evaluation}>
                     <UserProfile />
+
+                    <div className="profile-evaluation">
+                        <p id="profile-disliked">Nope</p>
+                        <p id="profile-liked">Like</p>
+                    </div>
+
+                    <div
+                        className="card_img_container next-user"
+                        style={{
+                            background:
+                                'url(' +
+                                // DUMMY_USER.imgA +
+                                '/src/assets/cat_glasses.jpg' +
+                                ') 50% 50% / cover no-repeat',
+                        }}
+                    ></div>
                     <div className="profile_matching_btn_container">
                         <button
                             className="profile_matching_btn profile_matching_dislike"

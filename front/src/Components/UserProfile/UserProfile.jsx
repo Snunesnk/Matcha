@@ -29,7 +29,6 @@ const UserProfile = () => {
     const userAge =
         new Date().getFullYear() -
         new Date(DUMMY_USER.dateOfBirth).getFullYear()
-    const [cardState, setCardState] = useState('')
 
     if (DUMMY_USER.imgA) imgs.push(DUMMY_USER.imgA)
     if (DUMMY_USER.imgB) imgs.push(DUMMY_USER.imgB)
@@ -55,7 +54,7 @@ const UserProfile = () => {
     return (
         <div id="user-profile-container">
             <div
-                className={'card_img_container ' + cardState}
+                className="card_img_container"
                 style={{
                     background:
                         'url(' +
