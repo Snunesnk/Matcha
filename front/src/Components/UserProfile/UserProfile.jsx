@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import PlaceIcon from '@mui/icons-material/Place'
+import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import './UserProfile.css'
 
 const DUMMY_USER = {
@@ -23,8 +24,10 @@ const DUMMY_USER = {
     ],
 }
 
-const UserProfile = () => {
+const UserProfile = ({ scroll = 0 }) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
+    const emailRef = useRef(null)
+    const infosRef = useRef(null)
     const imgs = []
     const userAge =
         new Date().getFullYear() -
@@ -51,6 +54,20 @@ const UserProfile = () => {
         }
     }
 
+    const toggleScroll = () => {
+        if (scroll <= 50) {
+            emailRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            })
+        } else {
+            infosRef.current?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'end',
+            })
+        }
+    }
+
     return (
         <div id="user-profile-container">
             <div
@@ -64,11 +81,13 @@ const UserProfile = () => {
                 }}
             >
                 <div className="name_and_age_container">
-                    <button className="info-chip">Info</button>
+                    <button className="info-chip" onClick={toggleScroll}>
+                        {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
+                    </button>
                     <div className="name_and_age">
                         {DUMMY_USER.firstname}, {userAge}
                     </div>
-                    <div className="user-location-infos">
+                    <div ref={infosRef} className="user-location-infos">
                         <PlaceIcon /> 19km away
                     </div>
                 </div>
@@ -77,7 +96,9 @@ const UserProfile = () => {
             <div id="user-profile-bio">{DUMMY_USER.bio}</div>
 
             <i id="user-login">@{DUMMY_USER.login}</i>
-            <i id="user-email">{DUMMY_USER.email}</i>
+            <i ref={emailRef} id="user-email">
+                {DUMMY_USER.email}
+            </i>
 
             <div id="user-profile-pictures-container">
                 {imgs.map((img, i) => (

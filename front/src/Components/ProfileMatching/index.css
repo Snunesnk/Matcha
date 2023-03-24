@@ -7,6 +7,7 @@
     position: relative;
     position: absolute;
     top: 0;
+    overflow: hidden;
 }
 
 @media screen and (min-width: 450px) {
@@ -18,6 +19,9 @@
         border: 4px solid white;
         overflow: hidden;
         border-radius: 20px;
+    }
+
+    .card_img_container.next-user {
     }
 }
 
@@ -149,13 +153,4 @@
 .profile_matching_dislike svg {
     background-color: transparent;
     font-size: 50px;
-}
-
-#teeest {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: relative;
 }

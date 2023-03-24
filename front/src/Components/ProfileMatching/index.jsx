@@ -36,6 +36,7 @@ const ProfileMatching = () => {
         name: 'Jon the cat',
         age: '7',
     })
+    const [scroll, setScroll] = useState(0)
 
     let transitioning = false
 
@@ -64,8 +65,12 @@ const ProfileMatching = () => {
     if (actualCard) {
         return (
             <div id="profile_matching">
-                <div id="profile_matching-container" className={evaluation}>
-                    <UserProfile />
+                <div
+                    id="profile_matching-container"
+                    className={evaluation}
+                    onScroll={(e) => setScroll(e.target.scrollTop)}
+                >
+                    <UserProfile scroll={scroll} />
 
                     <div className="profile-evaluation">
                         <p id="profile-disliked">Nope</p>
