@@ -1,6 +1,9 @@
 import React, { useRef, useState } from 'react'
 import PlaceIcon from '@mui/icons-material/Place'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
+import ClearIcon from '@mui/icons-material/Clear'
 import './UserProfile.css'
 
 const UserProfile = ({ user, scroll = 0 }) => {
@@ -97,29 +100,47 @@ const UserProfile = ({ user, scroll = 0 }) => {
             <div
                 id="display-user-picture"
                 className={
-                    selectedPicture !== -1 ? 'mignify-picture' : 'hidden'
+                    'card_img_container' +
+                    (selectedPicture !== -1 ? ' mignify-picture' : ' hidden')
                 }
+                style={{
+                    background:
+                        'url(' +
+                        imgs[selectedPicture] +
+                        ') 50% 50% / cover no-repeat',
+                }}
             >
-                <div id="user-pictures-navigator">
+                <div id="picture-navigation">
                     <div
                         className="user-picture-nav user-picture-prev"
                         onClick={prevPicture}
                     >
-                        {'<'}
+                        <ArrowLeftIcon />
                     </div>
-                    <img src={imgs[selectedPicture]}></img>
+                    {imgs.map((img, i) => (
+                        <div
+                            className={
+                                'img-indicator' +
+                                (selectedPicture === i ? ' img-selected' : '')
+                            }
+                            key={i}
+                            onClick={() => {
+                                setSelectedPicture(i)
+                            }}
+                        ></div>
+                    ))}
                     <div
-                        className="user-picture-nav user-picture-prev"
+                        className="user-picture-nav user-picture-next"
                         onClick={nextPicture}
                     >
-                        {'>'}
+                        <ArrowRightIcon />
                     </div>
                 </div>
                 <button
                     id="btn-close-magnify-picture"
                     onClick={() => setSelectedPicture(-1)}
                 >
-                    Close
+                    <ClearIcon />
                 </button>
             </div>
         </div>

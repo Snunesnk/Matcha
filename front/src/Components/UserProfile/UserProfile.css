@@ -145,49 +145,89 @@
 #display-user-picture {
     position: absolute;
     top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     backdrop-filter: blur(15px);
     -webkit-backdrop-filter: blur(15px);
+    z-index: 10;
+    width: 100% !important;
+    min-height: 100%;
 }
-#display-user-picture.magnify-picture {
-    display: block;
-}
+
 #display-user-picture.hidden {
     display: none;
 }
 
-#user-pictures-navigator {
+#picture-navigation {
+    position: absolute;
+    z-index: 2;
+    bottom: 10px;
+    width: 100%;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: space-around;
+    padding: 0 120px;
+    min-width: 450px;
 }
 
 .user-picture-nav {
-    font-size: 5rem;
-    margin: 20px;
     cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    filter: drop-shadow(0 0 2px #4b3244);
+}
+
+.user-picture-nav svg {
+    font-size: 2.3rem;
 }
 
 .user-picture-nav:hover {
     color: #dc21b8;
 }
 
+.user-picture-nav.user-picture-prev {
+    left: 35px;
+}
+.user-picture-nav.user-picture-next {
+    right: 35px;
+}
+
+.img-indicator {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: #ffffff80;
+    transition: all 100ms;
+    cursor: pointer;
+}
+
+.img-indicator.img-selected {
+    background-color: #ffffff;
+}
+
 #btn-close-magnify-picture {
-    margin-top: 40px;
-    background-color: white;
+    background-color: #ffffff40;
     color: #dc21b8;
     transition: all 100ms ease;
+    position: absolute;
+    border-radius: 50%;
+    top: 10px;
+    right: 10px;
+    padding: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 9px -3px black;
 }
 
 #btn-close-magnify-picture:hover {
-    color: white;
-    background-color: #dc21b8;
+    background-color: #ffffff;
+}
+#btn-close-magnify-picture svg {
+    font-size: 2em;
 }
 
 @media screen and (min-width: 450px) {
