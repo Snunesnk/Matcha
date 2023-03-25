@@ -7,6 +7,27 @@ import UserProfile from '../UserProfile/UserProfile'
 
 import './MessagesContainer.css'
 
+const DUMMY_USER = {
+    firstname: 'John',
+    surname: 'Doe',
+    gender: 'f',
+    dateOfBirth: '2000-01-10',
+    email: 'john.doe@test.com',
+    login: 'john.doe',
+    bio: 'A happy go lucky girl with a sharp tongue and wise eyes.',
+    imgA: 'https://picsum.photos/200/300?random=1',
+    imgB: 'https://picsum.photos/200/300?random=2',
+    imgC: 'https://picsum.photos/200/300?random=3',
+    imgD: 'https://picsum.photos/200/300?random=4',
+    imgE: 'https://picsum.photos/200/300?random=5',
+    tags: [
+        { bwid: 'pizza' },
+        { bwid: 'workout' },
+        { bwid: 'video games' },
+        { bwid: 'hiking' },
+    ],
+}
+
 const MessagesContainer = () => {
     const [showNotifications, setShowNotifications] = useState(false)
     const navigate = useNavigate()
@@ -57,7 +78,7 @@ const MessagesContainer = () => {
                     <ChatComponent />
                 </Grid>
                 <Grid item xs={3} id="user_info_container">
-                    <UserProfile />
+                    <UserProfile user={DUMMY_USER} />
                 </Grid>
             </Grid>
         </div>

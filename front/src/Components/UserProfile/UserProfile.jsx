@@ -3,41 +3,19 @@ import PlaceIcon from '@mui/icons-material/Place'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import './UserProfile.css'
 
-const DUMMY_USER = {
-    firstname: 'John',
-    surname: 'Doe',
-    gender: 'f',
-    dateOfBirth: '2000-01-10',
-    email: 'john.doe@test.com',
-    login: 'john.doe',
-    bio: 'A happy go lucky girl with a sharp tongue and wise eyes.',
-    imgA: 'https://picsum.photos/200/300?random=1',
-    imgB: 'https://picsum.photos/200/300?random=2',
-    imgC: 'https://picsum.photos/200/300?random=3',
-    imgD: 'https://picsum.photos/200/300?random=4',
-    imgE: 'https://picsum.photos/200/300?random=5',
-    tags: [
-        { bwid: 'pizza' },
-        { bwid: 'workout' },
-        { bwid: 'video games' },
-        { bwid: 'hiking' },
-    ],
-}
-
-const UserProfile = ({ scroll = 0 }) => {
+const UserProfile = ({ user, scroll = 0 }) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
     const emailRef = useRef(null)
     const infosRef = useRef(null)
     const imgs = []
     const userAge =
-        new Date().getFullYear() -
-        new Date(DUMMY_USER.dateOfBirth).getFullYear()
+        new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
 
-    if (DUMMY_USER.imgA) imgs.push(DUMMY_USER.imgA)
-    if (DUMMY_USER.imgB) imgs.push(DUMMY_USER.imgB)
-    if (DUMMY_USER.imgC) imgs.push(DUMMY_USER.imgC)
-    if (DUMMY_USER.imgD) imgs.push(DUMMY_USER.imgD)
-    if (DUMMY_USER.imgE) imgs.push(DUMMY_USER.imgE)
+    if (user.imgA) imgs.push(user.imgA)
+    if (user.imgB) imgs.push(user.imgB)
+    if (user.imgC) imgs.push(user.imgC)
+    if (user.imgD) imgs.push(user.imgD)
+    if (user.imgE) imgs.push(user.imgE)
 
     const prevPicture = () => {
         if (selectedPicture === 0) {
@@ -74,10 +52,7 @@ const UserProfile = ({ scroll = 0 }) => {
                 className="card_img_container"
                 style={{
                     background:
-                        'url(' +
-                        // DUMMY_USER.imgA +
-                        '/src/assets/cat_profile.jpg' +
-                        ') 50% 50% / cover no-repeat',
+                        'url(' + user.imgA + ') 50% 50% / cover no-repeat',
                 }}
             >
                 <div className="name_and_age_container">
@@ -85,7 +60,7 @@ const UserProfile = ({ scroll = 0 }) => {
                         {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
                     </button>
                     <div className="name_and_age">
-                        {DUMMY_USER.firstname}, {userAge}
+                        {user.firstname}, {userAge}
                     </div>
                     <div ref={infosRef} className="user-location-infos">
                         <PlaceIcon /> 19km away
@@ -93,11 +68,11 @@ const UserProfile = ({ scroll = 0 }) => {
                 </div>
             </div>
 
-            <div id="user-profile-bio">{DUMMY_USER.bio}</div>
+            <div id="user-profile-bio">{user.bio}</div>
 
-            <i id="user-login">@{DUMMY_USER.login}</i>
+            <i id="user-login">@{user.login}</i>
             <i ref={emailRef} id="user-email">
-                {DUMMY_USER.email}
+                {user.email}
             </i>
 
             <div id="user-profile-pictures-container">
@@ -112,7 +87,7 @@ const UserProfile = ({ scroll = 0 }) => {
             </div>
 
             <div id="user-profile-tags">
-                {DUMMY_USER.tags.map((tag, i) => (
+                {user.tags.map((tag, i) => (
                     <div key={i} className="user-profile-tag">
                         <i>#</i>
                         {tag.bwid}

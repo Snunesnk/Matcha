@@ -45,7 +45,13 @@
 }
 
 #profile_matching-container #user-profile-container {
-    transition: all 120ms ease-in;
+    transition: opacity 500ms ease-in;
+}
+
+#profile_matching-container.liked,
+#profile_matching-container.disliked,
+#profile_matching-container.transition {
+    overflow: hidden;
 }
 
 #profile_matching-container.liked .profile-evaluation,
@@ -64,11 +70,15 @@
 #profile_matching-container.liked.transition #user-profile-container,
 #profile_matching-container.liked.transition #profile-liked {
     margin-left: calc(200% + 80px);
+    transition: all 200ms ease-in;
+    opacity: 0;
 }
 
 #profile_matching-container.disliked.transition #user-profile-container,
 #profile_matching-container.disliked.transition #profile-disliked {
     margin-right: calc(200% + 80px);
+    transition: all 120ms ease-in;
+    opacity: 0;
 }
 
 .profile-evaluation {
@@ -105,6 +115,7 @@
 .card_img_container.next-user {
     position: absolute;
     z-index: -1;
+    transition: none;
 }
 
 .profile_matching_btn_container {
