@@ -5,7 +5,7 @@
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    padding: 0 50px;
+    padding: 0 20px;
 }
 
 #chat_header {
@@ -19,11 +19,27 @@
 #person_info {
     display: flex;
     align-items: center;
+    justify-content: space-between;
+}
+
+#person_info img {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    margin-right: 20px;
+    object-fit: cover;
+}
+
+#person_info svg {
+    color: #dc21b8;
+    display: none;
+    font-size: 1.8rem;
+    cursor: pointer;
 }
 
 .message_username {
     font-size: 1.3em;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 #user-chat-more {
@@ -110,7 +126,7 @@
 .messsage_line > .message {
     background-color: #ffffff40;
     color: white;
-    border-radius: 15px 2px 15px 15px;
+    border-radius: 20px 2px 20px 20px;
 }
 
 .messsage_line.other {
@@ -120,13 +136,28 @@
 .messsage_line.other > .message {
     color: black;
     background-color: #4ac0fc;
-    border-radius: 2px 15px 15px 15px;
+    border-radius: 2px 20px 20px 20px;
 }
 
 .message {
     padding: 10px 15px;
-
     width: fit-content;
     width: -moz-fit-content;
     max-width: 60%;
+    font-size: 0.9rem;
+}
+
+.self + .other,
+.other + .self {
+    margin-top: 20px;
+}
+
+@media screen and (max-width: 950px) {
+    #person_info svg {
+        color: #dc21b8;
+        display: block;
+    }
+    #person_info img {
+        margin-left: 30px;
+    }
 }

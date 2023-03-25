@@ -1,20 +1,26 @@
 #message-pannel {
     height: 100%;
     padding: 5px;
+    min-width: 70%;
 }
 
 #messages_component_container {
     height: 100%;
     background-color: #200618;
     color: #fffdfc;
-    box-shadow: 0 0 7px 4px #ffffff90;
+    border: 4px solid white;
     border-radius: 4px;
+    display: grid;
+    grid-template-columns: 25% 50% 25%;
+    justify-content: center;
+    overflow: hidden;
 }
 
 #chat_list_container {
     height: 100%;
     display: flex;
     flex-direction: column;
+    overflow: auto;
 }
 
 .message-feed-selection-container {
@@ -66,7 +72,6 @@
 }
 
 #chat_container {
-    /* background-color: red; */
     border-left: 1px solid #4b3244;
     border-right: 1px solid #4b3244;
 }
@@ -74,8 +79,38 @@
 #user_info_container {
     overflow: auto;
     height: 100%;
+    position: relative;
 }
 
 #user_info_container #user-profile-tags {
     padding-bottom: 50px;
+}
+
+@media screen and (max-width: 950px) {
+    #messages_component_container {
+        grid-template-columns: 100%;
+    }
+
+    #chat_list_container {
+        display: none;
+    }
+
+    #user_info_container {
+        display: none;
+    }
+
+    #chat_container {
+        border-left: none;
+        border-right: none;
+    }
+}
+
+@media screen and (max-width: 420px) {
+    #messages_component_container {
+        border: none;
+    }
+
+    #message-pannel {
+        width: 100%;
+    }
 }

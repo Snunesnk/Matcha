@@ -34,8 +34,8 @@ const MessagesContainer = () => {
 
     return (
         <div id="message-pannel">
-            <Grid container id="messages_component_container">
-                <Grid item xs={3} id="chat_list_container">
+            <div container id="messages_component_container">
+                <div id="chat_list_container">
                     <div className="message-feed-selection-container">
                         <button
                             className={
@@ -73,14 +73,14 @@ const MessagesContainer = () => {
                             )
                         })}
                     </Grid>
-                </Grid>
-                <Grid item xs={6} id="chat_container">
-                    <ChatComponent />
-                </Grid>
-                <Grid item xs={3} id="user_info_container">
+                </div>
+                <div xs={6} id="chat_container">
+                    <ChatComponent user={DUMMY_USER} />
+                </div>
+                <div id="user_info_container">
                     <UserProfile user={DUMMY_USER} />
-                </Grid>
-            </Grid>
+                </div>
+            </div>
         </div>
     )
 }

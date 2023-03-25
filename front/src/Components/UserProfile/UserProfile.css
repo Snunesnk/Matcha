@@ -7,6 +7,12 @@
     align-items: center;
 }
 
+.no-overflow {
+    overflow: hidden;
+    height: 100%;
+    width: 100%;
+}
+
 #user-profile-container .card_img_container {
     width: calc(100% + 40px);
 }
@@ -154,6 +160,7 @@
     z-index: 10;
     width: 100% !important;
     min-height: 100%;
+    overflow: hidden;
 }
 
 #display-user-picture.hidden {
@@ -170,6 +177,7 @@
     justify-content: space-around;
     padding: 0 120px;
     min-width: 450px;
+    overflow: hidden;
 }
 
 .user-picture-nav {

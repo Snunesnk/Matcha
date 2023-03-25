@@ -50,7 +50,10 @@ const UserProfile = ({ user, scroll = 0 }) => {
     }
 
     return (
-        <div id="user-profile-container">
+        <div
+            id="user-profile-container"
+            className={selectedPicture !== -1 ? 'no-overflow' : ''}
+        >
             <div
                 className="card_img_container"
                 style={{
@@ -101,7 +104,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 id="display-user-picture"
                 className={
                     'card_img_container' +
-                    (selectedPicture !== -1 ? ' mignify-picture' : ' hidden')
+                    (selectedPicture === -1 ? ' hidden' : '')
                 }
                 style={{
                     background:

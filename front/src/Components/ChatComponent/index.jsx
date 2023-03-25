@@ -1,23 +1,22 @@
 import { useEffect, useRef, useState } from 'react'
-import { Link, useParams } from 'react-router-dom'
-import { Grid } from '@mui/material'
-import ClearIcon from '@mui/icons-material/Clear'
+import { useParams } from 'react-router-dom'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import SendIcon from '@mui/icons-material/Send'
 import './index.css'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 const DUMMY_MESSAGES = [
     {
-        from: 1,
-        content: 'Hey!',
+        from: 0,
+        content: "What's a girl like you doing on an app like this",
     },
     {
         from: 1,
-        content: 'How are you?',
+        content: 'seeing what I can find',
     },
     {
         from: 1,
-        content: 'What are you doing?',
+        content: 'lol',
     },
     {
         from: 1,
@@ -37,15 +36,11 @@ const DUMMY_MESSAGES = [
     },
 ]
 
-const ChatComponent = () => {
+const ChatComponent = ({ user }) => {
     const params = useParams()
     const [newMessage, setNewMessage] = useState('')
     const [messages, setMessages] = useState(DUMMY_MESSAGES)
-    const [person, setPerson] = useState({
-        id: 1,
-        profile_pic: '/src/assets/cat_profile.jpg',
-        username: 'Jon the cat',
-    })
+    const [person, setPerson] = useState(user)
 
     const messageEnd = useRef(null)
     const messageInput = useRef(null)
@@ -76,7 +71,9 @@ const ChatComponent = () => {
         <div id="messages_container">
             <div id="chat_header">
                 <div id="person_info">
-                    <div className="message_username">{person.username}</div>
+                    <ArrowBackIcon />
+                    <img src={person.imgA} alt="profile_pic" />
+                    <div className="message_username">{person.login}</div>
                 </div>
                 <div id="user-chat-more">
                     <MoreVertIcon />
@@ -87,7 +84,7 @@ const ChatComponent = () => {
                     <div
                         className={
                             'messsage_line' +
-                            (message.from == 0 ? ' other' : '')
+                            (message.from == 0 ? ' other' : ' self')
                         }
                         key={i}
                     >
