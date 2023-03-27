@@ -95,8 +95,7 @@
 /**** WELCOME MESSAGE ****/
 /**** *************** ****/
 #onboarding_welcome_message {
-    padding-left: 19%;
-    padding-top: 2%;
+    padding: 10px 50px;
 }
 
 #onboarding_next_button {
