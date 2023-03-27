@@ -60,7 +60,7 @@
     font-weight: 500;
     font-size: 2em;
     color: white;
-    margin-top: 10px;
+    padding-top: 10px;
 }
 
 .user-location-infos {
@@ -100,7 +100,7 @@
 
 #user-profile-pictures-container {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     grid-gap: 15px;
     margin-top: 40px;
     width: 100%;
@@ -132,7 +132,7 @@
     margin-top: 20px;
     padding: 20px 0;
     justify-content: center;
-    padding-bottom: 150px;
+    padding-bottom: calc(10vh + 70px);
 }
 .user-profile-tag {
     background-color: #4b3244;
@@ -240,7 +240,7 @@
 
 @media screen and (min-width: 450px) {
     .card_img_container {
-        min-height: calc(70.86vh - 50px);
+        min-height: min(642px, calc(70.86vh - 50px));
         width: 100%;
     }
 }

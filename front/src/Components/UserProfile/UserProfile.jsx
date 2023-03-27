@@ -8,7 +8,7 @@ import './UserProfile.css'
 
 const UserProfile = ({ user, scroll = 0 }) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
-    const emailRef = useRef(null)
+    const profileRef = useRef(null)
     const infosRef = useRef(null)
     const imgs = []
     const userAge =
@@ -37,9 +37,9 @@ const UserProfile = ({ user, scroll = 0 }) => {
 
     const toggleScroll = () => {
         if (scroll <= 50) {
-            emailRef.current?.scrollIntoView({
+            profileRef.current?.scrollIntoView({
                 behavior: 'smooth',
-                block: 'center',
+                block: 'start',
             })
         } else {
             infosRef.current?.scrollIntoView({
@@ -65,8 +65,9 @@ const UserProfile = ({ user, scroll = 0 }) => {
                     <button className="info-chip" onClick={toggleScroll}>
                         {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
                     </button>
-                    <div className="name_and_age">
+                    <div ref={profileRef} className="name_and_age">
                         {user.firstname}, {userAge}
+                        <i id="user-login">, @{user.login}</i>
                     </div>
                     <div ref={infosRef} className="user-location-infos">
                         <PlaceIcon /> 19km away
@@ -75,11 +76,6 @@ const UserProfile = ({ user, scroll = 0 }) => {
             </div>
 
             <div id="user-profile-bio">{user.bio}</div>
-
-            <i id="user-login">@{user.login}</i>
-            <i ref={emailRef} id="user-email">
-                {user.email}
-            </i>
 
             <div id="user-profile-pictures-container">
                 {imgs.map((img, i) => (

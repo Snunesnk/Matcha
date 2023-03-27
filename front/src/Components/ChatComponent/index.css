@@ -6,6 +6,7 @@
     display: flex;
     flex-direction: column;
     padding: 0 20px;
+    position: relative;
 }
 
 #chat_header {
@@ -14,6 +15,8 @@
     justify-content: space-between;
     align-items: center;
     height: 70px;
+    border-bottom: 1px solid #ffffff20;
+    border-top: 1px solid #ffffff20;
 }
 
 #person_info {
@@ -45,6 +48,9 @@
 #user-chat-more {
     color: #dc21b8;
     cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 #user-chat-more svg {
@@ -159,5 +165,11 @@
     }
     #person_info img {
         margin-left: 30px;
+    }
+}
+
+@media screen and (min-width: 951px) {
+    #user-chat-more {
+        display: none;
     }
 }

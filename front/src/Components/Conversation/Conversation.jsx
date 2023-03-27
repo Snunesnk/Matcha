@@ -2,13 +2,9 @@ import { Grid } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 import './Conversation.css'
 
-const Conversation = ({ conversation, showNotif }) => {
+const Conversation = ({ conversation, components, setActiveComponent }) => {
     const navigate = useNavigate()
     const params = useParams()
-
-    const navigateToConv = (id) => {
-        navigate('' + id)
-    }
 
     return (
         <Grid
@@ -21,8 +17,7 @@ const Conversation = ({ conversation, showNotif }) => {
                     : '')
             }
             onClick={() => {
-                navigateToConv(conversation.id)
-                showNotif(false)
+                setActiveComponent(components.CHAT)
             }}
         >
             <div className="chat_img_container">

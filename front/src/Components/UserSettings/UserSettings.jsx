@@ -37,7 +37,6 @@ const UserSettings = () => {
     return (
         <div id="user-settings">
             <div id="settings-container">
-                <div className="settings-divider"></div>
                 <h2>Discovery settings</h2>
                 <div className="setting">
                     <div>Show me</div>
@@ -104,7 +103,7 @@ const UserSettings = () => {
                 <div className="settings-divider"></div>
                 <h2>Personal infos</h2>
                 <div className="setting">
-                    <div>You indentify yourself as a</div>
+                    <div>You identify yourself as</div>
                     <Select
                         options={['Female', 'Male', 'Non-binary']}
                         defaultSelected={personalGender}

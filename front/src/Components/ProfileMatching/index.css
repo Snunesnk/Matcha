@@ -14,7 +14,7 @@
     #profile_matching {
         position: relative;
         width: 450px;
-        height: 80.86vh;
+        height: min(calc(642px + 10vh + 50px), 80.86vh);
         box-sizing: content-box;
         border: 4px solid white;
         overflow: hidden;

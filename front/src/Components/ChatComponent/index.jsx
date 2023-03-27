@@ -2,8 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import SendIcon from '@mui/icons-material/Send'
+import PersonIcon from '@mui/icons-material/Person'
 import './index.css'
-import MoreVertIcon from '@mui/icons-material/MoreVert'
 
 const DUMMY_MESSAGES = [
     {
@@ -36,7 +36,7 @@ const DUMMY_MESSAGES = [
     },
 ]
 
-const ChatComponent = ({ user }) => {
+const ChatComponent = ({ user, components, setActiveComponent }) => {
     const params = useParams()
     const [newMessage, setNewMessage] = useState('')
     const [messages, setMessages] = useState(DUMMY_MESSAGES)
@@ -71,12 +71,20 @@ const ChatComponent = ({ user }) => {
         <div id="messages_container">
             <div id="chat_header">
                 <div id="person_info">
-                    <ArrowBackIcon />
+                    <ArrowBackIcon
+                        onClick={() =>
+                            setActiveComponent(components.MESSAGE_LIST)
+                        }
+                    />
                     <img src={person.imgA} alt="profile_pic" />
                     <div className="message_username">{person.login}</div>
                 </div>
                 <div id="user-chat-more">
-                    <MoreVertIcon />
+                    <PersonIcon
+                        onClick={() =>
+                            setActiveComponent(components.USER_PROFILE)
+                        }
+                    />
                 </div>
             </div>
             <div id="chat_body">

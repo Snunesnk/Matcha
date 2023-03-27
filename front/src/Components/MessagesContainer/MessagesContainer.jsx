@@ -1,9 +1,9 @@
 import { Grid } from '@mui/material'
-import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
 import ChatComponent from '../ChatComponent'
 import Conversation from '../Conversation/Conversation'
 import UserProfile from '../UserProfile/UserProfile'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import './MessagesContainer.css'
 
@@ -28,23 +28,43 @@ const DUMMY_USER = {
     ],
 }
 
+const COMPONENTS = {
+    MESSAGE_LIST: 'MESSAGE_LIST',
+    NOTIFICATION: 'NOTIFICATION',
+    CHAT: 'CHAT',
+    USER_PROFILE: 'USER_PROFILE',
+}
+
 const MessagesContainer = () => {
-    const [showNotifications, setShowNotifications] = useState(false)
-    const navigate = useNavigate()
+    const [activeComponent, setActiveComponent] = useState(
+        COMPONENTS.MESSAGE_LIST
+    )
+
+    useEffect(() => {
+        console.log('activeComponent', activeComponent)
+    }, [activeComponent])
 
     return (
         <div id="message-pannel">
-            <div container id="messages_component_container">
-                <div id="chat_list_container">
+            <div id="messages_component_container">
+                <div
+                    id="chat_list_container"
+                    data-active={
+                        activeComponent === COMPONENTS.MESSAGE_LIST ||
+                        activeComponent === COMPONENTS.NOTIFICATION
+                    }
+                    className="responsive-component"
+                >
                     <div className="message-feed-selection-container">
                         <button
                             className={
                                 'messages-category-btn' +
-                                (showNotifications ? '' : ' selected')
+                                (activeComponent === COMPONENTS.MESSAGE_LIST
+                                    ? ' selected'
+                                    : '')
                             }
                             onClick={() => {
-                                setShowNotifications(false)
-                                navigate('/dashboard/messages/chat')
+                                setActiveComponent(COMPONENTS.MESSAGE_LIST)
                             }}
                         >
                             Messages
@@ -52,33 +72,59 @@ const MessagesContainer = () => {
                         <button
                             className={
                                 'messages-category-btn' +
-                                (showNotifications ? ' selected' : '')
+                                (activeComponent === COMPONENTS.NOTIFICATION
+                                    ? ' selected'
+                                    : '')
                             }
                             onClick={() => {
-                                setShowNotifications(true)
-                                navigate('/dashboard/messages/notifications')
+                                setActiveComponent(COMPONENTS.NOTIFICATION)
                             }}
                         >
                             Feed
                         </button>
                     </div>
-                    <Grid container id="chat_display_container">
+                    <Grid
+                        container
+                        id="chat_display_container"
+                        data-active={
+                            activeComponent === COMPONENTS.MESSAGE_LIST
+                        }
+                        className="responsive-component"
+                    >
                         {conversations.map((conversation, i) => {
                             return (
                                 <Conversation
                                     conversation={conversation}
                                     key={i}
-                                    showNotif={setShowNotifications}
+                                    components={COMPONENTS}
+                                    setActiveComponent={setActiveComponent}
                                 />
                             )
                         })}
                     </Grid>
                 </div>
-                <div xs={6} id="chat_container">
-                    <ChatComponent user={DUMMY_USER} />
+                <div
+                    id="chat_container"
+                    data-active={activeComponent === COMPONENTS.CHAT}
+                    className="responsive-component"
+                >
+                    <ChatComponent
+                        user={DUMMY_USER}
+                        components={COMPONENTS}
+                        setActiveComponent={setActiveComponent}
+                    />
                 </div>
-                <div id="user_info_container">
+                <div
+                    id="user_info_container"
+                    data-active={activeComponent === COMPONENTS.USER_PROFILE}
+                    className="responsive-component"
+                >
                     <UserProfile user={DUMMY_USER} />
+                    <div className="user-profile-go-back">
+                        <ArrowBackIcon
+                            onClick={() => setActiveComponent(COMPONENTS.CHAT)}
+                        />
+                    </div>
                 </div>
             </div>
         </div>

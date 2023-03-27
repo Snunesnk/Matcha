@@ -118,12 +118,6 @@ const getRouterWithStore = (store) => {
                         {
                             path: 'messages',
                             element: <MessagesContainer />,
-                            children: [
-                                {
-                                    path: ':id',
-                                    element: <ChatComponent />,
-                                },
-                            ],
                         },
                         {
                             path: 'userSettings',

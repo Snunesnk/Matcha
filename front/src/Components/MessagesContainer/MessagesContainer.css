@@ -86,22 +86,55 @@
     padding-bottom: 50px;
 }
 
+.user-profile-go-back {
+    display: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    margin: 10px;
+    font-size: 1.5rem;
+    color: #fffdfc;
+    cursor: pointer;
+    z-index: 9;
+    background-color: #ffffff40;
+    border-radius: 50%;
+}
+.user-profile-go-back:hover {
+    background-color: white;
+}
+
+.user-profile-go-back svg {
+    font-size: 1.8rem;
+    color: #dc21b8;
+}
+
 @media screen and (max-width: 950px) {
+    #message-pannel {
+        min-width: 100%;
+    }
+
     #messages_component_container {
         grid-template-columns: 100%;
     }
 
-    #chat_list_container {
-        display: none;
+    .responsive-component[data-active='true'] {
+        display: flex;
     }
 
-    #user_info_container {
-        display: none;
+    .responsive-component[data-active='false'] {
+        display: none !important;
     }
 
     #chat_container {
         border-left: none;
         border-right: none;
+    }
+
+    .user-profile-go-back {
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 
@@ -112,5 +145,12 @@
 
     #message-pannel {
         width: 100%;
+        padding: 0;
+    }
+
+    #chat_container {
+        width: 100%;
+        height: 100%;
+        background: #200618;
     }
 }
