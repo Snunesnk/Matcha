@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import './Navbar.css'
-import { AlreadyHaveAccountBtn } from '../Button/Button'
+import { AlreadyHaveAccountBtn, QuitOnboarding } from '../Button/Button'
 import { useSelector } from 'react-redux'
 import PetsIcon from '@mui/icons-material/Pets'
 import ChatBubbleIcon from '@mui/icons-material/ChatBubble'
@@ -55,10 +55,20 @@ const Navbar = () => {
     const loggedIn = userStatus.loggedIn
     const onboarded = userStatus.onboarded
     const [selectedMenu, setSelectedMenu] = useState(1)
+    const location = useLocation()
+    const [titleVisibility, setTitleVisibility] = useState(true)
+
+    useEffect(() => {
+        if (location.pathname.includes('onboarding')) {
+            setTitleVisibility(false)
+        } else {
+            setTitleVisibility(true)
+        }
+    }, [location.pathname])
 
     return (
         <div id="navbar" className="fw">
-            <div className="nav-title-container">
+            <div className="nav-title-container" data-visible={titleVisibility}>
                 <Link to="/">
                     <h1 className="navTitle fw">MatChat</h1>
                 </Link>
@@ -109,8 +119,17 @@ const Navbar = () => {
                     </div>
                 </div>
             )}
-            <div className="log-in-btn-container">
-                {loggedIn == false && <AlreadyHaveAccountBtn />}
+            <div
+                className="log-in-btn-container"
+                data-title-visibility={titleVisibility}
+            >
+                <div>
+                    {titleVisibility == false && loggedIn == false && (
+                        <QuitOnboarding />
+                    )}
+
+                    {loggedIn == false && <AlreadyHaveAccountBtn />}
+                </div>
             </div>
         </div>
     )

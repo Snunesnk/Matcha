@@ -16,27 +16,7 @@ const Onboarding = () => {
         <div id="onboarding">
             <Grid container id="onboarding_grid">
                 <Grid item xs={0} md={6} id="cat_pic"></Grid>
-                <Grid item xs={12} md={6}>
-                    <Grid
-                        container
-                        id="onboarding_content"
-                        className="centered_container"
-                    >
-                        <Grid
-                            item
-                            xs={12}
-                            id="onboarding_content_btn_container"
-                        >
-                            {loggedIn == false && <QuitOnboarding />}
-                            {/* Putting title on "Not visible", so I can have
-                                the same padding between the two 
-                                "AlreadyHaveAccountBtn" without having to use
-                                the navbar */}
-                            <h1 className="navTitle not-visible">MatChat</h1>
-                            {loggedIn == false && <AlreadyHaveAccountBtn />}
-                        </Grid>
-                    </Grid>
-
+                <Grid item xs={12} md={6} id="onboarding-component-container">
                     {/* Onboarding children */}
                     <Outlet />
                 </Grid>

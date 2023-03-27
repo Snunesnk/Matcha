@@ -11,6 +11,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import './OnboardingForm.css'
+import Button from '../Button/Button'
 
 const checkPassword = (password) => {
     // Password => must not be empty
@@ -102,37 +103,39 @@ export async function action({ request }) {
         dateOfBirth: formData.get('dateOfBirth'),
     }
     let error = checkPassword(data.password)
-    error = checkDate(data.dateOfBirth)
-
     if (error === validationErrors.noValidationError) {
-        data.password = await hashPassword(data.password)
+        error = checkDate(data.dateOfBirth)
 
-        // Send data to controller to create an user
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        }
-        await fetch('http://localhost:8080/api/user', options).then(
-            (response) => {
-                switch (response.status) {
-                    case 400:
-                        error = validationErrors.missingData
-                        break
+        if (error === validationErrors.noValidationError) {
+            data.password = await hashPassword(data.password)
 
-                    default:
-                    case 500:
-                        error = validationErrors.genericProfileCreationError
-                        break
-
-                    case 200:
-                        error = validationErrors.noValidationError
-                        break
-                }
+            // Send data to controller to create an user
+            const options = {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(data),
             }
-        )
+            await fetch('http://localhost:8080/api/user', options).then(
+                (response) => {
+                    switch (response.status) {
+                        case 400:
+                            error = validationErrors.missingData
+                            break
+
+                        default:
+                        case 500:
+                            error = validationErrors.genericProfileCreationError
+                            break
+
+                        case 200:
+                            error = validationErrors.noValidationError
+                            break
+                    }
+                }
+            )
+        }
     }
 
     return { ...data, error }
@@ -177,111 +180,52 @@ const SignupForm = () => {
                 >
                     <h3>Create your account to find your catmate</h3>
                 </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
-                        <FormInput
-                            placeholder="First Name"
-                            name="firstName"
-                            required={true}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
-                        <FormInput
-                            placeholder="Last Name"
-                            name="lastName"
-                            required={true}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
-                        <FormInput
-                            placeholder="Username"
-                            name="username"
-                            required={true}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
+                <div id="signup-form-container">
+                    <FormInput
+                        placeholder="First Name"
+                        name="firstName"
+                        required={true}
+                    />
+                    <FormInput
+                        placeholder="Last Name"
+                        name="lastName"
+                        required={true}
+                    />
+                    <FormInput
+                        placeholder="Username"
+                        name="username"
+                        required={true}
+                    />
                     <FormInput
                         placeholder="Birth date"
                         type="date"
                         name="dateOfBirth"
                         required={true}
                     />
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
-                        <FormInput
-                            placeholder="Email"
-                            type="email"
-                            name="email"
-                            required={true}
-                        />
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
-                        <FormInput
-                            placeholder="Password"
-                            type="password"
-                            name="password"
-                            required={true}
-                        />
-                    </Grid>
+                    <FormInput
+                        placeholder="Email"
+                        type="email"
+                        name="email"
+                        required={true}
+                    />
+                    <FormInput
+                        placeholder="Password"
+                        type="password"
+                        name="password"
+                        required={true}
+                    />
                     {formResult &&
                         formResult.error !==
                             validationErrors.noValidationError && (
-                            <Grid item xs={12} className="centered_container">
-                                <label className="errorLabel">
-                                    {formResult.error}
-                                </label>
-                            </Grid>
+                            <label className="errorLabel">
+                                {formResult.error}
+                            </label>
                         )}
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container button_container"
-                >
-                    <MainButton
-                        text="Create my account"
-                        shadowClass="sub"
-                        submit="true"
-                    ></MainButton>
-                </Grid>
+                    <Button
+                        text={'Create my account'}
+                        btnClass={'pink mrg-top-30 mrg-bottom-30'}
+                    />
+                </div>
             </Grid>
         </Form>
     )

@@ -9,6 +9,15 @@
     position: relative;
 }
 
+.nav-title-container {
+    display: flex;
+    align-items: center;
+    justify-content: left;
+}
+.nav-title-container[data-visible='false'] {
+    display: none;
+}
+
 @media screen and (max-width: 1141px) {
     .nav-title-container {
         display: none;
@@ -83,9 +92,23 @@
 }
 
 .log-in-btn-container {
+    width: 100%;
     display: flex;
     align-items: center;
     justify-content: right;
+    font-size: 0.8em;
+}
+
+.log-in-btn-container div {
+    width: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: right;
+    padding-left: 20px;
+}
+
+.log-in-btn-container[data-title-visibility='false'] div {
+    justify-content: space-between;
 }
 
 button.btn-log-in {
@@ -96,4 +119,11 @@ button.btn-log-in {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+@media screen and (max-width: 900px) {
+    .log-in-btn-container div {
+        width: 100%;
+        padding: 0;
+    }
 }

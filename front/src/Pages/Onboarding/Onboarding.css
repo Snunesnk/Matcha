@@ -1,5 +1,5 @@
 #onboarding {
-    position: absolute;
+    position: fixed;
     left: 0;
     width: 100%;
     height: 100%;
@@ -30,9 +30,6 @@
     justify-content: center;
 }
 
-#onboarding_content_btn_container {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px 30px;
+#onboarding-component-container {
+    margin-top: 90px;
 }

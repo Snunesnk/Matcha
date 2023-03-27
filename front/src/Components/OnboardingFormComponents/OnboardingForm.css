@@ -1,28 +1,33 @@
 /**** ************ ****/
 /**** SIGN UP FORM ****/
 /**** ************ ****/
+#onboarding_sign_up {
+    display: flex;
+    justify-content: center;
+}
+
+.onboarding_title h1 {
+    line-height: 1;
+    margin: 20px;
+    font-size: 3.2rem;
+}
+
 .catch_phrase {
     color: #4ac0fc;
 }
 
 .center_align {
+    text-align: center;
+    padding: 0 20px;
+}
+
+#signup-form-container {
+    display: grid;
+    grid-template-columns: 65%;
+    width: 100%;
     align-items: center;
-}
-
-#already_have_account.visible {
-    opacity: 1;
-    transition: all 350ms cubic-bezier(1, 0.06, 0.83, 0.67);
-    transition-delay: 450ms;
-}
-
-#already_have_account.hidden {
-    opacity: 0;
-    transition: all 250ms cubic-bezier(1, 0.06, 0.83, 0.67);
-}
-
-#onboarding_sign_up {
-    display: flex;
     justify-content: center;
+    grid-gap: 15px;
 }
 
 .input_container {
@@ -36,6 +41,23 @@
 
 .errorLabel {
     color: red;
+    font-size: 0.8em;
+    text-align: center;
+}
+
+#sign-up-submit-button {
+    background-color: white;
+    border-radius: 4px;
+    width: fit-content;
+    width: -moz-fit-content;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    transition: all 150ms;
+    color: #dc21b8;
+    cursor: pointer;
+    border: none;
+    width: 100%;
+    margin: 20px 0;
 }
 
 /**** ************ ****/

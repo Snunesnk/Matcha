@@ -23,13 +23,18 @@
     justify-content: center;
     height: fit-content;
     transition: all 0.2s;
+    padding: 13px 20px;
+    font-size: 1.1em;
+    cursor: pointer;
+    font-weight: 500;
 }
 
 .btn.pink {
     background-color: #dc21b8;
 }
 .btn.pink:hover {
-    filter: brightness(1.4);
+    background-color: white;
+    color: #dc21b8;
 }
 
 .btn.grey {
@@ -59,6 +64,10 @@
 
 .btn.mrg-top-30 {
     margin-top: 30px;
+}
+
+.btn.mrg-bottom-30 {
+    margin-bottom: 30px;
 }
 
 #already_have_account {
@@ -93,8 +102,7 @@
 
 .onboardingBack {
     background-color: transparent;
-    color: #fbe3dd;
-    border: 1px solid #fbe3dd;
+    color: #dc21b8;
 
     padding: 8px 11px;
     font-size: 1em;
@@ -108,21 +116,9 @@
     cursor: pointer;
 }
 
-.onboardingBack.visible {
-    opacity: 1;
-    transition: opacity 350ms cubic-bezier(1, 0.06, 0.83, 0.67) 450ms,
-        transform 250ms ease-in-out;
-}
-
-.onboardingBack.hidden {
-    opacity: 0;
-    transition: opacity 250ms cubic-bezier(1, 0.06, 0.83, 0.67);
-}
-
 .onboardingBack:hover {
     color: white;
     transition: transform 250ms;
-    border: 1px solid #ba7300;
 }
 
 .onboardingBackLabel {
