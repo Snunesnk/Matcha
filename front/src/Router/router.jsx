@@ -32,6 +32,7 @@ import {
 import MessagesContainer from '../Components/MessagesContainer/MessagesContainer'
 import UserSettings from '../Components/UserSettings/UserSettings'
 import ProfileMatching from '../Components/ProfileMatching'
+import LoginPage from '../Pages/Login/Login'
 
 const getRouterWithStore = (store) => {
     return createBrowserRouter([
@@ -124,6 +125,10 @@ const getRouterWithStore = (store) => {
                             element: <UserSettings />,
                         },
                     ],
+                },
+                {
+                    path: 'login',
+                    element: <LoginPage />,
                 },
             ],
         },

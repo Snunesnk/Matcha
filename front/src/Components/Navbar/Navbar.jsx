@@ -66,6 +66,9 @@ const Navbar = () => {
         }
     }, [location.pathname])
 
+    console.log('titleVisibility: ', titleVisibility)
+    console.log('loggedIn: ', loggedIn)
+
     return (
         <div id="navbar" className="fw">
             <div className="nav-title-container" data-visible={titleVisibility}>
@@ -128,7 +131,10 @@ const Navbar = () => {
                         <QuitOnboarding />
                     )}
 
-                    {loggedIn == false && <AlreadyHaveAccountBtn />}
+                    {loggedIn == false &&
+                        !location.pathname.includes('/login') && (
+                            <AlreadyHaveAccountBtn />
+                        )}
                 </div>
             </div>
         </div>
