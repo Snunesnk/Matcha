@@ -67,11 +67,16 @@ const SexualPreferences = () => {
                 ))}
             </Grid>
 
-            <Link to="/onboarding/bio">
-                <button id="onboarding_next_button" onClick={savePreferences}>
-                    Next
-                </button>
-            </Link>
+            <div>
+                <Link to="/onboarding/bio">
+                    <button
+                        id="onboarding_next_button"
+                        onClick={savePreferences}
+                    >
+                        Next
+                    </button>
+                </Link>
+            </div>
         </div>
     )
 }

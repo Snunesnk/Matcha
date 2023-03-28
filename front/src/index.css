@@ -2,6 +2,7 @@ a {
     font-weight: 500;
     color: #646cff;
     text-decoration: inherit;
+    cursor: pointer;
 }
 
 a:hover {
@@ -42,6 +43,7 @@ h1 {
 
 button {
     border: none;
+    cursor: pointer;
 }
 
 @media (prefers-color-scheme: light) {

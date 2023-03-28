@@ -24,11 +24,13 @@ const InterestsTags = () => {
 
             <TagsAutocomplete onChange={(e, tagsList) => setTags(tagsList)} />
 
-            <Link to="/onboarding/pictures">
-                <button id="onboarding_next_button" onClick={saveTags}>
-                    Next
-                </button>
-            </Link>
+            <div>
+                <Link to="/onboarding/pictures">
+                    <button id="onboarding_next_button" onClick={saveTags}>
+                        Next
+                    </button>
+                </Link>
+            </div>
         </div>
     )
 }

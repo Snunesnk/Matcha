@@ -41,6 +41,8 @@
     justify-content: center;
     transition: all 100ms ease-out;
     height: fit-content;
+    padding: 13px 20px;
+    font-size: 0.9rem;
 }
 .messages-category-btn:not(.selected):hover {
     transition: all 100ms ease-out;
@@ -97,8 +99,9 @@
     color: #fffdfc;
     cursor: pointer;
     z-index: 9;
-    background-color: #ffffff40;
+    background-color: #ffffff90;
     border-radius: 50%;
+    box-shadow: 0 0 9px -3px black;
 }
 .user-profile-go-back:hover {
     background-color: white;
@@ -112,6 +115,7 @@
 @media screen and (max-width: 950px) {
     #message-pannel {
         min-width: 100%;
+        padding: 0;
     }
 
     #messages_component_container {
@@ -136,13 +140,13 @@
         align-items: center;
         justify-content: center;
     }
+    #messages_component_container {
+        border: none;
+        border-top: 4px solid white;
+    }
 }
 
 @media screen and (max-width: 420px) {
-    #messages_component_container {
-        border: none;
-    }
-
     #message-pannel {
         width: 100%;
         padding: 0;

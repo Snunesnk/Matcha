@@ -27,11 +27,13 @@ const DescriptionCreation = () => {
                 onChange={(e) => setValue(e.target.value)}
             ></textarea>
 
-            <Link to="/onboarding/interests">
-                <button id="onboarding_next_button" onClick={saveBio}>
-                    That's me!
-                </button>
-            </Link>
+            <div>
+                <Link to="/onboarding/interests">
+                    <button id="onboarding_next_button" onClick={saveBio}>
+                        That's me!
+                    </button>
+                </Link>
+            </div>
         </div>
     )
 }

@@ -4,7 +4,7 @@
     border: 1px solid white;
     border-radius: 5px;
     padding: 5px 10px;
-    min-width: 42%;
+    min-width: min(200px, 42%);
     max-width: 65%;
     display: flex;
     align-items: center;
@@ -33,8 +33,8 @@
 }
 
 .list_choice_number {
-    background-color: #dc21b89c;
-    color: #200618;
+    background-color: #dc21b8;
+    color: black;
     width: fit-content;
     width: -moz-fit-content;
     padding: 2px 7px;

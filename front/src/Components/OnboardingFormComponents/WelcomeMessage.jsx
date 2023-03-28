@@ -17,9 +17,11 @@ const WelcomeMessage = () => {
                 <br />
                 And it'll make your time with MatChat even better.
             </p>
-            <Link to="/onboarding/gender">
-                <button id="onboarding_next_button">Get set up</button>
-            </Link>
+            <div>
+                <Link to="/onboarding/gender">
+                    <button id="onboarding_next_button">Get set up</button>
+                </Link>
+            </div>
         </div>
     )
 }

@@ -34,11 +34,13 @@ const AllSetMessage = () => {
             </p>
             <p>Are you ready to find your catmate?</p>
 
-            <Link to="/dashboard">
-                <button id="onboarding_next_button" onClick={sendForm}>
-                    Let the magic begin!
-                </button>
-            </Link>
+            <div>
+                <Link to="/dashboard">
+                    <button id="onboarding_next_button" onClick={sendForm}>
+                        Let the magic begin!
+                    </button>
+                </Link>
+            </div>
         </div>
     )
 }

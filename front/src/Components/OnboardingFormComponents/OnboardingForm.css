@@ -121,6 +121,21 @@
     margin-bottom: 100px;
 }
 
+@media screen and (max-width: 900px) {
+    #onboarding_welcome_message {
+        margin-top: -90px;
+    }
+}
+@media screen and (max-height: 700px) {
+    h1 {
+        font-size: 2.5em;
+    }
+    #welcome_message {
+        margin-top: 0px;
+        margin-bottom: 0px;
+    }
+}
+
 /**** **************** ****/
 /**** GENDER SELECTION ****/
 /**** **************** ****/
@@ -155,11 +170,13 @@
     transition: all 150ms cubic-bezier(1, 0.06, 0.83, 0.67);
     background-color: rgba(181, 201, 234, 0.2);
     color: #fbe3dd;
+    padding: 7px;
+    border-radius: 4px 4px 0 0;
 }
 
 #description_creation_input:focus-visible {
     outline: none;
-    border-bottom-color: #ba7300;
+    border-bottom-color: #dc21b8;
     transition: all 100ms cubic-bezier(1, 0.06, 0.83, 0.67);
 }
 

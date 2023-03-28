@@ -45,11 +45,13 @@ const PicturesUploading = () => {
 
             <ImageUpload setFileList={setFileList}></ImageUpload>
 
-            <Link to="/onboarding/done">
-                <button id="onboarding_next_button" onClick={savePictures}>
-                    Finish
-                </button>
-            </Link>
+            <div>
+                <Link to="/onboarding/done">
+                    <button id="onboarding_next_button" onClick={savePictures}>
+                        Finish
+                    </button>
+                </Link>
+            </div>
         </div>
     )
 }

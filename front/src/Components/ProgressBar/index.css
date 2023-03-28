@@ -63,11 +63,13 @@
 #progress_next {
     border-right: 0.5px solid white;
     border-radius: 2px 0px 0px 2px;
+    color: #200618;
 }
 
 #progress_prev {
     border-left: 0.5px solid;
     border-radius: 0px 2px 2px 0px;
+    color: #200618;
 }
 
 #progress_bar::before {
