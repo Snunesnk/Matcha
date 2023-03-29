@@ -20,7 +20,7 @@ const getMatchingTags = (userInput, setMatchingTags) => {
 
 const DEBOUNCE_DELAY = 100
 
-const TagsAutocomplete = ({ onChange, defaultValues = [] }) => {
+const TagsAutocomplete = ({ value, setValue }) => {
     const [userInput, setUserInput] = useState('')
     const [matchingTags, setMatchingTags] = useState([])
     let timer = new Date()
@@ -43,10 +43,10 @@ const TagsAutocomplete = ({ onChange, defaultValues = [] }) => {
         <Autocomplete
             multiple
             id="tags_autocomplete"
-            defaultValue={defaultValues}
+            value={value}
             options={matchingTags.map((tag) => tag.bwid)}
             freeSolo
-            renderTags={(value, getTagProps) => {
+            renderTags={(e, getTagProps) => {
                 return value.map((item, index) => (
                     <Chip
                         variant="outlined"
@@ -59,7 +59,7 @@ const TagsAutocomplete = ({ onChange, defaultValues = [] }) => {
             onInputChange={(event, newInputValue) => {
                 setUserInput(newInputValue)
             }}
-            onChange={onChange}
+            onChange={setValue}
             renderInput={(params) => (
                 <TextField
                     {...params}

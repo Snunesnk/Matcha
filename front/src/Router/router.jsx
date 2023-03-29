@@ -20,7 +20,6 @@ import DescriptionCreation from '../Components/OnboardingFormComponents/Descript
 import InterestsTags from '../Components/OnboardingFormComponents/InterestsTags'
 import PicturesUploading from '../Components/OnboardingFormComponents/PicturesUploading'
 import AllSetMessage from '../Components/OnboardingFormComponents/AllSetMessage'
-import ChatComponent from '../Components/ChatComponent'
 import Root from '../Pages/Root/Root'
 import EmailVerify from '../Components/OnboardingFormComponents/EmailVerify'
 import {

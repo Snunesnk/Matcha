@@ -164,10 +164,10 @@ export default class {
         return;
       }
 
-      const result = await User.updateByLogin(
-        login,
-        { verified: true, token: null }
-      );
+      const result = await User.updateByLogin(login, {
+        verified: true,
+        token: null,
+      });
       if (result !== null) {
         res.status(200).send({
           message: "User verified successfully.",
@@ -255,11 +255,16 @@ export default class {
     }
 
     if (user.pictures) {
-      user.imagA = user.pictures.imagA[0].path;
-      user.imagB = user.pictures.imagB[0].path;
-      user.imagC = user.pictures.imagC[0].path;
-      user.imagD = user.pictures.imagD[0].path;
-      user.imagE = user.pictures.imagE[0].path;
+      if (typeof user.pictures.imgA !== "undefined")
+        user.imagA = user.pictures.imgA[0].path;
+      if (typeof user.pictures.imgB !== "undefined")
+        user.imagB = user.pictures.imgB[0].path;
+      if (typeof user.pictures.imgC !== "undefined")
+        user.imagC = user.pictures.imgC[0].path;
+      if (typeof user.pictures.imgD !== "undefined")
+        user.imagD = user.pictures.imgD[0].path;
+      if (typeof user.pictures.imgE !== "undefined")
+        user.imagE = user.pictures.imgE[0].path;
     }
 
     try {

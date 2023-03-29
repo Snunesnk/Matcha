@@ -20,6 +20,18 @@ const EmailValidation = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
+    // In case user validate email in another window, we will not receive update.
+    // So we set a call tu get user's data on page refresh
+    const getUserData = async (setVerified) => {
+        fetch('http://localhost:8080/api/user/' + userInfos.login)
+            .then((data) => data.json())
+            .then((user) => {
+                if (user.verified === true) setVerified(true)
+            })
+    }
+    getUserData(setVerified)
+
+    // Set listener in case window is oppened in same window
     setListenerForValidation(setVerified)
 
     useEffect(() => {

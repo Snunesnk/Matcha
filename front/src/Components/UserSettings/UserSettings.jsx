@@ -32,7 +32,8 @@ const UserSettings = () => {
     const [fameMax, setFameMax] = useState(FAME_MAX)
     const [discoveryGender, setDiscoveryGender] = useState('Female')
     const [personalGender, setPersonalGender] = useState('Female')
-    const [tags, setTags] = useState(['test'])
+    const [searchTags, setSearchTags] = useState([])
+    const [personalTags, setPersonalTags] = useState([])
 
     return (
         <div id="user-settings">
@@ -77,7 +78,8 @@ const UserSettings = () => {
                 <div className="setting complex-setting">
                     <div className="setting-infos">Interests</div>
                     <TagsAutocomplete
-                        onChange={(e, tagsList) => setTags(tagsList)}
+                        value={searchTags}
+                        setValue={(e, tagsList) => setSearchTags(tagsList)}
                     />
                 </div>
                 <div className="setting complex-setting">
@@ -117,7 +119,8 @@ const UserSettings = () => {
                 <div className="setting complex-setting personal-setting">
                     <div className="setting-infos">You are interested in</div>
                     <TagsAutocomplete
-                        onChange={(e, tagsList) => setTags(tagsList)}
+                        value={personalTags}
+                        setValue={(e, tagsList) => setPersonalTags(tagsList)}
                     />
                 </div>
                 <ImageUpload defaultImages={pictures}></ImageUpload>

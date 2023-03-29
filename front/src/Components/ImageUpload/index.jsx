@@ -3,24 +3,12 @@ import './index.css'
 
 const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
     const [imgs, setImgs] = useState(defaultImages)
-    const imgList = []
-
-    const saveBase64 = (file) => {
-        var reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = function () {
-            imgList.push(reader.result.base64)
-        }
-        reader.onerror = function (error) {
-            console.log('Error: ', error)
-        }
-    }
 
     const onChange = (e) => {
         const fileList = e.target.files
 
         for (let i = 0; i < fileList.length; i++) {
-            saveBase64(fileList[i])
+            // setFileList((files) => [...files, URL.createObjectURL(fileList[i])])
             setFileList((files) => [...files, fileList[i]])
 
             setImgs((prev) => {
@@ -54,24 +42,32 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
             )}
             <div id="user-settings-pictures-container">
                 {imgs.length > 0 &&
-                    imgs.map((img, i) => (
-                        <div className="setting-picture-container" key={i}>
-                            <div
-                                className="user-setting-picture"
-                                style={{
-                                    background: 'url(' + img + ')',
-                                }}
-                            ></div>
-                            <div className="setting-picture-delete">
-                                <button
-                                    className="setting-picture-delete-btn"
-                                    onClick={() => removeImg(img)}
-                                >
-                                    Delete
-                                </button>
+                    imgs.map((img, i) => {
+                        // Create URL if it not a URL
+                        const imgUrl =
+                            img.name !== undefined
+                                ? URL.createObjectURL(img)
+                                : img
+
+                        return (
+                            <div className="setting-picture-container" key={i}>
+                                <div
+                                    className="user-setting-picture"
+                                    style={{
+                                        background: 'url(' + imgUrl + ')',
+                                    }}
+                                ></div>
+                                <div className="setting-picture-delete">
+                                    <button
+                                        className="setting-picture-delete-btn"
+                                        onClick={() => removeImg(img)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
                             </div>
-                        </div>
-                    ))}
+                        )
+                    })}
             </div>
 
             <input

@@ -3,8 +3,15 @@ import { Grid } from '@mui/material'
 import './index.css'
 import { Link } from 'react-router-dom'
 
-const ListChoice = ({ number, name, label, onclick = () => {}, to = '' }) => {
-    const [isClicked, setIsClicked] = useState(false)
+const ListChoice = ({
+    number,
+    name,
+    label,
+    onclick = () => {},
+    to = '',
+    defaultSelected = false,
+}) => {
+    const [isClicked, setIsClicked] = useState(defaultSelected)
 
     const toggleClass = () => {
         setIsClicked(!isClicked)

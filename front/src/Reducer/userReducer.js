@@ -4,10 +4,10 @@ const checkForSessionCreds = () => {
     let userInfos = JSON.parse(sessionStorage.getItem('user_infos'))
     const userSettings = {
         gender: '',
-        preferences: { prefMale: true, prefFemale: true, prefEnby: false },
+        preferences: { prefMale: false, prefFemale: false, prefEnby: false },
         bio: '',
         tags: [],
-        pictures: {},
+        pictures: [],
         birthDate: '',
     }
     const verified = sessionStorage.getItem('verified') ? true : false

@@ -1,7 +1,7 @@
 import React from 'react'
 import { Grid } from '@mui/material'
 import ListChoice from '../ListChoice'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import './OnboardingForm.css'
 import { USER_STATE_ACTIONS } from '../../constants'
 
@@ -12,6 +12,9 @@ const Genders = [
 ]
 
 const GenderSelection = () => {
+    const defaultGender = useSelector(
+        (state) => state.userState.userSettings.gender
+    )
     const dispatch = useDispatch()
 
     const onGenderSelection = (label) => {
@@ -33,6 +36,7 @@ const GenderSelection = () => {
                         key={gender.number}
                         onclick={onGenderSelection}
                         to="/onboarding/preferences"
+                        defaultSelected={gender.label === defaultGender}
                     />
                 ))}
             </Grid>

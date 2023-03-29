@@ -1,11 +1,13 @@
 import React, { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { USER_STATE_ACTIONS } from '../../constants'
 import './OnboardingForm.css'
 
 const DescriptionCreation = () => {
-    const [value, setValue] = useState('')
+    const [value, setValue] = useState(
+        useSelector((state) => state.userState.userSettings.bio)
+    )
     const dispatch = useDispatch()
 
     const saveBio = () => {

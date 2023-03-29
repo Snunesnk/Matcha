@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
 import './OnboardingForm.css'
 
 const InterestsTags = () => {
-    const [tags, setTags] = useState([])
+    const [tags, setTags] = useState(
+        useSelector((state) => state.userState.userSettings.tags)
+    )
     const dispatch = useDispatch()
 
     const saveTags = () => {
@@ -22,7 +24,12 @@ const InterestsTags = () => {
                 What are <b>your interests?</b>
             </p>
 
-            <TagsAutocomplete onChange={(e, tagsList) => setTags(tagsList)} />
+            <TagsAutocomplete
+                value={tags}
+                setValue={(e, tagsList) => {
+                    setTags(tagsList)
+                }}
+            />
 
             <div>
                 <Link to="/onboarding/pictures">

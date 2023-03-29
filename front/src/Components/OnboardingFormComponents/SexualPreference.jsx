@@ -3,7 +3,7 @@ import { Grid } from '@mui/material'
 import './OnboardingForm.css'
 import ListChoice from '../ListChoice'
 import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 
 const Preferences = [
@@ -14,7 +14,14 @@ const Preferences = [
 
 const SexualPreferences = () => {
     const genderSelected = []
+    const genders = useSelector(
+        (state) => state.userState.userSettings.preferences
+    )
     const dispatch = useDispatch()
+
+    if (genders.prefMale) genderSelected.push('m')
+    if (genders.prefFemale) genderSelected.push('f')
+    if (genders.prefEnby) genderSelected.push('nb')
 
     const OnPreferenceSelection = (label) => {
         if (genderSelected.indexOf(label) >= 0)
@@ -62,6 +69,9 @@ const SexualPreferences = () => {
                         name={preference.name}
                         label={preference.label}
                         key={preference.number}
+                        defaultSelected={
+                            genderSelected.indexOf(preference.label) >= 0
+                        }
                         onclick={OnPreferenceSelection}
                     />
                 ))}
