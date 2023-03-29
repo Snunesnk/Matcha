@@ -22,11 +22,13 @@ import userRoute from "./app/routes/user.routes.js";
 import tagRoute from "./app/routes/tag.routes.js";
 import likeRoute from "./app/routes/like.routes.js";
 import viewRoute from "./app/routes/view.routes.js";
+import imageRoute from "./app/routes/images.routes.js";
 
 app.use("/api", tagRoute);
 app.use("/api", userRoute);
 app.use("/api", likeRoute);
 app.use("/api", viewRoute);
+app.use("/api", imageRoute);
 
 // Docker health check
 app.use(

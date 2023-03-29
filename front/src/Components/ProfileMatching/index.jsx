@@ -4,75 +4,6 @@ import './index.css'
 import { Favorite } from '@mui/icons-material'
 import UserProfile from '../UserProfile/UserProfile'
 
-const USER_LIST = [
-    {
-        firstname: 'John',
-        surname: 'Doe',
-        gender: 'f',
-        dateOfBirth: '2000-01-10',
-        email: 'john.doe@test.com',
-        login: 'john.doe',
-        bio: 'A happy go lucky girl with a sharp tongue and wise eyes.',
-        imgA: '/src/assets/cat_profile.jpg',
-        imgB: 'https://picsum.photos/200/300?random=2',
-        imgC: 'https://picsum.photos/200/300?random=3',
-        imgD: 'https://picsum.photos/200/300?random=4',
-        imgE: 'https://picsum.photos/200/300?random=5',
-        tags: [
-            { bwid: 'pizza' },
-            { bwid: 'workout' },
-            { bwid: 'video games' },
-            { bwid: 'hiking' },
-        ],
-    },
-    {
-        firstname: 'Roger',
-        surname: 'Doe',
-        gender: 'm',
-        dateOfBirth: '1998-01-10',
-        email: 'roger.doe@test.com',
-        login: 'roger.doe',
-        bio: 'Yes I am a Girou.',
-        imgA: '/src/assets/cat_glasses.jpg',
-        imgB: 'https://picsum.photos/200/300?random=2',
-        imgC: 'https://picsum.photos/200/300?random=3',
-        imgD: 'https://picsum.photos/200/300?random=4',
-        imgE: 'https://picsum.photos/200/300?random=5',
-        tags: [
-            { bwid: 'pizza' },
-            { bwid: 'workout' },
-            { bwid: 'video games' },
-            { bwid: 'hiking' },
-            { bwid: 'beer' },
-            { bwid: 'football' },
-            { bwid: 'les copaings' },
-        ],
-    },
-    {
-        firstname: 'Marcel',
-        surname: 'Doe',
-        gender: 'm',
-        dateOfBirth: '1998-01-10',
-        email: 'roger.doe@test.com',
-        login: 'roger.doe',
-        bio: 'Yes I am a Girou.',
-        imgA: '/src/assets/kissing_cats.jpg',
-        imgB: 'https://picsum.photos/200/300?random=2',
-        imgC: 'https://picsum.photos/200/300?random=3',
-        imgD: 'https://picsum.photos/200/300?random=4',
-        imgE: 'https://picsum.photos/200/300?random=5',
-        tags: [
-            { bwid: 'pizza' },
-            { bwid: 'workout' },
-            { bwid: 'video games' },
-            { bwid: 'hiking' },
-            { bwid: 'beer' },
-            { bwid: 'football' },
-            { bwid: 'les copaings' },
-        ],
-    },
-]
-
 const GradientCross = () => (
     <>
         <svg width={0} height={0}>
@@ -85,13 +16,38 @@ const GradientCross = () => (
     </>
 )
 
+const getProfileList = (setUserList) => {
+    fetch('http://localhost:8080/api/user/verified', {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            }
+            throw new Error('Something went wrong ...')
+        })
+        .then((data) => {
+            setUserList(data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}
+
 const ProfileMatching = () => {
     const [evaluation, setEvaluation] = useState('')
     const [scroll, setScroll] = useState(0)
-    const [userList, setUserList] = useState(USER_LIST)
-    const [actualUser, setActualUser] = useState(USER_LIST[0])
-    const [nextUser, setNextUser] = useState(USER_LIST[1])
+    const [userList, setUserList] = useState([])
+    const [actualUser, setActualUser] = useState(null)
+    const [nextUser, setNextUser] = useState(null)
     const profileRef = useRef(null)
+
+    useEffect(() => {
+        getProfileList(setUserList)
+    }, [])
 
     const setCardState = (state) => {
         let firstTimeout = 100
@@ -113,6 +69,7 @@ const ProfileMatching = () => {
                 // Third timeout, to have time to see transition between cards
                 setTimeout(() => {
                     setEvaluation('')
+                    ////////////////// NEED TO CHANGE THIS TO GET NEXT BATCH, OR DISPLAY "NO MORE USERS"
                     setUserList((prev) => {
                         if (prev.length <= 2) prev = prev.concat(USER_LIST)
                         return prev.slice(1)
@@ -123,11 +80,11 @@ const ProfileMatching = () => {
     }
 
     useEffect(() => {
-        setActualUser(userList[0])
-        setTimeout(() => setNextUser(userList[1]), 500)
+        setActualUser(userList[0] || null)
+        setTimeout(() => setNextUser(userList[1] || null), 500)
     }, [userList])
 
-    if (userList.length > 0) {
+    if (actualUser !== null && nextUser !== null) {
         return (
             <div id="profile_matching">
                 <div
@@ -147,7 +104,7 @@ const ProfileMatching = () => {
                         className="card_img_container next-user"
                         style={{
                             background:
-                                'url(' +
+                                'url(http://localhost:8080/api' +
                                 nextUser.imgA +
                                 ') 50% 50% / cover no-repeat',
                         }}

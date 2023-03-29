@@ -58,7 +58,9 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 className="card_img_container"
                 style={{
                     background:
-                        'url(' + user.imgA + ') 50% 50% / cover no-repeat',
+                        'url(http://localhost:8080/api' +
+                        user.imgA +
+                        ') 50% 50% / cover no-repeat',
                 }}
             >
                 <div className="name_and_age_container">
@@ -66,7 +68,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
                     </button>
                     <div ref={profileRef} className="name_and_age">
-                        {user.firstname}, {userAge}
+                        {user.name}, {userAge}
                         <i id="user-login">, @{user.login}</i>
                     </div>
                     <div ref={infosRef} className="user-location-infos">
@@ -82,19 +84,25 @@ const UserProfile = ({ user, scroll = 0 }) => {
                     <div
                         key={i}
                         className="user-profile-picture"
-                        style={{ background: 'url(' + img + ') center' }}
+                        style={{
+                            background:
+                                'url(http://localhost:8080/api' +
+                                img +
+                                ') center',
+                        }}
                         onClick={() => setSelectedPicture(i)}
                     ></div>
                 ))}
             </div>
 
             <div id="user-profile-tags">
-                {user.tags.map((tag, i) => (
-                    <div key={i} className="user-profile-tag">
-                        <i>#</i>
-                        {tag.bwid}
-                    </div>
-                ))}
+                {user.tags &&
+                    user.tags.map((tag, i) => (
+                        <div key={i} className="user-profile-tag">
+                            <i>#</i>
+                            {tag.bwid}
+                        </div>
+                    ))}
             </div>
             <div
                 id="display-user-picture"
@@ -104,7 +112,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 }
                 style={{
                     background:
-                        'url(' +
+                        'url(http://localhost:8080/api' +
                         imgs[selectedPicture] +
                         ') 50% 50% / cover no-repeat',
                 }}
