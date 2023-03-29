@@ -2,6 +2,9 @@ import _ from "lodash";
 import upload from "../middlewares/upload.js";
 
 export default async function (req, res, next) {
+  // if user is defined and no pictures, skip
+  if (req.body.user && !req.body.user.pictures) return next();
+
   try {
     await upload(req, res);
     if (Object.keys(req.files).length > 0) {

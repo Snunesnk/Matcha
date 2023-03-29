@@ -256,15 +256,15 @@ export default class {
 
     if (user.pictures) {
       if (typeof user.pictures.imgA !== "undefined")
-        user.imagA = user.pictures.imgA[0].path;
+        user.imgA = user.pictures.imgA[0].path;
       if (typeof user.pictures.imgB !== "undefined")
-        user.imagB = user.pictures.imgB[0].path;
+        user.imgB = user.pictures.imgB[0].path;
       if (typeof user.pictures.imgC !== "undefined")
-        user.imagC = user.pictures.imgC[0].path;
+        user.imgC = user.pictures.imgC[0].path;
       if (typeof user.pictures.imgD !== "undefined")
-        user.imagD = user.pictures.imgD[0].path;
+        user.imgD = user.pictures.imgD[0].path;
       if (typeof user.pictures.imgE !== "undefined")
-        user.imagE = user.pictures.imgE[0].path;
+        user.imgE = user.pictures.imgE[0].path;
     }
 
     try {

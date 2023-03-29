@@ -25,11 +25,14 @@ const uploadUserImages = (login, userData) => {
     )
 }
 
-const uploadUserDatas = (userData) => {
+const uploadUserDatas = (login, userData) => {
     // Add mandatory "bwid" field name for tags
     userData.tags = userData.tags.map((tag) => {
         return { bwid: tag }
     })
+
+    // Remove pictures from user data, as it is already uploaded
+    userData.pictures = null
 
     const options = {
         method: 'PUT',
@@ -38,7 +41,7 @@ const uploadUserDatas = (userData) => {
         },
         body: JSON.stringify({ user: userData }),
     }
-    fetch('http://localhost:8080/api/user/' + userData.login, options).then(
+    fetch('http://localhost:8080/api/user/' + login, options).then(
         (response) => {
             console.log(response)
         }
@@ -52,12 +55,12 @@ const AllSetMessage = () => {
     const userData = userState.userSettings
 
     const sendForm = () => {
-        // dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
+        dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
 
         // First, upload images, as it requires different header
         uploadUserImages(login, userData)
         // Then, upload user datas
-        // uploadUserDatas(userData)
+        uploadUserDatas(login, userData)
     }
 
     return (
@@ -68,11 +71,11 @@ const AllSetMessage = () => {
             <p>Are you ready to find your catmate?</p>
 
             <div>
-                {/* <Link to="/dashboard"> */}
-                <button id="onboarding_next_button" onClick={sendForm}>
-                    Let the magic begin!
-                </button>
-                {/* </Link> */}
+                <Link to="/dashboard">
+                    <button id="onboarding_next_button" onClick={sendForm}>
+                        Let the magic begin!
+                    </button>
+                </Link>
             </div>
         </div>
     )
