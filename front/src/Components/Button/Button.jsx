@@ -31,9 +31,13 @@ export const QuitOnboarding = () => (
     </Link>
 )
 
-const Button = ({ text, btnClass, onClick = () => {} }) => {
+const Button = ({ text, btnClass, onClick = () => {}, disabled = false }) => {
     return (
-        <button className={'btn ' + btnClass} onClick={onClick}>
+        <button
+            className={'btn ' + btnClass}
+            onClick={onClick}
+            disabled={disabled}
+        >
             {text}
         </button>
     )

@@ -5,7 +5,6 @@ import { USER_STATE_ACTIONS } from '../../constants'
 import './OnboardingForm.css'
 
 const uploadUserImages = (login, userData) => {
-    console.log('user data', userData)
     const formData = new FormData()
 
     if (userData.pictures.imgA) formData.append('imgA', userData.pictures.imgA)
@@ -18,11 +17,19 @@ const uploadUserImages = (login, userData) => {
         method: 'PUT',
         body: formData,
     }
-    fetch('http://localhost:8080/api/user/' + login, options).then(
-        (response) => {
+    fetch('http://localhost:8080/api/user/' + login, options)
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            }
+            throw new Error('Something went wrong ...')
+        })
+        .then((response) => {
             console.log(response)
-        }
-    )
+        })
+        .catch((error) => {
+            console.log(error)
+        })
 }
 
 const uploadUserDatas = (login, userData) => {

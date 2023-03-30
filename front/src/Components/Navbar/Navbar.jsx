@@ -64,6 +64,11 @@ const Navbar = () => {
         } else {
             setTitleVisibility(true)
         }
+
+        if (location.pathname.includes('messages')) setSelectedMenu(MENU.chat)
+        else if (location.pathname.includes('userSettings'))
+            setSelectedMenu(MENU.userSettings)
+        else setSelectedMenu(MENU.dashboard)
     }, [location.pathname])
 
     return (

@@ -21,6 +21,7 @@ var storage = diskStorage({
     }
 
     var filename = `${Date.now()}-brichard-${file.originalname}`;
+    filename = filename.replace(/\s/g, "_");
     callback(null, filename);
   },
 });

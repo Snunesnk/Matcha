@@ -260,14 +260,19 @@ export default class {
     if (user.pictures) {
       if (typeof user.pictures.imgA !== "undefined")
         user.imgA = user.pictures.imgA[0].path;
+      else user.imgA = null;
       if (typeof user.pictures.imgB !== "undefined")
         user.imgB = user.pictures.imgB[0].path;
+      else user.imgB = null;
       if (typeof user.pictures.imgC !== "undefined")
         user.imgC = user.pictures.imgC[0].path;
+      else user.imgC = null;
       if (typeof user.pictures.imgD !== "undefined")
         user.imgD = user.pictures.imgD[0].path;
+      else user.imgD = null;
       if (typeof user.pictures.imgE !== "undefined")
         user.imgE = user.pictures.imgE[0].path;
+      else user.imgE = null;
     }
 
     try {

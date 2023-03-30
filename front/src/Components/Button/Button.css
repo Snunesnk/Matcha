@@ -29,6 +29,12 @@
     font-weight: 500;
 }
 
+.btn:disabled {
+    background-color: #ffffff40 !important;
+    color: #ffffff40 !important;
+    cursor: not-allowed;
+}
+
 .btn.pink {
     background-color: #dc21b8;
 }

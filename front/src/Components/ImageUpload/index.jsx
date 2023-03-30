@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './index.css'
 
 const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
     const [imgs, setImgs] = useState(defaultImages)
 
+    useEffect(() => {
+        setImgs(defaultImages)
+    }, [defaultImages])
+
     const onChange = (e) => {
         const fileList = e.target.files
 
         for (let i = 0; i < fileList.length; i++) {
-            // setFileList((files) => [...files, URL.createObjectURL(fileList[i])])
             setFileList((files) => [...files, fileList[i]])
 
             setImgs((prev) => {
@@ -18,6 +21,10 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
     }
 
     const removeImg = (img) => {
+        const index = imgs.indexOf(img)
+        setFileList((files) => {
+            return files.filter((f, i) => i !== index)
+        })
         setImgs((prev) => {
             return prev.filter((i) => i !== img)
         })
@@ -47,7 +54,9 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
                         const imgUrl =
                             img.name !== undefined
                                 ? URL.createObjectURL(img)
-                                : img
+                                : img.includes('http')
+                                ? img
+                                : 'http://localhost:8080/api' + img
 
                         return (
                             <div className="setting-picture-container" key={i}>
