@@ -3,6 +3,7 @@ import ClearIcon from '@mui/icons-material/Clear'
 import './index.css'
 import { Favorite } from '@mui/icons-material'
 import UserProfile from '../UserProfile/UserProfile'
+import { useSelector } from 'react-redux'
 
 const GradientCross = () => (
     <>
@@ -37,7 +38,30 @@ const getProfileList = (setUserList) => {
         })
 }
 
+const sendLike = (issuer, receiver) => {
+    fetch('http://localhost:8080/api/like', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ issuer, receiver }),
+    })
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            }
+            throw new Error('Something went wrong ...')
+        })
+        .then((data) => {
+            console.log(data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}
+
 const ProfileMatching = () => {
+    const userLogin = useSelector((state) => state.userState.userInfos.login)
     const [evaluation, setEvaluation] = useState('')
     const [scroll, setScroll] = useState(0)
     const [userList, setUserList] = useState([])
@@ -57,6 +81,8 @@ const ProfileMatching = () => {
             profileRef.current.scrollTop = 0
             firstTimeout = 200
         }
+
+        if (state === 'liked') sendLike(userLogin, actualUser.login)
 
         // First timeout, to have time to scroll to top
         setTimeout(() => {
