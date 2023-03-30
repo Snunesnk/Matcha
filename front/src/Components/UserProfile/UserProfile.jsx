@@ -58,7 +58,10 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 className="card_img_container"
                 style={{
                     background:
-                        'url(http://localhost:8080/api' +
+                        'url(' +
+                        (user.imgA.includes('http')
+                            ? ''
+                            : 'http://localhost:8080/api') +
                         user.imgA +
                         ') 50% 50% / cover no-repeat',
                 }}
@@ -86,7 +89,10 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         className="user-profile-picture"
                         style={{
                             background:
-                                'url(http://localhost:8080/api' +
+                                'url(' +
+                                (!img || img.includes('http')
+                                    ? ''
+                                    : 'http://localhost:8080/api') +
                                 img +
                                 ') center',
                         }}
@@ -112,7 +118,12 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 }
                 style={{
                     background:
-                        'url(http://localhost:8080/api' +
+                        'url(' +
+                        (selectedPicture >= imgs.length ||
+                        selectedPicture == -1 ||
+                        imgs[selectedPicture].indexOf('http') > -1
+                            ? ''
+                            : 'http://localhost:8080/api') +
                         imgs[selectedPicture] +
                         ') 50% 50% / cover no-repeat',
                 }}

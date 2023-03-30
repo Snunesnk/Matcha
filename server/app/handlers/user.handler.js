@@ -233,7 +233,10 @@ export default class {
       ...req.body.filters,
       verified: true,
     };
-    return await this.getAllUsers(req, res);
+
+    const allUsers = await this.getAllUsers(req, res);
+
+    return allUsers;
   };
 
   // Update a User identified by the login in the request

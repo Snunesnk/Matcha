@@ -80,6 +80,7 @@ const ProfileMatching = () => {
     }
 
     useEffect(() => {
+        console.log(userList)
         setActualUser(userList[0] || null)
         setTimeout(() => setNextUser(userList[1] || null), 500)
     }, [userList])
@@ -104,7 +105,10 @@ const ProfileMatching = () => {
                         className="card_img_container next-user"
                         style={{
                             background:
-                                'url(http://localhost:8080/api' +
+                                'url(' +
+                                (nextUser.imgA.includes('http')
+                                    ? ''
+                                    : 'http://localhost:8080/api') +
                                 nextUser.imgA +
                                 ') 50% 50% / cover no-repeat',
                         }}
