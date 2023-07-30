@@ -111,13 +111,21 @@ const getRouterWithStore = (store) => {
                     children: [
                         {
                             index: true,
-                            element: <DashboardOverview />,
+                            element: <ProfileMatching />,
                         },
                         {
-                            path: 'messages/:id',
-                            element: <ChatComponent />,
+                            path: 'messages',
+                            element: <MessagesContainer />,
+                        },
+                        {
+                            path: 'userSettings',
+                            element: <UserSettings />,
                         },
                     ],
+                },
+                {
+                    path: 'login',
+                    element: <LoginPage />,
                 },
             ],
         },

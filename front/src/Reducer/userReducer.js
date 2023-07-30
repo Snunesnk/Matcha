@@ -4,10 +4,10 @@ const checkForSessionCreds = () => {
     let userInfos = JSON.parse(sessionStorage.getItem('user_infos'))
     const userSettings = {
         gender: '',
-        preferences: { prefMale: true, prefFemale: true, prefEnby: false },
+        preferences: { prefMale: false, prefFemale: false, prefEnby: false },
         bio: '',
         tags: [],
-        pictures: {},
+        pictures: [],
         birthDate: '',
     }
     const verified = sessionStorage.getItem('verified') ? true : false
@@ -45,9 +45,10 @@ const userReducer = (state = initialState, action) => {
                 userInfos: action.payload,
             }
         case USER_STATE_ACTIONS.LOG_OUT:
+            sessionStorage.clear()
+            const clearedState = checkForSessionCreds()
             return {
-                ...state,
-                userStatus: { ...state.userStatus, loggedIn: false },
+                ...clearedState,
             }
         case USER_STATE_ACTIONS.VERIFY:
             return {
@@ -58,6 +59,11 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 userStatus: { ...state.userStatus, verified: false },
+            }
+        case USER_STATE_ACTIONS.ONBOARDED:
+            return {
+                ...state,
+                userStatus: { ...state.userStatus, onboarded: true },
             }
 
         case USER_STATE_ACTIONS.UPDATE_GENDER:
