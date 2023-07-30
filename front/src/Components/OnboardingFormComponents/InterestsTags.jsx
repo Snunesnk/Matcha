@@ -60,40 +60,47 @@ const InterestsTags = () => {
     )
 
     const content = (
-        <Autocomplete
-            multiple
-            id="tags_autocomplete"
-            options={matchingTags.map((tag) => tag.bwid)}
-            freeSolo
-            renderTags={(value, getTagProps) => {
-                tags = value.map((val) => {
-                    return {
-                        bwid: val,
-                    }
-                })
+        <div>
+            <p>
+                You can choose from tag list, or just add your own.
+                <br />
+                Your choice !
+            </p>
+            <Autocomplete
+                multiple
+                id="tags_autocomplete"
+                options={matchingTags.map((tag) => tag.bwid)}
+                freeSolo
+                renderTags={(value, getTagProps) => {
+                    tags = value.map((val) => {
+                        return {
+                            bwid: val,
+                        }
+                    })
 
-                return value.map((item, index) => (
-                    <Chip
-                        variant="outlined"
-                        label={item}
-                        key={index}
-                        {...getTagProps({ index })}
+                    return value.map((item, index) => (
+                        <Chip
+                            variant="outlined"
+                            label={item}
+                            key={index}
+                            {...getTagProps({ index })}
+                        />
+                    ))
+                }}
+                onInputChange={(event, newInputValue) => {
+                    setUserInput(newInputValue)
+                }}
+                renderInput={(params) => (
+                    <TextField
+                        {...params}
+                        id="tags_text_field"
+                        label="Choose tag"
+                        placeholder="Type to add tags..."
+                        variant="filled"
                     />
-                ))
-            }}
-            onInputChange={(event, newInputValue) => {
-                setUserInput(newInputValue)
-            }}
-            renderInput={(params) => (
-                <TextField
-                    {...params}
-                    id="tags_text_field"
-                    label="Interests tags"
-                    placeholder="+ Add tags"
-                    variant="filled"
-                />
-            )}
-        />
+                )}
+            />
+        </div>
     )
 
     return (

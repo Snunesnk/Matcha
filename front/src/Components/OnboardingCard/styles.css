@@ -20,15 +20,17 @@
     min-height: 20%;
     max-height: 20%;
     padding: 5px 0;
+    animation: appear 1s cubic-bezier(0.215, 0.61, 0.355, 1) both 0s;
 }
 
 .onboarding_card .content {
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: start;
     min-height: 60%;
     max-height: 60%;
     padding: 5px 0;
+    animation: appear 1s cubic-bezier(0.215, 0.61, 0.355, 1) both 0.2s;
 }
 
 .onboarding_card .footer {
@@ -38,6 +40,7 @@
     min-height: 20%;
     max-height: 20%;
     padding: 5px 0;
+    animation: appear 1s cubic-bezier(0.215, 0.61, 0.355, 1) both 0.4s;
 }
 
 #onboarding_next_button {

@@ -24,6 +24,7 @@
     left: 0;
     z-index: 1;
     filter: blur(2px);
+    animation: zoom-out 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms 1 normal none;
 }
 
 #onboarding_child_container {

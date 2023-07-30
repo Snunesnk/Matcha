@@ -14,13 +14,18 @@ const OnboardingCard = ({
             <div className="header">{header}</div>
             <div className="content">{content}</div>
             <div className="footer">
-                <div className="card_next">
-                    <Link to={next}>
-                        <button id="onboarding_next_button" onClick={onClick}>
-                            {btnText}
-                        </button>
-                    </Link>
-                </div>
+                {next !== '' && (
+                    <div className="card_next">
+                        <Link to={next}>
+                            <button
+                                id="onboarding_next_button"
+                                onClick={onClick}
+                            >
+                                {btnText}
+                            </button>
+                        </Link>
+                    </div>
+                )}
             </div>
         </div>
     )

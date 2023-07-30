@@ -11,6 +11,7 @@ import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
 import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import './OnboardingForm.css'
+import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
 const checkPassword = (password) => {
     // Password => must not be empty
@@ -160,66 +161,77 @@ const SignupForm = () => {
         }
     }, [formResult])
 
+    const header = (
+        <h3 id="signup_title">Create your account to find your catmate</h3>
+    )
+
+    const content = (
+        <div id="onboarding_form">
+            <div className="centered_container input_container">
+                <FormInput
+                    placeholder="First Name"
+                    name="firstName"
+                    required={true}
+                />
+            </div>
+            <div className="centered_container input_container">
+                <FormInput
+                    placeholder="Last Name"
+                    name="lastName"
+                    required={true}
+                />
+            </div>
+            <div className="centered_container input_container">
+                <FormInput
+                    placeholder="Username"
+                    name="username"
+                    required={true}
+                />
+            </div>
+            <div className="centered_container input_container">
+                <FormInput
+                    placeholder="Birth date"
+                    type="date"
+                    name="dateOfBirth"
+                    required={true}
+                />
+            </div>
+            <div className="centered_container input_container">
+                <FormInput
+                    placeholder="Email"
+                    type="email"
+                    name="email"
+                    required={true}
+                />
+            </div>
+            <div className="centered_container input_container">
+                <FormInput
+                    placeholder="Password"
+                    type="password"
+                    name="password"
+                    required={true}
+                />
+                {formResult &&
+                    formResult.error !== validationErrors.noValidationError && (
+                        <div className="centered_container">
+                            <label className="errorLabel">
+                                {formResult.error}
+                            </label>
+                        </div>
+                    )}
+            </div>
+        </div>
+    )
+
     return (
         <Form method="post">
+            <OnboardingCard
+                header={header}
+                content={content}
+                next={''}
+                btnText={''}
+            />
             <div id="onboarding_sign_up">
-                <div id="onboarding_form">
-                    <h3>Create your account to find your catmate</h3>
-                    <div className="centered_container input_container">
-                        <FormInput
-                            placeholder="First Name"
-                            name="firstName"
-                            required={true}
-                        />
-                    </div>
-                    <div className="centered_container input_container">
-                        <FormInput
-                            placeholder="Last Name"
-                            name="lastName"
-                            required={true}
-                        />
-                    </div>
-                    <div className="centered_container input_container">
-                        <FormInput
-                            placeholder="Username"
-                            name="username"
-                            required={true}
-                        />
-                    </div>
-                    <div className="centered_container input_container">
-                        <FormInput
-                            placeholder="Birth date"
-                            type="date"
-                            name="dateOfBirth"
-                            required={true}
-                        />
-                    </div>
-                    <div className="centered_container input_container">
-                        <FormInput
-                            placeholder="Email"
-                            type="email"
-                            name="email"
-                            required={true}
-                        />
-                    </div>
-                    <div className="centered_container input_container">
-                        <FormInput
-                            placeholder="Password"
-                            type="password"
-                            name="password"
-                            required={true}
-                        />
-                        {formResult &&
-                            formResult.error !==
-                                validationErrors.noValidationError && (
-                                <div className="centered_container">
-                                    <label className="errorLabel">
-                                        {formResult.error}
-                                    </label>
-                                </div>
-                            )}
-                    </div>
-                </div>
                 <div className="centered_container button_container">
                     <MainButton
                         text="Create my account"
