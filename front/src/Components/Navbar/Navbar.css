@@ -2,7 +2,7 @@
     padding: 10px 30px;
     z-index: 2;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     position: sticky;
     min-height: 68px;
@@ -24,13 +24,8 @@
 }
 
 .log-in-btn-container {
-    position: absolute;
-    display: flex;
-    align-items: center;
-    justify-content: right;
     height: calc(100% - 20px);
-    top: 10px;
-    right: 30px;
+    font-size: 0.8em;
     animation: fade-in 500ms ease-out both 1.7s;
 }
 

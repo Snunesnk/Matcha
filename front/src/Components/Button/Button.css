@@ -15,13 +15,11 @@
     border: 1px solid #fbe3dd;
 }
 
-.btn {
-    padding: 5px 15px;
-    font-weight: 400;
-    font-size: 1.1em;
-    line-height: 24px;
-    border-radius: 15px;
-    background-color: transparent;
+#already_have_account {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: fit-content;
 }
 
 #alreadyHaveLabel {
@@ -31,9 +29,11 @@
 .alreadyHaveButton {
     background-color: transparent;
     color: white;
-    border: 1px solid #ba7300;
+    border: 1px solid #4ac0fc;
 
-    padding: 8px 11px;
+    width: fit-content;
+
+    padding: 8px 13px;
     font-size: 0.9em;
     line-height: 15px;
     border-radius: 5px;
@@ -42,7 +42,7 @@
 }
 
 .alreadyHaveButton:hover {
-    border: 1px solid #fbe3dd;
+    border: 1px solid white;
 }
 
 .onboardingBack {

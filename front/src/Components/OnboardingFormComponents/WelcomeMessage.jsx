@@ -27,6 +27,7 @@ const WelcomeMessage = () => {
             content={content}
             next={'/onboarding/gender'}
             btnText={'Get set up'}
+            btnClass="sm"
         />
     )
 }

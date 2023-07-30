@@ -1,28 +1,18 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './index.css'
-import InsertPhotoIcon from '@mui/icons-material/InsertPhoto'
-import { Grid } from '@mui/material'
+import '../UserSettings/UserSettings.css'
 
-const ImageUpload = ({ setFileList }) => {
-    const [imgs, setImgs] = useState([])
-    const imgList = []
+const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
+    const [imgs, setImgs] = useState(defaultImages)
 
-    const saveBase64 = (file) => {
-        var reader = new FileReader()
-        reader.readAsDataURL(file)
-        reader.onload = function () {
-            imgList.push(reader.result.base64)
-        }
-        reader.onerror = function (error) {
-            console.log('Error: ', error)
-        }
-    }
+    useEffect(() => {
+        setImgs(defaultImages)
+    }, [defaultImages])
 
     const onChange = (e) => {
         const fileList = e.target.files
 
         for (let i = 0; i < fileList.length; i++) {
-            saveBase64(fileList[i])
             setFileList((files) => [...files, fileList[i]])
 
             setImgs((prev) => {
@@ -31,26 +21,64 @@ const ImageUpload = ({ setFileList }) => {
         }
     }
 
-    return (
-        <div id="image_upload_container">
-            {imgs.length === 0 && (
-                <InsertPhotoIcon className="img_icon"></InsertPhotoIcon>
-            )}
-            <Grid container>
-                {imgs.length > 0 &&
-                    imgs.map((img, i) => (
-                        <Grid item className="img_container" key={i}>
-                            <img src={img} className="img_uploaded"></img>
-                        </Grid>
-                    ))}
-            </Grid>
-            <p className="picture_upload_text">
-                Show everyone how beautiful you are
-            </p>
+    const removeImg = (img) => {
+        const index = imgs.indexOf(img)
+        setFileList((files) => {
+            return files.filter((f, i) => i !== index)
+        })
+        setImgs((prev) => {
+            return prev.filter((i) => i !== img)
+        })
+    }
 
-            <label htmlFor="picture_upload_btn" id="upload_pictures_btn_label">
-                Choose image
-            </label>
+    return (
+        <div className="setting complex-setting">
+            <div className="setting-infos">
+                <div>Your pictures</div>
+                <div>
+                    <label
+                        htmlFor="picture_upload_btn"
+                        id="upload_pictures_btn_label"
+                        className={imgs.length >= 5 ? 'disabled' : ''}
+                    >
+                        Upload
+                    </label>
+                </div>
+            </div>
+            {imgs.length === 0 && (
+                <p>Add pictures to show everyone how beautiful you are !</p>
+            )}
+            <div id="user-settings-pictures-container">
+                {imgs.length > 0 &&
+                    imgs.map((img, i) => {
+                        // Create URL if it not a URL
+                        const imgUrl =
+                            img.name !== undefined
+                                ? URL.createObjectURL(img)
+                                : img.includes('http')
+                                ? img
+                                : 'http://localhost:8080/api' + img
+
+                        return (
+                            <div className="setting-picture-container" key={i}>
+                                <div
+                                    className="user-setting-picture"
+                                    style={{
+                                        background: 'url(' + imgUrl + ')',
+                                    }}
+                                ></div>
+                                <div className="setting-picture-delete">
+                                    <button
+                                        className="setting-picture-delete-btn"
+                                        onClick={() => removeImg(img)}
+                                    >
+                                        Delete
+                                    </button>
+                                </div>
+                            </div>
+                        )
+                    })}
+            </div>
 
             <input
                 multiple

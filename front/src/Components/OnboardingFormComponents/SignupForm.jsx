@@ -1,15 +1,9 @@
 import React from 'react'
 import { Form, useActionData, useNavigate } from 'react-router-dom'
-import { Grid } from '@mui/material'
-import MainButton from '../MainButton/MainBtn'
 import FormInput from '../FormInput/FormInput'
 import { USER_STATE_ACTIONS, validationErrors } from '../../constants'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
-import TextField from '@mui/material/TextField'
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider'
-import { DatePicker } from '@mui/x-date-pickers/DatePicker'
 import './OnboardingForm.css'
 import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
@@ -167,79 +161,53 @@ const SignupForm = () => {
 
     const content = (
         <div id="onboarding_form">
-            <div className="centered_container input_container">
-                <FormInput
-                    placeholder="First Name"
-                    name="firstName"
-                    required={true}
-                />
-            </div>
-            <div className="centered_container input_container">
-                <FormInput
-                    placeholder="Last Name"
-                    name="lastName"
-                    required={true}
-                />
-            </div>
-            <div className="centered_container input_container">
-                <FormInput
-                    placeholder="Username"
-                    name="username"
-                    required={true}
-                />
-            </div>
-            <div className="centered_container input_container">
-                <FormInput
-                    placeholder="Birth date"
-                    type="date"
-                    name="dateOfBirth"
-                    required={true}
-                />
-            </div>
-            <div className="centered_container input_container">
-                <FormInput
-                    placeholder="Email"
-                    type="email"
-                    name="email"
-                    required={true}
-                />
-            </div>
-            <div className="centered_container input_container">
-                <FormInput
-                    placeholder="Password"
-                    type="password"
-                    name="password"
-                    required={true}
-                />
-                {formResult &&
-                    formResult.error !== validationErrors.noValidationError && (
-                        <div className="centered_container">
-                            <label className="errorLabel">
-                                {formResult.error}
-                            </label>
-                        </div>
-                    )}
-            </div>
+            <FormInput
+                placeholder="First Name"
+                name="firstName"
+                required={true}
+            />
+            <FormInput
+                placeholder="Last Name"
+                name="lastName"
+                required={true}
+            />
+            <FormInput placeholder="Username" name="username" required={true} />
+            <FormInput
+                placeholder="Birth date"
+                type="date"
+                name="dateOfBirth"
+                required={true}
+            />
+            <FormInput
+                placeholder="Email"
+                type="email"
+                name="email"
+                required={true}
+            />
+            <FormInput
+                placeholder="Password"
+                type="password"
+                name="password"
+                required={true}
+            />
+            {formResult &&
+                formResult.error !== validationErrors.noValidationError && (
+                    <div className="centered_container">
+                        <label className="errorLabel">{formResult.error}</label>
+                    </div>
+                )}
         </div>
     )
 
     return (
-        <Form method="post">
+        <Form method="post" id="onboarding_signup">
             <OnboardingCard
                 header={header}
                 content={content}
                 next={''}
-                btnText={''}
+                btnText={'Create my account'}
+                submit={true}
             />
-            <div id="onboarding_sign_up">
-                <div className="centered_container button_container">
-                    <MainButton
-                        text="Create my account"
-                        shadowClass="sub"
-                        submit="true"
-                    ></MainButton>
-                </div>
-            </div>
         </Form>
     )
 }

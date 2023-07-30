@@ -4,16 +4,18 @@
 
 
 .list_choice_container {
-    background-color: rgba(251, 227, 221, 1);
-    color: rgba(63, 31, 113, 1);
-    border: 1px solid #fbe3dd;
-    box-shadow: 4px 4px 4px #3f1f71;
+    background-color: white;
+    color: black;
+    border: 1px solid white;
     border-radius: 5px;
     padding: 5px 10px;
+    min-width: min(200px, 42%);
+    max-width: 75%;
     display: flex;
     align-items: center;
     transition: all 450ms;
     cursor: pointer;
+    box-shadow: 4px 4px 4px #4AC0FC;
 }
 
 .list_choice_container label {
@@ -22,31 +24,26 @@
 }
 
 .list_choice_container:hover {
-    background-color: #ba7300;
-    color: #fbe3dd;
+    background-color: #dc21B8;
+    color: white;
     transition: all 150ms;
-    border: 1px solid #9185be;
+    border: 1px solid #dc21B8;
     transform: scale(0.98);
 }
 
 .list_choice_container.selected {
-    background-color: #ba7300;
-    color: #fbe3dd;
+    background-color: #dc21B8;
+    color: white;
     transition: all 150ms;
-    border: 1px solid #fbe3dd;
-}
-
-.list_choice_container.selected .list_choice_number {
-    background-color: #fbe3dd;
+    border: 1px solid #dc21B8;
 }
 
 .list_choice_number {
-    background-color: rgba(145, 133, 190, 1);
-    color: rgba(63, 31, 113, 1);
+    background-color: #dc21B8;
+    color: black;
     width: fit-content;
-    padding: 0 5px;
+    padding: 2px 7px;
     font-weight: 600;
-    border: 1px solid #9185be;
     border-radius: 2px;
     line-height: 21px;
 }

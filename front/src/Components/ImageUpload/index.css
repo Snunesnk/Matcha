@@ -1,56 +1,93 @@
-#image_upload_container {
-    background: #9185BE;
-    border: 2px dashed #FBE3DD;
-    border-radius: 5px;
-
-    height: fit-content;
-    width: fit-content;
-
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-
-    padding: 30px;
-}
-
-.img_icon {
-    transform: scale(3);
-}
-
-.picture_upload_text {
-    font-style: normal;
-    font-weight: 700;
-    font-size: 1.7rem;
-    line-height: 25px;
-    color: #3F1F71;
-}
-
-#picture_upload_btn {
-    display: none !important;
-}
-
 #upload_pictures_btn_label {
-    background: #3F1F71;
-    border-radius: 100px;
-    color: #FBE3DD;
-    padding: 13px;
-    font-size: 1.2rem;
+    color: #dc21b8;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 100ms ease-out;
 }
 
 #upload_pictures_btn_label:hover {
-    cursor: pointer;
+    filter: brightness(1.6);
 }
 
-.img_uploaded {
-    border: 1px solid white;
-    height: auto;
-    width: 100px;
+#upload_pictures_btn_label.disabled {
+    color: grey;
+    font-weight: 600;
+    cursor: not-allowed;
 }
 
-.img_container {
+#upload_pictures_btn_label.disabled:hover {
+    filter: brightness(1);
+}
+
+#user-settings-pictures-container {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.setting-picture-container {
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 10px;
+    transition: all 100ms ease-out;
+    animation: slideUp 0.5s;
+    overflow: hidden;
+}
+
+.user-setting-picture {
+    width: 7vw;
+    height: 10vw;
+    border-radius: 10px;
+    transition: all 100ms ease-out;
+    min-width: 100px;
+    min-height: 142px;
+    background-size: cover !important;
+    background-position: center !important;
+}
+
+.setting-picture-container:hover .user-setting-picture {
+    transform: scale(0.99);
+    filter: grayscale(100%);
+    -webkit-filter: grayscale(100%);
+    transition: all 100ms;
+    cursor: zoom-out;
+    cursor: -moz-zoom-out;
+    cursor: -webkit-zoom-out;
+}
+
+.user-setting-picture:hover+.setting-picture-delete,
+.setting-picture-delete:hover {
+    bottom: 0;
+    transition: all 200ms;
+    cursor: zoom-out;
+    cursor: -moz-zoom-out;
+    cursor: -webkit-zoom-out;
+}
+
+.setting-picture-delete {
+    position: absolute;
+    height: 100%;
+    width: 100%;
     display: flex;
     align-items: center;
-    /* Overwrite grid default margin */
-    margin: 5px !important;
+    justify-content: center;
+    bottom: -100%;
+}
+
+.setting-picture-delete-btn {
+    background-color: white;
+    color: #dc21b8;
+    padding: 5px;
+    border-radius: 4px;
+}
+
+.setting-picture-delete-btn:hover {
+    background-color: #dc21b8;
+    color: white;
+}
+
+#picture_upload_btn {
+    display: none;
 }

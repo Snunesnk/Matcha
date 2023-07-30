@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
-import { Grid } from '@mui/material'
-import './index.css'
 import { Link } from 'react-router-dom'
+import './index.css'
 
 const ListChoice = ({ number, name, label, onclick = () => {}, to = '' }) => {
     const [isClicked, setIsClicked] = useState(false)

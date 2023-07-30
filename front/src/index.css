@@ -26,13 +26,14 @@ html {
 
 body {
     /* font-family: 'Gantari'; */
-    font-family: 'Catamaran';
+    /* font-family: 'Catamaran'; */
+    font-family: 'Poppins';
     font-style: normal;
-    color: #fbe3dd;
+    color: white;
     width: 100%;
     height: 100%;
     margin: 0;
-    background: linear-gradient(154.03deg, #3f1f71 1.96%, #010101 98.95%);
+    background: #200518;
 
 }
 
@@ -42,15 +43,9 @@ h1 {
 }
 
 button {
-    border-radius: 8px;
-    border: 1px solid transparent;
-    padding: 0.6em 1.2em;
-    font-size: 1em;
-    font-weight: 500;
-    font-family: inherit;
-    background-color: #1a1a1a;
     cursor: pointer;
-    transition: border-color 0.25s;
+    outline: none;
+    border: none;
 }
 
 @media (prefers-color-scheme: light) {

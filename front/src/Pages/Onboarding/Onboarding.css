@@ -15,7 +15,7 @@
 
 #cat_pic {
     position: fixed;
-    background: linear-gradient(154.03deg, #3f1f719c 1.96%, #0101019c 98.95%), url('../../assets/cat_glasses.jpg'), #d9d9d9 no-repeat fixed;
+    background: linear-gradient(148deg, rgba(332, 33, 184, 0.40) 0%, rgba(74, 192, 252, 0.40) 100%), url('../../assets/cat_glasses.jpg'), no-repeat fixed;
     background-size: cover;
     background-position: 100% 50%;
     height: 100dvh;
@@ -23,7 +23,7 @@
     top: 0;
     left: 0;
     z-index: 1;
-    filter: blur(2px);
+    /* filter: blur(2px); */
     animation: zoom-out 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms 1 normal none;
 }
 

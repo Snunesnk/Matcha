@@ -13,5 +13,5 @@
 
 .form_input::placeholder {
     color: #b5c9ea;
-    opacity: 1;
+    opacity: 0.5;
 }

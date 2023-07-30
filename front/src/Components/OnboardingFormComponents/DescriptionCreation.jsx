@@ -15,7 +15,9 @@ const DescriptionCreation = () => {
 
     const header = (
         <p id="gender_selection_catch_phrase">
-            Tell us more about <b>yourself</b> (max 100 char)
+            Tell us more <b>about yourself</b>
+            <br />
+            <i>100 char max</i>
         </p>
     )
 
@@ -37,6 +39,7 @@ const DescriptionCreation = () => {
             next={'/onboarding/interests'}
             btnText={"That's me!"}
             onClick={saveBio}
+            btnClass="sm"
         />
     )
 }

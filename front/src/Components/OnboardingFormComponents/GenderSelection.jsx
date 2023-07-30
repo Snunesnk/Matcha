@@ -45,6 +45,7 @@ const GenderSelection = () => {
             content={content}
             next={'/onboarding/preferences'}
             btnText={'Next'}
+            btnClass="sm"
         />
     )
 }

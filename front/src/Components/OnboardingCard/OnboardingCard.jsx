@@ -7,6 +7,8 @@ const OnboardingCard = ({
     content,
     next,
     btnText,
+    btnClass = 'white',
+    submit = false,
     onClick = () => {},
 }) => {
     return (
@@ -15,16 +17,24 @@ const OnboardingCard = ({
             <div className="content">{content}</div>
             <div className="footer">
                 {next !== '' && (
-                    <div className="card_next">
-                        <Link to={next}>
-                            <button
-                                id="onboarding_next_button"
-                                onClick={onClick}
-                            >
-                                {btnText}
-                            </button>
-                        </Link>
-                    </div>
+                    <Link to={next}>
+                        <button
+                            className={'btn ' + btnClass}
+                            onClick={onClick}
+                            type={submit ? 'submit' : 'button'}
+                        >
+                            {btnText}
+                        </button>
+                    </Link>
+                )}
+                {next == '' && (
+                    <button
+                        className={'btn ' + btnClass}
+                        onClick={onClick}
+                        type={submit ? 'submit' : 'button'}
+                    >
+                        {btnText}
+                    </button>
                 )}
             </div>
         </div>

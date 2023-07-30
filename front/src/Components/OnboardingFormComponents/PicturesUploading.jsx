@@ -1,17 +1,39 @@
 import React, { useState } from 'react'
 import './OnboardingForm.css'
 import ImageUpload from '../ImageUpload'
-import { Link } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
 const PicturesUploading = () => {
-    const [fileList, setFileList] = useState([])
+    const savedImages = useSelector(
+        (state) => state.userState.userSettings.pictures
+    )
+    const [fileList, setFileList] = useState(() => {
+        if (savedImages.length === 0) {
+            return []
+        }
+
+        const imgs = []
+        if (savedImages.imgA) imgs.push(savedImages.imgA)
+        if (savedImages.imgB) imgs.push(savedImages.imgB)
+        if (savedImages.imgC) imgs.push(savedImages.imgC)
+        if (savedImages.imgD) imgs.push(savedImages.imgD)
+        if (savedImages.imgE) imgs.push(savedImages.imgE)
+
+        return imgs
+    })
+
     const dispatch = useDispatch()
 
     const savePictures = () => {
-        const pictures = { imgA: {}, imgB: {}, imgC: {}, imgD: {}, imgE: {} }
+        const pictures = {
+            imgA: null,
+            imgB: null,
+            imgC: null,
+            imgD: null,
+            imgE: null,
+        }
         fileList.forEach((file, i) => {
             switch (i) {
                 case 0:
@@ -44,7 +66,12 @@ const PicturesUploading = () => {
         </p>
     )
 
-    const content = <ImageUpload setFileList={setFileList}></ImageUpload>
+    const content = (
+        <ImageUpload
+            defaultImages={fileList}
+            setFileList={setFileList}
+        ></ImageUpload>
+    )
 
     return (
         <OnboardingCard
@@ -53,6 +80,7 @@ const PicturesUploading = () => {
             next={'/onboarding/done'}
             btnText={'Finish'}
             onClick={savePictures}
+            btnClass="sm"
         />
     )
 }

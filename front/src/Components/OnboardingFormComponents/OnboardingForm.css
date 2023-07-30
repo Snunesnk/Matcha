@@ -1,40 +1,31 @@
 /**** ************ ****/
 /**** SIGN UP FORM ****/
 /**** ************ ****/
-.onboarding_title {
-    color: #fbe3dd;
-}
-
-.center_align {
+#onboarding_signup .footer {
     align-items: center;
 }
 
-#onboarding_sign_up {
-    display: flex;
-    flex-direction: column;
+#onboarding_signup button {
+    width: 75%;
+}
+
+#onboarding_form {
+    display: grid;
+    grid-template-columns: 75%;
+    width: 100%;
+    align-items: center;
     justify-content: center;
-    align-items: center;
-}
-
-#onboarding_sign_up h3 {
-    color: #FBE3DD;
-    text-align: center;
-    margin-top: 15px;
-    margin-bottom: 30px;
+    grid-gap: 15px;
 }
 
 #signup_title {
     text-align: center;
     width: 100%;
+    color: #4AC0FC;
 }
 
 .input_container {
     margin-bottom: 20px;
-}
-
-.button_container {
-    margin-top: 50px;
-    align-items: center;
 }
 
 .errorLabel {
@@ -72,7 +63,7 @@
 }
 
 .send-email-again-msg a:hover {
-    color: #ba7300;
+    color: #4AC0FC;
 }
 
 /**** **************** ****/
@@ -94,6 +85,15 @@
 
 #gender_selection_catch_phrase {
     font-size: 1.6em;
+    margin: 0;
+}
+
+#gender_selection_catch_phrase b {
+    color: #4AC0FC;
+}
+
+#gender_selection_catch_phrase i {
+    font-size: 0.6em;
 }
 
 /**** *********** ****/
@@ -101,7 +101,7 @@
 /**** *********** ****/
 #description_creation_input {
     border: none;
-    border-bottom: 2px solid #fbe3dd;
+    border-bottom: 2px solid white;
     width: 100%;
     font-size: 16px;
     line-height: 20px;
@@ -110,11 +110,13 @@
     transition: all 150ms cubic-bezier(1, 0.06, 0.83, 0.67);
     background-color: rgba(181, 201, 234, 0.2);
     color: #fbe3dd;
+    padding: 7px;
+    border-radius: 4px 4px 0 0;
 }
 
 #description_creation_input:focus-visible {
     outline: none;
-    border-bottom-color: #ba7300;
+    border-bottom-color: #4AC0FC;
     transition: all 100ms cubic-bezier(1, 0.06, 0.83, 0.67);
 }
 

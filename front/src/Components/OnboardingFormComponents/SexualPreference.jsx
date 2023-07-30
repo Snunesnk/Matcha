@@ -52,7 +52,7 @@ const SexualPreferences = () => {
 
     const header = (
         <p id="gender_selection_catch_phrase">
-            Who do you want to <b>see?</b>
+            Who are you <b>attracted to?</b>
         </p>
     )
 
@@ -77,6 +77,7 @@ const SexualPreferences = () => {
             next={'/onboarding/bio'}
             btnText={'Next'}
             onClick={savePreferences}
+            btnClass="sm"
         />
     )
 }

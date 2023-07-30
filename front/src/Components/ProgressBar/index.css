@@ -3,13 +3,11 @@
 /**** ************ ****/
 #progress_container {
     position: absolute;
-    bottom: 0;
-    right: 0;
+    bottom: 20px;
+    right: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 25px;
-    margin-bottom: 25px;
     z-index: 2;
 }
 
@@ -24,9 +22,9 @@
 #progress_bar {
     height: 3px;
     width: 150px;
-    background-color: #fbe3dd;
+    background-color: white;
     border-radius: 1px;
-    color: #fbe3dd;
+    color: white;
 }
 
 #next_and_prev_button {
@@ -37,9 +35,9 @@
 #next_and_prev_button a {
     display: flex;
     align-items: center;
-    background-color: #ba7300;
+    background-color: #dc21B8;
     padding: 3px;
-    color: #fbe3dd;
+    color: white;
 }
 
 #next_and_prev_button a:not(disabled) {
@@ -66,7 +64,7 @@
 }
 
 #progress_next {
-    border-right: 0.5px solid #fbe3dd;
+    border-right: 0.5px solid white;
     border-radius: 2px 0px 0px 2px;
 }
 
@@ -78,7 +76,7 @@
 #progress_bar::before {
     content: '';
     position: absolute;
-    border: solid #ba7300;
+    border: solid #dc21B8;
     border-width: 3px 0 0 0;
     height: 0px;
     width: 0;
