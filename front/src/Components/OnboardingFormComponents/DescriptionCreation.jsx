@@ -3,6 +3,7 @@ import { useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { USER_STATE_ACTIONS } from '../../constants'
 import './OnboardingForm.css'
+import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
 const DescriptionCreation = () => {
     const [value, setValue] = useState('')
@@ -12,27 +13,31 @@ const DescriptionCreation = () => {
         dispatch({ type: USER_STATE_ACTIONS.UPDATE_BIO, payload: value })
     }
 
+    const header = (
+        <p id="gender_selection_catch_phrase">
+            Tell us more about <b>yourself</b> (max 100 char)
+        </p>
+    )
+
+    const content = (
+        <textarea
+            id="description_creation_input"
+            placeholder="Enter your description here"
+            maxLength="100"
+            rows="8"
+            value={value}
+            onChange={(e) => setValue(e.target.value)}
+        ></textarea>
+    )
+
     return (
-        <div id="gender_selection_container">
-            <p id="gender_selection_catch_phrase">
-                Tell us more about <b>yourself</b> (max 100 char)
-            </p>
-
-            <textarea
-                id="description_creation_input"
-                placeholder="Enter your description here"
-                maxLength="100"
-                rows="8"
-                value={value}
-                onChange={(e) => setValue(e.target.value)}
-            ></textarea>
-
-            <Link to="/onboarding/interests">
-                <button id="onboarding_next_button" onClick={saveBio}>
-                    That's me!
-                </button>
-            </Link>
-        </div>
+        <OnboardingCard
+            header={header}
+            content={content}
+            next={'/onboarding/interests'}
+            btnText={"That's me!"}
+            onClick={saveBio}
+        />
     )
 }
 

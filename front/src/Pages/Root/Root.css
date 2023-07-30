@@ -7,4 +7,12 @@
 
     display: flex;
     flex-flow: column;
+    background: linear-gradient(154.03deg, #3f1f71 1.96%, #010101 98.95%);
+}
+
+
+#page_container {
+    width: 100%;
+    min-height: calc(100vh - 20px - 48px);
+    max-height: calc(100vh - 20px - 48px);
 }

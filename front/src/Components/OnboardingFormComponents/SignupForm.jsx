@@ -162,127 +162,72 @@ const SignupForm = () => {
 
     return (
         <Form method="post">
-            <Grid container item id="onboarding_sign_up">
-                <Grid
-                    item
-                    xs={12}
-                    className="centered_container onboarding_title center_align"
-                >
-                    <h1>MatChat</h1>
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    className="centered_container catch_phrase center_align"
-                >
+            <div id="onboarding_sign_up">
+                <div id="onboarding_form">
                     <h3>Create your account to find your catmate</h3>
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
+                    <div className="centered_container input_container">
                         <FormInput
                             placeholder="First Name"
                             name="firstName"
                             required={true}
                         />
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
+                    </div>
+                    <div className="centered_container input_container">
                         <FormInput
                             placeholder="Last Name"
                             name="lastName"
                             required={true}
                         />
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
+                    </div>
+                    <div className="centered_container input_container">
                         <FormInput
                             placeholder="Username"
                             name="username"
                             required={true}
                         />
-                    </Grid>
-                </Grid>
-                <Grid
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <FormInput
-                        placeholder="Birth date"
-                        type="date"
-                        name="dateOfBirth"
-                        required={true}
-                    />
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
+                    </div>
+                    <div className="centered_container input_container">
+                        <FormInput
+                            placeholder="Birth date"
+                            type="date"
+                            name="dateOfBirth"
+                            required={true}
+                        />
+                    </div>
+                    <div className="centered_container input_container">
                         <FormInput
                             placeholder="Email"
                             type="email"
                             name="email"
                             required={true}
                         />
-                    </Grid>
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container input_container"
-                >
-                    <Grid item xs={12} className="centered_container">
+                    </div>
+                    <div className="centered_container input_container">
                         <FormInput
                             placeholder="Password"
                             type="password"
                             name="password"
                             required={true}
                         />
-                    </Grid>
-                    {formResult &&
-                        formResult.error !==
-                            validationErrors.noValidationError && (
-                            <Grid item xs={12} className="centered_container">
-                                <label className="errorLabel">
-                                    {formResult.error}
-                                </label>
-                            </Grid>
-                        )}
-                </Grid>
-                <Grid
-                    container
-                    item
-                    xs={12}
-                    className="centered_container button_container"
-                >
+                        {formResult &&
+                            formResult.error !==
+                                validationErrors.noValidationError && (
+                                <div className="centered_container">
+                                    <label className="errorLabel">
+                                        {formResult.error}
+                                    </label>
+                                </div>
+                            )}
+                    </div>
+                </div>
+                <div className="centered_container button_container">
                     <MainButton
                         text="Create my account"
                         shadowClass="sub"
                         submit="true"
                     ></MainButton>
-                </Grid>
-            </Grid>
+                </div>
+            </div>
         </Form>
     )
 }

@@ -2,13 +2,14 @@ import React from 'react'
 import './OnboardingForm.css'
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
+import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
 const WelcomeMessage = () => {
     const login = useSelector((state) => state.userState.userInfos.login)
 
-    return (
-        <div id="onboarding_welcome_message">
-            <h1 id="welcome_title">Welcome to MatChat</h1>
+    const header = <h1 id="welcome_title">Welcome to MatChat</h1>
+    const content = (
+        <div>
             <h2 id="welcome_catchphrase">
                 Hello {login}, let's get you set up
             </h2>
@@ -17,10 +18,16 @@ const WelcomeMessage = () => {
                 <br />
                 And it'll make your time with MatChat even better.
             </p>
-            <Link to="/onboarding/gender">
-                <button id="onboarding_next_button">Get set up</button>
-            </Link>
         </div>
+    )
+
+    return (
+        <OnboardingCard
+            header={header}
+            content={content}
+            next={'/onboarding/gender'}
+            btnText={'Get set up'}
+        />
     )
 }
 

@@ -11,7 +11,7 @@ const ListChoice = ({ number, name, label, onclick = () => {}, to = '' }) => {
     }
 
     return (
-        <Grid item xs={12}>
+        <div className="list_choice">
             <Link to={to}>
                 <div
                     className={
@@ -28,7 +28,7 @@ const ListChoice = ({ number, name, label, onclick = () => {}, to = '' }) => {
                     <label>{name}</label>
                 </div>
             </Link>
-        </Grid>
+        </div>
     )
 }
 

@@ -1,5 +1,8 @@
 #footer {
-    position: absolute;
-    bottom: 1px;
     width: 100%;
+    text-align: center;
+    padding: 10px;
+    z-index: 10;
+    background-color: #3f1f71;
+    ;
 }

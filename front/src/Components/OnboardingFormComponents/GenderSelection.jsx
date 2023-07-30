@@ -4,6 +4,7 @@ import ListChoice from '../ListChoice'
 import { useDispatch } from 'react-redux'
 import './OnboardingForm.css'
 import { USER_STATE_ACTIONS } from '../../constants'
+import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
 const Genders = [
     { number: 'A', name: 'Female', label: 'f' },
@@ -18,25 +19,33 @@ const GenderSelection = () => {
         dispatch({ type: USER_STATE_ACTIONS.UPDATE_GENDER, payload: label })
     }
 
-    return (
-        <div id="gender_selection_container">
-            <p id="gender_selection_catch_phrase">
-                What is <b>your gender?</b>
-            </p>
-
-            <Grid container id="choice_list" rowGap={2}>
-                {Genders.map((gender) => (
-                    <ListChoice
-                        number={gender.number}
-                        name={gender.name}
-                        label={gender.label}
-                        key={gender.number}
-                        onclick={onGenderSelection}
-                        to="/onboarding/preferences"
-                    />
-                ))}
-            </Grid>
+    const header = (
+        <p id="gender_selection_catch_phrase">
+            What is <b>your gender?</b>
+        </p>
+    )
+    const content = (
+        <div id="choice_list">
+            {Genders.map((gender) => (
+                <ListChoice
+                    number={gender.number}
+                    name={gender.name}
+                    label={gender.label}
+                    key={gender.number}
+                    onclick={onGenderSelection}
+                    to="/onboarding/preferences"
+                />
+            ))}
         </div>
+    )
+
+    return (
+        <OnboardingCard
+            header={header}
+            content={content}
+            next={'/onboarding/preferences'}
+            btnText={'Next'}
+        />
     )
 }
 

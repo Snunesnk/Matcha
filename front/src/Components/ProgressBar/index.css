@@ -8,8 +8,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-right: 35px;
-    margin-bottom: 55px;
+    margin-right: 25px;
+    margin-bottom: 25px;
+    z-index: 2;
 }
 
 #progress_bar_container {
@@ -40,6 +41,7 @@
     padding: 3px;
     color: #fbe3dd;
 }
+
 #next_and_prev_button a:not(disabled) {
     cursor: pointer;
 }

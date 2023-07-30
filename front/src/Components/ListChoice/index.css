@@ -1,3 +1,8 @@
+.list_choice {
+    width: 100%;
+}
+
+
 .list_choice_container {
     background-color: rgba(251, 227, 221, 1);
     color: rgba(63, 31, 113, 1);
@@ -5,8 +10,6 @@
     box-shadow: 4px 4px 4px #3f1f71;
     border-radius: 5px;
     padding: 5px 10px;
-    min-width: 42%;
-    max-width: 65%;
     display: flex;
     align-items: center;
     transition: all 450ms;

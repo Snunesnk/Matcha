@@ -5,6 +5,7 @@ import ListChoice from '../ListChoice'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
+import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
 const Preferences = [
     { number: 'A', name: 'Female', label: 'f' },
@@ -49,30 +50,34 @@ const SexualPreferences = () => {
         })
     }
 
-    return (
-        <div id="gender_selection_container">
-            <p id="gender_selection_catch_phrase">
-                Who do you want to <b>see?</b>
-            </p>
+    const header = (
+        <p id="gender_selection_catch_phrase">
+            Who do you want to <b>see?</b>
+        </p>
+    )
 
-            <Grid container id="choice_list" rowGap={2}>
-                {Preferences.map((preference) => (
-                    <ListChoice
-                        number={preference.number}
-                        name={preference.name}
-                        label={preference.label}
-                        key={preference.number}
-                        onclick={OnPreferenceSelection}
-                    />
-                ))}
-            </Grid>
-
-            <Link to="/onboarding/bio">
-                <button id="onboarding_next_button" onClick={savePreferences}>
-                    Next
-                </button>
-            </Link>
+    const content = (
+        <div id="choice_list">
+            {Preferences.map((preference) => (
+                <ListChoice
+                    number={preference.number}
+                    name={preference.name}
+                    label={preference.label}
+                    key={preference.number}
+                    onclick={OnPreferenceSelection}
+                />
+            ))}
         </div>
+    )
+
+    return (
+        <OnboardingCard
+            header={header}
+            content={content}
+            next={'/onboarding/bio'}
+            btnText={'Next'}
+            onClick={savePreferences}
+        />
     )
 }
 

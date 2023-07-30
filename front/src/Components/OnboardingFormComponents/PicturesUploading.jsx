@@ -4,6 +4,7 @@ import ImageUpload from '../ImageUpload'
 import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
+import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
 const PicturesUploading = () => {
     const [fileList, setFileList] = useState([])
@@ -37,20 +38,22 @@ const PicturesUploading = () => {
         })
     }
 
+    const header = (
+        <p id="gender_selection_catch_phrase">
+            Upload <b>your pictures</b> (5 max)
+        </p>
+    )
+
+    const content = <ImageUpload setFileList={setFileList}></ImageUpload>
+
     return (
-        <div id="gender_selection_container">
-            <p id="gender_selection_catch_phrase">
-                Upload <b>your pictures</b> (5 max)
-            </p>
-
-            <ImageUpload setFileList={setFileList}></ImageUpload>
-
-            <Link to="/onboarding/done">
-                <button id="onboarding_next_button" onClick={savePictures}>
-                    Finish
-                </button>
-            </Link>
-        </div>
+        <OnboardingCard
+            header={header}
+            content={content}
+            next={'/onboarding/done'}
+            btnText={'Finish'}
+            onClick={savePictures}
+        />
     )
 }
 

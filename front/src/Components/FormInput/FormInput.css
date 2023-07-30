@@ -2,7 +2,7 @@
     background-color: transparent;
     color: #FBE3DD;
     border: 1px solid #FBE3DD;
-    min-width: 50%;
+    width: 100%;
     min-height: 40px;
     font-style: normal;
     font-weight: 400;
@@ -12,5 +12,6 @@
 }
 
 .form_input::placeholder {
-    color: rgb(120, 120, 120);
+    color: #b5c9ea;
+    opacity: 1;
 }
