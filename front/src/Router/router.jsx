@@ -20,8 +20,6 @@ import DescriptionCreation from '../Components/OnboardingFormComponents/Descript
 import InterestsTags from '../Components/OnboardingFormComponents/InterestsTags'
 import PicturesUploading from '../Components/OnboardingFormComponents/PicturesUploading'
 import AllSetMessage from '../Components/OnboardingFormComponents/AllSetMessage'
-import DashboardOverview from '../Components/DashboardOverview'
-import ChatComponent from '../Components/ChatComponent'
 import Root from '../Pages/Root/Root'
 import EmailVerify from '../Components/OnboardingFormComponents/EmailVerify'
 import {
@@ -30,6 +28,10 @@ import {
     checkIfVerified,
     redirectToSignup,
 } from './loaders'
+import MessagesContainer from '../Components/MessagesContainer/MessagesContainer'
+import UserSettings from '../Components/UserSettings/UserSettings'
+import ProfileMatching from '../Components/ProfileMatching'
+import LoginPage from '../Pages/Login/Login'
 
 const getRouterWithStore = (store) => {
     return createBrowserRouter([
