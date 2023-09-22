@@ -1,67 +1,168 @@
 #profile_matching {
+    width: 100%;
+    height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
+    position: absolute;
+    top: 0;
+    overflow: hidden;
 }
 
-.card_container {
+@media screen and (min-width: 450px) {
+    #profile_matching {
+        position: relative;
+        width: 450px;
+        height: min(calc(642px + 10vh + 50px), 80.86vh);
+        box-sizing: content-box;
+        border: 4px solid white;
+        overflow: hidden;
+        border-radius: 20px;
+    }
+}
+
+#profile_matching-container {
     display: flex;
     justify-content: center;
-    position: relative;
+    align-items: center;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    justify-content: start;
+    overflow: auto;
+
+    /* Hide scrollbar for IE, Edge and Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+#profile_matching-container::-webkit-scrollbar {
+    display: none;
+}
+
+#profile_matching-container #user-profile-container {
+    transition: opacity 500ms ease-in;
+}
+
+#profile_matching-container.liked,
+#profile_matching-container.disliked,
+#profile_matching-container.transition {
+    overflow: hidden;
+}
+
+#profile_matching-container.liked .profile-evaluation,
+#profile_matching-container.disliked .profile-evaluation {
+    display: flex;
+}
+
+#profile_matching-container.liked #profile-liked {
+    display: block;
+}
+
+#profile_matching-container.disliked #profile-disliked {
+    display: block;
+}
+
+#profile_matching-container.liked.transition #user-profile-container,
+#profile_matching-container.liked.transition #profile-liked {
+    margin-left: calc(200% + 80px);
+    transition: all 200ms ease-in;
+    opacity: 0;
+}
+
+#profile_matching-container.disliked.transition #user-profile-container,
+#profile_matching-container.disliked.transition #profile-disliked {
+    margin-right: calc(200% + 80px);
+    transition: all 120ms ease-in;
+    opacity: 0;
+}
+
+.profile-evaluation {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 2;
+    display: none;
+}
+
+.profile-evaluation p {
+    font-size: 3rem;
+    padding: 20px 50px;
+    font-weight: 600;
+    border-radius: 20px;
+    transform: rotate(-20deg);
+}
+
+.profile-evaluation #profile-liked {
+    color: #4ac0fc;
+    border: 6px solid #4ac0fc;
+    display: none;
+}
+
+.profile-evaluation #profile-disliked {
+    color: #dc21b8;
+    border: 6px solid #dc21b8;
+    display: none;
+}
+
+.card_img_container.next-user {
+    position: absolute;
+    z-index: -1;
+    transition: none;
 }
 
 .profile_matching_btn_container {
     display: flex;
-    justify-content: center;
-    margin-top: 42px;
+    justify-content: space-around;
+    align-items: center;
+
+    position: absolute;
+    bottom: 0;
+    z-index: 3;
+    width: 100%;
+    padding-bottom: 5vh;
+    padding-top: 5vh;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #200618 25%);
 }
 
 .profile_matching_btn {
-    background-color: white;
-    color: #5e0b4f;
-    box-shadow: 0 0 7px 4px rgb(0 0 0 / 20%);
-    border-radius: 40px;
-    padding: 10px;
+    color: white;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     transition: all 100ms;
+    border: none;
+    padding: 10px;
+    height: fit-content;
 }
 
-.profile_matching_btn:hover {
-    transform: scale(1.2);
-    transition: all 100ms;
-}
+.profile_matching_btn:hover {}
 
 .profile_matching_btn:active {
     transform: scale(0.9);
-    transition: all 100ms;
 }
 
 .profile_matching_btn svg {
-    width: 30px;
-    height: 30px;
+    font-size: 50px;
 }
 
-.profile_matching_like:hover {
-    background-color: #ff9d00;
-    transition: all 100ms;
-    color: white;
+.profile_matching_like {
+    background: linear-gradient(325deg, #4ac0fc 33%, #dc21b8 66%);
 }
 
-.profile_matching_more {
-    margin-left: 110px;
-    margin-right: 110px;
+.profile_matching_dislike {
+    background-color: white;
 }
 
-.profile_matching_more:hover {
-    background-color: #5e0b4f;
-    transition: all 100ms;
-    color: white;
-}
-
-.profile_matching_dislike:hover {
-    background-color: #ff0000df;
-    transition: all 100ms;
-    color: white;
+.profile_matching_dislike svg {
+    background-color: transparent;
+    font-size: 50px;
 }
