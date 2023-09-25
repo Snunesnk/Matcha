@@ -32,7 +32,6 @@ export class UserTag {
                 console.log("Tag didn't exist, but couldn't create it");
                 return null;
             }
-            console.log(`Tag didn't exist, created it with bwid: ${newTag.bwid}`);
         }
         const data = await DbRequestService.create('userTag', newUserTag)
         if (data.affectedRows === 0) {
