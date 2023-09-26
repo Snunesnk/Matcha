@@ -23,6 +23,7 @@
     z-index: 2;
     border-radius: 0px 100px 100px 0px;
     left: 0;
+    animation: unblur 3s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms 1 normal none;
 }
 
 #right-div {
@@ -36,6 +37,18 @@
     right: 0;
     display: flex;
     justify-content: center;
+}
+
+#onboarding_form>h3 {
+    animation: appear 2s cubic-bezier(0.215, 0.61, 0.355, 1) both 250ms;
+}
+
+#onboarding_form>div {
+    animation: appear 1.9s cubic-bezier(0.215, 0.61, 0.355, 1) both 450ms;
+}
+
+#onboarding_form>.signup-btn {
+    animation: appear 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) both 650ms;
 }
 
 #signup_title {
@@ -75,6 +88,16 @@
     color: red;
 }
 
+
+@keyframes unblur {
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
 
 /**** ************ ****/
 /**** SIGN UP FORM ****/
