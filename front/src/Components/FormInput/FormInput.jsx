@@ -1,48 +1,53 @@
-import "./FormInput.css"
+import './FormInput.css'
 
 const FormInput = ({
     placeholder,
-    type = "",
-    value = "",
-    defaultValue = "",
-    updateValue = () => { },
-    name = "",
+    type = '',
+    value = '',
+    defaultValue = '',
+    updateValue = () => {},
+    name = '',
     required = false,
     // At least 1 chat is expected
-    pattern = ".{1,}"
+    pattern = '.{1,}',
 }) => {
-
-    const onChangeUpdate = e => {
-        updateValue(e.target.value);
+    const onChangeUpdate = (e) => {
+        updateValue(e.target.value)
     }
 
     /// Can't have an input with both value and defaultValue, so create two separate input depending of given parameters
-    if (value === "") {
+    if (value === '') {
         return (
+            <div className="form_input_container">
+                <label className="form_label">{placeholder}</label>
+                <input
+                    className="form_input"
+                    placeholder={placeholder}
+                    type={type}
+                    defaultValue={defaultValue}
+                    onChange={onChangeUpdate}
+                    name={name}
+                    required={required}
+                    pattern={pattern}
+                ></input>
+            </div>
+        )
+    }
+
+    return (
+        <div className="form_input_container">
+            <label className="form_label">{placeholder}</label>
             <input
                 className="form_input"
                 placeholder={placeholder}
                 type={type}
-                defaultValue={defaultValue}
+                value={value}
                 onChange={onChangeUpdate}
                 name={name}
                 required={required}
                 pattern={pattern}
             ></input>
-        )
-    }
-
-    return (
-        <input
-            className="form_input"
-            placeholder={placeholder}
-            type={type}
-            value={value}
-            onChange={onChangeUpdate}
-            name={name}
-            required={required}
-            pattern={pattern}
-        ></input>
+        </div>
     )
 }
 

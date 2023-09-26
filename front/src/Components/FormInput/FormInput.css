@@ -1,17 +1,37 @@
 .form_input {
     background-color: transparent;
     color: #FBE3DD;
-    border: 1px solid #FBE3DD;
-    width: 100%;
+    border: 1px solid #71586A;
     min-height: 40px;
     font-style: normal;
     font-weight: 400;
-    font-size: 1em;
-    padding: 6px 8px;
+    font-size: 0.8em;
+    padding: 14px 10px;
     line-height: 16px;
+    border-radius: 7px;
+    width: 100%;
 }
 
 .form_input::placeholder {
     color: #b5c9ea;
     opacity: 0.5;
+}
+
+.form_input:focus {
+    outline: none;
+    border: 1px solid #FBE3DD;
+    box-shadow: 0px 0px 10px 0px #200618;
+}
+
+.form_label {
+    position: relative;
+    top: 12px;
+    left: 12px;
+    background-color: #200618;
+    font-size: 14px;
+    padding: 0 5px;
+}
+
+.form_input_container {
+    width: 90%;
 }

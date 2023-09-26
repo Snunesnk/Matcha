@@ -155,60 +155,76 @@ const SignupForm = () => {
         }
     }, [formResult])
 
-    const header = (
-        <h3 id="signup_title">Create your account to find your catmate</h3>
-    )
-
-    const content = (
-        <div id="onboarding_form">
-            <FormInput
-                placeholder="First Name"
-                name="firstName"
-                required={true}
-            />
-            <FormInput
-                placeholder="Last Name"
-                name="lastName"
-                required={true}
-            />
-            <FormInput placeholder="Username" name="username" required={true} />
-            <FormInput
-                placeholder="Birth date"
-                type="date"
-                name="dateOfBirth"
-                required={true}
-            />
-            <FormInput
-                placeholder="Email"
-                type="email"
-                name="email"
-                required={true}
-            />
-            <FormInput
-                placeholder="Password"
-                type="password"
-                name="password"
-                required={true}
-            />
-            {formResult &&
-                formResult.error !== validationErrors.noValidationError && (
-                    <div className="centered_container">
-                        <label className="errorLabel">{formResult.error}</label>
-                    </div>
-                )}
-        </div>
-    )
-
     return (
-        <Form method="post" id="onboarding_signup">
-            <OnboardingCard
-                header={header}
-                content={content}
-                next={''}
-                btnText={'Create my account'}
-                submit={true}
-            />
-        </Form>
+        <div id="test-div">
+            <div id="left-div"></div>
+            <div id="right-div">
+                <form id="onboarding_form" method="post">
+                    <h3 id="signup_title">
+                        Create your account to find your catmate
+                    </h3>
+                    <div>
+                        <div className="form-double-field">
+                            <FormInput
+                                placeholder="First Name"
+                                name="firstName"
+                                required={true}
+                            />
+                        </div>
+                        <div className="form-double-field">
+                            <FormInput
+                                placeholder="Last Name"
+                                name="lastName"
+                                required={true}
+                            />
+                        </div>
+                    </div>
+                    <div>
+                        <FormInput
+                            placeholder="Username"
+                            name="username"
+                            required={true}
+                        />
+                    </div>
+                    <div>
+                        <FormInput
+                            placeholder="Email"
+                            type="email"
+                            name="email"
+                            required={true}
+                        />
+                    </div>
+                    <div>
+                        <FormInput
+                            placeholder="Password"
+                            type="password"
+                            name="password"
+                            required={true}
+                        />
+                    </div>
+                    <div>
+                        <FormInput
+                            placeholder="Birth date"
+                            type="date"
+                            name="dateOfBirth"
+                            required={true}
+                        />
+                    </div>
+                    {formResult &&
+                        formResult.error !==
+                            validationErrors.noValidationError && (
+                            <div className="centered_container">
+                                <label className="errorLabel">
+                                    {formResult.error}
+                                </label>
+                            </div>
+                        )}
+                    <button className="btn signup-btn" type="submit">
+                        Create my account
+                    </button>
+                </form>
+            </div>
+        </div>
     )
 }
 

@@ -1,21 +1,41 @@
 /**** ************ ****/
 /**** SIGN UP FORM ****/
 /**** ************ ****/
-#onboarding_signup .footer {
-    align-items: center;
-}
-
-#onboarding_signup button {
-    width: 75%;
-}
-
-#onboarding_form {
-    display: grid;
-    grid-template-columns: 75%;
+#test-div {
+    background-color: white;
     width: 100%;
-    align-items: center;
+    height: 100%;
+    display: flex;
+    flex-flow: row;
+    background: transparent;
+    box-shadow: 0px 0px 10px 0px #200618;
+    position: absolute;
+    top: 0;
+}
+
+#left-div {
+    background: url('../../assets/cat_glasses.jpg'), no-repeat fixed;
+    background-size: 120%;
+    background-position: 100% 50%;
+    height: 100%;
+    min-width: 45%;
+    max-width: 45%;
+    z-index: 2;
+    border-radius: 0px 100px 100px 0px;
+    left: 0;
+}
+
+#right-div {
+    height: 100%;
+    min-width: 55%;
+    max-width: 55%;
+    z-index: 1;
+    /* background: linear-gradient(148deg, rgba(232, 33, 184, 0.40) 0%, rgba(74, 192, 252, 0.40) 100%); */
+    background-color: #200618;
+    /* background: linear-gradient(148deg, rgba(232, 33, 184, 0.70) 0%, rgba(74, 192, 252, 0.70) 100%); */
+    right: 0;
+    display: flex;
     justify-content: center;
-    grid-gap: 15px;
 }
 
 #signup_title {
@@ -24,13 +44,37 @@
     color: #4AC0FC;
 }
 
-.input_container {
-    margin-bottom: 20px;
+#onboarding_form {
+    display: flex;
+    width: 100%;
+    max-width: 650px;
+    align-items: center;
+    justify-content: center;
+    /* justify-content: space-around; */
+    flex-direction: column;
+    gap: 5px;
+    /* padding: 60px 0px; */
+}
+
+#onboarding_form>div {
+    width: 95%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: row;
+}
+
+.form-double-field {
+    width: 47%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .errorLabel {
     color: red;
 }
+
 
 /**** ************ ****/
 /**** SIGN UP FORM ****/
