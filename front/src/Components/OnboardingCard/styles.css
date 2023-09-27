@@ -1,8 +1,9 @@
 .onboarding_card {
     min-height: 575px;
     max-height: 575px;
-    min-width: 470px;
-    max-width: 470px;
+    min-width: 600px;
+    width: 40%;
+    max-width: 40%;
     background-color: #200518;
     padding: 15px 40px;
     border-radius: 16px;
@@ -10,6 +11,7 @@
     display: flex;
     flex-direction: column;
     justify-content: space-around;
+    border: 2px solid white;
 }
 
 .onboarding_card h3,
@@ -43,12 +45,4 @@
     justify-content: center;
     padding: 5px 0;
     animation: appear 1s cubic-bezier(0.215, 0.61, 0.355, 1) both 0.4s;
-}
-
-.onboarding_card .setting.complex-setting {
-    margin-top: -20%;
-}
-
-.onboarding_card .onboarding_tags_content {
-    margin-top: -15%;
 }

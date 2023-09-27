@@ -17,7 +17,7 @@ const DescriptionCreation = () => {
         <p id="gender_selection_catch_phrase">
             Tell us more <b>about yourself</b>
             <br />
-            <i>100 char max</i>
+            <i>100 characters, all about you!</i>
         </p>
     )
 

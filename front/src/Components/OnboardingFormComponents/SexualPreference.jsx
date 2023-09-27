@@ -53,6 +53,8 @@ const SexualPreferences = () => {
     const header = (
         <p id="gender_selection_catch_phrase">
             Who are you <b>attracted to?</b>
+            <br />
+            <i>Pick one, two, or all three - Love is limitless</i>
         </p>
     )
 

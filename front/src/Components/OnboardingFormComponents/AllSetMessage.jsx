@@ -44,6 +44,7 @@ const AllSetMessage = () => {
             next={'/dashboard'}
             btnText={'Let the magic begin!'}
             onClick={sendForm}
+            btnClass="all-set-btn"
         />
     )
 }

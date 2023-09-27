@@ -19,7 +19,7 @@
 }
 
 .btn.sm {
-    background-color: #dc21b8;
+    background-color: transparent;
     color: white;
     line-height: 30px;
     font-size: 1.1em;
@@ -30,11 +30,12 @@
     letter-spacing: 1px;
     border-radius: 4px;
     transition: all 0.2s;
+    border: 1px solid #dc21b8;
+    transition: all 0.2s;
 }
 
 .btn.sm:hover {
-    background-color: white;
-    color: #dc21b8;
+    background-color: #dc21b8;
 }
 
 
@@ -173,4 +174,19 @@
 .signup-btn:hover {
     background-color: white;
     color: #dc21b8;
+}
+
+.all-set-btn {
+    width: 100%;
+    border-radius: 5px;
+    background-color: white;
+    border: 1px solid #dc21b8;
+    transition: all 0.2s;
+    color: #dc21b8;
+}
+
+.all-set-btn:hover {
+    background-color: #dc21b8;
+    color: white;
+    border: 1px solid white;
 }

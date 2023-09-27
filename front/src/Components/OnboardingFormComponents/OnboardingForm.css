@@ -196,8 +196,6 @@
 /**** ************** ****/
 /**** TAGS INTERESTS ****/
 /**** ************** ****/
-
-
 #tags_text_field {
     color: #fbe3dd;
 }
@@ -229,4 +227,16 @@ label.Mui-focused {
 
 .css-11v1qwh-MuiInputBase-root-MuiFilledInput-root:after {
     border-bottom: 2px solid #ba7300 !important;
+}
+
+/**** *************** ****/
+/**** ALL SET MESSAGE ****/
+/**** *************** ****/
+.all-set-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    font-size: 1.3em;
 }
