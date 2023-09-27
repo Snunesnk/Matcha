@@ -1,6 +1,6 @@
 .onboarding_card {
-    min-height: 575px;
-    max-height: 575px;
+    height: 90%;
+    max-height: 650px;
     min-width: 600px;
     width: 40%;
     max-width: 40%;

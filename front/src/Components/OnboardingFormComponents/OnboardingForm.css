@@ -139,6 +139,13 @@
     color: #4AC0FC;
 }
 
+/**** ******* ****/
+/**** WELCOME ****/
+/**** ******* ****/
+#welcome_catchphrase {
+    padding-top: 6vh;
+}
+
 /**** **************** ****/
 /**** GENDER SELECTION ****/
 /**** **************** ****/
@@ -228,6 +235,15 @@ label.Mui-focused {
 .css-11v1qwh-MuiInputBase-root-MuiFilledInput-root:after {
     border-bottom: 2px solid #ba7300 !important;
 }
+
+
+/**** ************** ****/
+/**** PICTURE UPLOAD ****/
+/**** ************** ****/
+.complex-setting.has-imgs {
+    margin-top: -15%;
+}
+
 
 /**** *************** ****/
 /**** ALL SET MESSAGE ****/

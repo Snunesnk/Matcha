@@ -11,8 +11,9 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
 
     const onChange = (e) => {
         const fileList = e.target.files
+        const imgCount = imgs.length
 
-        for (let i = 0; i < fileList.length; i++) {
+        for (let i = 0; i < fileList.length && i + imgCount < 5; i++) {
             setFileList((files) => [...files, fileList[i]])
 
             setImgs((prev) => {
@@ -32,7 +33,12 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
     }
 
     return (
-        <div className="setting complex-setting">
+        <div
+            className={
+                'setting complex-setting' +
+                (imgs.length === 0 ? ' no-img' : ' has-imgs')
+            }
+        >
             <div className="setting-infos">
                 <div>Your pictures</div>
                 <div>
