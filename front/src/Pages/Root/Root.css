@@ -7,6 +7,8 @@
 
     display: flex;
     flex-flow: column;
+
+    background: linear-gradient(148deg, rgba(232, 33, 184, 0.70) 0%, rgba(74, 192, 252, 0.70) 100%);
 }
 
 

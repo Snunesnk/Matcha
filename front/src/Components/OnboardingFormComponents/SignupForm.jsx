@@ -96,8 +96,11 @@ export async function action({ request }) {
         password: formData.get('password'),
         dateOfBirth: formData.get('dateOfBirth'),
     }
+
     let error = checkPassword(data.password)
-    error = checkDate(data.dateOfBirth)
+
+    if (error === validationErrors.noValidationError)
+        error = checkDate(data.dateOfBirth)
 
     if (error === validationErrors.noValidationError) {
         data.password = await hashPassword(data.password)
@@ -157,9 +160,11 @@ const SignupForm = () => {
 
     return (
         <div id="test-div">
-            <div id="left-div"></div>
+            <div id="left-div">
+                <div></div>
+            </div>
             <div id="right-div">
-                <form id="onboarding_form" method="post">
+                <Form id="onboarding_form" method="post">
                     <h3 id="signup_title">
                         Create your account to find your catmate
                     </h3>
@@ -178,6 +183,14 @@ const SignupForm = () => {
                                 required={true}
                             />
                         </div>
+                    </div>
+                    <div>
+                        <FormInput
+                            placeholder="Birth date"
+                            type="date"
+                            name="dateOfBirth"
+                            required={true}
+                        />
                     </div>
                     <div>
                         <FormInput
@@ -202,27 +215,19 @@ const SignupForm = () => {
                             required={true}
                         />
                     </div>
-                    <div>
-                        <FormInput
-                            placeholder="Birth date"
-                            type="date"
-                            name="dateOfBirth"
-                            required={true}
-                        />
-                    </div>
                     {formResult &&
                         formResult.error !==
                             validationErrors.noValidationError && (
-                            <div className="centered_container">
-                                <label className="errorLabel">
-                                    {formResult.error}
-                                </label>
-                            </div>
+                            // <div className="centered_container">
+                            <label className="errorLabel">
+                                {formResult.error}
+                            </label>
+                            // </div>
                         )}
                     <button className="btn signup-btn" type="submit">
                         Create my account
                     </button>
-                </form>
+                </Form>
             </div>
         </div>
     )
