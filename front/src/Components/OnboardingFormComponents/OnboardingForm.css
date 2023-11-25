@@ -21,8 +21,26 @@
     left: 0;
 }
 
-#left-div>div {
+#left-div > div {
     background: url('../../assets/cat_glasses.jpg'), no-repeat fixed;
+    background-size: 120%;
+    background-position: 100% 50%;
+    height: 100%;
+    width: 100%;
+    animation: unblur 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms 1 normal none;
+    border-radius: 0px 100px 100px 0px;
+}
+
+#right-div-t {
+    background-color: #200618;
+    height: 100%;
+    min-width: 40%;
+    max-width: 40%;
+    left: 0;
+}
+
+#right-div-t > div {
+    background: url('../../assets/login_cat.jpg'), no-repeat fixed;
     background-size: 120%;
     background-position: 100% 50%;
     height: 100%;
@@ -44,22 +62,22 @@
     justify-content: center;
 }
 
-#onboarding_form>h3 {
+#onboarding_form > h3 {
     animation: appear 2s cubic-bezier(0.215, 0.61, 0.355, 1) both 250ms;
 }
 
-#onboarding_form>div {
+#onboarding_form > div {
     animation: appear 1.9s cubic-bezier(0.215, 0.61, 0.355, 1) both 450ms;
 }
 
-#onboarding_form>.signup-btn {
+#onboarding_form > .signup-btn {
     animation: appear 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) both 650ms;
 }
 
 #signup_title {
     text-align: center;
     width: 100%;
-    color: #4AC0FC;
+    color: #4ac0fc;
 }
 
 #onboarding_form {
@@ -74,7 +92,7 @@
     /* padding: 60px 0px; */
 }
 
-#onboarding_form>div {
+#onboarding_form > div {
     width: 95%;
     display: flex;
     justify-content: center;
@@ -92,7 +110,6 @@
 .errorLabel {
     color: red;
 }
-
 
 @keyframes unblur {
     0% {
@@ -136,7 +153,7 @@
 }
 
 .send-email-again-msg a:hover {
-    color: #4AC0FC;
+    color: #4ac0fc;
 }
 
 /**** ******* ****/
@@ -169,7 +186,7 @@
 }
 
 #gender_selection_catch_phrase b {
-    color: #4AC0FC;
+    color: #4ac0fc;
 }
 
 #gender_selection_catch_phrase i {
@@ -196,7 +213,7 @@
 
 #description_creation_input:focus-visible {
     outline: none;
-    border-bottom-color: #4AC0FC;
+    border-bottom-color: #4ac0fc;
     transition: all 100ms cubic-bezier(1, 0.06, 0.83, 0.67);
 }
 
@@ -236,14 +253,12 @@ label.Mui-focused {
     border-bottom: 2px solid #ba7300 !important;
 }
 
-
 /**** ************** ****/
 /**** PICTURE UPLOAD ****/
 /**** ************** ****/
 .complex-setting.has-imgs {
     margin-top: -15%;
 }
-
 
 /**** *************** ****/
 /**** ALL SET MESSAGE ****/
