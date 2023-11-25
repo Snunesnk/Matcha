@@ -1,5 +1,7 @@
 import { User } from "../models/user.model.js";
 import { cryptPassword } from "../services/password.service.js";
+import crypto from "crypto";
+import bcrypt from "bcrypt";
 
 export default class {
   static async login(req, res) {
@@ -34,6 +36,23 @@ export default class {
         });
         return;
       }
+
+      // Create remember-me cookie
+      const rememberMeToken = crypto.randomBytes(64).toString("hex");
+      const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
+
+      const result = await User.updateByLogin(login, { token: hashedToken });
+      if (result === null) {
+        res.status(500).send({
+          message: "COULD_NOT_LOGIN",
+        });
+        return;
+      }
+
+      res.cookie("remember_me", rememberMeToken, {
+        httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
+        maxAge: 2592000000, // e.g., 30 days, expressed in milliseconds
+      });
 
       res.status(200).send({
         message: "User logged in successfully.",
@@ -115,12 +134,7 @@ export default class {
       // Save User in the database
       const result = await User.create(user);
       if (result !== null) {
-        //// DEBUG ////
-        // User.sendVerificationMail(result);
-        console.log(
-          `${process.env.FRONT_URL}/onboarding/verify/?login=${result.login}&token=${result.token}`
-        );
-        //// DEBUG ////
+        User.sendVerificationMail(result);
 
         res.status(200).send(result);
         return;
@@ -164,11 +178,20 @@ export default class {
         return;
       }
 
-      const result = await User.updateByLogin(
-        login,
-        { verified: true, token: null }
-      );
+      // Create remember-me cookie
+      const rememberMeToken = crypto.randomBytes(64).toString("hex");
+      const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
+
+      const result = await User.updateByLogin(login, {
+        verified: true,
+        token: hashedToken,
+      });
       if (result !== null) {
+        res.cookie("remember_me", rememberMeToken, {
+          httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
+          maxAge: 2592000000, // e.g., 30 days, expressed in milliseconds
+        });
+
         res.status(200).send({
           message: "User verified successfully.",
         });
