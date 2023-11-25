@@ -8,12 +8,11 @@
     display: flex;
     flex-flow: column;
 
-    background: linear-gradient(148deg, rgba(232, 33, 184, 0.70) 0%, rgba(74, 192, 252, 0.70) 100%);
+    background: #5d0f46;
 }
-
 
 #page_container {
     width: 100%;
-    min-height: calc(100vh - 20px - 48px);
-    max-height: calc(100vh - 20px - 48px);
+    min-height: calc(100vh - 20px - 48px - 42px);
+    max-height: calc(100vh - 20px - 48px - 42px);
 }

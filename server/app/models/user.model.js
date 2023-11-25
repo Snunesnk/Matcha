@@ -40,7 +40,11 @@ export class User extends UserChunk {
   }
 
   set coordinate(coordinate) {
-    if (coordinate !== null && this._latitude !== undefined && this._longitude !== undefined) {
+    if (
+      coordinate !== null &&
+      this._latitude !== undefined &&
+      this._longitude !== undefined
+    ) {
       this._coordinate = `POINT(${this._latitude} ${this._longitude})`;
     } else {
       this._coordinate = coordinate;
@@ -52,7 +56,12 @@ export class User extends UserChunk {
   }
 
   set latitude(coordinate) {
-    if (_.isObject(coordinate) && coordinate !== null && coordinate.x !== undefined && coordinate.y !== undefined) {
+    if (
+      _.isObject(coordinate) &&
+      coordinate !== null &&
+      coordinate.x !== undefined &&
+      coordinate.y !== undefined
+    ) {
       this._latitude = coordinate.y;
     } else {
       this._latitude = undefined;
@@ -64,7 +73,12 @@ export class User extends UserChunk {
   }
 
   set longitude(coordinate) {
-    if (_.isObject(coordinate) && coordinate !== null && coordinate.x !== undefined && coordinate.y !== undefined) {
+    if (
+      _.isObject(coordinate) &&
+      coordinate !== null &&
+      coordinate.x !== undefined &&
+      coordinate.y !== undefined
+    ) {
       this._longitude = coordinate.x;
     } else {
       this._longitude = undefined;
@@ -76,7 +90,7 @@ export class User extends UserChunk {
   }
 
   set isOnline(isOnline) {
-    if (isOnline === true || isOnline === "true" || isOnline === 1) { 
+    if (isOnline === true || isOnline === "true" || isOnline === 1) {
       this._isOnline = true;
       return;
     }
@@ -229,7 +243,8 @@ export class User extends UserChunk {
     const token = user.token;
     const login = user.login;
     const email = user.email;
-    const message = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${token}`;
+    const verifLink = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${token}`;
+    const message = `Hello ${user.name} ${user.surname}!\n\nPlease verify your email by clicking on the following link:\n${verifLink}\n\nHave a nice day!`;
 
     try {
       return await sendEmail(email, "Verify your email", message);
@@ -257,7 +272,18 @@ export class User extends UserChunk {
       return null;
     }
     user.password = "XXXXX";
-    return user
+    user.token = "YYYYY";
+    return user;
+  }
+
+  static async getUserByToken(token) {
+    const user = await User.getFullUserByToken(token);
+    if (user === null) {
+      return null;
+    }
+    user.password = "XXXXX";
+    user.token = "YYYYY";
+    return user;
   }
 
   static async getFullUserByLogin(login) {
@@ -269,7 +295,28 @@ export class User extends UserChunk {
     try {
       const userTags = await UserTag.getUserTagsByLogin(login);
       if (_.isArray(userTags)) {
-        tags = userTags.map((userTag) => ({bwid: userTag.tagBwid}));
+        tags = userTags.map((userTag) => ({ bwid: userTag.tagBwid }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    const user = {
+      ...data[0],
+      tags,
+    };
+    return new User(user);
+  }
+
+  static async getFullUserByToken(token) {
+    const data = await DbRequestService.read("user", { token: `${token}` });
+    if (data.length === 0) {
+      return null;
+    }
+    let tags = [];
+    try {
+      const userTags = await UserTag.getUserTagsByLogin(data.login);
+      if (_.isArray(userTags)) {
+        tags = userTags.map((userTag) => ({ bwid: userTag.tagBwid }));
       }
     } catch (error) {
       console.log(error);
@@ -290,17 +337,23 @@ export class User extends UserChunk {
       user.verified = false;
       user.token = rand.suid(16);
     }
-    const data = await DbRequestService.update("user", new User({...user, tags: undefined}), {
-      login: `${login}`,
-    });
+    const data = await DbRequestService.update(
+      "user",
+      new User({ ...user, tags: undefined }),
+      {
+        login: `${login}`,
+      }
+    );
     if (data.affectedRows === 0) {
       return null;
     }
     try {
       if (_.isArray(user.tags)) {
         await UserTag.deleteByLogin(login);
-        user.tags.forEach(async tag => {
-          await UserTag.create(new UserTag({ userLogin: login, tagBwid: tag.bwid }));
+        user.tags.forEach(async (tag) => {
+          await UserTag.create(
+            new UserTag({ userLogin: login, tagBwid: tag.bwid })
+          );
         });
       }
     } catch (error) {

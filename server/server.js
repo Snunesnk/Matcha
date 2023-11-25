@@ -31,6 +31,21 @@ app.use("/api", likeRoute);
 app.use("/api", viewRoute);
 app.use("/api", imageRoute);
 
+// Cookie parser middleware
+app.use((req, res, next) => {
+  if (req.cookies) {
+    const token = req.cookies["remember_me"];
+    if (token) {
+      const user = findUserByRememberMeToken(token);
+      if (user) {
+        // If the token is valid, attach the user to the request object
+        req.user = user;
+      }
+    }
+  }
+  next();
+});
+
 // Docker health check
 app.use(
   "/isHealthy",
