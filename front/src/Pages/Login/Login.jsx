@@ -1,52 +1,91 @@
-import { useState } from 'react'
-import Button from '../../Components/Button/Button'
 import FormInput from '../../Components/FormInput/FormInput'
 import './Login.css'
-import { Form, useActionData } from 'react-router-dom'
+import { Form, useActionData, useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useEffect, useState } from 'react'
 
-// const LoginPage = () => {
-//     const [login, setLogin] = useState('')
-//     const [password, setPassword] = useState('')
+// Function taken from https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
+const hashPassword = async (password) => {
+    const encoder = new TextEncoder()
+    const encodedPassword = encoder.encode(password)
 
-//     return (
-//         <div id="login_page">
-//             <div id="login-container">
-//                 <div id="login-welcome">
-//                     <h2>Log in to your account</h2>
-//                     <p>Welcome back! Please enter your details.</p>
-//                 </div>
-//                 <div className="login-input">
-//                     <label htmlFor="login">Login</label>
-//                     <FormInput
-//                         placeholder="Login"
-//                         name="login"
-//                         required={true}
-//                         updateValue={setLogin}
-//                     />
-//                 </div>
+    const hashedPassword = await crypto.subtle.digest(
+        'SHA-256',
+        encodedPassword
+    )
 
-//                 <div className="login-input">
-//                     <label htmlFor="password">Password</label>
-//                     <FormInput
-//                         placeholder="Password"
-//                         name="password"
-//                         required={true}
-//                         updateValue={setPassword}
-//                     />
-//                 </div>
-//                 <div id="login-forgot-password">
-//                     <label>Forgot password?</label>
-//                 </div>
-//                 <Button text="Sign in" btnClass="pink" />
-//             </div>
-//         </div>
-//     )
-// }
+    const hashArray = Array.from(new Uint8Array(hashedPassword))
+    const hashHex = hashArray
+        .map((b) => b.toString(16).padStart(2, '0'))
+        .join('')
+    return hashHex
+}
+
+export async function action({ request }) {
+    const formData = await request.formData()
+    const data = {
+        login: formData.get('login'),
+        password: formData.get('password'),
+    }
+
+    data.password = await hashPassword(data.password)
+
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+    }
+    const res = await fetch(
+        'http://localhost:8080/api/user/login',
+        options
+    ).then((response) => {
+        return response.json()
+    })
+
+    return res
+}
 
 const LoginPage = () => {
-    const [login, setLogin] = useState('')
-    const [password, setPassword] = useState('')
     const formResult = useActionData()
+    const dispatch = useDispatch()
+    const navigate = useNavigate()
+    const [error, setError] = useState('')
+
+    useEffect(() => {
+        if (!formResult) return
+
+        console.log(formResult)
+
+        switch (formResult.message) {
+            case 'EMAIL_NOT_VERIFIED':
+                navigate('/onboarding/validation')
+                break
+            case 'MISSING_DATA':
+                setError('Missing data')
+                break
+            case 'WRONG_CREDENTIALS':
+                setError('Login or password incorrect')
+                break
+            case 'COULD_NOT_LOGIN':
+                setError('Could not login')
+                break
+            case 'LOG_IN_SUCCESS':
+                dispatch({
+                    type: USER_STATE_ACTIONS.LOG_IN,
+                    payload: {
+                        email: formResult.email,
+                        name: formResult.name,
+                        login: formResult.login,
+                    },
+                })
+                navigate('/dashboard')
+                break
+            default:
+                console.log('Unknown message')
+        }
+    }, [formResult])
 
     return (
         <div id="test-div">
@@ -55,38 +94,28 @@ const LoginPage = () => {
             </div>
             <div id="right-div">
                 <Form id="onboarding_form" method="post">
-                    <div id="login-welcome">
-                        <h2>Log in to your account</h2>
-                        <p>Welcome back! Please enter your details.</p>
-                    </div>
+                    <h3 id="signup_title">
+                        Welcome back! Please enter your credentials.
+                    </h3>
                     <div>
                         <FormInput
                             placeholder="Login"
                             name="login"
                             required={true}
-                            updateValue={setLogin}
                         />
                     </div>
                     <div>
                         <FormInput
                             placeholder="Password"
                             name="password"
+                            type="password"
                             required={true}
-                            updateValue={setPassword}
                         />
                     </div>
-                    {formResult &&
-                        formResult.error !==
-                            validationErrors.noValidationError && (
-                            // <div className="centered_container">
-                            <label className="errorLabel">
-                                {formResult.error}
-                            </label>
-                            // </div>
-                        )}
                     <div id="login-forgot-password">
-                        <label>Forgot password?</label>
+                        <label>Forgot your password?</label>
                     </div>
+                    {error && <div className="error">{error}</div>}
                     <button className="btn signup-btn" type="submit">
                         Sign In
                     </button>
