@@ -55,12 +55,14 @@ export default class {
       });
 
       res.status(200).send({
-        message: "User logged in successfully.",
+        message: "LOG_IN_SUCCESS",
+        user: user,
       });
     } catch (error) {
       res.status(500).send({
-        message: error.message || "Error occurred while logging in.",
+        message: "COULD_NOT_LOGIN",
       });
+      console.log(error);
     }
   }
 
@@ -326,6 +328,22 @@ export default class {
     } catch (error) {
       res.status(500).send({
         message: `Could not delete User with login ${login}`,
+      });
+    }
+  };
+
+  static currentUser = async (req, res) => {
+    const user = req.user;
+
+    console.log(user);
+
+    if (!user) {
+      res.status(200).send({
+        user: null,
+      });
+    } else {
+      res.status(200).send({
+        user: user,
       });
     }
   };

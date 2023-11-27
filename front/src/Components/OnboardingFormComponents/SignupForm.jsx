@@ -5,7 +5,6 @@ import { USER_STATE_ACTIONS, validationErrors } from '../../constants'
 import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import './OnboardingForm.css'
-import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
 const checkPassword = (password) => {
     // Password => must not be empty

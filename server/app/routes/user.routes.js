@@ -22,6 +22,9 @@ router.get("/user/verified", userHandler.getAllVerified);
 // Login
 router.post("/user/login", userHandler.login);
 
+// Get current user
+router.get("/user/me", userHandler.currentUser);
+
 // Retrieve a single User with login
 router.get("/user/:login", userHandler.getUserByLogin);
 

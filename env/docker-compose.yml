@@ -55,9 +55,6 @@ services:
       - ../front:/front/src
     networks:
       - public
-    depends_on:
-      matcha_backend:
-        condition: service_healthy
 
 networks:
   public:
