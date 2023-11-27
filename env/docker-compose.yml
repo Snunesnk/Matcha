@@ -34,7 +34,9 @@ services:
     volumes:
       - matcha-mysql-data:/var/lib/mysql
     networks:
-      - private
+      - public
+    ports:
+      - 3306:3306
     env_file: ../server/.env
     healthcheck:
       test: "mysqladmin ping -h $$MYSQL_HOST -p$$MYSQL_ROOT_PASSWORD"
@@ -42,6 +44,7 @@ services:
       retries: 20
       start_period: 5s
       timeout: 2s
+    platform: linux/x86_64
       
   matcha_frontend:
     container_name: matcha_frontend
