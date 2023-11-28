@@ -33,8 +33,6 @@ services:
     restart: always
     volumes:
       - matcha-mysql-data:/var/lib/mysql
-    networks:
-      - public
     ports:
       - 3306:3306
     env_file: ../server/.env
