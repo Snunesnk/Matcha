@@ -104,18 +104,18 @@ const LoginPage = () => {
                             required={true}
                         />
                     </div>
-                    <div>
+                    <div id="login-password">
                         <FormInput
                             placeholder="Password"
                             name="password"
                             type="password"
                             required={true}
                         />
+                        <div id="login-error">{error}</div>
                     </div>
                     <div id="login-forgot-password">
                         <label>Forgot your password?</label>
                     </div>
-                    {error && <div className="error">{error}</div>}
                     <button className="btn signup-btn" type="submit">
                         Sign In
                     </button>

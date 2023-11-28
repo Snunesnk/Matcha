@@ -37,9 +37,22 @@
     font-weight: 500;
 }
 
+#login-password {
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+#login-error {
+    color: red;
+    font-size: 0.8rem;
+    animation: none !important;
+    min-height: 5px;
+    max-height: 5px;
+}
+
 #login-forgot-password {
     text-align: center;
-    margin-bottom: 20px;
+    margin-top: 40px;
     font-size: 0.8em;
     color: #dc21b8;
 }

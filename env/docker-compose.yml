@@ -14,7 +14,6 @@ services:
     env_file: ../server/.env
     networks:
       - public
-      - private
     healthcheck:
       test: "curl --fail http://localhost:$$NODE_DOCKER_PORT/isHealthy || exit 1"
       interval: 5s
@@ -36,6 +35,10 @@ services:
     ports:
       - 3306:3306
     env_file: ../server/.env
+    ports:
+      - "3306:3306"
+    networks:
+      - public
     healthcheck:
       test: "mysqladmin ping -h $$MYSQL_HOST -p$$MYSQL_ROOT_PASSWORD"
       interval: 5s
@@ -58,6 +61,3 @@ services:
 
 networks:
   public:
-  private:
-volumes:
-  matcha-mysql-data:

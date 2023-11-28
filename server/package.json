@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon --inspect=0.0.0.0:2424 --watch app ./server.js -p",
+    "dev": "nodemon --inspect=0.0.0.0:2424 --watch /server/app ./server.js",
+    "dev:populate": "nodemon --inspect=0.0.0.0:2424 --watch /server/app ./server.js -p",
     "prod": "node ./server.js"
   },
   "keywords": [
