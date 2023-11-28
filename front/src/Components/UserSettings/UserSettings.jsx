@@ -201,8 +201,6 @@ const UserSettings = () => {
     return (
         <div id="user-settings">
             <div id="settings-container">
-                <Button text={'Log out'} btnClass="danger" onClick={logOut} />
-                <div className="settings-divider"></div>
                 <h2>Discovery settings</h2>
                 <div className="setting">
                     <div>Show me</div>
@@ -267,7 +265,6 @@ const UserSettings = () => {
                     text={'Save discovery settings'}
                     btnClass={'grey mrg-top-30'}
                 />
-                <div className="settings-divider"></div>
 
                 <h2>Personal infos</h2>
                 <div className="setting">

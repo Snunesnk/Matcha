@@ -23,10 +23,12 @@
 
 .navTitle {
     color: white;
-    text-align: center;
     font-size: 48px;
     line-height: 48px;
-    margin: 0;
+}
+
+.onglet {
+    color: white;
 }
 
 .log-in-btn-container {
