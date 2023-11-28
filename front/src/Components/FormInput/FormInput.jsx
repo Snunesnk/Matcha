@@ -19,7 +19,6 @@ const FormInput = ({
     if (value === '') {
         return (
             <div className="form_input_container">
-                <label className="form_label">{placeholder}</label>
                 <input
                     className="form_input"
                     placeholder={placeholder}

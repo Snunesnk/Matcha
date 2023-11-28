@@ -11,7 +11,7 @@ const LoginPage = () => {
         <div id="login_page">
             <div id="login-container">
                 <div id="login-welcome">
-                    <h2>Log in to your account</h2>
+                    <h2>Log into your account</h2>
                     <p>Welcome back! Please enter your details.</p>
                 </div>
                 <div className="login-input">
