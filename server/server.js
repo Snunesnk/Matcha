@@ -40,12 +40,12 @@ app.use(
 );
 
 // Populate DB with fake accounts if flag is set
-if (
-  process.argv.length >= 3 &&
-  (process.argv[2] === "--populate-db" || process.argv[2] === "-p")
-) {
-  populateDB();
-}
+// if (
+//   process.argv.length >= 3 &&
+//   (process.argv[2] === "--populate-db" || process.argv[2] === "-p")
+// ) {
+//   populateDB();
+// }
 
 // set port, listen for requests
 const PORT = process.env.NODE_DOCKER_PORT || 8080;
