@@ -8,9 +8,8 @@ services:
     ports:
       - 8080:8080
       - 2424:2424
-    working_dir: /server/src
     volumes:
-      - ../server:/server/src
+      - ../server/app:/server/app
     env_file: ../server/.env
     networks:
       - public

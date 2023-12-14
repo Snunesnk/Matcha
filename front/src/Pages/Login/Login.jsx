@@ -89,7 +89,7 @@ const LoginPage = () => {
 
     return (
         <div id="test-div">
-            <div id="right-div-t">
+            <div id="left-div" className="left-login">
                 <div></div>
             </div>
             <div id="right-div">

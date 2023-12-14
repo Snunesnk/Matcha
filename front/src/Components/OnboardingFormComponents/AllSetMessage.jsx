@@ -11,7 +11,6 @@ const AllSetMessage = () => {
     const login = useSelector((state) => state.userState.userInfos.login)
 
     const sendForm = () => {
-        console.log(userState)
         dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
 
         const options = {

@@ -1,6 +1,15 @@
 import express, { json, urlencoded } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import cookieParser from "cookie-parser";
+
+// Setting /api routes
+import userRoute from "./routes/user.routes.js";
+import tagRoute from "./routes/tag.routes.js";
+import likeRoute from "./routes/like.routes.js";
+import viewRoute from "./routes/view.routes.js";
+import imageRoute from "./routes/images.routes.js";
+import populateDB from "./services/faker.service.js";
 
 dotenv.config();
 
@@ -8,31 +17,27 @@ const app = express();
 
 var corsOptions = {
   origin: process.env.FRONT_URL,
+  credentials: true,
 };
 
 app.use(cors(corsOptions));
-// parse requests of content-type - application/json
 app.use(json());
-
-// parse requests of content-type - application/x-www-form-urlencoded
+app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 
-// Setting /api routes
-import userRoute from "./app/routes/user.routes.js";
-import tagRoute from "./app/routes/tag.routes.js";
-import likeRoute from "./app/routes/like.routes.js";
-import viewRoute from "./app/routes/view.routes.js";
-import imageRoute from "./app/routes/images.routes.js";
-import populateDB from "./app/services/faker.service.js";
-
-app.use("/api", tagRoute);
-app.use("/api", userRoute);
-app.use("/api", likeRoute);
-app.use("/api", viewRoute);
-app.use("/api", imageRoute);
-
+// Docker health check
+app.use(
+  "/isHealthy",
+  express.Router().get("", (req, res) => {
+    res.status(200).send("I'm healthy !");
+  })
+);
 // Cookie parser middleware
 app.use((req, res, next) => {
+  console.log("Cookies: ", req.cookies);
+  var fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
+  console.log("fullUrl", fullUrl);
+  // console.log("req", req);
   if (req.cookies) {
     const token = req.cookies["remember_me"];
     if (token) {
@@ -42,17 +47,16 @@ app.use((req, res, next) => {
         req.user = user;
       }
     }
+  } else {
+    res.cookie("title", "GeeksforGeeks");
   }
   next();
 });
-
-// Docker health check
-app.use(
-  "/isHealthy",
-  express.Router().get("", (req, res) => {
-    res.status(200).send("I'm healthy !");
-  })
-);
+app.use("/api", tagRoute);
+app.use("/api", userRoute);
+app.use("/api", likeRoute);
+app.use("/api", viewRoute);
+app.use("/api", imageRoute);
 
 // Populate DB with fake accounts if flag is set
 if (
