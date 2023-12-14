@@ -5,6 +5,7 @@ import { sendEmail } from "../services/send-mail.service.js";
 import { UserChunk } from "./user-chunk.model.js";
 import { UserTag } from "./user-tag.model.js";
 import { Tag } from "./tag.model.js";
+import bcrypt from "bcrypt";
 import _ from "lodash";
 
 export class User extends UserChunk {
@@ -240,11 +241,11 @@ export class User extends UserChunk {
   }
 
   static async sendVerificationMail(user) {
-    const token = user.token;
+    const token = bcrypt.hashSync(user.token, 10);
     const login = user.login;
     const email = user.email;
     const verifLink = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${token}`;
-    const message = `Hello ${user.name} ${user.surname}!\n\nPlease verify your email by clicking on the following link:\n${verifLink}\n\nHave a nice day!`;
+    const message = `Hello ${user.surname}!\n\nPlease verify your email by clicking the following link:\n${verifLink}\n\nHave a nice day!`;
 
     try {
       return await sendEmail(email, "Verify your email", message);

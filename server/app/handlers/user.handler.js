@@ -41,7 +41,9 @@ export default class {
       const rememberMeToken = crypto.randomBytes(64).toString("hex");
       const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
 
-      const result = await User.updateByLogin(login, { token: hashedToken });
+      const result = await User.updateByLogin(login, {
+        token: rememberMeToken,
+      });
       if (result === null) {
         res.status(500).send({
           message: "COULD_NOT_LOGIN",
@@ -49,9 +51,9 @@ export default class {
         return;
       }
 
-      res.cookie("remember_me", rememberMeToken, {
+      res.cookie("remember_me", hashedToken, {
         httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
-        maxAge: 2592000000, // e.g., 30 days, expressed in milliseconds
+        maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days, expressed in milliseconds
       });
 
       res.status(200).send({
@@ -84,6 +86,9 @@ export default class {
         });
         return;
       }
+
+      user.token = crypto.randomBytes(64).toString("hex");
+      await User.updateByLogin(login, user);
 
       const result = await User.sendVerificationMail(user);
       if (result === true) {
@@ -175,7 +180,7 @@ export default class {
         return;
       }
 
-      if (user.token !== token) {
+      if (bcrypt.hashSync(user.token, 10) !== token) {
         res.status(401).send({
           message: "WRONG_TOKEN",
         });
