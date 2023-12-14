@@ -44,8 +44,6 @@ services:
       retries: 20
       start_period: 5s
       timeout: 2s
-    platform: linux/x86_64
-      
   matcha_frontend:
     container_name: matcha_frontend
     build:
