@@ -113,6 +113,8 @@ export default class {
       return;
     }
 
+    // TODO - Validate birthdate
+
     // TODO - test password strength
     const password = await cryptPassword(req.body.password);
     if (password === null) {
@@ -190,9 +192,10 @@ export default class {
       });
       if (result !== null) {
         res.cookie("remember_me", rememberMeToken, {
-          httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
+          // httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
           maxAge: 2592000000, // e.g., 30 days, expressed in milliseconds
         });
+        console.log("Cookie set.", rememberMeToken);
 
         res.status(200).send({
           message: "User verified successfully.",
@@ -335,7 +338,7 @@ export default class {
   static currentUser = async (req, res) => {
     const user = req.user;
 
-    console.log(user);
+    console.log("currentUser", user);
 
     if (!user) {
       res.status(200).send({

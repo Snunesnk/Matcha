@@ -27,7 +27,6 @@ const setListenerForValidation = () => {
 
 const EmailValidated = () => {
     const setValidation = () => {
-        console.log('set validation')
         localStorage.setItem('sessionStorage', 'validated')
     }
 
