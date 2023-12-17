@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { Link, useMatch } from 'react-router-dom'
 import { AlreadyHaveAccountBtn, CreateAccountButton } from '../Button/Button'
 import { useSelector } from 'react-redux'
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import './Navbar.css'
 
 const Navbar = () => {
@@ -14,7 +15,7 @@ const Navbar = () => {
                 <h3 className="navTitle">MatChat</h3>
             </Link>
             <Link to="/dashboard/userSettings">
-                <h2 className="onglet">Profil</h2>
+                <AccountCircleIcon> test</AccountCircleIcon>
             </Link>
             <Link to="/dashboard/messages">
                 <h2 className="onglet">Chat</h2>

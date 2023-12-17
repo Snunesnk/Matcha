@@ -1,8 +1,6 @@
 import React from 'react'
-import { Grid } from '@mui/material'
 import './OnboardingForm.css'
 import ListChoice from '../ListChoice'
-import { Link } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import OnboardingCard from '../OnboardingCard/OnboardingCard'
