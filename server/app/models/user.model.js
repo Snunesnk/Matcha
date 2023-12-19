@@ -240,11 +240,15 @@ export class User extends UserChunk {
     return await comparePassword(password, this.password);
   }
 
-  static async sendVerificationMail(user) {
-    const token = bcrypt.hashSync(user.token, 10);
+  static async sendVerificationMail(user, token) {
+    let hashedToken = bcrypt.hashSync(token, 10);
+    while (hashedToken.includes("/")) {
+      console.log("hashing again");
+      hashedToken = bcrypt.hashSync(token, 10);
+    }
     const login = user.login;
     const email = user.email;
-    const verifLink = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${token}`;
+    const verifLink = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${hashedToken}`;
     const message = `Hello ${user.surname}!\n\nPlease verify your email by clicking the following link:\n${verifLink}\n\nHave a nice day!`;
 
     try {
@@ -361,9 +365,24 @@ export class User extends UserChunk {
       console.log(error);
     }
     if (user.email !== undefined) {
+      console.log("Test");
       await User.sendVerificationMail(user);
     }
     return await User.getUserByLogin(login);
+  }
+
+  static async verifyLogin(login, token) {
+    const data = await DbRequestService.read("user", { login: `${login}` });
+
+    if (data === null) {
+      return -1;
+    }
+
+    const userToken = data[0].token;
+    const res = bcrypt.compareSync(userToken, token);
+
+    if (res === false) return 0;
+    return 1;
   }
 
   static async deleteByLogin(login) {

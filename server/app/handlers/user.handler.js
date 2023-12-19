@@ -29,6 +29,7 @@ export default class {
         return;
       }
 
+      console.log("Comparing password");
       const isPasswordMatch = await user.passwordMatch(password);
       if (!isPasswordMatch) {
         res.status(401).send({
@@ -87,10 +88,10 @@ export default class {
         return;
       }
 
-      user.token = crypto.randomBytes(64).toString("hex");
+      user.token = crypto.randomBytes(64).toString("base64url");
       await User.updateByLogin(login, user);
 
-      const result = await User.sendVerificationMail(user);
+      const result = await User.sendVerificationMail(user, user.token);
       if (result === true) {
         res.status(200).send({
           message: "Verification mail sent successfully.",
@@ -141,9 +142,10 @@ export default class {
 
     try {
       // Save User in the database
+      user.token = crypto.randomBytes(64).toString("base64url");
       const result = await User.create(user);
       if (result !== null) {
-        User.sendVerificationMail(result);
+        User.sendVerificationMail(result, user.token);
 
         res.status(200).send(result);
         return;
@@ -172,15 +174,16 @@ export default class {
     }
 
     try {
-      const user = await User.getUserByLogin(login);
-      if (user === null) {
+      let result = await User.verifyLogin(login, token);
+      if (result === -1) {
         res.status(404).send({
           message: "USER_NOT_FOUND",
         });
         return;
       }
 
-      if (bcrypt.hashSync(user.token, 10) !== token) {
+      // if (bcrypt.hashSync(user.token, 10) !== token) {
+      if (result == 0) {
         res.status(401).send({
           message: "WRONG_TOKEN",
         });
@@ -191,7 +194,7 @@ export default class {
       const rememberMeToken = crypto.randomBytes(64).toString("hex");
       const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
 
-      const result = await User.updateByLogin(login, {
+      result = await User.updateByLogin(login, {
         verified: true,
         token: hashedToken,
       });

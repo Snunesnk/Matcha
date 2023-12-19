@@ -12,12 +12,13 @@ export async function sendEmail(email, subject, text) {
       },
     });
 
-    await transporter.sendMail({
-      from: FROM,
-      to: email,
-      subject: subject,
-      text: text,
-    });
+    // await transporter.sendMail({
+    //   from: FROM,
+    //   to: email,
+    //   subject: subject,
+    //   text: text,
+    // });
+    console.log(text);
     console.log("email sent sucessfully");
     return true;
   } catch (error) {

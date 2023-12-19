@@ -3,8 +3,9 @@ import './OnboardingForm.css'
 
 const MESSAGES = {
     pending: 'It should take a few second to process your request.',
-    verified: 'Your email is now verified, you can close this and continue.',
-    error: 'An error occured, please close this and try again',
+    verified:
+        'Your email is now verified, you can close this page and log in to access your account.',
+    error: 'An error occured, please close this page and try again',
 }
 
 const sendVerificationRequest = async (login, token) => {

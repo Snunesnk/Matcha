@@ -3,6 +3,7 @@ import './Login.css'
 import { Form, useActionData, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
+import { USER_STATE_ACTIONS } from '../../constants'
 
 // Function taken from https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
 const hashPassword = async (password) => {
