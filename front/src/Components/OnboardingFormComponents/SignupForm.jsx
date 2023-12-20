@@ -82,6 +82,7 @@ export async function action({ request }) {
     return { ...data, error }
 }
 
+// TODO: Handle back status code response
 const SignupForm = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()

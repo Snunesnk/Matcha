@@ -4,6 +4,7 @@ import { checkPassword, hashPassword } from '../../../utils'
 import { validationErrors } from '../../../constants'
 import { CircularProgress } from '@mui/material'
 
+// TODO: Handle back status code response
 const ChangePassword = ({ login, token }) => {
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')

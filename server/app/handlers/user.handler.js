@@ -58,7 +58,6 @@ export default class {
 
       res.status(200).send({
         message: "LOG_IN_SUCCESS",
-        user: user,
       });
     } catch (error) {
       res.status(500).send({
@@ -446,7 +445,6 @@ export default class {
       }
 
       // TODO - test password strength
-      console.log("password", password);
       password = await cryptPassword(password);
       if (password === null) {
         res.status(500).send({

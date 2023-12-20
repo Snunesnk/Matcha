@@ -291,7 +291,6 @@ export class User extends UserChunk {
 
   static async getUserByLogin(login) {
     const user = await User.getFullUserByLogin(login);
-    console.log("user", user);
     if (user === null) {
       return null;
     }

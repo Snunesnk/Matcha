@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import FormInput from '../../../Components/FormInput/FormInput'
 
+// TODO: Handle back status code response
 const SendMail = () => {
     const [emailSent, setEmailSent] = useState(false)
     const [email, setEmail] = useState('')
