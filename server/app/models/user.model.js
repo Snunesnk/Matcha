@@ -12,28 +12,28 @@ export class User extends UserChunk {
   constructor(obj = {}) {
     super(obj);
 
-    this.bio = obj.bio;
-    this.gender = obj.gender;
+    this.bio = obj.bio || obj._bio;
+    this.gender = obj.gender || obj._gender;
 
-    this.verified = obj.verified;
-    this.isOnline = obj.isOnline;
-    this.lastOnline = obj.lastOnline;
+    this.verified = obj.verified || obj._verified;
+    this.isOnline = obj.isOnline || obj._isOnline;
+    this.lastOnline = obj.lastOnline || obj._lastOnline;
 
-    this.prefMale = obj.prefMale;
-    this.prefFemale = obj.prefFemale;
-    this.prefEnby = obj.prefEnby;
+    this.prefMale = obj.prefMale || obj._prefMale;
+    this.prefFemale = obj.prefFemale || obj._prefFemale;
+    this.prefEnby = obj.prefEnby || obj._prefEnby;
 
-    this.imgA = obj.imgA;
-    this.imgB = obj.imgB;
-    this.imgC = obj.imgC;
-    this.imgD = obj.imgD;
-    this.imgE = obj.imgE;
+    this.imgA = obj.imgA || obj._imgA;
+    this.imgB = obj.imgB || obj._imgB;
+    this.imgC = obj.imgC || obj._imgC;
+    this.imgD = obj.imgD || obj._imgD;
+    this.imgE = obj.imgE || obj._imgE;
 
-    this.tags = obj.tags;
+    this.tags = obj.tags || obj._tags;
 
-    this.latitude = obj.coordinate;
-    this.longitude = obj.coordinate;
-    this.coordinate = obj.coordinate;
+    this.latitude = obj.latitude || obj._latitude;
+    this.longitude = obj.longitude || obj._longitude;
+    this.coordinate = obj.coordinate || obj._coordinate;
   }
 
   get coordinate() {
@@ -291,6 +291,7 @@ export class User extends UserChunk {
 
   static async getUserByLogin(login) {
     const user = await User.getFullUserByLogin(login);
+    console.log("user", user);
     if (user === null) {
       return null;
     }
@@ -312,6 +313,15 @@ export class User extends UserChunk {
   static async getUserByMail(mail) {
     const data = await DbRequestService.read("user", { email: `${mail}` });
 
+    if (data.length === 0) {
+      return null;
+    }
+
+    return new User(data[0]);
+  }
+
+  static async getChunkUserByLogin(login) {
+    const data = await DbRequestService.read("user", { login: `${login}` });
     if (data.length === 0) {
       return null;
     }
@@ -366,10 +376,6 @@ export class User extends UserChunk {
   }
 
   static async updateByLogin(login, user) {
-    if (user.email !== undefined) {
-      user.verified = false;
-      user.token = rand.suid(16);
-    }
     const data = await DbRequestService.update(
       "user",
       new User({ ...user, tags: undefined }),
@@ -402,7 +408,7 @@ export class User extends UserChunk {
       return -1;
     }
 
-    const userToken = data[0].token;
+    const userToken = data[0].token.split("_mail_timestamp_")[0];
     const res = bcrypt.compareSync(userToken, token);
 
     if (res === false) return 0;

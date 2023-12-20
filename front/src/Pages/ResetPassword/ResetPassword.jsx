@@ -15,7 +15,11 @@ const ResetPasswordPage = () => {
 
     return (
         <div id="password-reset-container">
-            {token ? <ChangePassword login={login} /> : <SendMail />}
+            {token ? (
+                <ChangePassword login={login} token={token} />
+            ) : (
+                <SendMail />
+            )}
         </div>
     )
 }

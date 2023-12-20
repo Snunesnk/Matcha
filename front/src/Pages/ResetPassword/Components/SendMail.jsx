@@ -47,17 +47,15 @@ const SendMail = () => {
                 required={true}
                 updateValue={handleChange}
             />
-            {!emailSent ? (
-                <button
-                    className="btn signup-btn"
-                    type="submit"
-                    onClick={handleSubmit}
-                >
-                    Send an email to reset your password
-                </button>
-            ) : (
-                <p>email already sent</p>
-            )}
+            <button
+                className="btn signup-btn"
+                type="submit"
+                onClick={handleSubmit}
+                disabled={emailSent}
+            >
+                Send an email to reset your password
+            </button>
+            <p className="send-mail-label">{emailSent && 'Email sent'}</p>
         </div>
     )
 }

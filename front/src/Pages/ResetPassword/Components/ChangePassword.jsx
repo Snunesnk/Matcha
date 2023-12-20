@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react'
 import FormInput from '../../../Components/FormInput/FormInput'
-import { checkPassword } from '../../../utils'
+import { checkPassword, hashPassword } from '../../../utils'
 import { validationErrors } from '../../../constants'
+import { CircularProgress } from '@mui/material'
 
-const ChangePassword = ({ login }) => {
+const ChangePassword = ({ login, token }) => {
     const [newPassword, setNewPassword] = useState('')
     const [confirmPassword, setConfirmPassword] = useState('')
     const [passwordError, setPasswordError] = useState('')
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         const res = checkPassword(newPassword)
@@ -18,10 +20,11 @@ const ChangePassword = ({ login }) => {
         }
     }, [newPassword])
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
+        setLoading(true)
 
-        const hashedPassword = hashPassword(newPassword)
+        const hashedPassword = await hashPassword(newPassword)
         const options = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -33,7 +36,7 @@ const ChangePassword = ({ login }) => {
                 return response.json()
             })
             .then((data) => {
-                console.log(data)
+                console.log('response: ', data)
             })
             .catch((error) => {
                 console.log(error)
@@ -76,10 +79,10 @@ const ChangePassword = ({ login }) => {
                 </div>
                 <button
                     type="submit"
-                    disabled={!passwordsMatch}
-                    className="btn signup-btn"
+                    disabled={!passwordsMatch || loading}
+                    className="btn signup-btn reset-password-btn"
                 >
-                    Change password
+                    {loading ? <CircularProgress /> : 'Change password'}
                 </button>
             </form>
         </div>

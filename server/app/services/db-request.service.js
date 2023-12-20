@@ -127,6 +127,8 @@ export class DbRequestService {
     const objectModel = Object.getOwnPropertyNames(updatedObject).map((prop) =>
       prop.replace("_", "")
     );
+    console.log("objectModel", objectModel);
+    console.log("updatedObject", updatedObject);
     return new Promise((resolve, reject) => {
       if (!this.allowedTableUse.includes(tableName)) {
         reject(new Error("Table does not exist in database"));
@@ -140,6 +142,10 @@ export class DbRequestService {
         this._computeQueryCondition(filters);
       const query = `UPDATE ${tableName}` + queryCommand + queryCondition;
       const settersAndFilters = querySetters.concat(queryFilters);
+
+      console.log("query", query);
+      console.log("queryCommand", queryCommand);
+      console.log("settersAndFilters", settersAndFilters);
 
       connection.query(query, settersAndFilters, (err, res) => {
         if (err) {

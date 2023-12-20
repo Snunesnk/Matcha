@@ -34,9 +34,7 @@ app.use(
 );
 // Cookie parser middleware
 app.use((req, res, next) => {
-  console.log("Cookies: ", req.cookies);
   var fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
-  console.log("fullUrl", fullUrl);
   // console.log("req", req);
   if (req.cookies) {
     const token = req.cookies["remember_me"];
