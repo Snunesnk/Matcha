@@ -34,4 +34,10 @@ router.put("/user/:login", picturesUpload, userHandler.update);
 // Delete a User with login
 router.delete("/user/:login", userHandler.delete);
 
+// Send a reset password mail
+router.get("/user/reset-password/:email", userHandler.sendResetPasswordMail);
+
+// Reset password
+router.post("/user/reset-password", userHandler.resetPassword);
+
 export default router;

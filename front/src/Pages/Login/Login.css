@@ -55,9 +55,11 @@
     margin-top: 40px;
     font-size: 0.8em;
     color: #dc21b8;
+    background: none;
+    animation: appear 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) both 650ms;
 }
 
-#login-forgot-password label:hover {
+#login-forgot-password:hover {
     text-decoration: underline;
     cursor: pointer;
     filter: brightness(1.6);

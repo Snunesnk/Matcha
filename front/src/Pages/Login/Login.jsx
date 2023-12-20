@@ -4,23 +4,7 @@ import { Form, useActionData, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { USER_STATE_ACTIONS } from '../../constants'
-
-// Function taken from https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
-const hashPassword = async (password) => {
-    const encoder = new TextEncoder()
-    const encodedPassword = encoder.encode(password)
-
-    const hashedPassword = await crypto.subtle.digest(
-        'SHA-256',
-        encodedPassword
-    )
-
-    const hashArray = Array.from(new Uint8Array(hashedPassword))
-    const hashHex = hashArray
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join('')
-    return hashHex
-}
+import { hashPassword } from '../../utils'
 
 export async function action({ request }) {
     const formData = await request.formData()
@@ -114,9 +98,20 @@ const LoginPage = () => {
                         />
                         <div id="login-error">{error}</div>
                     </div>
-                    <div id="login-forgot-password">
-                        <label>Forgot your password?</label>
-                    </div>
+                    {/* When the user clicks the button, it should sent him an email
+                        it should also tell him that the email has been sent
+                        Then there must be a link in the mail redirecting to a page where the user
+                        can set a new password
+                        A new token must be created for the user and used as identification
+                         */}
+                    <button
+                        id="login-forgot-password"
+                        type="button"
+                        onClick={() => navigate('/password-reset')}
+                    >
+                        Forgot your password?
+                    </button>
+
                     <button className="btn signup-btn" type="submit">
                         Sign In
                     </button>

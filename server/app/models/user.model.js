@@ -258,6 +258,24 @@ export class User extends UserChunk {
     }
   }
 
+  static async sendResetPasswordMail(user, token) {
+    let hashedToken = bcrypt.hashSync(token, 10);
+    while (hashedToken.includes("/")) {
+      console.log("hashing again");
+      hashedToken = bcrypt.hashSync(token, 10);
+    }
+    const login = user.login;
+    const email = user.email;
+    const resetLink = `${process.env.FRONT_URL}/password-reset/?login=${login}&token=${hashedToken}`;
+    const message = `Hello ${user.surname}!\n\nPlease reset your password by clicking the following link:\n${resetLink}\n\nHave a nice day!`;
+
+    try {
+      return await sendEmail(email, "Reset your password", message);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   static async create(newUser) {
     const data = await DbRequestService.create("user", new UserChunk(newUser));
     if (data.affectedRows === 0) {
@@ -289,6 +307,16 @@ export class User extends UserChunk {
     user.password = "XXXXX";
     user.token = "YYYYY";
     return user;
+  }
+
+  static async getUserByMail(mail) {
+    const data = await DbRequestService.read("user", { email: `${mail}` });
+
+    if (data.length === 0) {
+      return null;
+    }
+
+    return new User(data[0]);
   }
 
   static async getFullUserByLogin(login) {
@@ -363,10 +391,6 @@ export class User extends UserChunk {
       }
     } catch (error) {
       console.log(error);
-    }
-    if (user.email !== undefined) {
-      console.log("Test");
-      await User.sendVerificationMail(user);
     }
     return await User.getUserByLogin(login);
   }

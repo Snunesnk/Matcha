@@ -29,7 +29,6 @@ export default class {
         return;
       }
 
-      console.log("Comparing password");
       const isPasswordMatch = await user.passwordMatch(password);
       if (!isPasswordMatch) {
         res.status(401).send({
@@ -355,6 +354,118 @@ export default class {
     } else {
       res.status(200).send({
         user: user,
+      });
+    }
+  };
+
+  static sendResetPasswordMail = async (req, res) => {
+    const email = req.params.email;
+
+    if (!email) {
+      res.status(400).send({
+        message: `Missing mail`,
+      });
+      return;
+    }
+
+    try {
+      const user = await User.getUserByMail(email);
+      if (user === null) {
+        res.status(404).send({
+          message: "USER_NOT_FOUND",
+        });
+        return;
+      }
+      if (user.verified !== true) {
+        res.status(401).send({
+          message: "EMAIL_NOT_VERIFIED",
+        });
+        return;
+      }
+
+      // Check if previous mail was sent less than 5 minutes ago
+      if (user?.token.includes("_mail_timestamp_")) {
+        const timestamp = user.token.split("_mail_timestamp_")[1];
+        if (Date.now() - timestamp < 5 * 60 * 1000) {
+          res.status(400).send({
+            message: "MAIL_ALREADY_SENT",
+          });
+          return;
+        }
+      }
+
+      user.token = crypto.randomBytes(64).toString("base64url");
+      // Append timestamp
+      user.token += `_mail_timestamp_${Date.now()}`;
+      await User.updateByLogin(user.login, user);
+
+      const result = await User.sendResetPasswordMail(
+        user,
+        user.token.split("_mail_timestamp_")[0]
+      );
+      if (result === true) {
+        res.status(200).send({
+          message: "Reset password mail sent successfully.",
+        });
+        return;
+      }
+      res.status(500).send({
+        message: "COULD_NOT_SEND_EMAIL",
+      });
+    } catch (error) {
+      res.status(500).send({
+        message:
+          error.message || "Error occurred while sending reset password mail.",
+      });
+    }
+  };
+
+  static resetPassword = async (req, res) => {
+    let { login, token, password } = req.body;
+
+    if (!login || !token || !password) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+
+    try {
+      const user = await User.getUserByLogin(login);
+      if (user === null) {
+        res.status(404).send({
+          message: "USER_NOT_FOUND",
+        });
+        return;
+      }
+
+      if (user.token.split("_mail_timestamp_")[0] !== token) {
+        res.status(401).send({
+          message: "WRONG_TOKEN",
+        });
+        return;
+      }
+
+      // TODO - test password strength
+      password = await cryptPassword(password);
+      if (password === null) {
+        res.status(500).send({
+          message: "PASSWORD_ENCRYPTION_ERROR",
+        });
+        return;
+      }
+
+      user.password = password;
+      user.token = crypto.randomBytes(64).toString("base64url");
+      await User.updateByLogin(login, user);
+
+      res.status(200).send({
+        message: "SUCCESS",
+      });
+      return;
+    } catch (error) {
+      res.status(500).send({
+        message: error.message || "Error occurred while resetting password.",
       });
     }
   };
