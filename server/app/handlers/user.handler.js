@@ -55,9 +55,6 @@ export default class {
         path: "/",
       };
 
-      console.log("remember_me cookie created successfully");
-      console.log("remember_me cookie value:", jwtToken);
-      console.log("remember_me cookie options:", cookieOptions);
       res.cookie("remember_me", jwtToken, cookieOptions);
       res.status(200).send({
         message: "LOG_IN_SUCCESS",
@@ -217,11 +214,9 @@ export default class {
   }
 
   static async onboardUser(req, res) {
-    const login = req.params.login;
+    const token = req.cookies.remember_me;
 
-    console.log("onboardUser", login);
-
-    if (!login) {
+    if (!token) {
       res.status(400).send({
         message: "MISSING_DATA",
       });
@@ -229,10 +224,15 @@ export default class {
       return;
     }
 
+    const decoded = await authenticationService.verifyToken(token);
+    const login = decoded.login;
+
     try {
-      result = await User.updateByLogin(login, {
+      const result = await User.updateByLogin(login, {
         onboarded: true,
       });
+      console.log("result");
+      console.log(result);
       if (result !== null) {
         res.status(200).send({
           message: "User onboarded successfully.",

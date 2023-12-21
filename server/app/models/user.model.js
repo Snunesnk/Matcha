@@ -130,7 +130,10 @@ export class User extends UserChunk {
     if (onboarded === true || onboarded === "true" || onboarded === 1) {
       this._onboarded = true;
       return;
-    } else this._onboarded = false;
+    }
+    if (onboarded === false || onboarded === "false" || onboarded === 0) {
+      this._onboarded = false;
+    }
   }
 
   get bio() {
@@ -438,6 +441,7 @@ export class User extends UserChunk {
     return {
       ...super.toJSON(),
       verified: this.verified,
+      onboarded: this.onboarded,
       bio: this.bio,
       gender: this.gender,
       prefMale: this.prefMale,

@@ -49,6 +49,7 @@ export class DbRequestService {
       (result, keyValue, index) => {
         const field = keyValue[0];
         const value = keyValue[1];
+
         if (field === undefined || value === undefined) {
           return;
         }

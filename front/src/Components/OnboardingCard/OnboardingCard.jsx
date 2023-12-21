@@ -27,7 +27,7 @@ const OnboardingCard = ({
                         </button>
                     </Link>
                 )}
-                {next == '' && (
+                {next === '' && (
                     <button
                         className={'btn ' + btnClass}
                         onClick={onClick}

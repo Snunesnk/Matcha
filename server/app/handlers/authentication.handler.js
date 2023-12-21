@@ -3,7 +3,6 @@ import { User } from "../models/user.model.js";
 
 export default class {
   static validate = async (req, res) => {
-    console.log("cookies", req.cookies);
     const token = req.cookies.remember_me;
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {

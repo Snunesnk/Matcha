@@ -1,30 +1,32 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { USER_STATE_ACTIONS } from '../../constants'
-import './OnboardingForm.css'
+import { useNavigate } from 'react-router-dom'
 import OnboardingCard from '../OnboardingCard/OnboardingCard'
+import './OnboardingForm.css'
 
 const AllSetMessage = () => {
-    const dispatch = useDispatch()
-    const userState = useSelector((state) => state.userState)
-    const login = useSelector((state) => state.userState.userInfos.login)
+    const navigate = useNavigate()
 
     const sendForm = () => {
-        dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
-
         const options = {
-            method: 'POST',
+            method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ user: userState.userSettings }),
+            credentials: 'include',
         }
-        fetch('http://localhost:8080/api/user/' + login, options).then(
-            (response) => {
-                console.log(response)
-            }
-        )
+        fetch('http://localhost:8080/api/user/onboarded', options)
+            .then((response) => {
+                if (response.ok) {
+                    console.log('User onboarded')
+                    navigate('/dashboard')
+                } else {
+                    // User needs to fill in informations
+                    throw new Error('Something went wrong ...')
+                }
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     const content = (
@@ -40,7 +42,7 @@ const AllSetMessage = () => {
         <OnboardingCard
             header={''}
             content={content}
-            next={'/dashboard'}
+            next={''}
             btnText={'Let the magic begin!'}
             onClick={sendForm}
             btnClass="all-set-btn"
