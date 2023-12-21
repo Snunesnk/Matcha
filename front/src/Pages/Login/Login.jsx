@@ -43,8 +43,6 @@ const LoginPage = () => {
     useEffect(() => {
         if (!formResult) return
 
-        console.log(formResult)
-
         switch (formResult.message) {
             case 'EMAIL_NOT_VERIFIED':
                 navigate('/onboarding/validation')

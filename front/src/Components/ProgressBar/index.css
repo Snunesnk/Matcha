@@ -35,7 +35,7 @@
 #next_and_prev_button a {
     display: flex;
     align-items: center;
-    background-color: #dc21B8;
+    background-color: #dc21b8;
     padding: 3px;
     color: white;
 }
@@ -76,7 +76,7 @@
 #progress_bar::before {
     content: '';
     position: absolute;
-    border: solid #dc21B8;
+    border: solid #dc21b8;
     border-width: 4px 0 0 0;
     height: 0px;
     width: 0;
