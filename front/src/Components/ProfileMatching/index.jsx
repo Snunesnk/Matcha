@@ -160,9 +160,7 @@ const ProfileMatching = () => {
         )
     } else
         return (
-            <div>
-                "We're sorry, we can't find anymore corresponding profiles"
-            </div>
+            <div>We're sorry, we can't find anymore corresponding profiles</div>
         )
 }
 
