@@ -57,7 +57,8 @@ const AllSetMessage = () => {
                             }
                         })
                         .catch((error) => {
-                            console.log(error)
+                            setError(error.message)
+                            setLoading(false)
                         })
                 } else {
                     if (response.status === 400) {
@@ -71,7 +72,8 @@ const AllSetMessage = () => {
                 }
             })
             .catch((error) => {
-                console.log(error)
+                setError(error.message)
+                setLoading(false)
             })
     }
 

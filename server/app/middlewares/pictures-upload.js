@@ -2,6 +2,7 @@ import _ from "lodash";
 import upload from "../middlewares/upload.js";
 import fs from "fs";
 import { User } from "../models/user.model.js";
+import path from "path";
 
 const pictures = ["imgA", "imgB", "imgC", "imgD", "imgE"];
 const allowedExt = [".png", ".jpeg", ".jpg"];
@@ -16,21 +17,20 @@ async function removePicture(picturePath) {
   });
 }
 
-async function removeOldPictures(login) {
-  for (let i = 0; i < pictures.length; i++) {
-    for (let j = 0; j < allowedExt.length; j++) {
-      const picturePath =
-        "/server/app/uploads/" + pictures[i] + "-" + login + allowedExt[j];
-      await removePicture(picturePath);
-    }
-  }
+async function removeOldPictures(user) {
+  const basePath = "/server/app/uploads/";
+  const extName = path.extname(user.imgA);
+
+  if (!user.imgB) removePicture(basePath + "imgB-" + user.login + extName);
+  if (!user.imgC) removePicture(basePath + "imgC-" + user.login + extName);
+  if (!user.imgD) removePicture(basePath + "imgD-" + user.login + extName);
+  if (!user.imgE) removePicture(basePath + "imgE-" + user.login + extName);
 }
 
 export default async function (req, res) {
   const login = req.decodedUser._login;
 
   try {
-    await removeOldPictures(login);
     await upload(req, res);
     if (Object.keys(req.files).length === 0) {
       return res
@@ -39,6 +39,7 @@ export default async function (req, res) {
     }
 
     const user = {
+      login: login,
       imgA: null,
       imgB: null,
       imgC: null,
@@ -51,6 +52,7 @@ export default async function (req, res) {
     if (req.files.imgC) user.imgC = req.files.imgC[0].path;
     if (req.files.imgD) user.imgD = req.files.imgD[0].path;
     if (req.files.imgE) user.imgE = req.files.imgE[0].path;
+    await removeOldPictures(user);
 
     const data = await User.updateByLogin(login, user);
     if (data === null) {

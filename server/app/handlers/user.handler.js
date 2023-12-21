@@ -320,10 +320,7 @@ export default class {
     if (
       user.gender.length === 0 ||
       user.bio.length === 0 ||
-      user.tags.length === 0 ||
-      !user.preferences.prefMale ||
-      !user.preferences.prefFemale ||
-      !user.preferences.prefEnby
+      user.tags.length === 0
     ) {
       res.status(400).send({
         message: `Missing data`,
@@ -331,9 +328,9 @@ export default class {
       return;
     }
     if (
-      user.preferences.prefMale === false &&
-      user.preferences.prefFemale === false &&
-      user.preferences.prefEnby === false
+      !user.preferences.prefMale &&
+      !user.preferences.prefFemale &&
+      !user.preferences.prefEnby
     ) {
       res.status(400).send({
         message: `Missing data`,
@@ -346,6 +343,8 @@ export default class {
       user.prefFemale = user.preferences.prefFemale;
       user.prefEnby = user.preferences.prefEnby;
     }
+
+    // Deal with images
 
     try {
       const data = await User.updateByLogin(login, user);

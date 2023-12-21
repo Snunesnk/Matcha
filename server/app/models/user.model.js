@@ -403,9 +403,7 @@ export class User extends UserChunk {
       if (_.isArray(user.tags)) {
         await UserTag.deleteByLogin(login);
         user.tags.forEach(async (tag) => {
-          await UserTag.create(
-            new UserTag({ userLogin: login, tagBwid: tag.bwid })
-          );
+          await UserTag.create(new UserTag({ userLogin: login, tagBwid: tag }));
         });
       }
     } catch (error) {
