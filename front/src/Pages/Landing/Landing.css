@@ -27,7 +27,11 @@
 #background_landing_img {
     height: 100%;
     width: 100%;
-    background-image: linear-gradient(148deg, rgba(232, 33, 184, 0.40) 0%, rgba(74, 192, 252, 0.40) 100%),
+    background-image: linear-gradient(
+            148deg,
+            rgba(232, 33, 184, 0.4) 0%,
+            rgba(74, 192, 252, 0.4) 100%
+        ),
         url('/src/assets/kissing_cats.jpg');
 
     background-size: cover;
@@ -56,7 +60,7 @@
 }
 
 #landing_main_btn {
-    color: #DC21B8;
+    color: #dc21b8;
     border-color: #ffffff;
     position: relative;
     display: inline-block;
@@ -71,9 +75,10 @@
     text-transform: uppercase;
     margin: 8px;
     text-align: center;
-    letter-spacing: .2em;
-    background-color: #DC21B8;
-    transition: color .45s cubic-bezier(.785, .135, .15, .86), border .45s cubic-bezier(.785, .135, .15, .86);
+    letter-spacing: 0.2em;
+    background-color: #dc21b8;
+    transition: color 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86),
+        border 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
     z-index: 1;
     animation: appear 1.7s cubic-bezier(0.215, 0.61, 0.355, 1) both 1s;
     font-weight: 600;
@@ -82,7 +87,7 @@
 
 #landing_main_btn::before {
     position: absolute;
-    content: "";
+    content: '';
     display: block;
     left: 0;
     top: 0;
@@ -94,7 +99,7 @@
     transform-origin: left center;
     z-index: -1;
     background-color: #ffffff;
-    transition: transform .45s cubic-bezier(.785, .135, .15, .86);
+    transition: transform 0.45s cubic-bezier(0.785, 0.135, 0.15, 0.86);
 }
 
 #landing_main_btn:hover {
@@ -106,7 +111,6 @@
     transform-origin: right center;
     transform: scaleX(0);
 }
-
 
 @keyframes zoom-out {
     0% {
@@ -125,7 +129,6 @@
         transform: scale(1);
     }
 }
-
 
 @keyframes appear {
     0% {

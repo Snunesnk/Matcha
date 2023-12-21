@@ -31,7 +31,8 @@ import {
 import MessagesContainer from '../Components/MessagesContainer/MessagesContainer'
 import UserSettings from '../Components/UserSettings/UserSettings'
 import ProfileMatching from '../Components/ProfileMatching'
-import LoginPage from '../Pages/Login/Login'
+import LoginPage, { action as loginAction } from '../Pages/Login/Login'
+import ResetPasswordPage from '../Pages/ResetPassword/ResetPassword'
 
 const getRouterWithStore = (store) => {
     return createBrowserRouter([
@@ -44,6 +45,15 @@ const getRouterWithStore = (store) => {
                     path: '',
                     element: <Landing />,
                     loader: () => checkIfLogged(store),
+                },
+                {
+                    path: 'login',
+                    element: <LoginPage />,
+                    action: loginAction,
+                },
+                {
+                    path: 'password-reset',
+                    element: <ResetPasswordPage />,
                 },
                 {
                     path: 'onboarding/*',
@@ -124,10 +134,6 @@ const getRouterWithStore = (store) => {
                             element: <UserSettings />,
                         },
                     ],
-                },
-                {
-                    path: 'login',
-                    element: <LoginPage />,
                 },
             ],
         },

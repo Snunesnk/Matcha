@@ -1,5 +1,7 @@
 import { User } from "../models/user.model.js";
 import { cryptPassword } from "../services/password.service.js";
+import crypto from "crypto";
+import bcrypt from "bcrypt";
 
 export default class {
   static async login(req, res) {
@@ -35,13 +37,33 @@ export default class {
         return;
       }
 
+      // Create remember-me cookie
+      const rememberMeToken = crypto.randomBytes(64).toString("hex");
+      const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
+
+      const result = await User.updateByLogin(login, {
+        token: hashedToken,
+      });
+      if (result === null) {
+        res.status(500).send({
+          message: "COULD_NOT_LOGIN",
+        });
+        return;
+      }
+
+      res.cookie("remember_me", bcrypt.hashSync(rememberMeToken, 10), {
+        httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
+        maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days, expressed in milliseconds
+      });
+
       res.status(200).send({
-        message: "User logged in successfully.",
+        message: "LOG_IN_SUCCESS",
       });
     } catch (error) {
       res.status(500).send({
-        message: error.message || "Error occurred while logging in.",
+        message: "COULD_NOT_LOGIN",
       });
+      console.log(error);
     }
   }
 
@@ -64,7 +86,11 @@ export default class {
         return;
       }
 
-      const result = await User.sendVerificationMail(user);
+      const userToken = crypto.randomBytes(64).toString("base64url");
+      user.token = userToken + "_mail_timestamp_" + Date.now();
+      await User.updateByLogin(login, user);
+
+      const result = await User.sendVerificationMail(user, userToken);
       if (result === true) {
         res.status(200).send({
           message: "Verification mail sent successfully.",
@@ -92,6 +118,8 @@ export default class {
       return;
     }
 
+    // TODO - Validate birthdate
+
     // TODO - test password strength
     const password = await cryptPassword(req.body.password);
     if (password === null) {
@@ -113,14 +141,11 @@ export default class {
 
     try {
       // Save User in the database
+      const userToken = crypto.randomBytes(64).toString("base64url");
+      user.token = userToken + "_mail_timestamp_" + Date.now();
       const result = await User.create(user);
       if (result !== null) {
-        //// DEBUG ////
-        // User.sendVerificationMail(result);
-        console.log(
-          `${process.env.FRONT_URL}/onboarding/verify/?login=${result.login}&token=${result.token}`
-        );
-        //// DEBUG ////
+        User.sendVerificationMail(result, userToken);
 
         res.status(200).send(result);
         return;
@@ -149,26 +174,36 @@ export default class {
     }
 
     try {
-      const user = await User.getUserByLogin(login);
-      if (user === null) {
+      let result = await User.verifyLogin(login, token);
+      if (result === -1) {
         res.status(404).send({
           message: "USER_NOT_FOUND",
         });
         return;
       }
 
-      if (user.token !== token) {
+      if (result == 0) {
         res.status(401).send({
           message: "WRONG_TOKEN",
         });
         return;
       }
 
-      const result = await User.updateByLogin(
-        login,
-        { verified: true, token: null }
-      );
+      // Create remember-me cookie
+      const rememberMeToken = crypto.randomBytes(64).toString("hex");
+      const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
+
+      result = await User.updateByLogin(login, {
+        verified: true,
+        token: rememberMeToken,
+      });
       if (result !== null) {
+        res.cookie("remember_me", hashedToken, {
+          // httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
+          maxAge: 2592000000, // e.g., 30 days, expressed in milliseconds
+        });
+        console.log("Cookie set.", hashedToken);
+
         res.status(200).send({
           message: "User verified successfully.",
         });
@@ -303,6 +338,133 @@ export default class {
     } catch (error) {
       res.status(500).send({
         message: `Could not delete User with login ${login}`,
+      });
+    }
+  };
+
+  static currentUser = async (req, res) => {
+    const user = req.user;
+
+    if (!user) {
+      res.status(200).send({
+        user: null,
+      });
+    } else {
+      res.status(200).send({
+        user: user,
+      });
+    }
+  };
+
+  static sendResetPasswordMail = async (req, res) => {
+    const email = req.params.email;
+
+    if (!email) {
+      res.status(400).send({
+        message: `Missing mail`,
+      });
+      return;
+    }
+
+    try {
+      const user = await User.getUserByMail(email);
+      if (user === null) {
+        res.status(404).send({
+          message: "USER_NOT_FOUND",
+        });
+        return;
+      }
+      if (user.verified !== true) {
+        res.status(401).send({
+          message: "EMAIL_NOT_VERIFIED",
+        });
+        return;
+      }
+
+      // Check if previous mail was sent less than 15 minutes ago
+      if (user?.token.includes("_mail_timestamp_")) {
+        const timestamp = user.token.split("_mail_timestamp_")[1];
+        if (Date.now() - timestamp < 15 * 60 * 1000) {
+          res.status(400).send({
+            message: "MAIL_ALREADY_SENT",
+          });
+          return;
+        }
+      }
+
+      const userToken = crypto.randomBytes(64).toString("base64url");
+      user.token = userToken + "_mail_timestamp_" + Date.now();
+      await User.updateByLogin(user.login, user);
+
+      const result = await User.sendResetPasswordMail(user, userToken);
+      if (result === true) {
+        res.status(200).send({
+          message: "Reset password mail sent successfully.",
+        });
+        return;
+      }
+      res.status(500).send({
+        message: "COULD_NOT_SEND_EMAIL",
+      });
+    } catch (error) {
+      res.status(500).send({
+        message:
+          error.message || "Error occurred while sending reset password mail.",
+      });
+    }
+  };
+
+  static resetPassword = async (req, res) => {
+    const { login, token } = req.body;
+    let password = req.body.hashedPassword;
+
+    if (!login || !token || !password) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+
+    try {
+      const user = await User.getChunkUserByLogin(login);
+      if (user === null) {
+        res.status(404).send({
+          message: "USER_NOT_FOUND",
+        });
+        return;
+      }
+
+      const userToken = user.token.split("_mail_timestamp_")[0];
+      if (!bcrypt.compareSync(userToken, token)) {
+        console.log("correct token", userToken);
+        console.log("received token", token);
+        res.status(401).send({
+          message: "WRONG_TOKEN",
+        });
+        return;
+      }
+
+      // TODO - test password strength
+      password = await cryptPassword(password);
+      if (password === null) {
+        res.status(500).send({
+          message: "PASSWORD_ENCRYPTION_ERROR",
+        });
+        return;
+      }
+
+      user.password = password;
+      user.token = crypto.randomBytes(64).toString("base64url");
+      user.token += "_mail_timestamp_" + Date.now();
+      await User.updateByLogin(login, user);
+
+      res.status(200).send({
+        message: "SUCCESS",
+      });
+      return;
+    } catch (error) {
+      res.status(500).send({
+        message: error.message || "Error occurred while resetting password.",
       });
     }
   };

@@ -22,6 +22,9 @@ router.get("/user/verified", userHandler.getAllVerified);
 // Login
 router.post("/user/login", userHandler.login);
 
+// Get current user
+router.get("/user/me", userHandler.currentUser);
+
 // Retrieve a single User with login
 router.get("/user/:login", userHandler.getUserByLogin);
 
@@ -30,5 +33,11 @@ router.put("/user/:login", picturesUpload, userHandler.update);
 
 // Delete a User with login
 router.delete("/user/:login", userHandler.delete);
+
+// Send a reset password mail
+router.get("/user/reset-password/:email", userHandler.sendResetPasswordMail);
+
+// Reset password
+router.post("/user/reset-password", userHandler.resetPassword);
 
 export default router;

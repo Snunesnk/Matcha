@@ -17,6 +17,8 @@
 #login-welcome {
     text-align: center;
     margin-bottom: 40px;
+    display: flex;
+    flex-direction: column;
 }
 
 #login-welcome p {
@@ -35,14 +37,29 @@
     font-weight: 500;
 }
 
-#login-forgot-password {
-    text-align: center;
-    margin-bottom: 20px;
-    font-size: 0.8em;
-    color: #dc21b8;
+#login-password {
+    display: flex !important;
+    flex-direction: column !important;
 }
 
-#login-forgot-password label:hover {
+#login-error {
+    color: red;
+    font-size: 0.8rem;
+    animation: none !important;
+    min-height: 5px;
+    max-height: 5px;
+}
+
+#login-forgot-password {
+    text-align: center;
+    margin-top: 40px;
+    font-size: 0.8em;
+    color: #dc21b8;
+    background: none;
+    animation: appear 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) both 650ms;
+}
+
+#login-forgot-password:hover {
     text-decoration: underline;
     cursor: pointer;
     filter: brightness(1.6);

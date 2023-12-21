@@ -1,3 +1,5 @@
 matcha-mysql-data
 .idea
 *.env
+.DS_Store
+data/

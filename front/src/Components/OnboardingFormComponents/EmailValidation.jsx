@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { redirect, useNavigate } from 'react-router'
-import { USER_STATE_ACTIONS } from '../../constants'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import './OnboardingForm.css'
 
 const setListenerForValidation = (setVerified) => {
@@ -17,15 +16,13 @@ const setListenerForValidation = (setVerified) => {
 const EmailValidation = () => {
     const userInfos = useSelector((state) => state.userState.userInfos)
     const [verified, setVerified] = useState(false)
-    const dispatch = useDispatch()
     const navigate = useNavigate()
 
     setListenerForValidation(setVerified)
 
     useEffect(() => {
         if (verified == true) {
-            dispatch({ type: USER_STATE_ACTIONS.VERIFY })
-            navigate('/onboarding/welcome')
+            navigate('/login')
         }
     }, [verified])
 

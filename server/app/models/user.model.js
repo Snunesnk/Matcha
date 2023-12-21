@@ -5,34 +5,35 @@ import { sendEmail } from "../services/send-mail.service.js";
 import { UserChunk } from "./user-chunk.model.js";
 import { UserTag } from "./user-tag.model.js";
 import { Tag } from "./tag.model.js";
+import bcrypt from "bcrypt";
 import _ from "lodash";
 
 export class User extends UserChunk {
   constructor(obj = {}) {
     super(obj);
 
-    this.bio = obj.bio;
-    this.gender = obj.gender;
+    this.bio = obj.bio || obj._bio;
+    this.gender = obj.gender || obj._gender;
 
-    this.verified = obj.verified;
-    this.isOnline = obj.isOnline;
-    this.lastOnline = obj.lastOnline;
+    this.verified = obj.verified || obj._verified;
+    this.isOnline = obj.isOnline || obj._isOnline;
+    this.lastOnline = obj.lastOnline || obj._lastOnline;
 
-    this.prefMale = obj.prefMale;
-    this.prefFemale = obj.prefFemale;
-    this.prefEnby = obj.prefEnby;
+    this.prefMale = obj.prefMale || obj._prefMale;
+    this.prefFemale = obj.prefFemale || obj._prefFemale;
+    this.prefEnby = obj.prefEnby || obj._prefEnby;
 
-    this.imgA = obj.imgA;
-    this.imgB = obj.imgB;
-    this.imgC = obj.imgC;
-    this.imgD = obj.imgD;
-    this.imgE = obj.imgE;
+    this.imgA = obj.imgA || obj._imgA;
+    this.imgB = obj.imgB || obj._imgB;
+    this.imgC = obj.imgC || obj._imgC;
+    this.imgD = obj.imgD || obj._imgD;
+    this.imgE = obj.imgE || obj._imgE;
 
-    this.tags = obj.tags;
+    this.tags = obj.tags || obj._tags;
 
-    this.latitude = obj.coordinate;
-    this.longitude = obj.coordinate;
-    this.coordinate = obj.coordinate;
+    this.latitude = obj.latitude || obj._latitude;
+    this.longitude = obj.longitude || obj._longitude;
+    this.coordinate = obj.coordinate || obj._coordinate;
   }
 
   get coordinate() {
@@ -40,7 +41,11 @@ export class User extends UserChunk {
   }
 
   set coordinate(coordinate) {
-    if (coordinate !== null && this._latitude !== undefined && this._longitude !== undefined) {
+    if (
+      coordinate !== null &&
+      this._latitude !== undefined &&
+      this._longitude !== undefined
+    ) {
       this._coordinate = `POINT(${this._latitude} ${this._longitude})`;
     } else {
       this._coordinate = coordinate;
@@ -52,7 +57,12 @@ export class User extends UserChunk {
   }
 
   set latitude(coordinate) {
-    if (_.isObject(coordinate) && coordinate !== null && coordinate.x !== undefined && coordinate.y !== undefined) {
+    if (
+      _.isObject(coordinate) &&
+      coordinate !== null &&
+      coordinate.x !== undefined &&
+      coordinate.y !== undefined
+    ) {
       this._latitude = coordinate.y;
     } else {
       this._latitude = undefined;
@@ -64,7 +74,12 @@ export class User extends UserChunk {
   }
 
   set longitude(coordinate) {
-    if (_.isObject(coordinate) && coordinate !== null && coordinate.x !== undefined && coordinate.y !== undefined) {
+    if (
+      _.isObject(coordinate) &&
+      coordinate !== null &&
+      coordinate.x !== undefined &&
+      coordinate.y !== undefined
+    ) {
       this._longitude = coordinate.x;
     } else {
       this._longitude = undefined;
@@ -76,7 +91,7 @@ export class User extends UserChunk {
   }
 
   set isOnline(isOnline) {
-    if (isOnline === true || isOnline === "true" || isOnline === 1) { 
+    if (isOnline === true || isOnline === "true" || isOnline === 1) {
       this._isOnline = true;
       return;
     }
@@ -225,14 +240,37 @@ export class User extends UserChunk {
     return await comparePassword(password, this.password);
   }
 
-  static async sendVerificationMail(user) {
-    const token = user.token;
+  static async sendVerificationMail(user, token) {
+    let hashedToken = bcrypt.hashSync(token, 10);
+    while (hashedToken.includes("/")) {
+      console.log("hashing again");
+      hashedToken = bcrypt.hashSync(token, 10);
+    }
     const login = user.login;
     const email = user.email;
-    const message = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${token}`;
+    const verifLink = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${hashedToken}`;
+    const message = `Hello ${user.surname}!\n\nPlease verify your email by clicking the following link:\n${verifLink}\n\nHave a nice day!`;
 
     try {
       return await sendEmail(email, "Verify your email", message);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async sendResetPasswordMail(user, token) {
+    let hashedToken = bcrypt.hashSync(token, 10);
+    while (hashedToken.includes("/")) {
+      console.log("hashing again");
+      hashedToken = bcrypt.hashSync(token, 10);
+    }
+    const login = user.login;
+    const email = user.email;
+    const resetLink = `${process.env.FRONT_URL}/password-reset/?login=${login}&token=${hashedToken}`;
+    const message = `Hello ${user.surname}!\n\nPlease reset your password by clicking the following link:\n${resetLink}\n\nHave a nice day!`;
+
+    try {
+      return await sendEmail(email, "Reset your password", message);
     } catch (error) {
       console.log(error);
     }
@@ -257,7 +295,37 @@ export class User extends UserChunk {
       return null;
     }
     user.password = "XXXXX";
-    return user
+    user.token = "YYYYY";
+    return user;
+  }
+
+  static async getUserByToken(token) {
+    const user = await User.getFullUserByToken(token);
+    if (user === null) {
+      return null;
+    }
+    user.password = "XXXXX";
+    user.token = "YYYYY";
+    return user;
+  }
+
+  static async getUserByMail(mail) {
+    const data = await DbRequestService.read("user", { email: `${mail}` });
+
+    if (data.length === 0) {
+      return null;
+    }
+
+    return new User(data[0]);
+  }
+
+  static async getChunkUserByLogin(login) {
+    const data = await DbRequestService.read("user", { login: `${login}` });
+    if (data.length === 0) {
+      return null;
+    }
+
+    return new User(data[0]);
   }
 
   static async getFullUserByLogin(login) {
@@ -269,7 +337,28 @@ export class User extends UserChunk {
     try {
       const userTags = await UserTag.getUserTagsByLogin(login);
       if (_.isArray(userTags)) {
-        tags = userTags.map((userTag) => ({bwid: userTag.tagBwid}));
+        tags = userTags.map((userTag) => ({ bwid: userTag.tagBwid }));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    const user = {
+      ...data[0],
+      tags,
+    };
+    return new User(user);
+  }
+
+  static async getFullUserByToken(token) {
+    const data = await DbRequestService.read("user", { token: `${token}` });
+    if (data.length === 0) {
+      return null;
+    }
+    let tags = [];
+    try {
+      const userTags = await UserTag.getUserTagsByLogin(data.login);
+      if (_.isArray(userTags)) {
+        tags = userTags.map((userTag) => ({ bwid: userTag.tagBwid }));
       }
     } catch (error) {
       console.log(error);
@@ -286,30 +375,43 @@ export class User extends UserChunk {
   }
 
   static async updateByLogin(login, user) {
-    if (user.email !== undefined) {
-      user.verified = false;
-      user.token = rand.suid(16);
-    }
-    const data = await DbRequestService.update("user", new User({...user, tags: undefined}), {
-      login: `${login}`,
-    });
+    const data = await DbRequestService.update(
+      "user",
+      new User({ ...user, tags: undefined }),
+      {
+        login: `${login}`,
+      }
+    );
     if (data.affectedRows === 0) {
       return null;
     }
     try {
       if (_.isArray(user.tags)) {
         await UserTag.deleteByLogin(login);
-        user.tags.forEach(async tag => {
-          await UserTag.create(new UserTag({ userLogin: login, tagBwid: tag.bwid }));
+        user.tags.forEach(async (tag) => {
+          await UserTag.create(
+            new UserTag({ userLogin: login, tagBwid: tag.bwid })
+          );
         });
       }
     } catch (error) {
       console.log(error);
     }
-    if (user.email !== undefined) {
-      await User.sendVerificationMail(user);
-    }
     return await User.getUserByLogin(login);
+  }
+
+  static async verifyLogin(login, token) {
+    const data = await DbRequestService.read("user", { login: `${login}` });
+
+    if (data === null) {
+      return -1;
+    }
+
+    const userToken = data[0].token.split("_mail_timestamp_")[0];
+    const res = bcrypt.compareSync(userToken, token);
+
+    if (res === false) return 0;
+    return 1;
   }
 
   static async deleteByLogin(login) {

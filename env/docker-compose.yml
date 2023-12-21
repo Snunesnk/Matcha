@@ -8,13 +8,11 @@ services:
     ports:
       - 8080:8080
       - 2424:2424
-    working_dir: /server/src
     volumes:
-      - ../server:/server/src
+      - ../server/app:/server/app
     env_file: ../server/.env
     networks:
       - public
-      - private
     healthcheck:
       test: "curl --fail http://localhost:$$NODE_DOCKER_PORT/isHealthy || exit 1"
       interval: 5s
@@ -36,14 +34,16 @@ services:
     ports:
       - 3306:3306
     env_file: ../server/.env
+    ports:
+      - "3306:3306"
+    networks:
+      - public
     healthcheck:
       test: "mysqladmin ping -h $$MYSQL_HOST -p$$MYSQL_ROOT_PASSWORD"
       interval: 5s
       retries: 20
       start_period: 5s
       timeout: 2s
-    platform: linux/x86_64
-      
   matcha_frontend:
     container_name: matcha_frontend
     build:
@@ -55,12 +55,6 @@ services:
       - ../front:/front/src
     networks:
       - public
-    depends_on:
-      matcha_backend:
-        condition: service_healthy
 
 networks:
   public:
-  private:
-volumes:
-  matcha-mysql-data:
