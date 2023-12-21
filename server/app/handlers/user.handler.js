@@ -344,8 +344,6 @@ export default class {
       user.prefEnby = user.preferences.prefEnby;
     }
 
-    // Deal with images
-
     try {
       const data = await User.updateByLogin(login, user);
       if (data === null) {

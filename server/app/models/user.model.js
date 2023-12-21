@@ -11,6 +11,7 @@ export class User extends UserChunk {
   constructor(obj = {}) {
     super(obj);
 
+    console.log("obj", obj);
     this.bio = obj.bio || obj._bio;
     this.gender = obj.gender || obj._gender;
 
@@ -23,11 +24,11 @@ export class User extends UserChunk {
     this.prefFemale = obj.prefFemale || obj._prefFemale;
     this.prefEnby = obj.prefEnby || obj._prefEnby;
 
-    this.imgA = obj.imgA || obj._imgA;
-    this.imgB = obj.imgB || obj._imgB;
-    this.imgC = obj.imgC || obj._imgC;
-    this.imgD = obj.imgD || obj._imgD;
-    this.imgE = obj.imgE || obj._imgE;
+    this.imgA = obj._imgA || obj.imgA;
+    this.imgB = obj._imgB || obj.imgB;
+    this.imgC = obj._imgC || obj.imgC;
+    this.imgD = obj._imgD || obj.imgD;
+    this.imgE = obj._imgE || obj.imgE;
 
     this.tags = obj.tags || obj._tags;
 
@@ -389,6 +390,7 @@ export class User extends UserChunk {
   }
 
   static async updateByLogin(login, user) {
+    console.log("u b l");
     const data = await DbRequestService.update(
       "user",
       new User({ ...user, tags: undefined }),

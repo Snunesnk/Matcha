@@ -142,6 +142,10 @@ export class DbRequestService {
       const query = `UPDATE ${tableName}` + queryCommand + queryCondition;
       const settersAndFilters = querySetters.concat(queryFilters);
 
+      console.log("upadte", updatedObject);
+      console.log(query);
+      console.log(settersAndFilters);
+
       connection.query(query, settersAndFilters, (err, res) => {
         if (err) {
           reject(err);

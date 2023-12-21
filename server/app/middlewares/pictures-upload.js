@@ -8,6 +8,7 @@ const pictures = ["imgA", "imgB", "imgC", "imgD", "imgE"];
 const allowedExt = [".png", ".jpeg", ".jpg"];
 
 async function removePicture(picturePath) {
+  console.log("removePicture", picturePath);
   fs.stat(picturePath, function (err, stats) {
     if (!err) {
       fs.unlink(picturePath, function (err) {
@@ -17,14 +18,14 @@ async function removePicture(picturePath) {
   });
 }
 
-async function removeOldPictures(user) {
+async function removeOldPictures(user, login) {
   const basePath = "/server/app/uploads/";
   const extName = path.extname(user.imgA);
 
-  if (!user.imgB) removePicture(basePath + "imgB-" + user.login + extName);
-  if (!user.imgC) removePicture(basePath + "imgC-" + user.login + extName);
-  if (!user.imgD) removePicture(basePath + "imgD-" + user.login + extName);
-  if (!user.imgE) removePicture(basePath + "imgE-" + user.login + extName);
+  if (!user.imgB) removePicture(basePath + "imgB-" + login + extName);
+  if (!user.imgC) removePicture(basePath + "imgC-" + login + extName);
+  if (!user.imgD) removePicture(basePath + "imgD-" + login + extName);
+  if (!user.imgE) removePicture(basePath + "imgE-" + login + extName);
 }
 
 export default async function (req, res) {
@@ -39,7 +40,6 @@ export default async function (req, res) {
     }
 
     const user = {
-      login: login,
       imgA: null,
       imgB: null,
       imgC: null,
@@ -52,7 +52,8 @@ export default async function (req, res) {
     if (req.files.imgC) user.imgC = req.files.imgC[0].path;
     if (req.files.imgD) user.imgD = req.files.imgD[0].path;
     if (req.files.imgE) user.imgE = req.files.imgE[0].path;
-    await removeOldPictures(user);
+    await removeOldPictures(user, login);
+    console.log("user", user);
 
     const data = await User.updateByLogin(login, user);
     if (data === null) {
