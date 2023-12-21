@@ -4,11 +4,17 @@ import picturesUpload from "../middlewares/pictures-upload.js";
 
 const router = express.Router();
 
+// Login
+router.post("/user/login", userHandler.login);
+
 // Create a new User
 router.post("/user/", userHandler.create);
 
 // Validate User's mail
 router.get("/user/verify/:login/:token", userHandler.verifyUser);
+
+// Mark user as onboarded
+router.get("/user/onboarded", userHandler.onboardUser);
 
 // Resend verification mail
 router.post("/user/verify/:login", userHandler.resendVerificationMail);
@@ -18,9 +24,6 @@ router.get("/user/", userHandler.getAllUsers);
 
 // Retrieve all verified Users
 router.get("/user/verified", userHandler.getAllVerified);
-
-// Login
-router.post("/user/login", userHandler.login);
 
 // Get current user
 router.get("/user/me", userHandler.currentUser);

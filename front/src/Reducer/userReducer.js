@@ -1,23 +1,6 @@
 import { USER_STATE_ACTIONS } from '../constants'
 
 const checkForSessionCreds = async () => {
-    fetch('http://localhost:8080/api/user/me', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-    })
-        .then((response) => {
-            response.json()
-        })
-        .then((data) => {
-            // console.log('Success:', data)
-        })
-        .catch((error) => {
-            console.error('Error:', error)
-        })
-
     let userInfos = JSON.parse(sessionStorage.getItem('user_infos'))
     const userSettings = {
         gender: '',

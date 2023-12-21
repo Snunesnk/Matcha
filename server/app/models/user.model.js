@@ -16,6 +16,7 @@ export class User extends UserChunk {
     this.gender = obj.gender || obj._gender;
 
     this.verified = obj.verified || obj._verified;
+    this.onboarded = obj.onboarded || obj._onboarded;
     this.isOnline = obj.isOnline || obj._isOnline;
     this.lastOnline = obj.lastOnline || obj._lastOnline;
 
@@ -31,8 +32,8 @@ export class User extends UserChunk {
 
     this.tags = obj.tags || obj._tags;
 
-    this.latitude = obj.latitude || obj._latitude;
-    this.longitude = obj.longitude || obj._longitude;
+    this.latitude = obj.coordinate || obj._coordinate;
+    this.longitude = obj.coordinate || obj._coordinate;
     this.coordinate = obj.coordinate || obj._coordinate;
   }
 
@@ -119,6 +120,17 @@ export class User extends UserChunk {
       this._verified = false;
       return;
     }
+  }
+
+  get onboarded() {
+    return this._onboarded;
+  }
+
+  set onboarded(onboarded) {
+    if (onboarded === true || onboarded === "true" || onboarded === 1) {
+      this._onboarded = true;
+      return;
+    } else this._onboarded = false;
   }
 
   get bio() {

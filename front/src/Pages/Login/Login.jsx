@@ -20,6 +20,7 @@ export async function action({ request }) {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(data),
     }
     const res = await fetch(

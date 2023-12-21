@@ -2,16 +2,21 @@ import { User } from "../models/user.model.js";
 import { cryptPassword } from "../services/password.service.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
+import authenticationService from "../services/authentication.service.js";
 
 export default class {
   static async login(req, res) {
     const { login, password } = req.body;
+    let rememberMe = req.body.rememberMe;
+
     if (!login || !password) {
       res.status(400).send({
         message: "MISSING_DATA",
       });
       return;
     }
+
+    if (!rememberMe) rememberMe = false;
 
     try {
       const user = await User.getFullUserByLogin(login);
@@ -31,31 +36,29 @@ export default class {
 
       const isPasswordMatch = await user.passwordMatch(password);
       if (!isPasswordMatch) {
-        res.status(401).send({
+        res.status(404).send({
           message: "WRONG_CREDENTIALS",
         });
         return;
       }
 
       // Create remember-me cookie
-      const rememberMeToken = crypto.randomBytes(64).toString("hex");
-      const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
+      const jwtToken = await authenticationService.generateToken(
+        user,
+        rememberMe
+      );
+      const cookieOptions = {
+        httpOnly: true, // Cookie inaccessible to browser's JavaScript
+        maxAge: rememberMe
+          ? 1000 * 60 * 60 * 24 * 7 // 7 days
+          : 1000 * 60 * 60 * 1, // 1 hour
+        path: "/",
+      };
 
-      const result = await User.updateByLogin(login, {
-        token: hashedToken,
-      });
-      if (result === null) {
-        res.status(500).send({
-          message: "COULD_NOT_LOGIN",
-        });
-        return;
-      }
-
-      res.cookie("remember_me", bcrypt.hashSync(rememberMeToken, 10), {
-        httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
-        maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days, expressed in milliseconds
-      });
-
+      console.log("remember_me cookie created successfully");
+      console.log("remember_me cookie value:", jwtToken);
+      console.log("remember_me cookie options:", cookieOptions);
+      res.cookie("remember_me", jwtToken, cookieOptions);
       res.status(200).send({
         message: "LOG_IN_SUCCESS",
       });
@@ -189,21 +192,14 @@ export default class {
         return;
       }
 
-      // Create remember-me cookie
       const rememberMeToken = crypto.randomBytes(64).toString("hex");
       const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
 
       result = await User.updateByLogin(login, {
         verified: true,
-        token: rememberMeToken,
+        token: hashedToken,
       });
       if (result !== null) {
-        res.cookie("remember_me", hashedToken, {
-          // httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
-          maxAge: 2592000000, // e.g., 30 days, expressed in milliseconds
-        });
-        console.log("Cookie set.", hashedToken);
-
         res.status(200).send({
           message: "User verified successfully.",
         });
@@ -216,6 +212,40 @@ export default class {
     } catch (error) {
       res.status(500).send({
         message: error.message || "Error occurred while verifying the User.",
+      });
+    }
+  }
+
+  static async onboardUser(req, res) {
+    const login = req.params.login;
+
+    console.log("onboardUser", login);
+
+    if (!login) {
+      res.status(400).send({
+        message: "MISSING_DATA",
+      });
+
+      return;
+    }
+
+    try {
+      result = await User.updateByLogin(login, {
+        onboarded: true,
+      });
+      if (result !== null) {
+        res.status(200).send({
+          message: "User onboarded successfully.",
+        });
+        return;
+      }
+
+      res.status(500).send({
+        message: "COULD_NOT_ONBOARD",
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message || "Error occurred while onboarding the User.",
       });
     }
   }

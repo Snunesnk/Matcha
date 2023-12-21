@@ -106,7 +106,6 @@ const ProfileMatching = () => {
     }
 
     useEffect(() => {
-        console.log(userList)
         setActualUser(userList[0] || null)
         setTimeout(() => setNextUser(userList[1] || null), 500)
     }, [userList])
