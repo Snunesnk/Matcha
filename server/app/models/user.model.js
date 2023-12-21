@@ -11,7 +11,6 @@ export class User extends UserChunk {
   constructor(obj = {}) {
     super(obj);
 
-    console.log("obj", obj);
     this.bio = obj.bio || obj._bio;
     this.gender = obj.gender || obj._gender;
 
@@ -390,7 +389,6 @@ export class User extends UserChunk {
   }
 
   static async updateByLogin(login, user) {
-    console.log("u b l");
     const data = await DbRequestService.update(
       "user",
       new User({ ...user, tags: undefined }),

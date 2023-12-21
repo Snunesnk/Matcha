@@ -8,7 +8,6 @@ const pictures = ["imgA", "imgB", "imgC", "imgD", "imgE"];
 const allowedExt = [".png", ".jpeg", ".jpg"];
 
 async function removePicture(picturePath) {
-  console.log("removePicture", picturePath);
   fs.stat(picturePath, function (err, stats) {
     if (!err) {
       fs.unlink(picturePath, function (err) {
@@ -53,7 +52,6 @@ export default async function (req, res) {
     if (req.files.imgD) user.imgD = req.files.imgD[0].path;
     if (req.files.imgE) user.imgE = req.files.imgE[0].path;
     await removeOldPictures(user, login);
-    console.log("user", user);
 
     const data = await User.updateByLogin(login, user);
     if (data === null) {
