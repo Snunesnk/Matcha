@@ -231,8 +231,6 @@ export default class {
       const result = await User.updateByLogin(login, {
         onboarded: true,
       });
-      console.log("result");
-      console.log(result);
       if (result !== null) {
         res.status(200).send({
           message: "User onboarded successfully.",
@@ -303,10 +301,23 @@ export default class {
 
   // Update a User identified by the login in the request
   static update = async (req, res) => {
-    console.log("Updating user");
     const user = req.body.user || {};
-    const login = req.params.login;
+    const token = req.cookies.remember_me;
 
+    if (!token) {
+      res.status(401).send({
+        message: "UNAUTHORIZED",
+      });
+      return;
+    }
+
+    const decoded = await authenticationService.verifyToken(token);
+    const login = decoded?.login;
+
+    console.log("decoded", decoded);
+    console.log("user: ", user);
+
+    // check for missing data
     if (!login || Object.keys(user).length === 0) {
       res.status(400).send({
         message: `Missing data`,

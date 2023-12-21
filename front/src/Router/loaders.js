@@ -33,6 +33,7 @@ export const loginLoader = async () => {
 export const onboardingLoader = async () => {
     const userStatus = await checkAuthStatus()
 
+    return null
     if (!userStatus.loggedIn) return redirect('/login')
     if (!userStatus.verified) return redirect('/validation')
     if (userStatus.onboarded) return redirect('/dashboard')

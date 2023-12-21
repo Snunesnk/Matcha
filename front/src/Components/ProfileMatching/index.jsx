@@ -97,7 +97,7 @@ const ProfileMatching = () => {
                     setEvaluation('')
                     ////////////////// NEED TO CHANGE THIS TO GET NEXT BATCH, OR DISPLAY "NO MORE USERS"
                     setUserList((prev) => {
-                        if (prev.length <= 2) prev = prev.concat(USER_LIST)
+                        if (prev.length <= 2) prev = prev.concat([])
                         return prev.slice(1)
                     })
                 }, 200)
@@ -131,7 +131,7 @@ const ProfileMatching = () => {
                         style={{
                             background:
                                 'url(' +
-                                (nextUser.imgA.includes('http')
+                                (nextUser.imgA?.includes('http')
                                     ? ''
                                     : 'http://localhost:8080/api') +
                                 nextUser.imgA +

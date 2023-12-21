@@ -10,6 +10,7 @@ services:
       - 2424:2424
     volumes:
       - ../server/app:/server/app
+      - ../server/app/uploads:/server/app/uploads
     env_file: ../server/.env
     networks:
       - public

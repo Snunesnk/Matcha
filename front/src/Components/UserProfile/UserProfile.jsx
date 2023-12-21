@@ -59,7 +59,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 style={{
                     background:
                         'url(' +
-                        (user.imgA.includes('http')
+                        (user.imgA?.includes('http')
                             ? ''
                             : 'http://localhost:8080/api') +
                         user.imgA +

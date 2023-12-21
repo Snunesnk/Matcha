@@ -44,6 +44,6 @@ router.get("/user/:login", userHandler.getUserByLogin);
 router.delete("/user/:login", userHandler.delete);
 
 // Update a User with login (first uploads user's 5 images)
-router.put("/user/:login", picturesUpload, userHandler.update);
+router.put("/user", picturesUpload, userHandler.update);
 
 export default router;

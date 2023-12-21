@@ -39,8 +39,10 @@ export default async function (req, res, next) {
   if (req.body.user && !req.body.user.pictures) return next();
 
   try {
+    console.log("req.body", req.body);
     await removeOldPictures(req);
     await upload(req, res);
+    console.log("req.files");
     // All pictures were removed
     if (typeof req.body.user === "undefined") req.body.user = {};
     if (Object.keys(req.files).length > 0) {

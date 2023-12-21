@@ -7,13 +7,6 @@ const saveCredsToSessionMiddleware = (store) => (next) => (action) => {
         case USER_STATE_ACTIONS.LOG_IN:
             sessionStorage.setItem('user_infos', JSON.stringify(action.payload))
             break
-        case USER_STATE_ACTIONS.VERIFY:
-            sessionStorage.setItem('verified', true)
-            break
-        case USER_STATE_ACTIONS.ONBOARDED:
-            sessionStorage.setItem('onboarded', true)
-            break
-
         default:
             break
     }
