@@ -1,4 +1,4 @@
-import { join } from "path";
+import path, { join } from "path";
 import multer, { diskStorage } from "multer";
 import util from "util";
 
@@ -14,15 +14,15 @@ var storage = diskStorage({
   },
   filename: (req, file, callback) => {
     const match = ["image/png", "image/jpeg", "image/jpg"];
+    const login = req.decodedUser._login;
 
-    console.log("file.mimetype", file.mimetype);
     if (match.indexOf(file.mimetype) === -1) {
       var message = `${file.originalname} is invalid. Only accept png/jpeg/jpg.`;
       return callback(message, null);
     }
 
-    var filename = `${Date.now()}-${file.originalname}`;
-    filename = filename.replace(/\s/g, "_");
+    const filename =
+      file.fieldname + "-" + login + path.extname(file.originalname);
     callback(null, filename);
   },
 });

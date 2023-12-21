@@ -1,6 +1,7 @@
 import express from "express";
 import userHandler from "../handlers/user.handler.js";
 import picturesUpload from "../middlewares/pictures-upload.js";
+import { needVerifiedMiddleware } from "../middlewares/authentication-middleware.js";
 
 const router = express.Router();
 
@@ -44,6 +45,7 @@ router.get("/user/:login", userHandler.getUserByLogin);
 router.delete("/user/:login", userHandler.delete);
 
 // Update a User with login (first uploads user's 5 images)
-router.put("/user", picturesUpload, userHandler.update);
+router.put("/upload-pictures", needVerifiedMiddleware, picturesUpload);
+router.put("/user", needVerifiedMiddleware, userHandler.update);
 
 export default router;

@@ -302,23 +302,39 @@ export default class {
   // Update a User identified by the login in the request
   static update = async (req, res) => {
     const user = req.body.user || {};
-    const token = req.cookies.remember_me;
-
-    if (!token) {
-      res.status(401).send({
-        message: "UNAUTHORIZED",
-      });
-      return;
-    }
-
-    const decoded = await authenticationService.verifyToken(token);
-    const login = decoded?.login;
-
-    console.log("decoded", decoded);
-    console.log("user: ", user);
+    const login = req.decodedUser._login;
 
     // check for missing data
     if (!login || Object.keys(user).length === 0) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+    if (!user.gender || !user.bio || !user.tags || !user.preferences) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+    if (
+      user.gender.length === 0 ||
+      user.bio.length === 0 ||
+      user.tags.length === 0 ||
+      !user.preferences.prefMale ||
+      !user.preferences.prefFemale ||
+      !user.preferences.prefEnby
+    ) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+    if (
+      user.preferences.prefMale === false &&
+      user.preferences.prefFemale === false &&
+      user.preferences.prefEnby === false
+    ) {
       res.status(400).send({
         message: `Missing data`,
       });
@@ -329,14 +345,6 @@ export default class {
       user.prefMale = user.preferences.prefMale;
       user.prefFemale = user.preferences.prefFemale;
       user.prefEnby = user.preferences.prefEnby;
-    }
-
-    if (user.pictures) {
-      user.imagA = user.pictures.imagA[0].path;
-      user.imagB = user.pictures.imagB[0].path;
-      user.imagC = user.pictures.imagC[0].path;
-      user.imagD = user.pictures.imagD[0].path;
-      user.imagE = user.pictures.imagE[0].path;
     }
 
     try {

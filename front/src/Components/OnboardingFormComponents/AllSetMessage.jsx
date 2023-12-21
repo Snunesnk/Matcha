@@ -8,8 +8,11 @@ const AllSetMessage = () => {
     const [loading, setLoading] = React.useState(false)
     const navigate = useNavigate()
     const user = useSelector((state) => state.userState.userSettings)
+    const [error, setError] = React.useState(null)
 
     const sendForm = () => {
+        setLoading(true)
+
         // First API to send image
         // If everything goes well, then second api to send user informations
         const formData = new FormData()
@@ -25,14 +28,46 @@ const AllSetMessage = () => {
             credentials: 'include',
             body: formData,
         }
-        fetch('http://localhost:8080/api/user/', options)
+        fetch('http://localhost:8080/api/upload-pictures/', options)
             .then((response) => {
                 if (response.ok) {
-                    console.log('User onboarded')
-                    // navigate('/dashboard')
+                    const options = {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ user: user }),
+                        credentials: 'include',
+                    }
+                    fetch('http://localhost:8080/api/user/', options)
+                        .then((response) => {
+                            if (response.ok) {
+                                navigate('/dashboard')
+                            } else {
+                                if (response.status === 400) {
+                                    setError(
+                                        'Missing information. Please fill in all the fields'
+                                    )
+                                } else {
+                                    setError(
+                                        'Something went wrong ... Please try again'
+                                    )
+                                }
+                                setLoading(false)
+                            }
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
                 } else {
-                    // User needs to fill in informations
-                    throw new Error('Something went wrong ...')
+                    if (response.status === 400) {
+                        setError(
+                            'Missing information. Please fill in all the fields'
+                        )
+                    } else {
+                        setError('Something went wrong ... Please try again')
+                    }
+                    setLoading(false)
                 }
             })
             .catch((error) => {
@@ -46,6 +81,7 @@ const AllSetMessage = () => {
                 <b>Fantastic, you're all set :)</b>
             </p>
             <p>Are you ready to find your catmate?</p>
+            {error && <p className="errorLabel">{error}</p>}
         </div>
     )
 

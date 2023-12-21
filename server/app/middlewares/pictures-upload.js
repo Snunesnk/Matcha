@@ -1,62 +1,71 @@
 import _ from "lodash";
 import upload from "../middlewares/upload.js";
-import { User } from "../models/user.model.js";
 import fs from "fs";
+import { User } from "../models/user.model.js";
 
-async function removeOldPictures(req) {
-  const login = req.params.login;
+const pictures = ["imgA", "imgB", "imgC", "imgD", "imgE"];
+const allowedExt = [".png", ".jpeg", ".jpg"];
 
-  if (!login) {
-    return;
-  }
-
-  const user = await User.getUserByLogin(login);
-
-  const pictures = [];
-  if (user.imgA) pictures.push(user.imgA);
-  if (user.imgB) pictures.push(user.imgB);
-  if (user.imgC) pictures.push(user.imgC);
-  if (user.imgD) pictures.push(user.imgD);
-  if (user.imgE) pictures.push(user.imgE);
-
-  // Remove all pictures
-  for (let i = 0; i < pictures.length; i++) {
-    const picture = pictures[i];
-    if (picture) {
-      fs.stat(picture, function (err, stats) {
-        if (!err) {
-          fs.unlink(picture, function (err) {
-            if (err) return console.log(err);
-          });
-        }
+async function removePicture(picturePath) {
+  fs.stat(picturePath, function (err, stats) {
+    if (!err) {
+      fs.unlink(picturePath, function (err) {
+        if (err) return;
       });
+    }
+  });
+}
+
+async function removeOldPictures(login) {
+  for (let i = 0; i < pictures.length; i++) {
+    for (let j = 0; j < allowedExt.length; j++) {
+      const picturePath =
+        "/server/app/uploads/" + pictures[i] + "-" + login + allowedExt[j];
+      await removePicture(picturePath);
     }
   }
 }
 
-export default async function (req, res, next) {
-  // if user is defined and no pictures, skip
-  if (req.body.user && !req.body.user.pictures) return next();
+export default async function (req, res) {
+  const login = req.decodedUser._login;
 
   try {
-    console.log("req.body", req.body);
-    await removeOldPictures(req);
+    await removeOldPictures(login);
     await upload(req, res);
-    console.log("req.files");
-    // All pictures were removed
-    if (typeof req.body.user === "undefined") req.body.user = {};
-    if (Object.keys(req.files).length > 0) {
-      // If not user is set, set it to empty object so update will trigger, and images will be saved
-      req.body.user.pictures = req.files;
-    } else {
-      req.body.user.pictures = {};
+    if (Object.keys(req.files).length === 0) {
+      return res
+        .status(400)
+        .send({ message: "Please upload at least one file." });
     }
+
+    const user = {
+      imgA: null,
+      imgB: null,
+      imgC: null,
+      imgD: null,
+      imgE: null,
+    };
+
+    user.imgA = req.files.imgA[0].path;
+    if (req.files.imgB) user.imgB = req.files.imgB[0].path;
+    if (req.files.imgC) user.imgC = req.files.imgC[0].path;
+    if (req.files.imgD) user.imgD = req.files.imgD[0].path;
+    if (req.files.imgE) user.imgE = req.files.imgE[0].path;
+
+    const data = await User.updateByLogin(login, user);
+    if (data === null) {
+      // not found User with the login
+      res.status(404).send({
+        message: `Could not find User with login ${login}.`,
+      });
+      return;
+    }
+    res.status(200).send(data);
   } catch (error) {
     console.log(error);
     if (error.code === "LIMIT_UNEXPECTED_FILE") {
-      return res.send("Too many files to upload.");
+      return res.status(500).send("Too many files to upload.");
     }
-    return res.send(`Error when trying upload files: ${error}`);
+    return res.status(500).send(`Error when trying upload files: ${error}`);
   }
-  next();
 }
