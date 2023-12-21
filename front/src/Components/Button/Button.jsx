@@ -27,7 +27,7 @@ export const CreateAccountButton = () => {
     const navigate = useNavigate()
 
     const navigateToSignup = () => {
-        navigate('/onboarding/signup')
+        navigate('/signup')
     }
 
     return (

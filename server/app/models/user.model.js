@@ -1,6 +1,5 @@
 import { DbRequestService } from "../services/db-request.service.js";
 import { comparePassword } from "../services/password.service.js";
-import rand from "rand-token";
 import { sendEmail } from "../services/send-mail.service.js";
 import { UserChunk } from "./user-chunk.model.js";
 import { UserTag } from "./user-tag.model.js";
@@ -263,7 +262,7 @@ export class User extends UserChunk {
     }
     const login = user.login;
     const email = user.email;
-    const verifLink = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${hashedToken}`;
+    const verifLink = `${process.env.FRONT_URL}/verify/?login=${login}&token=${hashedToken}`;
     const message = `Hello ${user.surname}!\n\nPlease verify your email by clicking the following link:\n${verifLink}\n\nHave a nice day!`;
 
     try {

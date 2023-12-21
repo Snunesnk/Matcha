@@ -303,6 +303,7 @@ export default class {
 
   // Update a User identified by the login in the request
   static update = async (req, res) => {
+    console.log("Updating user");
     const user = req.body.user || {};
     const login = req.params.login;
 

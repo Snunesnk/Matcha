@@ -6,7 +6,6 @@ export default class {
     const token = req.cookies.remember_me;
     jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
       if (err) {
-        console.log("err", err);
         const user = { loggedIn: false, onboarded: false, verified: false };
         res.json(user);
       } else {
