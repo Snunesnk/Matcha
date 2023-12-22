@@ -101,7 +101,7 @@ const SignupForm = () => {
                     login: formResult.login,
                 },
             })
-            navigate('/onboarding/validation')
+            navigate('/validation')
         }
     }, [formResult])
 

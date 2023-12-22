@@ -10,6 +10,7 @@ services:
       - 2424:2424
     volumes:
       - ../server/app:/server/app
+      - ../server/app/uploads:/server/app/uploads
     env_file: ../server/.env
     networks:
       - public
@@ -34,8 +35,6 @@ services:
     ports:
       - 3306:3306
     env_file: ../server/.env
-    ports:
-      - "3306:3306"
     networks:
       - public
     healthcheck:
@@ -44,6 +43,7 @@ services:
       retries: 20
       start_period: 5s
       timeout: 2s
+
   matcha_frontend:
     container_name: matcha_frontend
     build:
@@ -58,3 +58,6 @@ services:
 
 networks:
   public:
+
+volumes:
+  matcha-mysql-data:

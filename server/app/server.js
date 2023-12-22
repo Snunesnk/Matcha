@@ -2,6 +2,8 @@ import express, { json, urlencoded } from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import { Server } from "socket.io";
+import { createServer } from "http";
 
 // Setting /api routes
 import userRoute from "./routes/user.routes.js";
@@ -9,7 +11,9 @@ import tagRoute from "./routes/tag.routes.js";
 import likeRoute from "./routes/like.routes.js";
 import viewRoute from "./routes/view.routes.js";
 import imageRoute from "./routes/images.routes.js";
+import authenticationRoute from "./routes/authentication.routes.js";
 import populateDB from "./services/faker.service.js";
+import { initSocket, socketMiddleware } from "./socket/socket.js";
 
 dotenv.config();
 
@@ -25,6 +29,17 @@ app.use(json());
 app.use(cookieParser());
 app.use(urlencoded({ extended: true }));
 
+const httpServer = createServer(app);
+const io = new Server(httpServer, {
+  cors: {
+    origin: process.env.FRONT_URL, // or the client-side application's host
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+});
+
+initSocket(io);
+
 // Docker health check
 app.use(
   "/isHealthy",
@@ -32,40 +47,24 @@ app.use(
     res.status(200).send("I'm healthy !");
   })
 );
-// Cookie parser middleware
-app.use((req, res, next) => {
-  var fullUrl = req.protocol + "://" + req.get("host") + req.originalUrl;
-  // console.log("req", req);
-  if (req.cookies) {
-    const token = req.cookies["remember_me"];
-    if (token) {
-      const user = findUserByRememberMeToken(token);
-      if (user) {
-        // If the token is valid, attach the user to the request object
-        req.user = user;
-      }
-    }
-  } else {
-    res.cookie("title", "GeeksforGeeks");
-  }
-  next();
-});
-app.use("/api", tagRoute);
+
 app.use("/api", userRoute);
+app.use("/api", tagRoute);
 app.use("/api", likeRoute);
 app.use("/api", viewRoute);
 app.use("/api", imageRoute);
+app.use("/api", authenticationRoute);
 
 // Populate DB with fake accounts if flag is set
-// if (
-//   process.argv.length >= 3 &&
-//   (process.argv[2] === "--populate-db" || process.argv[2] === "-p")
-// ) {
-//   populateDB();
-// }
+if (
+  process.argv.length >= 3 &&
+  (process.argv[2] === "--populate-db" || process.argv[2] === "-p")
+) {
+  populateDB();
+}
 
 // set port, listen for requests
 const PORT = process.env.NODE_DOCKER_PORT || 8080;
-app.listen(PORT, () => {
+httpServer.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}.`);
 });

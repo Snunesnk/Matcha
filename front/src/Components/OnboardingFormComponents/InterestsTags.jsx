@@ -26,7 +26,11 @@ const InterestsTags = () => {
 
     const content = (
         <div className="onboarding_tags_content">
-            <p>Select tags or add your own</p>
+            <p>
+                Select tags or add your own
+                <br />
+                <i>1 tag min</i>
+            </p>
             <TagsAutocomplete
                 value={tags}
                 setValue={(e, tagsList) => setTags(tagsList)}

@@ -1,4 +1,4 @@
-import { join } from "path";
+import path, { join } from "path";
 import multer, { diskStorage } from "multer";
 import util from "util";
 
@@ -14,19 +14,23 @@ var storage = diskStorage({
   },
   filename: (req, file, callback) => {
     const match = ["image/png", "image/jpeg", "image/jpg"];
+    const login = req.decodedUser._login;
 
     if (match.indexOf(file.mimetype) === -1) {
       var message = `${file.originalname} is invalid. Only accept png/jpeg/jpg.`;
       return callback(message, null);
     }
 
-    var filename = `${Date.now()}-brichard-${file.originalname}`;
-    filename = filename.replace(/\s/g, "_");
+    const filename =
+      file.fieldname + "-" + login + path.extname(file.originalname);
     callback(null, filename);
   },
 });
 
-var uploadFiles = multer({ storage: storage }).fields([
+var uploadFiles = multer({
+  storage: storage,
+  limits: { fileSize: 15 * 1024 * 1024 }, // 15MB file size limit
+}).fields([
   { name: "imgA", maxCount: 1 },
   { name: "imgB", maxCount: 1 },
   { name: "imgC", maxCount: 1 },

@@ -1,6 +1,5 @@
 import { DbRequestService } from "../services/db-request.service.js";
 import { comparePassword } from "../services/password.service.js";
-import rand from "rand-token";
 import { sendEmail } from "../services/send-mail.service.js";
 import { UserChunk } from "./user-chunk.model.js";
 import { UserTag } from "./user-tag.model.js";
@@ -16,6 +15,7 @@ export class User extends UserChunk {
     this.gender = obj.gender || obj._gender;
 
     this.verified = obj.verified || obj._verified;
+    this.onboarded = obj.onboarded || obj._onboarded;
     this.isOnline = obj.isOnline || obj._isOnline;
     this.lastOnline = obj.lastOnline || obj._lastOnline;
 
@@ -23,16 +23,16 @@ export class User extends UserChunk {
     this.prefFemale = obj.prefFemale || obj._prefFemale;
     this.prefEnby = obj.prefEnby || obj._prefEnby;
 
-    this.imgA = obj.imgA || obj._imgA;
-    this.imgB = obj.imgB || obj._imgB;
-    this.imgC = obj.imgC || obj._imgC;
-    this.imgD = obj.imgD || obj._imgD;
-    this.imgE = obj.imgE || obj._imgE;
+    this.imgA = obj._imgA || obj.imgA;
+    this.imgB = obj._imgB || obj.imgB;
+    this.imgC = obj._imgC || obj.imgC;
+    this.imgD = obj._imgD || obj.imgD;
+    this.imgE = obj._imgE || obj.imgE;
 
     this.tags = obj.tags || obj._tags;
 
-    this.latitude = obj.latitude || obj._latitude;
-    this.longitude = obj.longitude || obj._longitude;
+    this.latitude = obj.coordinate || obj._coordinate;
+    this.longitude = obj.coordinate || obj._coordinate;
     this.coordinate = obj.coordinate || obj._coordinate;
   }
 
@@ -118,6 +118,20 @@ export class User extends UserChunk {
     if (verified === false || verified === "false" || verified === 0) {
       this._verified = false;
       return;
+    }
+  }
+
+  get onboarded() {
+    return this._onboarded;
+  }
+
+  set onboarded(onboarded) {
+    if (onboarded === true || onboarded === "true" || onboarded === 1) {
+      this._onboarded = true;
+      return;
+    }
+    if (onboarded === false || onboarded === "false" || onboarded === 0) {
+      this._onboarded = false;
     }
   }
 
@@ -248,7 +262,7 @@ export class User extends UserChunk {
     }
     const login = user.login;
     const email = user.email;
-    const verifLink = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${hashedToken}`;
+    const verifLink = `${process.env.FRONT_URL}/verify/?login=${login}&token=${hashedToken}`;
     const message = `Hello ${user.surname}!\n\nPlease verify your email by clicking the following link:\n${verifLink}\n\nHave a nice day!`;
 
     try {
@@ -389,9 +403,7 @@ export class User extends UserChunk {
       if (_.isArray(user.tags)) {
         await UserTag.deleteByLogin(login);
         user.tags.forEach(async (tag) => {
-          await UserTag.create(
-            new UserTag({ userLogin: login, tagBwid: tag.bwid })
-          );
+          await UserTag.create(new UserTag({ userLogin: login, tagBwid: tag }));
         });
       }
     } catch (error) {
@@ -426,6 +438,7 @@ export class User extends UserChunk {
     return {
       ...super.toJSON(),
       verified: this.verified,
+      onboarded: this.onboarded,
       bio: this.bio,
       gender: this.gender,
       prefMale: this.prefMale,

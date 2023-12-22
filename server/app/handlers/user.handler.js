@@ -2,16 +2,21 @@ import { User } from "../models/user.model.js";
 import { cryptPassword } from "../services/password.service.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
+import authenticationService from "../services/authentication.service.js";
 
 export default class {
   static async login(req, res) {
     const { login, password } = req.body;
+    let rememberMe = req.body.rememberMe;
+
     if (!login || !password) {
       res.status(400).send({
         message: "MISSING_DATA",
       });
       return;
     }
+
+    if (!rememberMe) rememberMe = false;
 
     try {
       const user = await User.getFullUserByLogin(login);
@@ -31,31 +36,26 @@ export default class {
 
       const isPasswordMatch = await user.passwordMatch(password);
       if (!isPasswordMatch) {
-        res.status(401).send({
+        res.status(404).send({
           message: "WRONG_CREDENTIALS",
         });
         return;
       }
 
       // Create remember-me cookie
-      const rememberMeToken = crypto.randomBytes(64).toString("hex");
-      const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
+      const jwtToken = await authenticationService.generateToken(
+        user,
+        rememberMe
+      );
+      const cookieOptions = {
+        httpOnly: true, // Cookie inaccessible to browser's JavaScript
+        maxAge: rememberMe
+          ? 1000 * 60 * 60 * 24 * 7 // 7 days
+          : 1000 * 60 * 60 * 1, // 1 hour
+        path: "/",
+      };
 
-      const result = await User.updateByLogin(login, {
-        token: hashedToken,
-      });
-      if (result === null) {
-        res.status(500).send({
-          message: "COULD_NOT_LOGIN",
-        });
-        return;
-      }
-
-      res.cookie("remember_me", bcrypt.hashSync(rememberMeToken, 10), {
-        httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
-        maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days, expressed in milliseconds
-      });
-
+      res.cookie("remember_me", jwtToken, cookieOptions);
       res.status(200).send({
         message: "LOG_IN_SUCCESS",
       });
@@ -189,21 +189,14 @@ export default class {
         return;
       }
 
-      // Create remember-me cookie
       const rememberMeToken = crypto.randomBytes(64).toString("hex");
       const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
 
       result = await User.updateByLogin(login, {
         verified: true,
-        token: rememberMeToken,
+        token: hashedToken,
       });
       if (result !== null) {
-        res.cookie("remember_me", hashedToken, {
-          // httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
-          maxAge: 2592000000, // e.g., 30 days, expressed in milliseconds
-        });
-        console.log("Cookie set.", hashedToken);
-
         res.status(200).send({
           message: "User verified successfully.",
         });
@@ -216,6 +209,41 @@ export default class {
     } catch (error) {
       res.status(500).send({
         message: error.message || "Error occurred while verifying the User.",
+      });
+    }
+  }
+
+  static async onboardUser(req, res) {
+    const token = req.cookies.remember_me;
+
+    if (!token) {
+      res.status(400).send({
+        message: "MISSING_DATA",
+      });
+
+      return;
+    }
+
+    const decoded = await authenticationService.verifyToken(token);
+    const login = decoded.login;
+
+    try {
+      const result = await User.updateByLogin(login, {
+        onboarded: true,
+      });
+      if (result !== null) {
+        res.status(200).send({
+          message: "User onboarded successfully.",
+        });
+        return;
+      }
+
+      res.status(500).send({
+        message: "COULD_NOT_ONBOARD",
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: error.message || "Error occurred while onboarding the User.",
       });
     }
   }
@@ -274,9 +302,36 @@ export default class {
   // Update a User identified by the login in the request
   static update = async (req, res) => {
     const user = req.body.user || {};
-    const login = req.params.login;
+    const login = req.decodedUser._login;
 
+    // check for missing data
     if (!login || Object.keys(user).length === 0) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+    if (!user.gender || !user.bio || !user.tags || !user.preferences) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+    if (
+      user.gender.length === 0 ||
+      user.bio.length === 0 ||
+      user.tags.length === 0
+    ) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+    if (
+      !user.preferences.prefMale &&
+      !user.preferences.prefFemale &&
+      !user.preferences.prefEnby
+    ) {
       res.status(400).send({
         message: `Missing data`,
       });
@@ -287,14 +342,6 @@ export default class {
       user.prefMale = user.preferences.prefMale;
       user.prefFemale = user.preferences.prefFemale;
       user.prefEnby = user.preferences.prefEnby;
-    }
-
-    if (user.pictures) {
-      user.imagA = user.pictures.imagA[0].path;
-      user.imagB = user.pictures.imagB[0].path;
-      user.imagC = user.pictures.imagC[0].path;
-      user.imagD = user.pictures.imagD[0].path;
-      user.imagE = user.pictures.imagE[0].path;
     }
 
     try {

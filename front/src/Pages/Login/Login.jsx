@@ -20,6 +20,7 @@ export async function action({ request }) {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(data),
     }
     const res = await fetch(
@@ -41,8 +42,6 @@ const LoginPage = () => {
 
     useEffect(() => {
         if (!formResult) return
-
-        console.log(formResult)
 
         switch (formResult.message) {
             case 'EMAIL_NOT_VERIFIED':
