@@ -10,25 +10,27 @@
     top: 0;
     left: 0;
     box-shadow: 0 -1px rgba(255, 255, 255, 0.25) inset;
-    transition: all .3s ease-in-out;
+    transition: all .2s ease-in-out;
 }
 
 #navbar:hover {
     background-color: #200518B0;
 }
 
-#nav-title-container {
-    text-align: center;
-}
-
 .navTitle {
     color: white;
-    font-size: 48px;
-    line-height: 48px;
+    font-size: 36px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
 }
 
-.onglet {
-    color: white;
+.navbar-menu {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
 }
 
 .log-in-btn-container {
@@ -37,17 +39,33 @@
     animation: fade-in 500ms ease-out both 1.7s;
 }
 
-button.btn-log-in {
-    color: white;
+@keyframes fade-in {
+    0% {opacity: 0;}
+    100% {opacity: 1;}
 }
 
-
-@keyframes fade-in {
-    0% {
-        opacity: 0;
+@media screen and (max-width: 480px) {
+    #brand-name {
+        display: none;
     }
+}
 
-    100% {
-        opacity: 1;
-    }
+.dropdown-menu {
+    position: absolute;
+    right: 20px;
+    background-color: rgba(83, 32, 112, 0.25);
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+    z-index: 1;
+}
+
+.dropdown-menu a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
 }
