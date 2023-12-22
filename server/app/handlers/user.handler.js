@@ -3,6 +3,7 @@ import { cryptPassword } from "../services/password.service.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import authenticationService from "../services/authentication.service.js";
+import { getIpAddress, getIpInfo } from "../services/location.service.js";
 
 export default class {
   static async login(req, res) {
@@ -54,6 +55,22 @@ export default class {
           : 1000 * 60 * 60 * 1, // 1 hour
         path: "/",
       };
+
+      const ip = await getIpAddress(req);
+      const loc = await getIpInfo(ip);
+      const userLoc = {
+        coordinate: {
+          y: loc.lat,
+          x: loc.lon,
+        },
+      };
+
+      const resUser = await User.updateByLogin(login, userLoc);
+      if (resUser === null) {
+        res.status(500).send({
+          message: "COULD_NOT_UPDATE_USER_LOCATION",
+        });
+      }
 
       res.cookie("remember_me", jwtToken, cookieOptions);
       res.status(200).send({

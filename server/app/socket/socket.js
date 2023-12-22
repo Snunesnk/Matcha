@@ -13,6 +13,7 @@ export const initSocket = (io) => {
 export const socketMiddleware = async (socket, next) => {
   try {
     const token = socket.handshake.headers.cookie;
+    if (!token) return;
     const split = token.split("remember_me=");
     if (split.length > 1) {
       const decoded = await authenticationService.verifyToken(split[1]);

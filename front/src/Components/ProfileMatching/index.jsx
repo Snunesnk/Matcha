@@ -5,6 +5,25 @@ import { Favorite } from '@mui/icons-material'
 import UserProfile from '../UserProfile/UserProfile'
 import { useSelector } from 'react-redux'
 
+const getUserLocation = async () => {
+    return new Promise((resolve) => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                resolve({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                })
+            },
+            (err) => {
+                resolve({
+                    lat: null,
+                    lng: null,
+                })
+            }
+        )
+    })
+}
+
 const GradientCross = () => (
     <>
         <svg width={0} height={0}>
@@ -71,6 +90,15 @@ const ProfileMatching = () => {
 
     useEffect(() => {
         getProfileList(setUserList)
+
+        const getLocation = async () => {
+            const location = await getUserLocation()
+            console.log(location)
+            if (location.lat !== null && location.lng !== null) {
+                // Send location to back, then trigger profile matching again
+            }
+        }
+        getLocation()
     }, [])
 
     const setCardState = (state) => {
