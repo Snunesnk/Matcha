@@ -1,5 +1,3 @@
-import rand from "rand-token";
-
 export class UserChunk {
   constructor(obj = {}) {
     this.login = obj.login || obj._login;

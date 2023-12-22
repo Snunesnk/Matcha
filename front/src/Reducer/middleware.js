@@ -1,14 +1,10 @@
 import { USER_STATE_ACTIONS } from '../constants'
+import { initSocket } from '../Socket/socket.js'
 
 const saveCredsToSessionMiddleware = (store) => (next) => (action) => {
-    // let stateToSave = store.getState()
-
-    switch (action.type) {
-        case USER_STATE_ACTIONS.LOG_IN:
-            sessionStorage.setItem('user_infos', JSON.stringify(action.payload))
-            break
-        default:
-            break
+    if (action.type === USER_STATE_ACTIONS.LOG_IN) {
+        initSocket()
+        sessionStorage.setItem('user_infos', JSON.stringify(action.payload))
     }
 
     return next(action)
