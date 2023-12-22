@@ -4,6 +4,7 @@ import crypto from "crypto";
 import bcrypt from "bcrypt";
 import authenticationService from "../services/authentication.service.js";
 import { getIpAddress, getIpInfo } from "../services/location.service.js";
+import { UserSetting } from "../models/user-settings.model.js";
 
 export default class {
   static async login(req, res) {
@@ -213,54 +214,25 @@ export default class {
         verified: true,
         token: hashedToken,
       });
-      if (result !== null) {
-        res.status(200).send({
-          message: "User verified successfully.",
+      if (result === null) {
+        res.status(500).send({
+          message: "COULD_NOT_VERIFY",
         });
-        return;
       }
-
-      res.status(500).send({
-        message: "COULD_NOT_VERIFY",
+      // Create default userSettings
+      result = await UserSetting.create({ userLogin: login });
+      if (result === null) {
+        res.status(500).send({
+          message: "COULLD_NOT_CREATE_USER_SETTINGS",
+        });
+      }
+      // const res
+      res.status(200).send({
+        message: "User verified successfully.",
       });
     } catch (error) {
       res.status(500).send({
         message: error.message || "Error occurred while verifying the User.",
-      });
-    }
-  }
-
-  static async onboardUser(req, res) {
-    const token = req.cookies.remember_me;
-
-    if (!token) {
-      res.status(400).send({
-        message: "MISSING_DATA",
-      });
-
-      return;
-    }
-
-    const decoded = await authenticationService.verifyToken(token);
-    const login = decoded.login;
-
-    try {
-      const result = await User.updateByLogin(login, {
-        onboarded: true,
-      });
-      if (result !== null) {
-        res.status(200).send({
-          message: "User onboarded successfully.",
-        });
-        return;
-      }
-
-      res.status(500).send({
-        message: "COULD_NOT_ONBOARD",
-      });
-    } catch (error) {
-      res.status(500).send({
-        message: error.message || "Error occurred while onboarding the User.",
       });
     }
   }
@@ -360,6 +332,8 @@ export default class {
       user.prefFemale = user.preferences.prefFemale;
       user.prefEnby = user.preferences.prefEnby;
     }
+
+    user.onboarded = true;
 
     try {
       const data = await User.updateByLogin(login, user);

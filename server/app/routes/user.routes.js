@@ -20,9 +20,6 @@ router.get("/user/", userHandler.getAllUsers);
 // Login
 router.post("/user/login", userHandler.login);
 
-// Mark user as onboarded
-router.get("/user/onboarded", userHandler.onboardUser);
-
 // Validate User's mail
 router.get("/user/verify/:login/:token", userHandler.verifyUser);
 

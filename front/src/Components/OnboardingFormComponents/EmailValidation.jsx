@@ -34,7 +34,7 @@ const EmailValidation = () => {
 
     return (
         <div id="onboarding_email_validation">
-            <h2>Hi {userInfos.name},</h2>
+            <h2>Hi {userInfos.login},</h2>
             <p>
                 We sent an email to <b>{userInfos.email}</b>
                 <br />
