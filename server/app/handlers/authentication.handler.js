@@ -1,5 +1,6 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
+import { checkIfUserIsOnline } from "../socket/socket.js";
 
 export default class {
   static validate = async (req, res) => {
@@ -12,7 +13,7 @@ export default class {
         const user = await User.getUserByLogin(decoded.login);
         // TODO: Look into sockets to see if user is logged in
         res.json({
-          loggedIn: true,
+          loggedIn: checkIfUserIsOnline(user.login),
           onboarded: user.onboarded || false,
           verified: user._verified,
         });

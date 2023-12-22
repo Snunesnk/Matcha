@@ -13,6 +13,7 @@ import viewRoute from "./routes/view.routes.js";
 import imageRoute from "./routes/images.routes.js";
 import authenticationRoute from "./routes/authentication.routes.js";
 import populateDB from "./services/faker.service.js";
+import { initSocket, socketMiddleware } from "./socket/socket.js";
 
 dotenv.config();
 
@@ -37,39 +38,7 @@ const io = new Server(httpServer, {
   },
 });
 
-io.use((socket, next) => {
-  try {
-    const token = socket.handshake.headers.cookie;
-    console.log(token);
-    console.log("test");
-
-    // Extract the JWT token from the cookie
-    const jwtToken = cookieParser.signedCookie(
-      token["your-cookie-name"],
-      "your-secret"
-    );
-
-    // Verify the JWT
-    if (jwtToken) {
-      jwt.verify(jwtToken, "your-jwt-secret", function (err, decodedToken) {
-        if (err) {
-          return next(new Error("Authentication error"));
-        }
-        socket.decoded = decodedToken;
-        next();
-      });
-    } else {
-      next(new Error("Authentication error"));
-    }
-  } catch (err) {
-    next(new Error("Authentication error"));
-  }
-});
-
-io.on("connection", (socket) => {
-  console.log("Connected user:", socket.decoded);
-  // now that you know the user is authenticated, and you have their data in `socket.decoded`
-});
+initSocket(io);
 
 // Docker health check
 app.use(
