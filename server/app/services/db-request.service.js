@@ -79,6 +79,7 @@ export class DbRequestService {
       },
       []
     );
+
     return { queryCommand, querySetters };
   }
 
@@ -186,13 +187,6 @@ export class DbRequestService {
       if (matchingParameters.male) genderPreferences.push("m");
       if (matchingParameters.female) genderPreferences.push("f");
 
-      const lat = matchingParameters.coordinate
-        .split("POINT(")[1]
-        .split(" ")[0];
-      const lng = matchingParameters.coordinate
-        .split("POINT(")[1]
-        .split(" ")[1]
-        .split(")")[0];
       const parameters = [
         matchingParameters.login,
         ...genderPreferences,
@@ -200,10 +194,9 @@ export class DbRequestService {
         matchingParameters.ageMax,
         matchingParameters.fameMin,
         matchingParameters.fameMax,
-        // lng,
-        // lat,
-        // matchingParameters.distMin * 1000, // Distances in meters.
-        // matchingParameters.distMax * 1000,
+        matchingParameters.coordinate,
+        matchingParameters.distMin * 1000, // Distances in meters.
+        matchingParameters.distMax * 1000,
         ...matchingParameters.tags,
       ];
 
@@ -223,8 +216,8 @@ WHERE
       }
       query += `)\n
       AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) BETWEEN ? AND ?
-      AND u.rating BETWEEN ? AND ?\n`;
-      // AND ST_Distance_Sphere(u.coordinate, POINT(?, ?)) BETWEEN ? AND ?\n`;
+      AND u.rating BETWEEN ? AND ?\n
+      AND ST_Distance_Sphere(u.coordinate, ST_GeomFromText(?)) BETWEEN ? AND ?\n`;
 
       if (matchingParameters.tags.length > 0) {
         query += `
