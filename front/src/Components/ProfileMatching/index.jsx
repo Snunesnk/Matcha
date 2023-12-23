@@ -92,9 +92,23 @@ const ProfileMatching = () => {
         getProfileList(setUserList)
 
         const getLocation = async () => {
-            const location = await getUserLocation()
-            console.log(location)
-            if (location.lat !== null && location.lng !== null) {
+            const loc = await getUserLocation()
+            if (loc.lat !== null && loc.lng !== null) {
+                const option = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        lat: loc.lat,
+                        lng: loc.lng,
+                    }),
+                    credentials: 'include',
+                }
+
+                fetch('http://localhost:8080/api/location', option).then(
+                    (res) => {
+                        if (res.ok) getProfileList(setUserList)
+                    }
+                )
                 // Send location to back, then trigger profile matching again
             }
         }

@@ -45,7 +45,6 @@ const LoginPage = () => {
     useEffect(() => {
         if (!formResult) return
 
-        console.log(formResult)
         switch (formResult.message) {
             case 'MISSING_DATA':
                 setError('Missing data')

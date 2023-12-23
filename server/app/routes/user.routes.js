@@ -1,7 +1,10 @@
 import express from "express";
 import userHandler from "../handlers/user.handler.js";
 import picturesUpload from "../middlewares/pictures-upload.js";
-import { needVerifiedMiddleware } from "../middlewares/authentication-middleware.js";
+import {
+  needOnboardedMiddleware,
+  needVerifiedMiddleware,
+} from "../middlewares/authentication-middleware.js";
 
 const router = express.Router();
 
@@ -45,4 +48,6 @@ router.delete("/user/:login", userHandler.delete);
 router.put("/upload-pictures", needVerifiedMiddleware, picturesUpload);
 router.put("/user", needVerifiedMiddleware, userHandler.update);
 
+// Update user location
+router.post("/location", needOnboardedMiddleware, userHandler.updateLocation);
 export default router;

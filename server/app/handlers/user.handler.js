@@ -515,4 +515,31 @@ export default class {
       });
     }
   };
+
+  static updateLocation = async (req, res) => {
+    const { lat, lng } = req.body;
+    const login = req.decodedUser._login;
+
+    if (!lat || !lng) {
+      res.status(400).send({
+        message: "MISSING_DATA",
+      });
+    }
+
+    const user = {
+      coordinate: {
+        y: lat,
+        x: lng,
+      },
+    };
+
+    const data = await User.updateByLogin(login, user);
+    if (!data) {
+      res.status(404).send({
+        message: "USER_NOT_FOUND",
+      });
+    }
+
+    res.status(200).send("Location updated");
+  };
 }
