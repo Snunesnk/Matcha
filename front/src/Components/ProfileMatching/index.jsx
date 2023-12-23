@@ -36,13 +36,16 @@ const GradientCross = () => (
     </>
 )
 
-const getProfileList = (setUserList) => {
-    fetch('http://localhost:8080/api/user/verified', {
-        method: 'GET',
+const getProfileList = (setUserList, matchingParameters) => {
+    const options = {
+        method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-    })
+        credentials: 'include',
+        body: JSON.stringify(matchingParameters),
+    }
+    fetch('http://localhost:8080/api/matching-profiles', options)
         .then((response) => {
             if (response.ok) {
                 return response.json()
@@ -50,6 +53,7 @@ const getProfileList = (setUserList) => {
             throw new Error('Something went wrong ...')
         })
         .then((data) => {
+            console.log('data')
             setUserList(data)
         })
         .catch((error) => {
@@ -89,7 +93,16 @@ const ProfileMatching = () => {
     const profileRef = useRef(null)
 
     useEffect(() => {
-        getProfileList(setUserList)
+        const matchingParameters = {
+            distMin: 0,
+            distMax: 100,
+            ageMin: 18,
+            ageMax: 55,
+            fameMin: 0,
+            fameMax: 100,
+            tags: [],
+        }
+        getProfileList(setUserList, matchingParameters)
 
         const getLocation = async () => {
             const loc = await getUserLocation()
@@ -106,7 +119,8 @@ const ProfileMatching = () => {
 
                 fetch('http://localhost:8080/api/location', option).then(
                     (res) => {
-                        if (res.ok) getProfileList(setUserList)
+                        if (res.ok)
+                            getProfileList(setUserList, matchingParameters)
                     }
                 )
                 // Send location to back, then trigger profile matching again

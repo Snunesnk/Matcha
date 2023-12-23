@@ -6,6 +6,7 @@ import authenticationService from "../services/authentication.service.js";
 import { getIpAddress, getIpInfo } from "../services/location.service.js";
 import { UserSetting } from "../models/user-settings.model.js";
 import { userInfo } from "os";
+import { getMatchs } from "../services/matching.service.js";
 
 export default class {
   static async login(req, res) {
@@ -549,36 +550,50 @@ export default class {
       req.body;
     const login = req.decodedUser._login;
 
+    console.log(req.body);
+
     if (
-      !distMin ||
-      !distMax ||
-      !ageMin ||
+      distMin === undefined ||
+      distMax === undefined ||
+      ageMin === undefined ||
       ageMin < 18 ||
-      !ageMax ||
-      !fameMin ||
-      !fameMax ||
+      ageMax === undefined ||
+      fameMin === undefined ||
+      fameMax === undefined ||
       !tags
     ) {
       res.status(400).send({ message: "INVALID_PARAMETERS" });
-    }
-
-    const user = await User.getUserByLogin(login);
-    if (!user) {
-      res.status(404).send({ message: "USER_NOT_FOUND" });
       return;
     }
 
-    const matchingParameters = {
-      distMin,
-      distMax,
-      ageMin,
-      ageMax,
-      fameMin,
-      fameMax,
-      tags,
-      enby: user.prefEnby,
-      male: user.prefMale,
-      female: user.prefFemale,
-    };
+    try {
+      const user = await User.getUserByLogin(login);
+      if (!user) {
+        res.status(404).send({ message: "USER_NOT_FOUND" });
+        return;
+      }
+
+      const matchingParameters = {
+        distMin,
+        distMax,
+        ageMin,
+        ageMax,
+        fameMin,
+        fameMax,
+        tags,
+        enby: user.prefEnby,
+        male: user.prefMale,
+        female: user.prefFemale,
+      };
+
+      const results = await getMatchs(matchingParameters);
+      if (!results) {
+        res.status(500).send({ message: "CANT_GET_MATCHS" });
+        return;
+      }
+      res.status(200).send({ results: results });
+    } catch (err) {
+      console.log(err);
+    }
   };
 }

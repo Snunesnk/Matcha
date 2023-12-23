@@ -53,7 +53,7 @@ router.post("/location", needOnboardedMiddleware, userHandler.updateLocation);
 
 // Get a list of matching profile
 router.post(
-  "/maatching-profiles",
+  "/matching-profiles",
   needOnboardedMiddleware,
   userHandler.getMatchingProfile
 );
