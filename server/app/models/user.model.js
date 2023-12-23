@@ -46,7 +46,7 @@ export class User extends UserChunk {
       this._latitude !== undefined &&
       this._longitude !== undefined
     ) {
-      this._coordinate = `POINT(${this._latitude} ${this._longitude})`;
+      this._coordinate = `POINT(${this._longitude} ${this._latitude})`;
     } else {
       this._coordinate = coordinate;
     }
@@ -439,9 +439,7 @@ export class User extends UserChunk {
 
     if (!data) return null;
 
-    if (data.length === 0) return [];
-
-    return data[0];
+    return data;
   }
 
   toJSON() {

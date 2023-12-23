@@ -570,6 +570,7 @@ export default class {
       }
 
       const matchingParameters = {
+        login,
         distMin,
         distMax,
         ageMin,
