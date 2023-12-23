@@ -213,38 +213,36 @@ FROM
     user u
     INNER JOIN userSettings us ON u.login = us.userLogin
 WHERE
-    u.login <> ?
-    AND u.verified = 1`;
-      // AND u.onboarded = 1
-      // AND u.gender IN (?`;
+      u.login <> ?
+      AND u.verified = 1
+      AND u.onboarded = 1
+      AND u.gender IN (?`;
 
-      //   for (let i = 1; i < genderPreferences.length; i++) {
-      //     query += ", ?";
-      //   }
-      //   query += `)\n
-      // AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) BETWEEN ? AND ?
-      // AND u.rating BETWEEN ? AND ?\n`;
-      //   // AND ST_Distance_Sphere(u.coordinate, POINT(?, ?)) BETWEEN ? AND ?\n`;
+      for (let i = 1; i < genderPreferences.length; i++) {
+        query += ", ?";
+      }
+      query += `)\n
+      AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) BETWEEN ? AND ?
+      AND u.rating BETWEEN ? AND ?\n`;
+      // AND ST_Distance_Sphere(u.coordinate, POINT(?, ?)) BETWEEN ? AND ?\n`;
 
-      //   if (matchingParameters.tags.length > 0) {
-      //     query += `
-      // AND EXISTS (
-      //     SELECT 1
-      //     FROM userTag ut
-      //     WHERE
-      //         ut.userLogin = u.login
-      //         AND ut.tagBwid IN (?`;
+      if (matchingParameters.tags.length > 0) {
+        query += `
+      AND EXISTS (
+          SELECT 1
+          FROM userTag ut
+          WHERE
+              ut.userLogin = u.login
+              AND ut.tagBwid IN (?`;
 
-      //     for (let i = 1; i < matchingParameters.tags.length; i++) {
-      //       query += ", ?";
-      //     }
+        for (let i = 1; i < matchingParameters.tags.length; i++) {
+          query += ", ?";
+        }
 
-      //     query += ")\n    )";
-      //   }
+        query += ")\n    )";
+      }
 
-      //   query += "ORDER BY u.rating DESC;";
-
-      console.log(query);
+      query += "ORDER BY u.rating DESC;";
 
       connection.query(query, parameters, (err, res) => {
         if (err) {
