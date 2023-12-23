@@ -53,8 +53,8 @@ const getProfileList = (setUserList, matchingParameters) => {
             throw new Error('Something went wrong ...')
         })
         .then((data) => {
-            console.log('data')
-            setUserList(data)
+            console.log('data', data)
+            setUserList(data.results)
         })
         .catch((error) => {
             console.log(error)

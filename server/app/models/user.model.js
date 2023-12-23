@@ -434,6 +434,16 @@ export class User extends UserChunk {
     return true;
   }
 
+  static async getMatchingProfiles(matchingParameters) {
+    const data = await DbRequestService.getMatchList(matchingParameters);
+
+    if (!data) return null;
+
+    if (data.length === 0) return [];
+
+    return data[0];
+  }
+
   toJSON() {
     return {
       ...super.toJSON(),

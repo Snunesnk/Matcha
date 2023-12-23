@@ -7,7 +7,7 @@ let socket = null
 export const initSocket = () => {
     socket = io(SOCKET_SERVER_URL, { withCredentials: true })
     socket.on('connect', () => {
-        console.log('Socket connected:', socket.id)
+        // console.log('Socket connected:', socket.id)
     })
     return socket
 }

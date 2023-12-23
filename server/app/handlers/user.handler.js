@@ -5,8 +5,6 @@ import bcrypt from "bcrypt";
 import authenticationService from "../services/authentication.service.js";
 import { getIpAddress, getIpInfo } from "../services/location.service.js";
 import { UserSetting } from "../models/user-settings.model.js";
-import { userInfo } from "os";
-import { getMatchs } from "../services/matching.service.js";
 
 export default class {
   static async login(req, res) {
@@ -550,8 +548,6 @@ export default class {
       req.body;
     const login = req.decodedUser._login;
 
-    console.log(req.body);
-
     if (
       distMin === undefined ||
       distMax === undefined ||
@@ -584,14 +580,15 @@ export default class {
         enby: user.prefEnby,
         male: user.prefMale,
         female: user.prefFemale,
+        coordinate: user.coordinate,
       };
 
-      const results = await getMatchs(matchingParameters);
+      const results = await User.getMatchingProfiles(matchingParameters);
       if (!results) {
         res.status(500).send({ message: "CANT_GET_MATCHS" });
         return;
       }
-      res.status(200).send({ results: results });
+      res.status(200).send({ results });
     } catch (err) {
       console.log(err);
     }
