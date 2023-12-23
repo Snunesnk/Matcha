@@ -211,12 +211,14 @@ SELECT DISTINCT
   u.name,
   u.login,
   u.bio,
-  u.rating
+  u.rating,
+  GROUP_CONCAT(ut.tagBwid ORDER BY ut.tagBwid ASC SEPARATOR ', ') AS tags
 FROM
     user u
     INNER JOIN userSettings us ON u.login = us.userLogin
     INNER JOIN user currentUser ON currentUser.login = ?
     INNER JOIN userSettings currentUs ON currentUser.login = currentUs.userLogin
+    LEFT JOIN userTag ut ON u.login = ut.userLogin
 WHERE
       u.login <> currentUser.login
       AND u.verified = 1
@@ -258,7 +260,10 @@ WHERE
       AND ST_Distance_Sphere(currentUser.coordinate, u.coordinate) <= us.distMax
       `;
 
-      query += "ORDER BY u.rating DESC;";
+      query += `
+      GROUP BY u.login
+      ORDER BY u.rating DESC
+      `;
 
       connection.query(query, parameters, (err, res) => {
         if (err) {
