@@ -589,6 +589,10 @@ export default class {
         res.status(500).send({ message: "CANT_GET_MATCHS" });
         return;
       }
+      // remove rating field from results
+      results.forEach((result) => {
+        delete result.rating;
+      });
       res.status(200).send({ results });
     } catch (err) {
       console.log(err);

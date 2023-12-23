@@ -201,7 +201,17 @@ export class DbRequestService {
       ];
 
       let query = `
-SELECT DISTINCT u.*
+SELECT DISTINCT
+  u.dateOfBirth,
+  u.imgA,
+  u.imgB,
+  u.imgC,
+  u.imgD,
+  u.imgE,
+  u.name,
+  u.login,
+  u.bio,
+  u.rating
 FROM
     user u
     INNER JOIN userSettings us ON u.login = us.userLogin
