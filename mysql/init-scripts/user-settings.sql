@@ -1,5 +1,5 @@
 create table userSettings (
-    userLogin varchar(50) not null,
+    userLogin varchar(50) not null primary key,
     distMin int default 0 not null,
     distMax int default 100 not null,
     ageMin int default 18 not null,

@@ -29,17 +29,20 @@ export default class {
         return;
       }
 
-      if (user.verified !== true) {
-        res.status(401).send({
-          message: "EMAIL_NOT_VERIFIED",
-        });
-        return;
-      }
-
       const isPasswordMatch = await user.passwordMatch(password);
       if (!isPasswordMatch) {
         res.status(404).send({
           message: "WRONG_CREDENTIALS",
+        });
+        return;
+      }
+
+      if (user.verified !== true) {
+        res.status(401).send({
+          message: "EMAIL_NOT_VERIFIED",
+          email: user._email,
+          name: user._name,
+          login: user._login,
         });
         return;
       }
@@ -57,25 +60,27 @@ export default class {
         path: "/",
       };
 
-      const ip = await getIpAddress(req);
-      const loc = await getIpInfo(ip);
-      const userLoc = {
-        coordinate: {
-          y: loc.lat,
-          x: loc.lon,
-        },
-      };
-
-      const resUser = await User.updateByLogin(login, userLoc);
-      if (resUser === null) {
-        res.status(500).send({
-          message: "COULD_NOT_UPDATE_USER_LOCATION",
+      try {
+        getIpAddress(req).then(async (ip) => {
+          const loc = await getIpInfo(ip);
+          const userLoc = {
+            coordinate: {
+              y: loc.lat,
+              x: loc.lon,
+            },
+          };
+          User.updateByLogin(login, userLoc);
         });
+      } catch (err) {
+        console.log("error while getting ip address", err);
       }
 
       res.cookie("remember_me", jwtToken, cookieOptions);
       res.status(200).send({
         message: "LOG_IN_SUCCESS",
+        email: user._email,
+        name: user._name,
+        login: user._login,
       });
     } catch (error) {
       res.status(500).send({
@@ -87,26 +92,34 @@ export default class {
 
   // Send a verification mail to the User
   static async resendVerificationMail(req, res) {
-    const login = req.params.login;
+    const email = req.params.email;
     try {
-      const user = await User.getUserByLogin(login);
-      if (user === null) {
-        res.status(404).send({
-          message: "USER_NOT_FOUND",
+      const user = await User.getUserByMail(email);
+      if (user === null || user.verified === true) {
+        res.status(403).send({
+          message: "NOT_ALLOWED",
         });
         return;
       }
 
-      if (user.verified === true) {
-        res.status(400).send({
-          message: "EMAIL_ALREADY_VERIFIED",
-        });
-        return;
+      // Check if previous mail was sent less than 5 minutes ago
+      if (user.token.includes("_mail_timestamp_")) {
+        const timestamp = user.token.split("_mail_timestamp_")[1];
+        if (Date.now() - timestamp < 5 * 60 * 1000) {
+          let cooldown = 5 * 60 * 1000 - (Date.now() - timestamp);
+          cooldown = Math.floor(cooldown / 1000 / 60);
+          cooldown = cooldown + " minute" + (cooldown > 1 ? "s" : "");
+          res.status(400).send({
+            message: "MAIL_ALREADY_SENT",
+            cooldown: cooldown,
+          });
+          return;
+        }
       }
 
       const userToken = crypto.randomBytes(64).toString("base64url");
       user.token = userToken + "_mail_timestamp_" + Date.now();
-      await User.updateByLogin(login, user);
+      await User.updateByLogin(user._login, { token: user.token });
 
       const result = await User.sendVerificationMail(user, userToken);
       if (result === true) {
@@ -191,16 +204,19 @@ export default class {
       return;
     }
 
+    // Create default userSettings
+    result = await UserSetting.create({ userLogin: login });
+    console.log("result", result);
+    if (result === null) {
+      res.status(500).send({
+        message: "COULLD_NOT_CREATE_USER_SETTINGS",
+      });
+    }
+
     try {
       let result = await User.verifyLogin(login, token);
-      if (result === -1) {
-        res.status(404).send({
-          message: "USER_NOT_FOUND",
-        });
-        return;
-      }
 
-      if (result == 0) {
+      if (result === -1) {
         res.status(401).send({
           message: "WRONG_TOKEN",
         });
@@ -217,13 +233,6 @@ export default class {
       if (result === null) {
         res.status(500).send({
           message: "COULD_NOT_VERIFY",
-        });
-      }
-      // Create default userSettings
-      result = await UserSetting.create({ userLogin: login });
-      if (result === null) {
-        res.status(500).send({
-          message: "COULLD_NOT_CREATE_USER_SETTINGS",
         });
       }
       // const res
@@ -432,7 +441,7 @@ export default class {
 
       const userToken = crypto.randomBytes(64).toString("base64url");
       user.token = userToken + "_mail_timestamp_" + Date.now();
-      await User.updateByLogin(user.login, user);
+      await User.updateByLogin(user.login, { token: user.token });
 
       const result = await User.sendResetPasswordMail(user, userToken);
       if (result === true) {

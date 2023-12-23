@@ -24,7 +24,7 @@ router.post("/user/login", userHandler.login);
 router.get("/user/verify/:login/:token", userHandler.verifyUser);
 
 // Resend verification mail
-router.post("/user/verify/:login", userHandler.resendVerificationMail);
+router.post("/user/verify/:email", userHandler.resendVerificationMail);
 
 // Retrieve all verified Users
 router.get("/user/verified", userHandler.getAllVerified);

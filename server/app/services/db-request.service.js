@@ -12,7 +12,15 @@ const connection = mysql.createConnection({
 
 export class DbRequestService {
   // Used to ensure our dynamically forged request won't break trying to reach for a table that does not exist
-  static allowedTableUse = ["user", "tag", "view", "userTag", "like"];
+  static allowedTableUse = [
+    "user",
+    "tag",
+    "view",
+    "userTag",
+    "like",
+    "userSettings",
+    "userSettingsTags",
+  ];
 
   /*
    ** UTILS
@@ -79,6 +87,7 @@ export class DbRequestService {
    */
 
   static async create(tableName, objectToAdd) {
+    console.log("adding", objectToAdd, "into table", tableName);
     return new Promise((resolve, reject) => {
       if (!this.allowedTableUse.includes(tableName)) {
         reject(new Error("Table does not exist in database"));

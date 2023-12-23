@@ -69,7 +69,7 @@ export class UserSetting {
 
   static async create(newUserSetting) {
     const data = await DbRequestService.create(
-      "userSetting",
+      "userSettings",
       new UserSetting(newUserSetting)
     );
     if (data.affectedRows === 0) {
@@ -79,17 +79,17 @@ export class UserSetting {
   }
 
   static async getUserSettingByLogin(userLogin) {
-    const data = await DbRequestService.read("userSetting", {
+    const data = await DbRequestService.read("userSettings", {
       userLogin: `${userLogin}`,
     });
     if (data.length === 0) {
       return null;
     }
-    return new userSetting(data[0]);
+    return new UserSetting(data[0]);
   }
 
   static async updateUserSettingByLogin(userLogin, newUserSetting) {
-    const data = await DbRequestService.update("userSetting", newUserSetting, {
+    const data = await DbRequestService.update("userSettings", newUserSetting, {
       userLogin: `${userLogin}`,
     });
     if (data.affectedRows === 0) {
@@ -99,7 +99,7 @@ export class UserSetting {
   }
 
   static async deleteUserSettingByLogin(userLogin) {
-    return DbRequestService.delete("userSetting", {
+    return DbRequestService.delete("userSettings", {
       userLogin: `${userLogin}`,
     });
   }

@@ -45,10 +45,8 @@ const LoginPage = () => {
     useEffect(() => {
         if (!formResult) return
 
+        console.log(formResult)
         switch (formResult.message) {
-            case 'EMAIL_NOT_VERIFIED':
-                navigate('/onboarding/validation')
-                break
             case 'MISSING_DATA':
                 setError('Missing data')
                 setLoading(false)
@@ -61,6 +59,7 @@ const LoginPage = () => {
                 setError('Could not login')
                 setLoading(false)
                 break
+            case 'EMAIL_NOT_VERIFIED':
             case 'LOG_IN_SUCCESS':
                 dispatch({
                     type: USER_STATE_ACTIONS.LOG_IN,
@@ -70,7 +69,9 @@ const LoginPage = () => {
                         login: formResult.login,
                     },
                 })
-                navigate('/dashboard')
+                if (formResult.message === 'EMAIL_NOT_VERIFIED')
+                    navigate('/validation')
+                else navigate('/dashboard')
                 break
             default:
                 console.log('Unknown message')

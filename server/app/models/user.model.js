@@ -422,7 +422,7 @@ export class User extends UserChunk {
     const userToken = data[0].token.split("_mail_timestamp_")[0];
     const res = bcrypt.compareSync(userToken, token);
 
-    if (res === false) return 0;
+    if (res === false) return -1;
     return 1;
   }
 
