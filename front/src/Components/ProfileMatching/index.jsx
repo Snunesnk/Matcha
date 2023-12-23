@@ -53,7 +53,6 @@ const getProfileList = (setUserList, matchingParameters) => {
             throw new Error('Something went wrong ...')
         })
         .then((data) => {
-            console.log('data', data)
             setUserList(data.results)
         })
         .catch((error) => {
@@ -83,6 +82,9 @@ const sendLike = (issuer, receiver) => {
         })
 }
 
+// I think there should be a loading animation
+// Plus a last card that tells "No more user"
+
 const ProfileMatching = () => {
     const userLogin = useSelector((state) => state.userState.userInfos.login)
     const [evaluation, setEvaluation] = useState('')
@@ -90,9 +92,11 @@ const ProfileMatching = () => {
     const [userList, setUserList] = useState([])
     const [actualUser, setActualUser] = useState(null)
     const [nextUser, setNextUser] = useState(null)
+    const [loading, setLoading] = useState(true)
     const profileRef = useRef(null)
 
     useEffect(() => {
+        setLoading(true)
         const matchingParameters = {
             distMin: 0,
             distMax: 100,
@@ -107,6 +111,7 @@ const ProfileMatching = () => {
         const getLocation = async () => {
             const loc = await getUserLocation()
             if (loc.lat !== null && loc.lng !== null) {
+                setLoading(true)
                 const option = {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
@@ -123,7 +128,6 @@ const ProfileMatching = () => {
                             getProfileList(setUserList, matchingParameters)
                     }
                 )
-                // Send location to back, then trigger profile matching again
             }
         }
         getLocation()
@@ -164,9 +168,11 @@ const ProfileMatching = () => {
     useEffect(() => {
         setActualUser(userList[0] || null)
         setTimeout(() => setNextUser(userList[1] || null), 500)
+        setLoading(false)
     }, [userList])
 
-    if (actualUser !== null && nextUser !== null) {
+    if (loading) return <div>Loading...</div>
+    if (actualUser !== null) {
         return (
             <div id="profile_matching">
                 <div
@@ -182,20 +188,27 @@ const ProfileMatching = () => {
                         <p id="profile-liked">Like</p>
                     </div>
 
-                    <div
-                        className="card_img_container next-user"
-                        style={{
-                            background:
-                                'url(' +
-                                (nextUser.imgA?.includes('http')
-                                    ? ''
-                                    : 'http://localhost:8080/api') +
-                                nextUser.imgA +
-                                ') 50% 50% / cover no-repeat',
-                        }}
-                    >
-                        <div className="name_and_age_container"></div>
-                    </div>
+                    {nextUser ? (
+                        <div
+                            className="card_img_container next-user"
+                            style={{
+                                background:
+                                    'url(' +
+                                    (nextUser.imgA?.includes('http')
+                                        ? ''
+                                        : 'http://localhost:8080/api') +
+                                    nextUser.imgA +
+                                    ') 50% 50% / cover no-repeat',
+                            }}
+                        >
+                            <div className="name_and_age_container"></div>
+                        </div>
+                    ) : (
+                        <div className="card_img_container next-user">
+                            <div className="name_and_age_container"></div>
+                        </div>
+                    )}
+
                     <div className="profile_matching_btn_container">
                         <button
                             className="profile_matching_btn profile_matching_dislike"
@@ -215,7 +228,15 @@ const ProfileMatching = () => {
         )
     } else
         return (
-            <div>We're sorry, we can't find anymore corresponding profiles</div>
+            // TODO: Add a "Sorry" title in big, plus a short description
+            <div id="profile_matching">
+                <div id="user-profile-container">
+                    <div>
+                        We're sorry, we can't find anymore corresponding
+                        profiles. Please try again later.
+                    </div>
+                </div>
+            </div>
         )
 }
 

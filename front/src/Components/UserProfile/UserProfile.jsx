@@ -103,10 +103,10 @@ const UserProfile = ({ user, scroll = 0 }) => {
 
             <div id="user-profile-tags">
                 {user.tags &&
-                    user.tags.map((tag, i) => (
+                    user.tags.split(', ').map((tag, i) => (
                         <div key={i} className="user-profile-tag">
                             <i>#</i>
-                            {tag.bwid}
+                            {tag}
                         </div>
                     ))}
             </div>
