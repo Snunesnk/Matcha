@@ -201,12 +201,14 @@ export class DbRequestService {
       ];
 
       let query = `
-SELECT u.*
+SELECT DISTINCT u.*
 FROM
     user u
     INNER JOIN userSettings us ON u.login = us.userLogin
+    INNER JOIN user currentUser ON currentUser.login = ?
+    INNER JOIN userSettings currentUs ON currentUser.login = currentUs.userLogin
 WHERE
-      u.login <> ?
+      u.login <> currentUser.login
       AND u.verified = 1
       AND u.onboarded = 1
       AND u.gender IN (?`;
@@ -234,6 +236,17 @@ WHERE
 
         query += ")\n    )";
       }
+
+      query += `    
+      AND (
+        (currentUser.gender = 'm' AND u.prefMale = 1) OR
+        (currentUser.gender = 'f' AND u.prefFemale = 1) OR
+        (currentUser.gender = 'nb' AND u.prefEnby = 1)
+      )
+      AND TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) BETWEEN us.ageMin AND us.ageMax
+      AND currentUser.rating BETWEEN us.fameMin AND us.fameMax
+      AND ST_Distance_Sphere(currentUser.coordinate, u.coordinate) <= us.distMax
+      `;
 
       query += "ORDER BY u.rating DESC;";
 
