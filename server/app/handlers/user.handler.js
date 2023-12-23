@@ -204,15 +204,6 @@ export default class {
       return;
     }
 
-    // Create default userSettings
-    result = await UserSetting.create({ userLogin: login });
-    console.log("result", result);
-    if (result === null) {
-      res.status(500).send({
-        message: "COULLD_NOT_CREATE_USER_SETTINGS",
-      });
-    }
-
     try {
       let result = await User.verifyLogin(login, token);
 
@@ -235,6 +226,15 @@ export default class {
           message: "COULD_NOT_VERIFY",
         });
       }
+
+      // Create default userSettings
+      result = await UserSetting.create({ userLogin: login });
+      if (result === null) {
+        res.status(500).send({
+          message: "COULLD_NOT_CREATE_USER_SETTINGS",
+        });
+      }
+
       // const res
       res.status(200).send({
         message: "User verified successfully.",

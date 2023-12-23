@@ -68,12 +68,16 @@ export class UserSetting {
   }
 
   static async create(newUserSetting) {
-    const data = await DbRequestService.create(
-      "userSettings",
-      new UserSetting(newUserSetting)
-    );
-    if (data.affectedRows === 0) {
-      return null;
+    try {
+      const data = await DbRequestService.create(
+        "userSettings",
+        new UserSetting(newUserSetting)
+      );
+      if (data.affectedRows === 0) {
+        return null;
+      }
+    } catch (err) {
+      console.log("error while saving user settings", err);
     }
     return this.getUserSettingByLogin(newUserSetting.userLogin);
   }

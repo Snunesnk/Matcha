@@ -87,7 +87,6 @@ export class DbRequestService {
    */
 
   static async create(tableName, objectToAdd) {
-    console.log("adding", objectToAdd, "into table", tableName);
     return new Promise((resolve, reject) => {
       if (!this.allowedTableUse.includes(tableName)) {
         reject(new Error("Table does not exist in database"));
