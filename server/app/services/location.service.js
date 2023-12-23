@@ -2,7 +2,7 @@ import { publicIpv4 } from "public-ip";
 import { getIpToLocationFn } from "@fuzzysaj/ip-to-geo-location";
 
 export const getIpAddress = async (req) => {
-  let ipAddr;
+  let ipAddr = null;
   const forwardedIpsStr = req.header("x-forwarded-for");
   if (!forwardedIpsStr) {
     ipAddr = req.connection.remoteAddress.split(":")[3];
@@ -11,15 +11,27 @@ export const getIpAddress = async (req) => {
     ipAddr = forwardedIps[0];
   }
 
-  // Get external IP address
-  if (ipAddr.includes("192.168.")) {
-    ipAddr = await publicIpv4();
+  try {
+    // Get external IP address
+    if (ipAddr.includes("192.168.")) {
+      ipAddr = await publicIpv4();
+    }
+  } catch (err) {
+    console.log(err);
   }
 
   return ipAddr;
 };
 
 export const getIpInfo = async (ipAddr) => {
-  const ipToLoc = await getIpToLocationFn();
-  return ipToLoc(ipAddr);
+  let ip = null;
+
+  try {
+    const ipToLoc = await getIpToLocationFn();
+    ip = ipToLoc(ipAddr);
+  } catch (err) {
+    console.log(err);
+  }
+
+  return ip;
 };

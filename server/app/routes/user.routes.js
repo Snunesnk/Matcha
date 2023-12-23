@@ -50,4 +50,11 @@ router.put("/user", needVerifiedMiddleware, userHandler.update);
 
 // Update user location
 router.post("/location", needOnboardedMiddleware, userHandler.updateLocation);
+
+// Get a list of matching profile
+router.post(
+  "/maatching-profiles",
+  needOnboardedMiddleware,
+  userHandler.getMatchingProfile
+);
 export default router;

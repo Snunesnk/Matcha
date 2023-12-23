@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 import authenticationService from "../services/authentication.service.js";
 import { getIpAddress, getIpInfo } from "../services/location.service.js";
 import { UserSetting } from "../models/user-settings.model.js";
+import { userInfo } from "os";
 
 export default class {
   static async login(req, res) {
@@ -541,5 +542,43 @@ export default class {
     }
 
     res.status(200).send("Location updated");
+  };
+
+  static getMatchingProfile = async (req, res) => {
+    const { distMin, distMax, ageMin, ageMax, fameMin, fameMax, tags } =
+      req.body;
+    const login = req.decodedUser._login;
+
+    if (
+      !distMin ||
+      !distMax ||
+      !ageMin ||
+      ageMin < 18 ||
+      !ageMax ||
+      !fameMin ||
+      !fameMax ||
+      !tags
+    ) {
+      res.status(400).send({ message: "INVALID_PARAMETERS" });
+    }
+
+    const user = await User.getUserByLogin(login);
+    if (!user) {
+      res.status(404).send({ message: "USER_NOT_FOUND" });
+      return;
+    }
+
+    const matchingParameters = {
+      distMin,
+      distMax,
+      ageMin,
+      ageMax,
+      fameMin,
+      fameMax,
+      tags,
+      enby: user.prefEnby,
+      male: user.prefMale,
+      female: user.prefFemale,
+    };
   };
 }
