@@ -60,13 +60,14 @@ const getProfileList = (setUserList, matchingParameters) => {
         })
 }
 
-const sendLike = (issuer, receiver) => {
+const sendLike = (receiver) => {
     fetch('http://localhost:8080/api/like', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ issuer, receiver }),
+        credentials: 'include',
+        body: JSON.stringify({ receiver }),
     })
         .then((response) => {
             if (response.ok) {
@@ -142,7 +143,7 @@ const ProfileMatching = () => {
             firstTimeout = 200
         }
 
-        if (state === 'liked') sendLike(userLogin, actualUser.login)
+        if (state === 'liked') sendLike(actualUser.login)
 
         // First timeout, to have time to scroll to top
         setTimeout(() => {

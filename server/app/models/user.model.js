@@ -442,6 +442,14 @@ export class User extends UserChunk {
     return data;
   }
 
+  static async checkBiDirectionnalMatch(likee, liker) {
+    const data = await DbRequestService.checkForBiDirectionMatch(likee, liker);
+
+    if (!data) return null;
+
+    return data[0];
+  }
+
   toJSON() {
     return {
       ...super.toJSON(),

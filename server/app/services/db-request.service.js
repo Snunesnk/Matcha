@@ -93,7 +93,7 @@ export class DbRequestService {
         reject(new Error("Table does not exist in database"));
       }
 
-      const query = `INSERT INTO ${tableName} SET ?`;
+      const query = `INSERT INTO \`${tableName}\` SET ?`;
       const params = _.pick(
         objectToAdd,
         Object.getOwnPropertyNames(objectToAdd).map((prop) =>
@@ -121,7 +121,7 @@ export class DbRequestService {
         whereLike,
         whereNotLike
       );
-      const query = `SELECT * FROM ${tableName}` + queryCondition;
+      const query = `SELECT * FROM \`${tableName}\`` + queryCondition;
 
       connection.query(query, queryFilters, (err, res) => {
         if (err) {
@@ -258,12 +258,55 @@ WHERE
       AND TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) BETWEEN us.ageMin AND us.ageMax
       AND currentUser.rating BETWEEN us.fameMin AND us.fameMax
       AND ST_Distance_Sphere(currentUser.coordinate, u.coordinate) <= us.distMax
+      AND NOT EXISTS (
+        SELECT 1 FROM \`like\` WHERE issuer = currentUser.login AND receiver = u.login
+      )
       `;
 
       query += `
       GROUP BY u.login
       ORDER BY u.rating DESC
       `;
+
+      connection.query(query, parameters, (err, res) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(res);
+      });
+    });
+  }
+
+  static async checkForBiDirectionMatch(likee, liker) {
+    return new Promise((resolve, reject) => {
+      const parameters = [likee, liker];
+      const query = `
+    SELECT COUNT(*) AS match_count
+FROM
+    user liker
+    INNER JOIN userSettings likerSettings ON liker.login = likerSettings.userLogin
+    INNER JOIN user likee ON likee.login = ?
+    INNER JOIN userSettings likeeSettings ON likee.login = likeeSettings.userLogin
+WHERE
+    liker.login = ?
+    AND (
+        (liker.gender = 'm' AND likee.prefMale) OR
+        (liker.gender = 'f' AND likee.prefFemale) OR
+        (liker.gender = 'nb' AND likee.prefEnby)
+    )
+    AND TIMESTAMPDIFF(YEAR, liker.dateOfBirth, CURDATE()) BETWEEN likeeSettings.ageMin AND likeeSettings.ageMax
+    AND liker.rating BETWEEN likeeSettings.fameMin AND likeeSettings.fameMax
+    AND ST_Distance_Sphere(liker.coordinate, likee.coordinate) <= likeeSettings.distMax
+    AND (
+        (likee.gender = 'm' AND liker.prefMale) OR
+        (likee.gender = 'f' AND liker.prefFemale) OR
+        (likee.gender = 'nb' AND liker.prefEnby)
+    )
+    AND TIMESTAMPDIFF(YEAR, likee.dateOfBirth, CURDATE()) BETWEEN likerSettings.ageMin AND likerSettings.ageMax
+    AND likee.rating BETWEEN likerSettings.fameMin AND likerSettings.fameMax
+    AND ST_Distance_Sphere(likee.coordinate, liker.coordinate) <= likerSettings.distMax;
+    `;
 
       connection.query(query, parameters, (err, res) => {
         if (err) {

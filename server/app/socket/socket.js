@@ -6,8 +6,27 @@ export const initSocket = (io) => {
   io.use(socketMiddleware);
 
   io.on("connection", (socket) => {
-    socketList.push({ socketId: socket.id, user: socket.decoded });
-  });
+    socketList.push({ clientSocket: socket, user: socket.decoded });
+  })
+    .on("error", function (err) {
+      if (err.code == "ENOTFOUND") {
+        console.log("[ERROR] No device found at this address!");
+        // device.clientSocket.destroy();
+        // socketList.splice(socketList.indexOf(device), 1);
+        return;
+      }
+
+      if (err.code == "ECONNREFUSED") {
+        console.log("[ERROR] Connection refused! Please check the IP.");
+        // device.clientSocket.destroy();
+        return;
+      }
+
+      console.log("[CONNECTION] Unexpected error! " + err.message);
+    })
+    .on("close", function () {
+      console.log("[CONNECTION] disconnected!");
+    });
 };
 
 export const socketMiddleware = async (socket, next) => {
