@@ -1,5 +1,4 @@
 import React from 'react'
-import { Grid } from '@mui/material'
 import './OnboardingForm.css'
 import ListChoice from '../ListChoice'
 import { Link } from 'react-router-dom'

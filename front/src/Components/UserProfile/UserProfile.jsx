@@ -7,47 +7,47 @@ import ClearIcon from '@mui/icons-material/Clear'
 import './UserProfile.css'
 
 const UserProfile = ({ user, scroll = 0 }) => {
-    const [selectedPicture, setSelectedPicture] = useState(-1)
-    const profileRef = useRef(null)
-    const infosRef = useRef(null)
-    const imgs = []
-    const userAge =
-        new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
+	const [selectedPicture, setSelectedPicture] = useState(-1)
+	const profileRef = useRef(null)
+	const infosRef = useRef(null)
+	const imgs = []
+	const userAge =
+		new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
 
-    if (user.imgA) imgs.push(user.imgA)
-    if (user.imgB) imgs.push(user.imgB)
-    if (user.imgC) imgs.push(user.imgC)
-    if (user.imgD) imgs.push(user.imgD)
-    if (user.imgE) imgs.push(user.imgE)
+	if (user.imgA) imgs.push(user.imgA)
+	if (user.imgB) imgs.push(user.imgB)
+	if (user.imgC) imgs.push(user.imgC)
+	if (user.imgD) imgs.push(user.imgD)
+	if (user.imgE) imgs.push(user.imgE)
 
-    const prevPicture = () => {
-        if (selectedPicture === 0) {
-            setSelectedPicture(imgs.length - 1)
-        } else {
-            setSelectedPicture(selectedPicture - 1)
-        }
-    }
-    const nextPicture = () => {
-        if (selectedPicture === imgs.length - 1) {
-            setSelectedPicture(0)
-        } else {
-            setSelectedPicture(selectedPicture + 1)
-        }
-    }
+	const prevPicture = () => {
+		if (selectedPicture === 0) {
+			setSelectedPicture(imgs.length - 1)
+		} else {
+			setSelectedPicture(selectedPicture - 1)
+		}
+	}
+	const nextPicture = () => {
+		if (selectedPicture === imgs.length - 1) {
+			setSelectedPicture(0)
+		} else {
+			setSelectedPicture(selectedPicture + 1)
+		}
+	}
 
-    const toggleScroll = () => {
-        if (scroll <= 50) {
-            profileRef.current?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start',
-            })
-        } else {
-            infosRef.current?.scrollIntoView({
-                behavior: 'smooth',
-                block: 'end',
-            })
-        }
-    }
+	const toggleScroll = () => {
+		if (scroll <= 50) {
+			profileRef.current?.scrollIntoView({
+				behavior: 'smooth',
+				block: 'start',
+			})
+		} else {
+			infosRef.current?.scrollIntoView({
+				behavior: 'smooth',
+				block: 'end',
+			})
+		}
+	}
 
     return (
         <div
@@ -80,26 +80,26 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 </div>
             </div>
 
-            <div id="user-profile-bio">{user.bio}</div>
+			<div id="user-profile-bio">{user.bio}</div>
 
-            <div id="user-profile-pictures-container">
-                {imgs.map((img, i) => (
-                    <div
-                        key={i}
-                        className="user-profile-picture"
-                        style={{
-                            background:
-                                'url(' +
-                                (!img || img.includes('http')
-                                    ? ''
-                                    : 'http://localhost:8080/api') +
-                                img +
-                                ') center',
-                        }}
-                        onClick={() => setSelectedPicture(i)}
-                    ></div>
-                ))}
-            </div>
+			<div id="user-profile-pictures-container">
+				{imgs.map((img, i) => (
+					<div
+						key={i}
+						className="user-profile-picture"
+						style={{
+							background:
+								'url(' +
+								(!img || img.includes('http')
+									? ''
+									: 'http://localhost:8080/api') +
+								img +
+								') center',
+						}}
+						onClick={() => setSelectedPicture(i)}
+					></div>
+				))}
+			</div>
 
             <div id="user-profile-tags">
                 {user.tags &&
