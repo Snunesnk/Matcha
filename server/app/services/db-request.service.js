@@ -20,6 +20,7 @@ export class DbRequestService {
     "like",
     "userSettings",
     "userSettingsTags",
+    "notifications",
   ];
 
   /*

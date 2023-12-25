@@ -26,3 +26,6 @@ create table user (
     password varchar(100) not null,
     constraint login unique (email)
 );
+
+create index user_gender_idx on user(gender);
+create index user_preferences_idx on user(prefMale, prefFemale, prefEnby);

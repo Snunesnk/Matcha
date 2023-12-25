@@ -60,8 +60,8 @@ const getProfileList = (setUserList, matchingParameters) => {
         })
 }
 
-const sendLike = (receiver) => {
-    fetch('http://localhost:8080/api/like', {
+const sendLike = async (receiver) => {
+    return fetch('http://localhost:8080/api/like', {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
@@ -76,10 +76,11 @@ const sendLike = (receiver) => {
             throw new Error('Something went wrong ...')
         })
         .then((data) => {
-            console.log(data)
+            return data
         })
         .catch((error) => {
             console.log(error)
+            return false
         })
 }
 
@@ -87,13 +88,13 @@ const sendLike = (receiver) => {
 // Plus a last card that tells "No more user"
 
 const ProfileMatching = () => {
-    const userLogin = useSelector((state) => state.userState.userInfos.login)
     const [evaluation, setEvaluation] = useState('')
     const [scroll, setScroll] = useState(0)
     const [userList, setUserList] = useState([])
     const [actualUser, setActualUser] = useState(null)
     const [nextUser, setNextUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const [match, setMatch] = useState(false)
     const profileRef = useRef(null)
 
     useEffect(() => {
@@ -134,7 +135,19 @@ const ProfileMatching = () => {
         getLocation()
     }, [])
 
-    const setCardState = (state) => {
+    const setCardState = async (state) => {
+        if (state === 'liked') {
+            const res = await sendLike(actualUser.login)
+            if (res.match) {
+                setMatch(true)
+                return
+            }
+        }
+
+        transition(state)
+    }
+
+    const transition = (state) => {
         let firstTimeout = 100
 
         // Increase timeout if we are not at the top to have time to scroll
@@ -142,8 +155,6 @@ const ProfileMatching = () => {
             profileRef.current.scrollTop = 0
             firstTimeout = 200
         }
-
-        if (state === 'liked') sendLike(actualUser.login)
 
         // First timeout, to have time to scroll to top
         setTimeout(() => {

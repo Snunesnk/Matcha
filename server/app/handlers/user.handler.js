@@ -63,13 +63,15 @@ export default class {
       try {
         getIpAddress(req).then(async (ip) => {
           const loc = await getIpInfo(ip);
-          const userLoc = {
-            coordinate: {
-              y: loc.lat,
-              x: loc.lon,
-            },
-          };
-          User.updateByLogin(login, userLoc);
+          if (loc) {
+            const userLoc = {
+              coordinate: {
+                y: loc.lat,
+                x: loc.lon,
+              },
+            };
+            User.updateByLogin(login, userLoc);
+          }
         });
       } catch (err) {
         console.log("error while getting ip address", err);

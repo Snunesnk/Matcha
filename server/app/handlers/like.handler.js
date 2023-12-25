@@ -1,5 +1,7 @@
 import { Like } from "../models/like.model.js";
+import { Notifications } from "../models/notifications.model.js";
 import { User } from "../models/user.model.js";
+import { NOTIFICATION_TYPES, sendNotification } from "../socket/socket.js";
 
 export default class {
   // Create and Save a new Like
@@ -44,11 +46,33 @@ export default class {
     };
 
     try {
-      // Save Like in the database
       const result = await Like.create(like);
       if (result !== null) {
-        // TODO: UPDATE WEBSOCKET TO SEND MATCHES
-        res.status(200).send(result);
+        const receiverMatch = await Like.getLike({
+          issuer: receiver,
+          receiver: issuer,
+        });
+        if (receiverMatch !== null) {
+          sendNotification(NOTIFICATION_TYPES.MATCH, { user: issuer });
+          Notifications.create({
+            login: receiver,
+            trigger_login: issuer,
+            type: NOTIFICATION_TYPES.MATCH,
+            message: `You matched with ${issuer}!`,
+          });
+          Notifications.create({
+            login: issuer,
+            trigger_login: receiver,
+            type: NOTIFICATION_TYPES.MATCH,
+            message: `You matched with ${receiver}!`,
+            read: true,
+          });
+          res.status(200).send({
+            match: true,
+          });
+          return;
+        }
+        res.status(200).send({ match: false });
         return;
       }
       res.status(500).send({
