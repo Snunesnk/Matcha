@@ -72,6 +72,13 @@ export default class {
           });
           return;
         }
+        sendNotification(NOTIFICATION_TYPES.LIKE, { user: issuer });
+        Notifications.create({
+          login: receiver,
+          trigger_login: issuer,
+          type: NOTIFICATION_TYPES.LIKE,
+          message: `${issuer} liked you!`,
+        });
         res.status(200).send({ match: false });
         return;
       }
