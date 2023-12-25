@@ -3,6 +3,8 @@ import { cryptPassword } from "../services/password.service.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
 import authenticationService from "../services/authentication.service.js";
+import { getIpAddress, getIpInfo } from "../services/location.service.js";
+import { UserSetting } from "../models/user-settings.model.js";
 
 export default class {
   static async login(req, res) {
@@ -27,17 +29,20 @@ export default class {
         return;
       }
 
-      if (user.verified !== true) {
-        res.status(401).send({
-          message: "EMAIL_NOT_VERIFIED",
-        });
-        return;
-      }
-
       const isPasswordMatch = await user.passwordMatch(password);
       if (!isPasswordMatch) {
         res.status(404).send({
           message: "WRONG_CREDENTIALS",
+        });
+        return;
+      }
+
+      if (user.verified !== true) {
+        res.status(401).send({
+          message: "EMAIL_NOT_VERIFIED",
+          email: user._email,
+          name: user._name,
+          login: user._login,
         });
         return;
       }
@@ -55,9 +60,29 @@ export default class {
         path: "/",
       };
 
+      try {
+        getIpAddress(req).then(async (ip) => {
+          const loc = await getIpInfo(ip);
+          if (loc) {
+            const userLoc = {
+              coordinate: {
+                y: loc.lat,
+                x: loc.lon,
+              },
+            };
+            User.updateByLogin(login, userLoc);
+          }
+        });
+      } catch (err) {
+        console.log("error while getting ip address", err);
+      }
+
       res.cookie("remember_me", jwtToken, cookieOptions);
       res.status(200).send({
         message: "LOG_IN_SUCCESS",
+        email: user._email,
+        name: user._name,
+        login: user._login,
       });
     } catch (error) {
       res.status(500).send({
@@ -69,26 +94,34 @@ export default class {
 
   // Send a verification mail to the User
   static async resendVerificationMail(req, res) {
-    const login = req.params.login;
+    const email = req.params.email;
     try {
-      const user = await User.getUserByLogin(login);
-      if (user === null) {
-        res.status(404).send({
-          message: "USER_NOT_FOUND",
+      const user = await User.getUserByMail(email);
+      if (user === null || user.verified === true) {
+        res.status(403).send({
+          message: "NOT_ALLOWED",
         });
         return;
       }
 
-      if (user.verified === true) {
-        res.status(400).send({
-          message: "EMAIL_ALREADY_VERIFIED",
-        });
-        return;
+      // Check if previous mail was sent less than 5 minutes ago
+      if (user.token.includes("_mail_timestamp_")) {
+        const timestamp = user.token.split("_mail_timestamp_")[1];
+        if (Date.now() - timestamp < 5 * 60 * 1000) {
+          let cooldown = 5 * 60 * 1000 - (Date.now() - timestamp);
+          cooldown = Math.floor(cooldown / 1000 / 60);
+          cooldown = cooldown + " minute" + (cooldown > 1 ? "s" : "");
+          res.status(400).send({
+            message: "MAIL_ALREADY_SENT",
+            cooldown: cooldown,
+          });
+          return;
+        }
       }
 
       const userToken = crypto.randomBytes(64).toString("base64url");
       user.token = userToken + "_mail_timestamp_" + Date.now();
-      await User.updateByLogin(login, user);
+      await User.updateByLogin(user._login, { token: user.token });
 
       const result = await User.sendVerificationMail(user, userToken);
       if (result === true) {
@@ -175,14 +208,8 @@ export default class {
 
     try {
       let result = await User.verifyLogin(login, token);
-      if (result === -1) {
-        res.status(404).send({
-          message: "USER_NOT_FOUND",
-        });
-        return;
-      }
 
-      if (result == 0) {
+      if (result === -1) {
         res.status(401).send({
           message: "WRONG_TOKEN",
         });
@@ -196,54 +223,27 @@ export default class {
         verified: true,
         token: hashedToken,
       });
-      if (result !== null) {
-        res.status(200).send({
-          message: "User verified successfully.",
+      if (result === null) {
+        res.status(500).send({
+          message: "COULD_NOT_VERIFY",
         });
-        return;
       }
 
-      res.status(500).send({
-        message: "COULD_NOT_VERIFY",
+      // Create default userSettings
+      result = await UserSetting.create({ userLogin: login });
+      if (result === null) {
+        res.status(500).send({
+          message: "COULLD_NOT_CREATE_USER_SETTINGS",
+        });
+      }
+
+      // const res
+      res.status(200).send({
+        message: "User verified successfully.",
       });
     } catch (error) {
       res.status(500).send({
         message: error.message || "Error occurred while verifying the User.",
-      });
-    }
-  }
-
-  static async onboardUser(req, res) {
-    const token = req.cookies.remember_me;
-
-    if (!token) {
-      res.status(400).send({
-        message: "MISSING_DATA",
-      });
-
-      return;
-    }
-
-    const decoded = await authenticationService.verifyToken(token);
-    const login = decoded.login;
-
-    try {
-      const result = await User.updateByLogin(login, {
-        onboarded: true,
-      });
-      if (result !== null) {
-        res.status(200).send({
-          message: "User onboarded successfully.",
-        });
-        return;
-      }
-
-      res.status(500).send({
-        message: "COULD_NOT_ONBOARD",
-      });
-    } catch (error) {
-      res.status(500).send({
-        message: error.message || "Error occurred while onboarding the User.",
       });
     }
   }
@@ -344,6 +344,8 @@ export default class {
       user.prefEnby = user.preferences.prefEnby;
     }
 
+    user.onboarded = true;
+
     try {
       const data = await User.updateByLogin(login, user);
       if (data === null) {
@@ -441,7 +443,7 @@ export default class {
 
       const userToken = crypto.randomBytes(64).toString("base64url");
       user.token = userToken + "_mail_timestamp_" + Date.now();
-      await User.updateByLogin(user.login, user);
+      await User.updateByLogin(user.login, { token: user.token });
 
       const result = await User.sendResetPasswordMail(user, userToken);
       if (result === true) {
@@ -513,6 +515,89 @@ export default class {
       res.status(500).send({
         message: error.message || "Error occurred while resetting password.",
       });
+    }
+  };
+
+  static updateLocation = async (req, res) => {
+    const { lat, lng } = req.body;
+    const login = req.decodedUser._login;
+
+    if (!lat || !lng) {
+      res.status(400).send({
+        message: "MISSING_DATA",
+      });
+    }
+
+    const user = {
+      coordinate: {
+        y: lat,
+        x: lng,
+      },
+    };
+
+    const data = await User.updateByLogin(login, user);
+    if (!data) {
+      res.status(404).send({
+        message: "USER_NOT_FOUND",
+      });
+    }
+
+    res.status(200).send("Location updated");
+  };
+
+  static getMatchingProfile = async (req, res) => {
+    const { distMin, distMax, ageMin, ageMax, fameMin, fameMax, tags } =
+      req.body;
+    const login = req.decodedUser._login;
+
+    if (
+      distMin === undefined ||
+      distMax === undefined ||
+      ageMin === undefined ||
+      ageMin < 18 ||
+      ageMax === undefined ||
+      fameMin === undefined ||
+      fameMax === undefined ||
+      !tags
+    ) {
+      res.status(400).send({ message: "INVALID_PARAMETERS" });
+      return;
+    }
+
+    try {
+      const user = await User.getUserByLogin(login);
+      if (!user) {
+        res.status(404).send({ message: "USER_NOT_FOUND" });
+        return;
+      }
+
+      const matchingParameters = {
+        login,
+        distMin,
+        distMax,
+        ageMin,
+        ageMax,
+        fameMin,
+        fameMax,
+        tags,
+        enby: user.prefEnby,
+        male: user.prefMale,
+        female: user.prefFemale,
+        coordinate: user.coordinate,
+      };
+
+      const results = await User.getMatchingProfiles(matchingParameters);
+      if (!results) {
+        res.status(500).send({ message: "CANT_GET_MATCHS" });
+        return;
+      }
+      // remove rating field from results
+      results.forEach((result) => {
+        delete result.rating;
+      });
+      res.status(200).send({ results });
+    } catch (err) {
+      console.log(err);
     }
   };
 }

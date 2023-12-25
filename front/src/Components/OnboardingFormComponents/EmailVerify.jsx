@@ -5,6 +5,8 @@ const MESSAGES = {
     pending: 'It should take a few second to process your request.',
     verified:
         'Your email is now verified, you can close this page and log in to access your account.',
+    invalid_token:
+        "Invalid token. If you can't log in, try sending a new mail.",
     error: 'An error occured, please close this page and try again',
 }
 
@@ -25,14 +27,23 @@ const EmailVerify = () => {
 
     useEffect(() => {
         sendVerificationRequest(login, token).then((res) => {
-            if (res.status != 200) {
-                setMessage(MESSAGES.error)
-            } else {
-                // Tell other tabs that email is now verified
-                const verifChannel = new BroadcastChannel('email_verification')
-                verifChannel.postMessage('verified')
+            switch (res.status) {
+                case 200:
+                    // Tell other tabs that email is now verified
+                    const verifChannel = new BroadcastChannel(
+                        'email_verification'
+                    )
+                    verifChannel.postMessage('verified')
 
-                setMessage(MESSAGES.verified)
+                    setMessage(MESSAGES.verified)
+                    break
+                case 401:
+                    setMessage(MESSAGES.invalid_token)
+                    break
+                case 500:
+                default:
+                    setMessage(MESSAGES.error)
+                    break
             }
         })
     }, [])

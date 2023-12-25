@@ -46,7 +46,7 @@ export class User extends UserChunk {
       this._latitude !== undefined &&
       this._longitude !== undefined
     ) {
-      this._coordinate = `POINT(${this._latitude} ${this._longitude})`;
+      this._coordinate = `POINT(${this._longitude} ${this._latitude})`;
     } else {
       this._coordinate = coordinate;
     }
@@ -422,7 +422,7 @@ export class User extends UserChunk {
     const userToken = data[0].token.split("_mail_timestamp_")[0];
     const res = bcrypt.compareSync(userToken, token);
 
-    if (res === false) return 0;
+    if (res === false) return -1;
     return 1;
   }
 
@@ -432,6 +432,22 @@ export class User extends UserChunk {
       return null;
     }
     return true;
+  }
+
+  static async getMatchingProfiles(matchingParameters) {
+    const data = await DbRequestService.getMatchList(matchingParameters);
+
+    if (!data) return null;
+
+    return data;
+  }
+
+  static async checkBiDirectionnalMatch(likee, liker) {
+    const data = await DbRequestService.checkForBiDirectionMatch(likee, liker);
+
+    if (!data) return null;
+
+    return data[0];
   }
 
   toJSON() {

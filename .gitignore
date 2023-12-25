@@ -4,3 +4,4 @@ matcha-mysql-data
 .DS_Store
 data/
 uploads/
+.vscode/

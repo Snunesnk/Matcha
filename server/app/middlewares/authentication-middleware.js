@@ -8,7 +8,7 @@ export const needOnboardedMiddleware = async (req, res, next) => {
     return res.status(401).send({ message: "Unauthorized!" });
   }
 
-  const decoded = authenticationService.verifyToken(token);
+  const decoded = await authenticationService.verifyToken(token);
   if (!decoded) {
     return res.status(401).send({ message: "Unauthorized!" });
   }

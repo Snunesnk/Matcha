@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { hashPassword } from '../../utils'
+import { CircularProgress } from '@mui/material'
 
 export async function action({ request }) {
     const formData = await request.formData()
@@ -39,23 +40,25 @@ const LoginPage = () => {
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if (!formResult) return
 
         switch (formResult.message) {
-            case 'EMAIL_NOT_VERIFIED':
-                navigate('/onboarding/validation')
-                break
             case 'MISSING_DATA':
                 setError('Missing data')
+                setLoading(false)
                 break
             case 'WRONG_CREDENTIALS':
                 setError('Login or password incorrect')
+                setLoading(false)
                 break
             case 'COULD_NOT_LOGIN':
                 setError('Could not login')
+                setLoading(false)
                 break
+            case 'EMAIL_NOT_VERIFIED':
             case 'LOG_IN_SUCCESS':
                 dispatch({
                     type: USER_STATE_ACTIONS.LOG_IN,
@@ -65,10 +68,13 @@ const LoginPage = () => {
                         login: formResult.login,
                     },
                 })
-                navigate('/dashboard')
+                if (formResult.message === 'EMAIL_NOT_VERIFIED')
+                    navigate('/validation')
+                else navigate('/dashboard')
                 break
             default:
                 console.log('Unknown message')
+                setLoading(false)
         }
     }, [formResult])
 
@@ -112,8 +118,12 @@ const LoginPage = () => {
                         Forgot your password?
                     </button>
 
-                    <button className="btn signup-btn" type="submit">
-                        Sign In
+                    <button
+                        className="btn signup-btn"
+                        type="submit"
+                        onClick={() => setLoading(true)}
+                    >
+                        {loading ? <CircularProgress /> : 'Sign In'}
                     </button>
                 </Form>
             </div>

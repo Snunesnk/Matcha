@@ -11,7 +11,6 @@ export default class {
         res.json(user);
       } else {
         const user = await User.getUserByLogin(decoded.login);
-        // TODO: Look into sockets to see if user is logged in
         res.json({
           loggedIn: checkIfUserIsOnline(user.login),
           onboarded: user.onboarded || false,

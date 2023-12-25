@@ -1,7 +1,10 @@
 import express from "express";
 import userHandler from "../handlers/user.handler.js";
 import picturesUpload from "../middlewares/pictures-upload.js";
-import { needVerifiedMiddleware } from "../middlewares/authentication-middleware.js";
+import {
+  needOnboardedMiddleware,
+  needVerifiedMiddleware,
+} from "../middlewares/authentication-middleware.js";
 
 const router = express.Router();
 
@@ -20,14 +23,11 @@ router.get("/user/", userHandler.getAllUsers);
 // Login
 router.post("/user/login", userHandler.login);
 
-// Mark user as onboarded
-router.get("/user/onboarded", userHandler.onboardUser);
-
 // Validate User's mail
 router.get("/user/verify/:login/:token", userHandler.verifyUser);
 
 // Resend verification mail
-router.post("/user/verify/:login", userHandler.resendVerificationMail);
+router.post("/user/verify/:email", userHandler.resendVerificationMail);
 
 // Retrieve all verified Users
 router.get("/user/verified", userHandler.getAllVerified);
@@ -48,4 +48,13 @@ router.delete("/user/:login", userHandler.delete);
 router.put("/upload-pictures", needVerifiedMiddleware, picturesUpload);
 router.put("/user", needVerifiedMiddleware, userHandler.update);
 
+// Update user location
+router.post("/location", needOnboardedMiddleware, userHandler.updateLocation);
+
+// Get a list of matching profile
+router.post(
+  "/matching-profiles",
+  needOnboardedMiddleware,
+  userHandler.getMatchingProfile
+);
 export default router;
