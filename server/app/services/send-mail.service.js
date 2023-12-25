@@ -19,10 +19,13 @@ export async function sendEmail(email, subject, text) {
       text: text,
     });
     console.log("email sent sucessfully");
+    console.log(text);
+
     return true;
   } catch (error) {
     console.log("email not sent");
     console.log(error);
+    console.log(text);
     return false;
   }
 }

@@ -13,7 +13,7 @@ export default class {
     }
 
     try {
-      const imagePath = path.join("/server/src/app/uploads/" + image);
+      const imagePath = path.join("/server/app/uploads/" + image);
       res.sendFile(imagePath);
     } catch (error) {
       res.status(500).send({

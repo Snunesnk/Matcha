@@ -2,16 +2,23 @@ import { User } from "../models/user.model.js";
 import { cryptPassword } from "../services/password.service.js";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
+import authenticationService from "../services/authentication.service.js";
+import { getIpAddress, getIpInfo } from "../services/location.service.js";
+import { UserSetting } from "../models/user-settings.model.js";
 
 export default class {
   static async login(req, res) {
     const { login, password } = req.body;
+    let rememberMe = req.body.rememberMe;
+
     if (!login || !password) {
       res.status(400).send({
         message: "MISSING_DATA",
       });
       return;
     }
+
+    if (!rememberMe) rememberMe = false;
 
     try {
       const user = await User.getFullUserByLogin(login);
@@ -22,43 +29,60 @@ export default class {
         return;
       }
 
-      if (user.verified !== true) {
-        res.status(401).send({
-          message: "EMAIL_NOT_VERIFIED",
-        });
-        return;
-      }
-
       const isPasswordMatch = await user.passwordMatch(password);
       if (!isPasswordMatch) {
-        res.status(401).send({
+        res.status(404).send({
           message: "WRONG_CREDENTIALS",
         });
         return;
       }
 
-      // Create remember-me cookie
-      const rememberMeToken = crypto.randomBytes(64).toString("hex");
-      const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
-
-      const result = await User.updateByLogin(login, {
-        token: rememberMeToken,
-      });
-      if (result === null) {
-        res.status(500).send({
-          message: "COULD_NOT_LOGIN",
+      if (user.verified !== true) {
+        res.status(401).send({
+          message: "EMAIL_NOT_VERIFIED",
+          email: user._email,
+          name: user._name,
+          login: user._login,
         });
         return;
       }
 
-      res.cookie("remember_me", hashedToken, {
-        httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
-        maxAge: 1000 * 60 * 60 * 24 * 30, // 30 days, expressed in milliseconds
-      });
+      // Create remember-me cookie
+      const jwtToken = await authenticationService.generateToken(
+        user,
+        rememberMe
+      );
+      const cookieOptions = {
+        httpOnly: true, // Cookie inaccessible to browser's JavaScript
+        maxAge: rememberMe
+          ? 1000 * 60 * 60 * 24 * 7 // 7 days
+          : 1000 * 60 * 60 * 1, // 1 hour
+        path: "/",
+      };
 
+      try {
+        getIpAddress(req).then(async (ip) => {
+          const loc = await getIpInfo(ip);
+          if (loc) {
+            const userLoc = {
+              coordinate: {
+                y: loc.lat,
+                x: loc.lon,
+              },
+            };
+            User.updateByLogin(login, userLoc);
+          }
+        });
+      } catch (err) {
+        console.log("error while getting ip address", err);
+      }
+
+      res.cookie("remember_me", jwtToken, cookieOptions);
       res.status(200).send({
         message: "LOG_IN_SUCCESS",
-        user: user,
+        email: user._email,
+        name: user._name,
+        login: user._login,
       });
     } catch (error) {
       res.status(500).send({
@@ -70,27 +94,36 @@ export default class {
 
   // Send a verification mail to the User
   static async resendVerificationMail(req, res) {
-    const login = req.params.login;
+    const email = req.params.email;
     try {
-      const user = await User.getUserByLogin(login);
-      if (user === null) {
-        res.status(404).send({
-          message: "USER_NOT_FOUND",
+      const user = await User.getUserByMail(email);
+      if (user === null || user.verified === true) {
+        res.status(403).send({
+          message: "NOT_ALLOWED",
         });
         return;
       }
 
-      if (user.verified === true) {
-        res.status(400).send({
-          message: "EMAIL_ALREADY_VERIFIED",
-        });
-        return;
+      // Check if previous mail was sent less than 5 minutes ago
+      if (user.token.includes("_mail_timestamp_")) {
+        const timestamp = user.token.split("_mail_timestamp_")[1];
+        if (Date.now() - timestamp < 5 * 60 * 1000) {
+          let cooldown = 5 * 60 * 1000 - (Date.now() - timestamp);
+          cooldown = Math.floor(cooldown / 1000 / 60);
+          cooldown = cooldown + " minute" + (cooldown > 1 ? "s" : "");
+          res.status(400).send({
+            message: "MAIL_ALREADY_SENT",
+            cooldown: cooldown,
+          });
+          return;
+        }
       }
 
-      user.token = crypto.randomBytes(64).toString("hex");
-      await User.updateByLogin(login, user);
+      const userToken = crypto.randomBytes(64).toString("base64url");
+      user.token = userToken + "_mail_timestamp_" + Date.now();
+      await User.updateByLogin(user._login, { token: user.token });
 
-      const result = await User.sendVerificationMail(user);
+      const result = await User.sendVerificationMail(user, userToken);
       if (result === true) {
         res.status(200).send({
           message: "Verification mail sent successfully.",
@@ -141,9 +174,11 @@ export default class {
 
     try {
       // Save User in the database
+      const userToken = crypto.randomBytes(64).toString("base64url");
+      user.token = userToken + "_mail_timestamp_" + Date.now();
       const result = await User.create(user);
       if (result !== null) {
-        User.sendVerificationMail(result);
+        User.sendVerificationMail(result, userToken);
 
         res.status(200).send(result);
         return;
@@ -172,44 +207,39 @@ export default class {
     }
 
     try {
-      const user = await User.getUserByLogin(login);
-      if (user === null) {
-        res.status(404).send({
-          message: "USER_NOT_FOUND",
-        });
-        return;
-      }
+      let result = await User.verifyLogin(login, token);
 
-      if (bcrypt.hashSync(user.token, 10) !== token) {
+      if (result === -1) {
         res.status(401).send({
           message: "WRONG_TOKEN",
         });
         return;
       }
 
-      // Create remember-me cookie
       const rememberMeToken = crypto.randomBytes(64).toString("hex");
       const hashedToken = bcrypt.hashSync(rememberMeToken, 10);
 
-      const result = await User.updateByLogin(login, {
+      result = await User.updateByLogin(login, {
         verified: true,
         token: hashedToken,
       });
-      if (result !== null) {
-        res.cookie("remember_me", rememberMeToken, {
-          // httpOnly: true, // Important: make the cookie inaccessible to browser's JavaScript
-          maxAge: 2592000000, // e.g., 30 days, expressed in milliseconds
+      if (result === null) {
+        res.status(500).send({
+          message: "COULD_NOT_VERIFY",
         });
-        console.log("Cookie set.", rememberMeToken);
-
-        res.status(200).send({
-          message: "User verified successfully.",
-        });
-        return;
       }
 
-      res.status(500).send({
-        message: "COULD_NOT_VERIFY",
+      // Create default userSettings
+      result = await UserSetting.create({ userLogin: login });
+      if (result === null) {
+        res.status(500).send({
+          message: "COULLD_NOT_CREATE_USER_SETTINGS",
+        });
+      }
+
+      // const res
+      res.status(200).send({
+        message: "User verified successfully.",
       });
     } catch (error) {
       res.status(500).send({
@@ -272,9 +302,36 @@ export default class {
   // Update a User identified by the login in the request
   static update = async (req, res) => {
     const user = req.body.user || {};
-    const login = req.params.login;
+    const login = req.decodedUser._login;
 
+    // check for missing data
     if (!login || Object.keys(user).length === 0) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+    if (!user.gender || !user.bio || !user.tags || !user.preferences) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+    if (
+      user.gender.length === 0 ||
+      user.bio.length === 0 ||
+      user.tags.length === 0
+    ) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+    if (
+      !user.preferences.prefMale &&
+      !user.preferences.prefFemale &&
+      !user.preferences.prefEnby
+    ) {
       res.status(400).send({
         message: `Missing data`,
       });
@@ -287,13 +344,7 @@ export default class {
       user.prefEnby = user.preferences.prefEnby;
     }
 
-    if (user.pictures) {
-      user.imagA = user.pictures.imagA[0].path;
-      user.imagB = user.pictures.imagB[0].path;
-      user.imagC = user.pictures.imagC[0].path;
-      user.imagD = user.pictures.imagD[0].path;
-      user.imagE = user.pictures.imagE[0].path;
-    }
+    user.onboarded = true;
 
     try {
       const data = await User.updateByLogin(login, user);
@@ -343,8 +394,6 @@ export default class {
   static currentUser = async (req, res) => {
     const user = req.user;
 
-    console.log("currentUser", user);
-
     if (!user) {
       res.status(200).send({
         user: null,
@@ -353,6 +402,202 @@ export default class {
       res.status(200).send({
         user: user,
       });
+    }
+  };
+
+  static sendResetPasswordMail = async (req, res) => {
+    const email = req.params.email;
+
+    if (!email) {
+      res.status(400).send({
+        message: `Missing mail`,
+      });
+      return;
+    }
+
+    try {
+      const user = await User.getUserByMail(email);
+      if (user === null) {
+        res.status(404).send({
+          message: "USER_NOT_FOUND",
+        });
+        return;
+      }
+      if (user.verified !== true) {
+        res.status(401).send({
+          message: "EMAIL_NOT_VERIFIED",
+        });
+        return;
+      }
+
+      // Check if previous mail was sent less than 15 minutes ago
+      if (user?.token.includes("_mail_timestamp_")) {
+        const timestamp = user.token.split("_mail_timestamp_")[1];
+        if (Date.now() - timestamp < 15 * 60 * 1000) {
+          res.status(400).send({
+            message: "MAIL_ALREADY_SENT",
+          });
+          return;
+        }
+      }
+
+      const userToken = crypto.randomBytes(64).toString("base64url");
+      user.token = userToken + "_mail_timestamp_" + Date.now();
+      await User.updateByLogin(user.login, { token: user.token });
+
+      const result = await User.sendResetPasswordMail(user, userToken);
+      if (result === true) {
+        res.status(200).send({
+          message: "Reset password mail sent successfully.",
+        });
+        return;
+      }
+      res.status(500).send({
+        message: "COULD_NOT_SEND_EMAIL",
+      });
+    } catch (error) {
+      res.status(500).send({
+        message:
+          error.message || "Error occurred while sending reset password mail.",
+      });
+    }
+  };
+
+  static resetPassword = async (req, res) => {
+    const { login, token } = req.body;
+    let password = req.body.hashedPassword;
+
+    if (!login || !token || !password) {
+      res.status(400).send({
+        message: `Missing data`,
+      });
+      return;
+    }
+
+    try {
+      const user = await User.getChunkUserByLogin(login);
+      if (user === null) {
+        res.status(404).send({
+          message: "USER_NOT_FOUND",
+        });
+        return;
+      }
+
+      const userToken = user.token.split("_mail_timestamp_")[0];
+      if (!bcrypt.compareSync(userToken, token)) {
+        console.log("correct token", userToken);
+        console.log("received token", token);
+        res.status(401).send({
+          message: "WRONG_TOKEN",
+        });
+        return;
+      }
+
+      // TODO - test password strength
+      password = await cryptPassword(password);
+      if (password === null) {
+        res.status(500).send({
+          message: "PASSWORD_ENCRYPTION_ERROR",
+        });
+        return;
+      }
+
+      user.password = password;
+      user.token = crypto.randomBytes(64).toString("base64url");
+      user.token += "_mail_timestamp_" + Date.now();
+      await User.updateByLogin(login, user);
+
+      res.status(200).send({
+        message: "SUCCESS",
+      });
+      return;
+    } catch (error) {
+      res.status(500).send({
+        message: error.message || "Error occurred while resetting password.",
+      });
+    }
+  };
+
+  static updateLocation = async (req, res) => {
+    const { lat, lng } = req.body;
+    const login = req.decodedUser._login;
+
+    if (!lat || !lng) {
+      res.status(400).send({
+        message: "MISSING_DATA",
+      });
+    }
+
+    const user = {
+      coordinate: {
+        y: lat,
+        x: lng,
+      },
+    };
+
+    const data = await User.updateByLogin(login, user);
+    if (!data) {
+      res.status(404).send({
+        message: "USER_NOT_FOUND",
+      });
+    }
+
+    res.status(200).send("Location updated");
+  };
+
+  static getMatchingProfile = async (req, res) => {
+    const { distMin, distMax, ageMin, ageMax, fameMin, fameMax, tags } =
+      req.body;
+    const login = req.decodedUser._login;
+
+    if (
+      distMin === undefined ||
+      distMax === undefined ||
+      ageMin === undefined ||
+      ageMin < 18 ||
+      ageMax === undefined ||
+      fameMin === undefined ||
+      fameMax === undefined ||
+      !tags
+    ) {
+      res.status(400).send({ message: "INVALID_PARAMETERS" });
+      return;
+    }
+
+    try {
+      const user = await User.getUserByLogin(login);
+      if (!user) {
+        res.status(404).send({ message: "USER_NOT_FOUND" });
+        return;
+      }
+
+      const matchingParameters = {
+        login,
+        distMin,
+        distMax,
+        ageMin,
+        ageMax,
+        fameMin,
+        fameMax,
+        tags,
+        enby: user.prefEnby,
+        male: user.prefMale,
+        female: user.prefFemale,
+        coordinate: user.coordinate,
+      };
+
+      const results = await User.getMatchingProfiles(matchingParameters);
+      if (!results) {
+        res.status(500).send({ message: "CANT_GET_MATCHS" });
+        return;
+      }
+      // remove rating field from results
+      results.forEach((result) => {
+        delete result.rating;
+      });
+      res.status(200).send({ results });
+    } catch (err) {
+      console.log(err);
     }
   };
 }

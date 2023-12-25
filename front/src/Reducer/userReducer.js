@@ -1,23 +1,6 @@
 import { USER_STATE_ACTIONS } from '../constants'
 
 const checkForSessionCreds = async () => {
-    fetch('http://localhost:8080/api/user/me', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-    })
-        .then((response) => {
-            response.json()
-        })
-        .then((data) => {
-            console.log('Success:', data)
-        })
-        .catch((error) => {
-            console.error('Error:', error)
-        })
-
     let userInfos = JSON.parse(sessionStorage.getItem('user_infos'))
     const userSettings = {
         gender: '',
@@ -27,9 +10,6 @@ const checkForSessionCreds = async () => {
         pictures: [],
         birthDate: '',
     }
-    const verified = sessionStorage.getItem('verified') ? true : false
-    const onboarded = sessionStorage.getItem('onboarded') ? true : false
-    let loggedIn = true
 
     if (!userInfos) {
         userInfos = {
@@ -37,15 +17,9 @@ const checkForSessionCreds = async () => {
             email: '',
             login: '',
         }
-        loggedIn = false
     }
 
     return {
-        userStatus: {
-            loggedIn: loggedIn,
-            verified: verified,
-            onboarded: onboarded,
-        },
         userInfos: userInfos,
         userSettings: userSettings,
     }
@@ -58,17 +32,11 @@ const userReducer = (state = initialState, action) => {
         case USER_STATE_ACTIONS.LOG_IN:
             return {
                 ...state,
-                userStatus: { ...state.userStatus, loggedIn: true },
                 userInfos: action.payload,
             }
         case USER_STATE_ACTIONS.LOG_OUT:
             sessionStorage.clear()
             return {
-                userStatus: {
-                    loggedIn: false,
-                    verified: false,
-                    onboarded: false,
-                },
                 userInfos: {
                     name: '',
                     email: '',
@@ -86,21 +54,6 @@ const userReducer = (state = initialState, action) => {
                     pictures: [],
                     birthDate: '',
                 },
-            }
-        case USER_STATE_ACTIONS.VERIFY:
-            return {
-                ...state,
-                userStatus: { ...state.userStatus, verified: true },
-            }
-        case USER_STATE_ACTIONS.UNVERIFY:
-            return {
-                ...state,
-                userStatus: { ...state.userStatus, verified: false },
-            }
-        case USER_STATE_ACTIONS.ONBOARDED:
-            return {
-                ...state,
-                userStatus: { ...state.userStatus, onboarded: true },
             }
 
         case USER_STATE_ACTIONS.UPDATE_GENDER:

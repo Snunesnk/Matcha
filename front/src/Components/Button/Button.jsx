@@ -27,7 +27,7 @@ export const CreateAccountButton = () => {
     const navigate = useNavigate()
 
     const navigateToSignup = () => {
-        navigate('/onboarding/signup')
+        navigate('/signup')
     }
 
     return (
@@ -44,7 +44,7 @@ export const CreateAccountButton = () => {
 
 export const LogoutBtn = () => (
     // const dispatch = useDispatch()
-    <Button text="logout" btnClass="alreadyHaveButton"/>
+    <Button text="logout" btnClass="alreadyHaveButton" />
 )
 
 export const QuitOnboarding = () => (

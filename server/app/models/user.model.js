@@ -1,6 +1,5 @@
 import { DbRequestService } from "../services/db-request.service.js";
 import { comparePassword } from "../services/password.service.js";
-import rand from "rand-token";
 import { sendEmail } from "../services/send-mail.service.js";
 import { UserChunk } from "./user-chunk.model.js";
 import { UserTag } from "./user-tag.model.js";
@@ -12,28 +11,29 @@ export class User extends UserChunk {
   constructor(obj = {}) {
     super(obj);
 
-    this.bio = obj.bio;
-    this.gender = obj.gender;
+    this.bio = obj.bio || obj._bio;
+    this.gender = obj.gender || obj._gender;
 
-    this.verified = obj.verified;
-    this.isOnline = obj.isOnline;
-    this.lastOnline = obj.lastOnline;
+    this.verified = obj.verified || obj._verified;
+    this.onboarded = obj.onboarded || obj._onboarded;
+    this.isOnline = obj.isOnline || obj._isOnline;
+    this.lastOnline = obj.lastOnline || obj._lastOnline;
 
-    this.prefMale = obj.prefMale;
-    this.prefFemale = obj.prefFemale;
-    this.prefEnby = obj.prefEnby;
+    this.prefMale = obj.prefMale || obj._prefMale;
+    this.prefFemale = obj.prefFemale || obj._prefFemale;
+    this.prefEnby = obj.prefEnby || obj._prefEnby;
 
-    this.imgA = obj.imgA;
-    this.imgB = obj.imgB;
-    this.imgC = obj.imgC;
-    this.imgD = obj.imgD;
-    this.imgE = obj.imgE;
+    this.imgA = obj._imgA || obj.imgA;
+    this.imgB = obj._imgB || obj.imgB;
+    this.imgC = obj._imgC || obj.imgC;
+    this.imgD = obj._imgD || obj.imgD;
+    this.imgE = obj._imgE || obj.imgE;
 
-    this.tags = obj.tags;
+    this.tags = obj.tags || obj._tags;
 
-    this.latitude = obj.coordinate;
-    this.longitude = obj.coordinate;
-    this.coordinate = obj.coordinate;
+    this.latitude = obj.coordinate || obj._coordinate;
+    this.longitude = obj.coordinate || obj._coordinate;
+    this.coordinate = obj.coordinate || obj._coordinate;
   }
 
   get coordinate() {
@@ -46,7 +46,7 @@ export class User extends UserChunk {
       this._latitude !== undefined &&
       this._longitude !== undefined
     ) {
-      this._coordinate = `POINT(${this._latitude} ${this._longitude})`;
+      this._coordinate = `POINT(${this._longitude} ${this._latitude})`;
     } else {
       this._coordinate = coordinate;
     }
@@ -118,6 +118,20 @@ export class User extends UserChunk {
     if (verified === false || verified === "false" || verified === 0) {
       this._verified = false;
       return;
+    }
+  }
+
+  get onboarded() {
+    return this._onboarded;
+  }
+
+  set onboarded(onboarded) {
+    if (onboarded === true || onboarded === "true" || onboarded === 1) {
+      this._onboarded = true;
+      return;
+    }
+    if (onboarded === false || onboarded === "false" || onboarded === 0) {
+      this._onboarded = false;
     }
   }
 
@@ -240,15 +254,37 @@ export class User extends UserChunk {
     return await comparePassword(password, this.password);
   }
 
-  static async sendVerificationMail(user) {
-    const token = bcrypt.hashSync(user.token, 10);
+  static async sendVerificationMail(user, token) {
+    let hashedToken = bcrypt.hashSync(token, 10);
+    while (hashedToken.includes("/")) {
+      console.log("hashing again");
+      hashedToken = bcrypt.hashSync(token, 10);
+    }
     const login = user.login;
     const email = user.email;
-    const verifLink = `${process.env.FRONT_URL}/onboarding/verify/?login=${login}&token=${token}`;
+    const verifLink = `${process.env.FRONT_URL}/verify/?login=${login}&token=${hashedToken}`;
     const message = `Hello ${user.surname}!\n\nPlease verify your email by clicking the following link:\n${verifLink}\n\nHave a nice day!`;
 
     try {
       return await sendEmail(email, "Verify your email", message);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  static async sendResetPasswordMail(user, token) {
+    let hashedToken = bcrypt.hashSync(token, 10);
+    while (hashedToken.includes("/")) {
+      console.log("hashing again");
+      hashedToken = bcrypt.hashSync(token, 10);
+    }
+    const login = user.login;
+    const email = user.email;
+    const resetLink = `${process.env.FRONT_URL}/password-reset/?login=${login}&token=${hashedToken}`;
+    const message = `Hello ${user.surname}!\n\nPlease reset your password by clicking the following link:\n${resetLink}\n\nHave a nice day!`;
+
+    try {
+      return await sendEmail(email, "Reset your password", message);
     } catch (error) {
       console.log(error);
     }
@@ -285,6 +321,25 @@ export class User extends UserChunk {
     user.password = "XXXXX";
     user.token = "YYYYY";
     return user;
+  }
+
+  static async getUserByMail(mail) {
+    const data = await DbRequestService.read("user", { email: `${mail}` });
+
+    if (data.length === 0) {
+      return null;
+    }
+
+    return new User(data[0]);
+  }
+
+  static async getChunkUserByLogin(login) {
+    const data = await DbRequestService.read("user", { login: `${login}` });
+    if (data.length === 0) {
+      return null;
+    }
+
+    return new User(data[0]);
   }
 
   static async getFullUserByLogin(login) {
@@ -334,10 +389,6 @@ export class User extends UserChunk {
   }
 
   static async updateByLogin(login, user) {
-    if (user.email !== undefined) {
-      user.verified = false;
-      user.token = rand.suid(16);
-    }
     const data = await DbRequestService.update(
       "user",
       new User({ ...user, tags: undefined }),
@@ -352,18 +403,27 @@ export class User extends UserChunk {
       if (_.isArray(user.tags)) {
         await UserTag.deleteByLogin(login);
         user.tags.forEach(async (tag) => {
-          await UserTag.create(
-            new UserTag({ userLogin: login, tagBwid: tag.bwid })
-          );
+          await UserTag.create(new UserTag({ userLogin: login, tagBwid: tag }));
         });
       }
     } catch (error) {
       console.log(error);
     }
-    if (user.email !== undefined) {
-      await User.sendVerificationMail(user);
-    }
     return await User.getUserByLogin(login);
+  }
+
+  static async verifyLogin(login, token) {
+    const data = await DbRequestService.read("user", { login: `${login}` });
+
+    if (data === null) {
+      return -1;
+    }
+
+    const userToken = data[0].token.split("_mail_timestamp_")[0];
+    const res = bcrypt.compareSync(userToken, token);
+
+    if (res === false) return -1;
+    return 1;
   }
 
   static async deleteByLogin(login) {
@@ -374,10 +434,27 @@ export class User extends UserChunk {
     return true;
   }
 
+  static async getMatchingProfiles(matchingParameters) {
+    const data = await DbRequestService.getMatchList(matchingParameters);
+
+    if (!data) return null;
+
+    return data;
+  }
+
+  static async checkBiDirectionnalMatch(likee, liker) {
+    const data = await DbRequestService.checkForBiDirectionMatch(likee, liker);
+
+    if (!data) return null;
+
+    return data[0];
+  }
+
   toJSON() {
     return {
       ...super.toJSON(),
       verified: this.verified,
+      onboarded: this.onboarded,
       bio: this.bio,
       gender: this.gender,
       prefMale: this.prefMale,

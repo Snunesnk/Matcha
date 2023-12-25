@@ -1,30 +1,80 @@
 import React from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
-import { USER_STATE_ACTIONS } from '../../constants'
-import './OnboardingForm.css'
+import { useNavigate } from 'react-router-dom'
 import OnboardingCard from '../OnboardingCard/OnboardingCard'
+import './OnboardingForm.css'
+import { useSelector } from 'react-redux'
 
 const AllSetMessage = () => {
-    const dispatch = useDispatch()
-    const userState = useSelector((state) => state.userState)
-    const login = useSelector((state) => state.userState.userInfos.login)
+    const [loading, setLoading] = React.useState(false)
+    const navigate = useNavigate()
+    const user = useSelector((state) => state.userState.userSettings)
+    const [error, setError] = React.useState(null)
 
     const sendForm = () => {
-        dispatch({ type: USER_STATE_ACTIONS.ONBOARDED })
+        setLoading(true)
+
+        // First API to send image
+        // If everything goes well, then second api to send user informations
+        const formData = new FormData()
+
+        formData.append('imgA', user.pictures.imgA)
+        formData.append('imgB', user.pictures.imgB)
+        formData.append('imgC', user.pictures.imgC)
+        formData.append('imgD', user.pictures.imgD)
+        formData.append('imgE', user.pictures.imgE)
 
         const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ user: userState.userSettings }),
+            method: 'PUT',
+            credentials: 'include',
+            body: formData,
         }
-        fetch('http://localhost:8080/api/user/' + login, options).then(
-            (response) => {
-                console.log(response)
-            }
-        )
+        fetch('http://localhost:8080/api/upload-pictures/', options)
+            .then((response) => {
+                if (response.ok) {
+                    const options = {
+                        method: 'PUT',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ user: user }),
+                        credentials: 'include',
+                    }
+                    fetch('http://localhost:8080/api/user/', options)
+                        .then((response) => {
+                            if (response.ok) {
+                                navigate('/dashboard')
+                            } else {
+                                if (response.status === 400) {
+                                    setError(
+                                        'Missing information. Please fill in all the fields'
+                                    )
+                                } else {
+                                    setError(
+                                        'Something went wrong ... Please try again'
+                                    )
+                                }
+                                setLoading(false)
+                            }
+                        })
+                        .catch((error) => {
+                            setError(error.message)
+                            setLoading(false)
+                        })
+                } else {
+                    if (response.status === 400) {
+                        setError(
+                            'Missing information. Please fill in all the fields'
+                        )
+                    } else {
+                        setError('Something went wrong ... Please try again')
+                    }
+                    setLoading(false)
+                }
+            })
+            .catch((error) => {
+                setError(error.message)
+                setLoading(false)
+            })
     }
 
     const content = (
@@ -33,6 +83,7 @@ const AllSetMessage = () => {
                 <b>Fantastic, you're all set :)</b>
             </p>
             <p>Are you ready to find your catmate?</p>
+            {error && <p className="errorLabel">{error}</p>}
         </div>
     )
 
@@ -40,7 +91,7 @@ const AllSetMessage = () => {
         <OnboardingCard
             header={''}
             content={content}
-            next={'/dashboard'}
+            next={''}
             btnText={'Let the magic begin!'}
             onClick={sendForm}
             btnClass="all-set-btn"

@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
-import { redirect, useNavigate } from 'react-router'
-import { USER_STATE_ACTIONS } from '../../constants'
+import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router'
 import './OnboardingForm.css'
 
 const setListenerForValidation = (setVerified) => {
@@ -17,27 +16,53 @@ const setListenerForValidation = (setVerified) => {
 const EmailValidation = () => {
     const userInfos = useSelector((state) => state.userState.userInfos)
     const [verified, setVerified] = useState(false)
-    const dispatch = useDispatch()
+    const [message, setMessage] = useState(null)
     const navigate = useNavigate()
 
     setListenerForValidation(setVerified)
 
     useEffect(() => {
         if (verified == true) {
-            dispatch({ type: USER_STATE_ACTIONS.VERIFY })
-            navigate('/onboarding/welcome')
+            navigate('/login')
         }
     }, [verified])
 
     const resendMail = () => {
-        fetch('http://localhost:8080/api/user/verify/' + userInfos.login, {
+        fetch('http://localhost:8080/api/user/verify/' + userInfos.email, {
             method: 'POST',
         })
+            .then(async (res) => {
+                switch (res.status) {
+                    case 200:
+                        setMessage(
+                            'Email sent! Please wait 5 minutes before sending a new one'
+                        )
+                        break
+                    case 400:
+                        const data = await res.json()
+                        setMessage(
+                            'Please wait ' +
+                                data?.cooldown +
+                                ' before sending a new mail'
+                        )
+                        break
+                    case 403:
+                        setMessage(
+                            'You are not allowed to send verification email'
+                        )
+                        break
+                    case 500:
+                    default:
+                        setMessage('Something went wrong')
+                        break
+                }
+            })
+            .catch((err) => console.log(err))
     }
 
     return (
         <div id="onboarding_email_validation">
-            <h2>Hi {userInfos.name},</h2>
+            <h2>Hi {userInfos.login},</h2>
             <p>
                 We sent an email to <b>{userInfos.email}</b>
                 <br />
@@ -46,6 +71,8 @@ const EmailValidation = () => {
             <h6 className="send-email-again-msg">
                 Did not receive it ? You can{' '}
                 <a onClick={resendMail}>send it again</a>
+                <br />
+                {message && <i>{message}</i>}
             </h6>
         </div>
     )

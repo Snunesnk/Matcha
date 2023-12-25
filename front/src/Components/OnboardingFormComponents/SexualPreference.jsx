@@ -1,7 +1,8 @@
 import React from 'react'
 import './OnboardingForm.css'
 import ListChoice from '../ListChoice'
-import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import OnboardingCard from '../OnboardingCard/OnboardingCard'
 
@@ -14,6 +15,13 @@ const Preferences = [
 const SexualPreferences = () => {
     const genderSelected = []
     const dispatch = useDispatch()
+    const savedPreferences = useSelector(
+        (state) => state.userState.userSettings.preferences
+    )
+
+    if (savedPreferences.prefMale) genderSelected.push('m')
+    if (savedPreferences.prefFemale) genderSelected.push('f')
+    if (savedPreferences.prefEnby) genderSelected.push('nb')
 
     const OnPreferenceSelection = (label) => {
         if (genderSelected.indexOf(label) >= 0)
@@ -64,6 +72,7 @@ const SexualPreferences = () => {
                     name={preference.name}
                     label={preference.label}
                     key={preference.number}
+                    defaultSelected={genderSelected.includes(preference.label)}
                     onclick={OnPreferenceSelection}
                 />
             ))}

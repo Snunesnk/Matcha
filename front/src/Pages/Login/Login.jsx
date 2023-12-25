@@ -3,23 +3,9 @@ import './Login.css'
 import { Form, useActionData, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
-
-// Function taken from https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
-const hashPassword = async (password) => {
-    const encoder = new TextEncoder()
-    const encodedPassword = encoder.encode(password)
-
-    const hashedPassword = await crypto.subtle.digest(
-        'SHA-256',
-        encodedPassword
-    )
-
-    const hashArray = Array.from(new Uint8Array(hashedPassword))
-    const hashHex = hashArray
-        .map((b) => b.toString(16).padStart(2, '0'))
-        .join('')
-    return hashHex
-}
+import { USER_STATE_ACTIONS } from '../../constants'
+import { hashPassword } from '../../utils'
+import { CircularProgress } from '@mui/material'
 
 export async function action({ request }) {
     const formData = await request.formData()
@@ -35,6 +21,7 @@ export async function action({ request }) {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
         body: JSON.stringify(data),
     }
     const res = await fetch(
@@ -47,30 +34,31 @@ export async function action({ request }) {
     return res
 }
 
+// TODO: Handle back status code response
 const LoginPage = () => {
     const formResult = useActionData()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [error, setError] = useState('')
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
         if (!formResult) return
 
-        console.log(formResult)
-
         switch (formResult.message) {
-            case 'EMAIL_NOT_VERIFIED':
-                navigate('/onboarding/validation')
-                break
             case 'MISSING_DATA':
                 setError('Missing data')
+                setLoading(false)
                 break
             case 'WRONG_CREDENTIALS':
                 setError('Login or password incorrect')
+                setLoading(false)
                 break
             case 'COULD_NOT_LOGIN':
                 setError('Could not login')
+                setLoading(false)
                 break
+            case 'EMAIL_NOT_VERIFIED':
             case 'LOG_IN_SUCCESS':
                 dispatch({
                     type: USER_STATE_ACTIONS.LOG_IN,
@@ -80,10 +68,13 @@ const LoginPage = () => {
                         login: formResult.login,
                     },
                 })
-                navigate('/dashboard')
+                if (formResult.message === 'EMAIL_NOT_VERIFIED')
+                    navigate('/validation')
+                else navigate('/dashboard')
                 break
             default:
                 console.log('Unknown message')
+                setLoading(false)
         }
     }, [formResult])
 
@@ -113,11 +104,26 @@ const LoginPage = () => {
                         />
                         <div id="login-error">{error}</div>
                     </div>
-                    <div id="login-forgot-password">
-                        <label>Forgot your password?</label>
-                    </div>
-                    <button className="btn signup-btn" type="submit">
-                        Sign In
+                    {/* When the user clicks the button, it should sent him an email
+                        it should also tell him that the email has been sent
+                        Then there must be a link in the mail redirecting to a page where the user
+                        can set a new password
+                        A new token must be created for the user and used as identification
+                         */}
+                    <button
+                        id="login-forgot-password"
+                        type="button"
+                        onClick={() => navigate('/password-reset')}
+                    >
+                        Forgot your password?
+                    </button>
+
+                    <button
+                        className="btn signup-btn"
+                        type="submit"
+                        onClick={() => setLoading(true)}
+                    >
+                        {loading ? <CircularProgress /> : 'Sign In'}
                     </button>
                 </Form>
             </div>

@@ -5,6 +5,25 @@ import { Favorite } from '@mui/icons-material'
 import UserProfile from '../UserProfile/UserProfile'
 import { useSelector } from 'react-redux'
 
+const getUserLocation = async () => {
+    return new Promise((resolve) => {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                resolve({
+                    lat: position.coords.latitude,
+                    lng: position.coords.longitude,
+                })
+            },
+            (err) => {
+                resolve({
+                    lat: null,
+                    lng: null,
+                })
+            }
+        )
+    })
+}
+
 const GradientCross = () => (
     <>
         <svg width={0} height={0}>
@@ -17,34 +36,38 @@ const GradientCross = () => (
     </>
 )
 
-const getProfileList = (setUserList) => {
-    fetch('http://localhost:8080/api/user/verified', {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    })
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            }
-            throw new Error('Something went wrong ...')
-        })
-        .then((data) => {
-            setUserList(data)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-}
-
-const sendLike = (issuer, receiver) => {
-    fetch('http://localhost:8080/api/like', {
+const getProfileList = (setUserList, matchingParameters) => {
+    const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ issuer, receiver }),
+        credentials: 'include',
+        body: JSON.stringify(matchingParameters),
+    }
+    fetch('http://localhost:8080/api/matching-profiles', options)
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            }
+            throw new Error('Something went wrong ...')
+        })
+        .then((data) => {
+            setUserList(data.results)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}
+
+const sendLike = async (receiver) => {
+    return fetch('http://localhost:8080/api/like', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({ receiver }),
     })
         .then((response) => {
             if (response.ok) {
@@ -53,27 +76,78 @@ const sendLike = (issuer, receiver) => {
             throw new Error('Something went wrong ...')
         })
         .then((data) => {
-            console.log(data)
+            return data
         })
         .catch((error) => {
             console.log(error)
+            return false
         })
 }
 
+// I think there should be a loading animation
+// Plus a last card that tells "No more user"
+
 const ProfileMatching = () => {
-    const userLogin = useSelector((state) => state.userState.userInfos.login)
     const [evaluation, setEvaluation] = useState('')
     const [scroll, setScroll] = useState(0)
     const [userList, setUserList] = useState([])
     const [actualUser, setActualUser] = useState(null)
     const [nextUser, setNextUser] = useState(null)
+    const [loading, setLoading] = useState(true)
+    const [match, setMatch] = useState(false)
     const profileRef = useRef(null)
 
     useEffect(() => {
-        getProfileList(setUserList)
+        setLoading(true)
+        const matchingParameters = {
+            distMin: 0,
+            distMax: 100,
+            ageMin: 18,
+            ageMax: 55,
+            fameMin: 0,
+            fameMax: 100,
+            tags: [],
+        }
+        getProfileList(setUserList, matchingParameters)
+
+        const getLocation = async () => {
+            const loc = await getUserLocation()
+            if (loc.lat !== null && loc.lng !== null) {
+                setLoading(true)
+                const option = {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        lat: loc.lat,
+                        lng: loc.lng,
+                    }),
+                    credentials: 'include',
+                }
+
+                fetch('http://localhost:8080/api/location', option).then(
+                    (res) => {
+                        if (res.ok)
+                            getProfileList(setUserList, matchingParameters)
+                    }
+                )
+            }
+        }
+        getLocation()
     }, [])
 
-    const setCardState = (state) => {
+    const setCardState = async (state) => {
+        if (state === 'liked') {
+            const res = await sendLike(actualUser.login)
+            if (res.match) {
+                setMatch(true)
+                return
+            }
+        }
+
+        transition(state)
+    }
+
+    const transition = (state) => {
         let firstTimeout = 100
 
         // Increase timeout if we are not at the top to have time to scroll
@@ -81,8 +155,6 @@ const ProfileMatching = () => {
             profileRef.current.scrollTop = 0
             firstTimeout = 200
         }
-
-        if (state === 'liked') sendLike(userLogin, actualUser.login)
 
         // First timeout, to have time to scroll to top
         setTimeout(() => {
@@ -97,7 +169,7 @@ const ProfileMatching = () => {
                     setEvaluation('')
                     ////////////////// NEED TO CHANGE THIS TO GET NEXT BATCH, OR DISPLAY "NO MORE USERS"
                     setUserList((prev) => {
-                        if (prev.length <= 2) prev = prev.concat(USER_LIST)
+                        if (prev.length <= 2) prev = prev.concat([])
                         return prev.slice(1)
                     })
                 }, 200)
@@ -106,12 +178,13 @@ const ProfileMatching = () => {
     }
 
     useEffect(() => {
-        console.log(userList)
         setActualUser(userList[0] || null)
         setTimeout(() => setNextUser(userList[1] || null), 500)
+        setLoading(false)
     }, [userList])
 
-    if (actualUser !== null && nextUser !== null) {
+    if (loading) return <div>Loading...</div>
+    if (actualUser !== null) {
         return (
             <div id="profile_matching">
                 <div
@@ -127,20 +200,27 @@ const ProfileMatching = () => {
                         <p id="profile-liked">Like</p>
                     </div>
 
-                    <div
-                        className="card_img_container next-user"
-                        style={{
-                            background:
-                                'url(' +
-                                (nextUser.imgA.includes('http')
-                                    ? ''
-                                    : 'http://localhost:8080/api') +
-                                nextUser.imgA +
-                                ') 50% 50% / cover no-repeat',
-                        }}
-                    >
-                        <div className="name_and_age_container"></div>
-                    </div>
+                    {nextUser ? (
+                        <div
+                            className="card_img_container next-user"
+                            style={{
+                                background:
+                                    'url(' +
+                                    (nextUser.imgA?.includes('http')
+                                        ? ''
+                                        : 'http://localhost:8080/api') +
+                                    nextUser.imgA +
+                                    ') 50% 50% / cover no-repeat',
+                            }}
+                        >
+                            <div className="name_and_age_container"></div>
+                        </div>
+                    ) : (
+                        <div className="card_img_container next-user">
+                            <div className="name_and_age_container"></div>
+                        </div>
+                    )}
+
                     <div className="profile_matching_btn_container">
                         <button
                             className="profile_matching_btn profile_matching_dislike"
@@ -160,8 +240,14 @@ const ProfileMatching = () => {
         )
     } else
         return (
-            <div>
-                "We're sorry, we can't find anymore corresponding profiles"
+            // TODO: Add a "Sorry" title in big, plus a short description
+            <div id="profile_matching">
+                <div id="user-profile-container">
+                    <div>
+                        We're sorry, we can't find anymore corresponding
+                        profiles. Please try again later.
+                    </div>
+                </div>
             </div>
         )
 }

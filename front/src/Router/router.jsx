@@ -23,116 +23,132 @@ import AllSetMessage from '../Components/OnboardingFormComponents/AllSetMessage'
 import Root from '../Pages/Root/Root'
 import EmailVerify from '../Components/OnboardingFormComponents/EmailVerify'
 import {
-    checkIfLogged,
-    checkIfOnboarded,
-    checkIfVerified,
-    redirectToSignup,
+    dashboardLoader,
+    emailValidationLoader,
+    loginLoader,
+    onboardingLoader,
+    redirectToLogin,
+    redirectToMatching,
+    redirectToWelcome,
 } from './loaders'
 import MessagesContainer from '../Components/MessagesContainer/MessagesContainer'
 import UserSettings from '../Components/UserSettings/UserSettings'
 import ProfileMatching from '../Components/ProfileMatching'
 import LoginPage, { action as loginAction } from '../Pages/Login/Login'
+import ResetPasswordPage from '../Pages/ResetPassword/ResetPassword'
 
-const getRouterWithStore = (store) => {
-    return createBrowserRouter([
-        {
-            path: '/',
-            element: <Root />,
-            errorElement: <ErrorPage />,
-            children: [
-                {
-                    path: '',
-                    element: <Landing />,
-                    loader: () => checkIfLogged(store),
-                },
-                {
-                    path: 'login',
-                    element: <LoginPage />,
-                    action: loginAction,
-                },
-                {
-                    path: 'onboarding/*',
-                    element: <Onboarding />,
-                    children: [
-                        {
-                            path: '',
-                            element: <></>,
-                            loader: redirectToSignup,
-                        },
-                        {
-                            path: 'signup',
-                            element: <SignupForm />,
-                            action: signupAction,
-                            loader: () => checkIfLogged(store),
-                        },
-                        {
-                            path: 'validation',
-                            element: <EmailValidation />,
-                            loader: () => checkIfVerified(store),
-                        },
-                        {
-                            path: 'verify',
-                            element: <EmailVerify />,
-                            loader: () => checkIfLogged(store),
-                        },
-                        {
-                            path: 'welcome',
-                            element: <WelcomeMessage />,
-                            loader: () => checkIfOnboarded(store),
-                        },
-                        {
-                            path: 'gender',
-                            element: <GenderSelection />,
-                            loader: () => checkIfOnboarded(store),
-                        },
-                        {
-                            path: 'preferences',
-                            element: <SexualPreferences />,
-                            loader: () => checkIfOnboarded(store),
-                        },
-                        {
-                            path: 'bio',
-                            element: <DescriptionCreation />,
-                            loader: () => checkIfOnboarded(store),
-                        },
-                        {
-                            path: 'interests',
-                            element: <InterestsTags />,
-                            loader: () => checkIfOnboarded(store),
-                        },
-                        {
-                            path: 'pictures',
-                            element: <PicturesUploading />,
-                            loader: () => checkIfOnboarded(store),
-                        },
-                        {
-                            path: 'done',
-                            element: <AllSetMessage />,
-                            loader: () => checkIfOnboarded(store),
-                        },
-                    ],
-                },
-                {
-                    path: 'dashboard/*',
-                    element: <Dashboard />,
-                    children: [
-                        {
-                            index: true,
-                            element: <ProfileMatching />,
-                        },
-                        {
-                            path: 'messages',
-                            element: <MessagesContainer />,
-                        },
-                        {
-                            path: 'userSettings',
-                            element: <UserSettings />,
-                        },
-                    ],
-                },
-            ],
-        },
-    ])
-}
+const router = createBrowserRouter([
+    {
+        path: '/',
+        element: <Root />,
+        errorElement: <ErrorPage />,
+        children: [
+            {
+                path: '',
+                element: <Landing />,
+            },
+            {
+                path: 'login',
+                element: <LoginPage />,
+                action: loginAction,
+                loader: loginLoader,
+            },
+            {
+                path: 'password-reset',
+                element: <ResetPasswordPage />,
+            },
+            {
+                path: 'signup',
+                element: <SignupForm />,
+                action: signupAction,
+                loader: loginLoader,
+            },
+            {
+                path: 'validation',
+                element: <EmailValidation />,
+                loader: emailValidationLoader,
+            },
+            {
+                path: 'verify',
+                element: <EmailVerify />,
+                loader: emailValidationLoader,
+            },
+            {
+                path: 'onboarding/*',
+                element: <Onboarding />,
+                loader: onboardingLoader,
+                children: [
+                    {
+                        path: '',
+                        element: <></>,
+                        loader: redirectToWelcome,
+                    },
+                    {
+                        path: 'welcome',
+                        element: <WelcomeMessage />,
+                    },
+                    {
+                        path: 'gender',
+                        element: <GenderSelection />,
+                    },
+                    {
+                        path: 'preferences',
+                        element: <SexualPreferences />,
+                    },
+                    {
+                        path: 'bio',
+                        element: <DescriptionCreation />,
+                    },
+                    {
+                        path: 'interests',
+                        element: <InterestsTags />,
+                    },
+                    {
+                        path: 'pictures',
+                        element: <PicturesUploading />,
+                    },
+                    {
+                        path: 'done',
+                        element: <AllSetMessage />,
+                    },
+                    {
+                        path: '*',
+                        element: <></>,
+                        loader: redirectToWelcome,
+                    },
+                ],
+            },
+            {
+                path: 'dashboard/*',
+                element: <Dashboard />,
+                loader: dashboardLoader,
+                children: [
+                    {
+                        index: true,
+                        element: <ProfileMatching />,
+                    },
+                    {
+                        path: 'messages',
+                        element: <MessagesContainer />,
+                    },
+                    {
+                        path: 'userSettings',
+                        element: <UserSettings />,
+                    },
+                    {
+                        path: '*',
+                        element: <></>,
+                        loader: redirectToMatching,
+                    },
+                ],
+            },
+            {
+                path: '*',
+                element: <></>,
+                loader: redirectToLogin,
+            },
+        ],
+    },
+])
 
-export default getRouterWithStore
+export default router

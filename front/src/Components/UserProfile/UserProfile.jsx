@@ -49,28 +49,36 @@ const UserProfile = ({ user, scroll = 0 }) => {
 		}
 	}
 
-	return (
-		<div
-			id="user-profile-container"
-			className={selectedPicture !== -1 ? 'no-overflow' : ''}
-		>
-			<div
-				className="card_img_container"
-				style={{ background: 'url(' + (user.imgA.includes('http') ? '' : 'http://localhost:8080/api') + user.imgA + ') 50% 50% / cover no-repeat',}}
-			>
-				<div className="name_and_age_container">
-					<button className="info-chip" onClick={toggleScroll}>
-						{scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
-					</button>
-					<div ref={infosRef} className="user-location-infos">
-						<PlaceIcon /> 19km away
-					</div>
-					<div ref={profileRef} className="name_and_age">
-						{user.firstname} {user.surname}, {userAge}
-						<i id="user-login"> @{user.login}</i>
-					</div>
-				</div>
-			</div>
+    return (
+        <div
+            id="user-profile-container"
+            className={selectedPicture !== -1 ? 'no-overflow' : ''}
+        >
+            <div
+                className="card_img_container"
+                style={{
+                    background:
+                        'url(' +
+                        (user.imgA?.includes('http')
+                            ? ''
+                            : 'http://localhost:8080/api') +
+                        user.imgA +
+                        ') 50% 50% / cover no-repeat',
+                }}
+            >
+                <div className="name_and_age_container">
+                    <button className="info-chip" onClick={toggleScroll}>
+                        {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
+                    </button>
+                    <div ref={profileRef} className="name_and_age">
+                        {user.name}, {userAge}
+                        <i id="user-login">, @{user.login}</i>
+                    </div>
+                    <div ref={infosRef} className="user-location-infos">
+                        <PlaceIcon /> 19km away
+                    </div>
+                </div>
+            </div>
 
 			<div id="user-profile-bio">{user.bio}</div>
 
@@ -93,68 +101,68 @@ const UserProfile = ({ user, scroll = 0 }) => {
 				))}
 			</div>
 
-			<div id="user-profile-tags">
-				{user.tags &&
-					user.tags.map((tag, i) => (
-						<div key={i} className="user-profile-tag">
-							<i>#</i>
-							{tag.bwid}
-						</div>
-					))}
-			</div>
-			<div
-				id="display-user-picture"
-				className={
-					'card_img_container' +
-					(selectedPicture === -1 ? ' hidden' : '')
-				}
-				style={{
-					background:
-						'url(' +
-						(selectedPicture >= imgs.length ||
-							selectedPicture == -1 ||
-							imgs[selectedPicture].indexOf('http') > -1
-							? ''
-							: 'http://localhost:8080/api') +
-						imgs[selectedPicture] +
-						') 50% 50% / cover no-repeat',
-				}}
-			>
-				<div id="picture-navigation">
-					<div
-						className="user-picture-nav user-picture-prev"
-						onClick={prevPicture}
-					>
-						<ArrowLeftIcon />
-					</div>
-					{imgs.map((img, i) => (
-						<div
-							className={
-								'img-indicator' +
-								(selectedPicture === i ? ' img-selected' : '')
-							}
-							key={i}
-							onClick={() => {
-								setSelectedPicture(i)
-							}}
-						></div>
-					))}
-					<div
-						className="user-picture-nav user-picture-next"
-						onClick={nextPicture}
-					>
-						<ArrowRightIcon />
-					</div>
-				</div>
-				<button
-					id="btn-close-magnify-picture"
-					onClick={() => setSelectedPicture(-1)}
-				>
-					<ClearIcon />
-				</button>
-			</div>
-		</div>
-	)
+            <div id="user-profile-tags">
+                {user.tags &&
+                    user.tags.split(', ').map((tag, i) => (
+                        <div key={i} className="user-profile-tag">
+                            <i>#</i>
+                            {tag}
+                        </div>
+                    ))}
+            </div>
+            <div
+                id="display-user-picture"
+                className={
+                    'card_img_container' +
+                    (selectedPicture === -1 ? ' hidden' : '')
+                }
+                style={{
+                    background:
+                        'url(' +
+                        (selectedPicture >= imgs.length ||
+                        selectedPicture == -1 ||
+                        imgs[selectedPicture].indexOf('http') > -1
+                            ? ''
+                            : 'http://localhost:8080/api') +
+                        imgs[selectedPicture] +
+                        ') 50% 50% / cover no-repeat',
+                }}
+            >
+                <div id="picture-navigation">
+                    <div
+                        className="user-picture-nav user-picture-prev"
+                        onClick={prevPicture}
+                    >
+                        <ArrowLeftIcon />
+                    </div>
+                    {imgs.map((img, i) => (
+                        <div
+                            className={
+                                'img-indicator' +
+                                (selectedPicture === i ? ' img-selected' : '')
+                            }
+                            key={i}
+                            onClick={() => {
+                                setSelectedPicture(i)
+                            }}
+                        ></div>
+                    ))}
+                    <div
+                        className="user-picture-nav user-picture-next"
+                        onClick={nextPicture}
+                    >
+                        <ArrowRightIcon />
+                    </div>
+                </div>
+                <button
+                    id="btn-close-magnify-picture"
+                    onClick={() => setSelectedPicture(-1)}
+                >
+                    <ClearIcon />
+                </button>
+            </div>
+        </div>
+    )
 }
 
 export default UserProfile

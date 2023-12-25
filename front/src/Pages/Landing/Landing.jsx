@@ -15,7 +15,7 @@ const LandingPage = () => {
                         Ready to meet fluffy cats in you area ?
                     </h1>
                 </div>
-                <Link to="/onboarding/signup">
+                <Link to="/signup">
                     <button id="landing_main_btn">Find your new catmate</button>
                 </Link>
             </div>

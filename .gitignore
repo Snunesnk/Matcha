@@ -3,3 +3,5 @@ matcha-mysql-data
 *.env
 .DS_Store
 data/
+uploads/
+.vscode/
