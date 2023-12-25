@@ -1,6 +1,7 @@
 import jwt from "jsonwebtoken";
 import { User } from "../models/user.model.js";
 import { checkIfUserIsOnline } from "../socket/socket.js";
+import authenticationService from "../services/authentication.service.js";
 
 export default class {
   static validate = async (req, res) => {
@@ -11,10 +12,19 @@ export default class {
         res.json(user);
       } else {
         const user = await User.getUserByLogin(decoded.login);
+
+        // Issue new token for sliding session
+        const newToken = await authenticationService.generateToken(user);
+        res.cookie("remember_me", newToken, {
+          maxAge: 1000 * 60 * 15,
+          httpOnly: true,
+          path: "/",
+        });
+
         res.json({
-          loggedIn: checkIfUserIsOnline(user.login),
+          loggedIn: true,
           onboarded: user.onboarded || false,
-          verified: user._verified,
+          verified: user.verified || false,
         });
       }
     });
