@@ -26,11 +26,19 @@
     gap: 5px;
 }
 
+.navTitle:hover {
+    color: #ef99de;
+}
+
 .navbar-menu {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 1em;
+}
+
+.navbar-menu svg:hover {
+    color: #ef99de;
 }
 
 .log-in-btn-container {
@@ -53,19 +61,21 @@
 .dropdown-menu {
     position: absolute;
     right: 20px;
-    background-color: rgba(83, 32, 112, 0.25);
-    min-width: 160px;
+    top: 68px;
+    background-color: #20051897;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
 }
 
 .dropdown-menu a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
+    color: white;
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
 }
 
 .dropdown-menu a:hover {
     background-color: #f1f1f1;
+    color: #dc21b8;
 }

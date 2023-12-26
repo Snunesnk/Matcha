@@ -6,13 +6,18 @@ import { AccountCircle, Chat, Pets, Notifications, Settings, EditNote, Portrait,
 import './Navbar.css'
 
 const Navbar = () => {
-    const loggedIn = useSelector((state) => state.userState.userStatus.loggedIn)
+    const loggedIn = useSelector((state) => state.userState.userStatus)
     const match = useMatch('/login')
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
     const dropdownRef = useRef(null);
 
     // Fonction pour basculer l'affichage du menu déroulant
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen);
+
+    const handleLogout = () => {
+        // Gestion de la déconnexion ici
+        // Par exemple, nettoyage du local storage, mise à jour de l'état global, redirection, etc.
+    };
 
     // Effet pour gérer le clic à l'extérieur du menu déroulant
     useEffect(() => {
@@ -28,7 +33,7 @@ const Navbar = () => {
     return (
         <div id="navbar">
             <Link to={loggedIn ? "/dashboard" : "/"}>
-                <div class="navTitle">
+                <div className="navTitle">
                     <Pets fontSize="large"></Pets>
                     <h4 id='brand-name'>MatChat</h4>
                 </div>
@@ -55,13 +60,21 @@ const Navbar = () => {
                         <div className="dropdown-menu">
                             <Link to="/profile"><Portrait/>View profile</Link>
                             <Link to="/profile"><EditNote/>Edit profile</Link>
-                            <Link to="/dashboard/messages"><Settings/>Settings</Link>
-                            <button><Logout/>Logout</button>
+                            <Link to="/dashboard/settings"><Settings/>Settings</Link>
+                            <Link to="/login" onClick={handleLogout}><Logout />Logout</Link>
                         </div>
                     )}
                 </div>
             </div>
         </div>
+    )
+}
+
+function DropdownItem(props) {
+    return (
+        <li className="dropdownItem">
+            <a>{props.icon} {props.text}</a>
+        </li>
     )
 }
 
