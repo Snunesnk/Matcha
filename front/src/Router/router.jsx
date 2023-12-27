@@ -46,7 +46,6 @@ const router = createBrowserRouter([
             {
                 path: '',
                 element: <Landing />,
-                loader: loginLoader,
             },
             {
                 path: 'login',
