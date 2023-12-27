@@ -38,10 +38,7 @@ const Navbar = () => {
                     <h4 id='brand-name'>MatChat</h4>
                 </div>
             </Link>
-            <div className="center log-in-btn-container">
-                {loggedIn == false && !match && <AlreadyHaveAccountBtn />}
-                {loggedIn == false && match && <CreateAccountButton />}
-            </div>
+            {loggedIn ?
             <div className="navbar-menu">
                 <Link to="/dashboard/messages">
                     <Notifications fontSize="large" sx={{ color: "white" }}></Notifications>
@@ -49,13 +46,8 @@ const Navbar = () => {
                 <Link to="/dashboard/messages">
                     <Chat fontSize="large" sx={{ color: "white" }}></Chat>
                 </Link>
-
                 <div ref={dropdownRef}>
-                    <AccountCircle
-                        fontSize="large"
-                        sx={{ color: 'white' }}
-                        onClick={toggleDropdown}
-                    />
+                    <AccountCircle fontSize="large" sx={{ color: 'white' }} onClick={toggleDropdown}/>
                     {isDropdownOpen && (
                         <div className="dropdown-menu">
                             <Link to="/profile"><Portrait/>View profile</Link>
@@ -66,17 +58,13 @@ const Navbar = () => {
                     )}
                 </div>
             </div>
+            :
+            <div className="center log-in-btn-container">
+                    {match ? <CreateAccountButton /> : <AlreadyHaveAccountBtn />}
+            </div>
+            }
         </div>
     )
 }
-
-function DropdownItem(props) {
-    return (
-        <li className="dropdownItem">
-            <a>{props.icon} {props.text}</a>
-        </li>
-    )
-}
-
 
 export default Navbar
