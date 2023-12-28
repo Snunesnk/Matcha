@@ -6,6 +6,7 @@ import UserProfile from '../UserProfile/UserProfile'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import './MessagesContainer.css'
+import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
 
 const DUMMY_USER = {
     firstname: 'John',
@@ -30,6 +31,147 @@ const COMPONENTS = {
     USER_PROFILE: 'USER_PROFILE',
 }
 
+const newMatches = [
+    {
+        id: 1,
+        name: 'Alex',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: true,
+    },
+    {
+        id: 2,
+        name: 'Jordan',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+    },
+    {
+        id: 3,
+        name: 'Casey',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: true,
+    },
+    {
+        id: 4,
+        name: 'Taylor',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+    },
+    {
+        id: 5,
+        name: 'Robin',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: true,
+    },
+    {
+        id: 6,
+        name: 'Alexis',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+    },
+    {
+        id: 7,
+        name: 'Taylor',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+    },
+    {
+        id: 8,
+        name: 'Alexis',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: true,
+    },
+    {
+        id: 9,
+        name: 'Robin',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+    },
+]
+
+const convs = [
+    {
+        id: 'convo1',
+        name: 'Taylor',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+        lastMessageDate: 'Apr 3',
+        lastMessage: 'Hey, how are you?',
+        unread: true,
+    },
+    {
+        id: 'convo2',
+        name: 'Alexis',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: true,
+        lastMessageDate: 'Apr 2',
+        lastMessage: 'Wanna meet up tomorrow? We could go to starbucks',
+        unread: false,
+    },
+    {
+        id: 'convo3',
+        name: 'Robin',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+        lastMessageDate: 'Mar 30',
+        lastMessage: 'That was fun!',
+        unread: false,
+    },
+    {
+        id: 'convo4',
+        name: 'Taylor',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+        lastMessageDate: 'Mar 30',
+        lastMessage: 'Hey, how are you?',
+        unread: false,
+    },
+    {
+        id: 'convo5',
+        name: 'Alexis',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: true,
+        lastMessageDate: 'Mar 29',
+        lastMessage: 'Hey, how are you?',
+        unread: false,
+    },
+    {
+        id: 'convo6',
+        name: 'Robin',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+        lastMessageDate: 'Mar 28',
+        lastMessage: 'Hey, how are you?',
+        unread: false,
+    },
+    {
+        id: 'convo7',
+        name: 'Taylor',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+        lastMessageDate: 'Mar 27',
+        lastMessage: 'Hey, how are you?',
+        unread: false,
+    },
+    {
+        id: 'convo8',
+        name: 'Alexis',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: true,
+        lastMessageDate: 'Mar 26',
+        lastMessage: 'Hey, how are you?',
+        unread: false,
+    },
+    {
+        id: 'convo9',
+        name: 'Robin',
+        photo: 'https://picsum.photos/200/300?random=1',
+        isOnline: false,
+        lastMessageDate: 'Mar 25',
+        lastMessage: 'Hey, how are you?',
+        unread: false,
+    },
+]
+
 const MessagesContainer = () => {
     const [activeComponent, setActiveComponent] = useState(
         COMPONENTS.MESSAGE_LIST
@@ -51,30 +193,10 @@ const MessagesContainer = () => {
                     }
                     className="responsive-component"
                 >
-                    <div className="message-feed-selection-container">
-                        <p>New matches</p>
-                        List of all matches without conversations
-                    </div>
-                    <Grid
-                        container
-                        id="chat_display_container"
-                        data-active={
-                            activeComponent === COMPONENTS.MESSAGE_LIST
-                        }
-                        className="responsive-component"
-                    >
-                        <p>Messages</p>
-                        {conversations.map((conversation, i) => {
-                            return (
-                                <Conversation
-                                    conversation={conversation}
-                                    key={i}
-                                    components={COMPONENTS}
-                                    setActiveComponent={setActiveComponent}
-                                />
-                            )
-                        })}
-                    </Grid>
+                    <MessagesLeftPane
+                        newMatches={newMatches}
+                        conversations={convs}
+                    />
                 </div>
                 <div
                     id="chat_container"
