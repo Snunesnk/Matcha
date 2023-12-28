@@ -41,4 +41,12 @@ export class Match {
     }
     return newMatch;
   }
+
+  static async getMatchesWithConversation(login) {
+    const matches = DbRequestService.getMatchListWithConversations(login);
+    if (matches === null) {
+      return null;
+    }
+    return matchesWithConversation;
+  }
 }

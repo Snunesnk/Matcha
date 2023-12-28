@@ -319,4 +319,30 @@ WHERE
       });
     });
   }
+
+  static async getMatchListWithConversations(login) {
+    return new Promise((resolve, reject) => {
+      const parameters = [login];
+      const query = `
+    SELECT 
+      m.*,
+      c.conversation_id,
+      c.last_message_id
+    FROM 
+      matches m
+    LEFT JOIN conversations c
+      ON m.id = c.match_id
+    WHERE 
+      m.user1 = ? OR m.user2 = ?
+      `;
+
+      connection.query(query, parameters, (err, res) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(res);
+      });
+    });
+  }
 }
