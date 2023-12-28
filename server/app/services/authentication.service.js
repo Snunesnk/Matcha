@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || ",z$F!Wx-NB)ZROO;UX|+h~[0}V>iyKme";
-const JWT_EXPIRATION = "1h";
+const JWT_EXPIRATION = "15m";
 const JWT_REMEMBER_ME_EXPIRATION = "7d";
 
 class AuthenticationService {

@@ -16,6 +16,8 @@ const checkForSessionCreds = async () => {
             name: '',
             email: '',
             login: '',
+            loggedIn: false,
+            onboarded: false,
         }
     }
 
@@ -32,7 +34,7 @@ const userReducer = (state = initialState, action) => {
         case USER_STATE_ACTIONS.LOG_IN:
             return {
                 ...state,
-                userInfos: action.payload,
+                userInfos: { ...state.userInfos, ...action.payload },
             }
         case USER_STATE_ACTIONS.LOG_OUT:
             sessionStorage.clear()

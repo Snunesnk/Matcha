@@ -30,9 +30,11 @@ services:
       context: ../mysql
       dockerfile: ./Dockerfile
     restart: always
-    # volumes:
-    #   - ../mysql/data:/var/lib/mysql
+    volumes:
+      - ../mysql/data:/var/lib/mysql
     env_file: ../server/.env
+    ports:
+      - 3306:3306
     networks:
       - public
     healthcheck:
@@ -41,6 +43,7 @@ services:
       retries: 20
       start_period: 5s
       timeout: 2s
+      
   matcha_frontend:
     container_name: matcha_frontend
     build:

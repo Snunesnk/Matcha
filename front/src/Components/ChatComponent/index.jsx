@@ -72,9 +72,10 @@ const ChatComponent = ({ user, components, setActiveComponent }) => {
             <div id="chat_header">
                 <div id="person_info">
                     <ArrowBackIcon
-                        onClick={() =>
+                        onClick={() => {
+                            console.log('clicked')
                             setActiveComponent(components.MESSAGE_LIST)
-                        }
+                        }}
                     />
                     <img src={person.imgA} alt="profile_pic" />
                     <div className="message_username">{person.login}</div>

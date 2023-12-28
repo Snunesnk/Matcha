@@ -56,7 +56,7 @@ export default class {
         httpOnly: true, // Cookie inaccessible to browser's JavaScript
         maxAge: rememberMe
           ? 1000 * 60 * 60 * 24 * 7 // 7 days
-          : 1000 * 60 * 60 * 1, // 1 hour
+          : 1000 * 60 * 15, // 15 minutes
         path: "/",
       };
 

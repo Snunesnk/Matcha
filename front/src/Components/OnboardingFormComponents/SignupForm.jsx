@@ -99,6 +99,7 @@ const SignupForm = () => {
                     email: formResult.email,
                     name: formResult.name,
                     login: formResult.login,
+                    loggedIn: true,
                 },
             })
             navigate('/validation')
