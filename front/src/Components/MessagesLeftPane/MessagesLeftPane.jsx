@@ -27,9 +27,9 @@ const NewMatch = ({ match }) => (
     <div className="new-match">
         <div className="new-match-img-container">
             <img
-                src={match.photo}
+                src={'http://localhost:8080/api' + match.imgA}
                 alt={`${match.name}'s avatar`}
-                className={`avatar ${match.isOnline ? 'online' : 'offline'}`}
+                className="avatar"
             />
             <div
                 className={`status-indicator ${
@@ -59,11 +59,9 @@ const MessageSnippet = ({ conversation }) => (
     <div className={`message ${conversation.unread ? 'unread' : ''}`}>
         <div className="message-img-container">
             <img
-                src={conversation.photo}
+                src={'http://localhost:8080/api' + conversation.imgA}
                 alt="user avatar"
-                className={`avatar ${
-                    conversation.isOnline ? 'online' : 'offline'
-                }`}
+                className="avatar"
             />
             <div
                 className={`status-indicator ${

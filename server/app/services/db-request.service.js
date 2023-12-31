@@ -320,21 +320,32 @@ WHERE
     });
   }
 
-  static async getMatchListWithConversations(login) {
+  static async getMatches(login) {
     return new Promise((resolve, reject) => {
-      const parameters = [login];
+      const parameters = [login, login, login];
       const query = `
-    SELECT 
-      m.*,
-      c.conversation_id,
-      c.last_message_id
-    FROM 
-      matches m
-    LEFT JOIN conversations c
-      ON m.id = c.match_id
-    WHERE 
-      m.user1 = ? OR m.user2 = ?
-      `;
+  SELECT
+    m.*,
+    c.last_message_id,
+    msg.timestamp AS last_message_timestamp,
+    u.name,
+    u.login,
+    u.surname,
+    u.imgA
+  FROM
+    matches m
+  LEFT JOIN
+    conversations c ON m.id = c.match_id
+  LEFT JOIN
+    messages msg ON c.last_message_id = msg.message_id
+  LEFT JOIN
+    user u ON u.login = CASE
+      WHEN m.user1 = ? THEN m.user2
+      ELSE m.user1
+    END
+  WHERE
+    m.user1 = ? OR m.user2 = ?
+`;
 
       connection.query(query, parameters, (err, res) => {
         if (err) {

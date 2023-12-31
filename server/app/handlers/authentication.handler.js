@@ -12,6 +12,9 @@ export default class {
         res.json(user);
       } else {
         const user = await User.getUserByLogin(decoded.login);
+        if (!user) {
+          return res.status(401).send({ message: "Unauthorized!" });
+        }
 
         // Issue new token for sliding session
         const newToken = await authenticationService.generateToken(user);
