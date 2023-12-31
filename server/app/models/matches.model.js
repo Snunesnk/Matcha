@@ -2,8 +2,6 @@ import { DbRequestService } from "../services/db-request.service.js";
 
 export class Match {
   constructor(obj = {}) {
-    console.log("obj", obj);
-
     if (obj.user1 > obj.user2) {
       this.user1 = obj.user1;
       this.user2 = obj.user2;

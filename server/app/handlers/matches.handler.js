@@ -2,10 +2,14 @@ import { Match } from "../models/matches.model.js";
 
 export default class {
   static async getMatches(req, res) {
-    // Get all matches + convs for one user
-    // Then get user associated with matches
     const user = req.decodedUser;
-    const newMatches = await Match.getMatches(user.login);
-    res.status(200).send(newMatches);
+    try {
+      const newMatches = await Match.getMatches(user.login);
+      res.status(200).send(newMatches);
+    } catch (err) {
+      res.status(500).send({
+        message: err.message || "Some error occurred while retrieving matches.",
+      });
+    }
   }
 }
