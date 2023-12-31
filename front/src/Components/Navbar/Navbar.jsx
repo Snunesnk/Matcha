@@ -92,7 +92,7 @@ const Navbar = () => {
             )}
             {loggedIn && onboarded && (
                 <div className="navbar-menu">
-                    <Link to="/dashboard/messages">
+                    <Link to="/dashboard/notifications">
                         <Notifications
                             fontSize="large"
                             sx={{ color: 'white' }}
@@ -114,11 +114,11 @@ const Navbar = () => {
                                     <Portrait />
                                     View profile
                                 </Link>
-                                <Link to="/profile">
+                                <Link to="/userSettings">
                                     <EditNote />
                                     Edit profile
                                 </Link>
-                                <Link to="/dashboard/messages">
+                                <Link to="/dashboard/userSettings">
                                     <Settings />
                                     Settings
                                 </Link>
