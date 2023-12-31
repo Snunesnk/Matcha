@@ -33,9 +33,11 @@ import {
 } from './loaders'
 import MessagesContainer from '../Components/MessagesContainer/MessagesContainer'
 import UserSettings from '../Components/UserSettings/UserSettings'
+import Notifications from '../Components/Notifications/Notifications'
 import ProfileMatching from '../Components/ProfileMatching'
 import LoginPage, { action as loginAction } from '../Pages/Login/Login'
 import ResetPasswordPage from '../Pages/ResetPassword/ResetPassword'
+
 
 const router = createBrowserRouter([
     {
@@ -134,6 +136,10 @@ const router = createBrowserRouter([
                     {
                         path: 'userSettings',
                         element: <UserSettings />,
+                    },
+                    {
+                        path: 'notifications',
+                        element: <Notifications />,
                     },
                     {
                         path: '*',
