@@ -68,4 +68,36 @@ export class Notifications {
     }
     return newNotification;
   }
+
+  static async getNotifications(login) {
+    const data = await DbRequestService.read("notifications", {
+      login: `${login}`,
+    });
+    if (data.length === 0) {
+      return null;
+    }
+    return data.map((notification) => new Notifications(notification));
+  }
+
+  static async getUnreadNotifications(login) {
+    const data = await DbRequestService.read("notifications", {
+      login: `${login}`,
+      read: 0,
+    });
+    if (data.length === 0) {
+      return null;
+    }
+    return data.map((notification) => new Notifications(notification));
+  }
+
+  toJSON() {
+    return {
+      login: this.login,
+      trigger_login: this.trigger_login,
+      type: this.type,
+      message: this.message,
+      created_at: this.created_at,
+      read: this.read,
+    };
+  }
 }

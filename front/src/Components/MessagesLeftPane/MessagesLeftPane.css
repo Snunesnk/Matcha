@@ -1,0 +1,234 @@
+/* ChatSidebar.css */
+
+.chat-sidebar {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+.chat-sidebar h4,
+.chat-sidebar p {
+    margin: 0;
+}
+
+.new-matches-section {
+    padding: 10px;
+    min-height: 20%;
+    max-height: 20%;
+}
+
+.new-matches {
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+    white-space: nowrap;
+
+    /* hide scrollbar */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+}
+
+.new-matches::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+.new-matches-container {
+    padding-top: 10px;
+}
+
+.new-match {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    margin-right: 15px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: all 0.1s ease-in-out;
+}
+
+.new-match:last-child {
+    margin-right: 0;
+}
+
+.new-match .new-match-img-container {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: relative;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.new-match-img-container img.avatar {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    margin-bottom: 5px;
+    border: 2px solid white;
+}
+
+.new-match:hover .new-match-img-container img.avatar {
+    border: 2px solid #dc21b8;
+}
+
+.status-indicator {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    width: 19px;
+    height: 19px;
+    border-radius: 50%;
+    border: 3px solid #200618; /* Optional: a white border around the avatar */
+    z-index: 10;
+}
+
+.online {
+    background-color: green;
+}
+
+.offline {
+    background-color: red;
+}
+
+.new-match .name {
+    font-size: 0.9rem;
+    color: white;
+}
+
+.messages {
+    padding: 10px;
+    min-height: 80%;
+    max-height: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.messages .messages-list {
+    overflow-y: auto;
+    flex-grow: 1;
+
+    /* hide scrollbar */
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+    transition: all 0.1s ease-in-out;
+}
+
+.messages .messages-list::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera*/
+}
+
+.messages .message {
+    width: 100%;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    cursor: pointer;
+    box-sizing: content-box;
+}
+
+@keyframes sliding-gradient {
+    to {
+        background-position: 200% center;
+    }
+}
+
+.messages .message .conv-name {
+    font-weight: 500;
+}
+
+.new-match:hover .name,
+.messages .message:hover .conv-name {
+    background: linear-gradient(
+        to right,
+        #dc21b8 20%,
+        #4ac0fc 40%,
+        #4ac0fc 60%,
+        #dc21b8 80%
+    );
+
+    /* Make the gradient background larger than the element to slide it */
+    background-size: 200% auto;
+
+    /* Make the text transparent so that the gradient is visible */
+    color: transparent;
+
+    animation: sliding-gradient 1s linear infinite;
+
+    /* Ensure the gradient is in the text itself, not just behind */
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.message:last-child {
+    border-bottom: none;
+}
+
+.message .message-img-container {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    position: relative;
+}
+
+.message:hover .message-img-container:after {
+    position: absolute;
+    content: '';
+    height: 100%;
+    width: 100%;
+    top: 0;
+    left: 0;
+    background: linear-gradient(-135deg, #4ac0fc9c 0%, #dc21b89c 100%);
+    border-radius: 50%;
+}
+
+.message img.avatar {
+    width: 60px; /* Adjust avatar size as desired */
+    min-width: 60px;
+    height: 60px;
+    min-height: 60px;
+    border-radius: 50%; /* Circle shape */
+    position: relative;
+}
+
+.message .message-info {
+    display: flex;
+    flex-direction: column;
+    margin-left: 10px;
+    flex-grow: 1;
+    max-width: calc(100% - 70px);
+    width: 100%;
+}
+
+.message-info-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.message-info-header time {
+    font-size: 0.75rem; /* Smaller font size for date */
+    color: #999999;
+    margin-bottom: 5px;
+    align-self: flex-end; /* Align the date to the right */
+}
+
+.message .message-info .message-snippet {
+    font-size: 0.85rem;
+    color: #ffffffbc;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    margin: 0;
+}
+
+.message.unread .message-snippet {
+    font-weight: bold;
+    color: white;
+}
+
+.opaque {
+    opacity: 0.6;
+}

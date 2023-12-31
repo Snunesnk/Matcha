@@ -6,6 +6,7 @@ import UserProfile from '../UserProfile/UserProfile'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 import './MessagesContainer.css'
+import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
 
 const DUMMY_USER = {
     firstname: 'John',
@@ -30,15 +31,61 @@ const COMPONENTS = {
     USER_PROFILE: 'USER_PROFILE',
 }
 
+// id: 9,
+// name: 'Robin',
+// photo: 'https://picsum.photos/200/300?random=1',
+// isOnline: false,
+
+// {
+//     id: 'convo9',
+//     name: 'Robin',
+//     photo: 'https://picsum.photos/200/300?random=1',
+//     isOnline: false,
+//     lastMessageDate: 'Mar 25',
+//     lastMessage: 'Hey, how are you?',
+//     unread: false,
+// },
+
 const MessagesContainer = () => {
     const [activeComponent, setActiveComponent] = useState(
         COMPONENTS.MESSAGE_LIST
     )
     const [conversations, setConversations] = useState([])
+    const [newMatches, setNewMatches] = useState([])
 
     useEffect(() => {
         console.log('activeComponent', activeComponent)
     }, [activeComponent])
+
+    useEffect(() => {
+        const getMatches = async () => {
+            fetch('http://localhost:8080/api/matches', {
+                method: 'GET',
+                credentials: 'include',
+            })
+                .then((response) => {
+                    if (response.ok) {
+                        return response.json()
+                    }
+                    throw new Error('Something went wrong ...')
+                })
+                .then((data) => {
+                    console.log('data', data)
+                    const newMatches = data.filter(
+                        (m) => m.last_message_id === null
+                    )
+                    setNewMatches(newMatches)
+                    const conversations = data.filter(
+                        (m) => m.last_message_id !== null
+                    )
+                    setConversations(conversations)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
+        getMatches()
+    }, [])
 
     return (
         <div id="message-pannel">
@@ -51,30 +98,10 @@ const MessagesContainer = () => {
                     }
                     className="responsive-component"
                 >
-                    <div className="message-feed-selection-container">
-                        <p>New matches</p>
-                        List of all matches without conversations
-                    </div>
-                    <Grid
-                        container
-                        id="chat_display_container"
-                        data-active={
-                            activeComponent === COMPONENTS.MESSAGE_LIST
-                        }
-                        className="responsive-component"
-                    >
-                        <p>Messages</p>
-                        {conversations.map((conversation, i) => {
-                            return (
-                                <Conversation
-                                    conversation={conversation}
-                                    key={i}
-                                    components={COMPONENTS}
-                                    setActiveComponent={setActiveComponent}
-                                />
-                            )
-                        })}
-                    </Grid>
+                    <MessagesLeftPane
+                        newMatches={newMatches}
+                        conversations={conversations}
+                    />
                 </div>
                 <div
                     id="chat_container"
