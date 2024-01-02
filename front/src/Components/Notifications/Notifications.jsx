@@ -1,20 +1,47 @@
 import "./Notifications.css"
 import React from 'react';
+import { Visibility, Favorite, HeartBroken } from '@mui/icons-material'
 
 function Notifications() {
   const notifications = [
-    { type: 'like', user: 'John Doe', action: 'a aimé votre profil', timestamp: 'Il y a 10 minutes', image: 'https://i.imgur.com/zYxDCQT.jpg' },
-    { type: 'like', user: 'Richard Miles', action: 'a aimé votre profil', timestamp: 'Il y a 20 minutes', image: 'https://i.imgur.com/w4Mp4ny.jpg' },
-    { type: 'match', user: 'Sarah', action: 'a matché avec vous', timestamp: 'Il y a 30 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg' },
-    { type: 'match', user: 'Lisa', action: 'a matché avec vous', timestamp: 'Il y a 40 minutes', image: 'https://i.imgur.com/AbZqFnR.jpg' },
-    { type: 'visit', user: 'Brian Cumin', action: 'a visité votre profil', timestamp: 'Il y a 50 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg' },
-    { type: 'visit', user: 'Lance Bogrol', action: 'a visité votre profil', timestamp: 'Il y a 60 minutes', image: 'https://i.imgur.com/CtAQDCP.jpg' },
+    { type: 'like', user: 'John Doe', timestamp: 'Il y a 10 minutes', image: 'https://i.imgur.com/zYxDCQT.jpg' },
+    { type: 'like', user: 'Richard Miles', timestamp: 'Il y a 20 minutes', image: 'https://i.imgur.com/w4Mp4ny.jpg' },
+    { type: 'match', user: 'Sarah', timestamp: 'Il y a 30 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg' },
+    { type: 'match', user: 'Lisa', timestamp: 'Il y a 40 minutes', image: 'https://i.imgur.com/AbZqFnR.jpg' },
+    { type: 'visit', user: 'Brian Cumin', timestamp: 'Il y a 50 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg' },
+    { type: 'visit', user: 'Lance Bogrol', timestamp: 'Il y a 60 minutes', image: 'https://i.imgur.com/CtAQDCP.jpg' },
     // Ajoutez plus de notifications ici si nécessaire
   ];
 
+  const getMessageByType = (type) => {
+    switch (type) {
+      case 'like':
+        return 'has liked your profile';
+      case 'match':
+        return 'has matched with you';
+      case 'visit':
+        return 'has visited your profile';
+      default:
+        return '';
+    }
+  };
+
+  const getIconByType = (type) => {
+    switch (type) {
+      case 'like':
+        return <Favorite className='notif-icon'/>;
+      case 'match':
+        return <HeartBroken />;
+      case 'visit':
+        return <Visibility />;
+      default:
+        return <></>;
+    }
+  };
+
   return (
     <div className="container">
-      <h3>Notifications</h3>
+      <h2>Notifications</h2>
 
       <div className="notification-content">
         {notifications.map((notification, index) => (
@@ -26,10 +53,13 @@ function Notifications() {
               </div>
 
               <div className="notification-list_detail">
-                <p><b>{notification.user}</b> {notification.action}</p>
+                <p><b>{notification.user}</b> {getMessageByType(notification.type)}</p>
                 <p className="text-muted"><small>{notification.timestamp}</small></p>
               </div>
             </div>
+            
+            {getIconByType(notification.type)}
+
           </div>
         ))}
       </div>
