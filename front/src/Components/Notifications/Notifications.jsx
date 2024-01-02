@@ -17,6 +17,8 @@ function Notifications() {
     switch (type) {
       case 'like':
         return 'has liked your profile';
+      case 'unlike':
+        return 'has unliked your profile';
       case 'match':
         return 'has matched with you';
       case 'visit':
