@@ -1,11 +1,11 @@
 import "./Notifications.css"
 import React from 'react';
-import { Visibility, Favorite, HeartBroken } from '@mui/icons-material'
+import { Visibility, Favorite, PeopleAlt, FavoriteBorder } from '@mui/icons-material'
 
 function Notifications() {
   const notifications = [
     { type: 'like', user: 'John Doe', timestamp: 'Il y a 10 minutes', image: 'https://i.imgur.com/zYxDCQT.jpg' },
-    { type: 'like', user: 'Richard Miles', timestamp: 'Il y a 20 minutes', image: 'https://i.imgur.com/w4Mp4ny.jpg' },
+    { type: 'unlike', user: 'Richard Miles', timestamp: 'Il y a 20 minutes', image: 'https://i.imgur.com/w4Mp4ny.jpg' },
     { type: 'match', user: 'Sarah', timestamp: 'Il y a 30 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg' },
     { type: 'match', user: 'Lisa', timestamp: 'Il y a 40 minutes', image: 'https://i.imgur.com/AbZqFnR.jpg' },
     { type: 'visit', user: 'Brian Cumin', timestamp: 'Il y a 50 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg' },
@@ -31,9 +31,11 @@ function Notifications() {
   const getIconByType = (type) => {
     switch (type) {
       case 'like':
-        return <Favorite className='notif-icon'/>;
+        return <Favorite />;
+      case 'unlike':
+        return <FavoriteBorder />;
       case 'match':
-        return <HeartBroken />;
+        return <PeopleAlt />;
       case 'visit':
         return <Visibility />;
       default:
