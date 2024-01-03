@@ -12,9 +12,6 @@
     margin: 0px;
 }
 
-.notification-content {
-}
-
 .notification-list {
     display: flex;
     padding: 20px;
@@ -28,7 +25,6 @@
     display: flex;
     width: 450px;
     align-items: center;
-
 }
 
 .notification-list_img img {
@@ -53,7 +49,7 @@
     margin-bottom: 5px;
     line-height: 1.2;
 }
-
-.notification-list_detail small {
-    color: rgba(255, 255, 255, 0.6);
+    
+    .notification-list_detail small {
+        color: rgba(255, 255, 255, 0.6);
 }
