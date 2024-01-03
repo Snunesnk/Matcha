@@ -1,15 +1,21 @@
 import "./Notifications.css"
 import React from 'react';
-import { Visibility, Favorite, PeopleAlt, FavoriteBorder } from '@mui/icons-material'
+import {
+  Visibility,
+  Favorite, 
+  PeopleAlt,
+  FavoriteBorder ,
+  FiberNew
+} from '@mui/icons-material'
 
 function Notifications() {
   const notifications = [
-    { type: 'like', user: 'John Doe', timestamp: 'Il y a 10 minutes', image: 'https://i.imgur.com/zYxDCQT.jpg' },
-    { type: 'unlike', user: 'Richard Miles', timestamp: 'Il y a 20 minutes', image: 'https://i.imgur.com/w4Mp4ny.jpg' },
-    { type: 'match', user: 'Sarah', timestamp: 'Il y a 30 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg' },
-    { type: 'match', user: 'Lisa', timestamp: 'Il y a 40 minutes', image: 'https://i.imgur.com/AbZqFnR.jpg' },
-    { type: 'visit', user: 'Brian Cumin', timestamp: 'Il y a 50 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg' },
-    { type: 'visit', user: 'Lance Bogrol', timestamp: 'Il y a 60 minutes', image: 'https://i.imgur.com/CtAQDCP.jpg' },
+    { type: 'like', user: 'John Doe', timestamp: 'Il y a 10 minutes', image: 'https://i.imgur.com/zYxDCQT.jpg', read: 'false'},
+    { type: 'unlike', user: 'Richard Miles', timestamp: 'Il y a 20 minutes', image: 'https://i.imgur.com/w4Mp4ny.jpg', read: 'true'},
+    { type: 'match', user: 'Sarah', timestamp: 'Il y a 30 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg', read: 'true'},
+    { type: 'match', user: 'Lisa', timestamp: 'Il y a 40 minutes', image: 'https://i.imgur.com/AbZqFnR.jpg', read: 'true'},
+    { type: 'visit', user: 'Brian Cumin', timestamp: 'Il y a 50 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg', read: 'true'},
+    { type: 'visit', user: 'Lance Bogrol', timestamp: 'Il y a 60 minutes', image: 'https://i.imgur.com/CtAQDCP.jpg', read: 'true'},
     // Ajoutez plus de notifications ici si nécessaire
   ];
 
@@ -58,7 +64,7 @@ function Notifications() {
 
               <div className="notification-list_detail">
                 <p><b>{notification.user}</b> {getMessageByType(notification.type)}</p>
-                <p className="text-muted"><small>{notification.timestamp}</small></p>
+                <p><small>{notification.timestamp}</small></p>
               </div>
             </div>
             
