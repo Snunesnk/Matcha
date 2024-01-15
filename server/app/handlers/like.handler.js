@@ -89,7 +89,8 @@ export default class {
           return;
         }
 
-        res.status(200).send({ match: false });
+        // res.status(200).send({ match: false });
+        res.status(200).send({ match: true });
         return;
       }
       res.status(500).send({
