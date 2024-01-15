@@ -50,6 +50,6 @@
     line-height: 1.2;
 }
     
-    .notification-list_detail small {
-        color: rgba(255, 255, 255, 0.6);
+.notification-list_detail small {
+    color: rgba(255, 255, 255, 0.6);
 }
