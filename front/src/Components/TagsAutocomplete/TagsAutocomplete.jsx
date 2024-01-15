@@ -40,12 +40,10 @@ const TagsAutocomplete = ({ value, setValue }) => {
     }, [userInput])
 
     return (
-        <Autocomplete
-            multiple
+        <Autocomplete multiple freeSolo
             id="tags_autocomplete"
             value={value}
             options={matchingTags.map((tag) => tag.bwid)}
-            freeSolo
             renderTags={(e, getTagProps) => {
                 return value.map((item, index) => (
                     <Chip
@@ -56,9 +54,7 @@ const TagsAutocomplete = ({ value, setValue }) => {
                     />
                 ))
             }}
-            onInputChange={(event, newInputValue) => {
-                setUserInput(newInputValue)
-            }}
+            onInputChange={(event, newInputValue) => {setUserInput(newInputValue)}}
             onChange={setValue}
             renderInput={(params) => (
                 <TextField

@@ -1,21 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { USER_STATE_ACTIONS } from '../../constants'
-import { useNavigate } from 'react-router-dom'
 import Button from '../Button/Button'
-import DualRangeSlider from '../DualRangeSlider/DualRangeSlider'
 import ImageUpload from '../ImageUpload'
-import RangeSlider from '../RangeSlider/RangeSlider'
 import Select from '../Select/Select'
 import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
-import './UserSettings.css'
-
-const DIST_MIN = 1
-const DIST_MAX = 100
-const AGE_MIN = 18
-const AGE_MAX = 55
-const FAME_MIN = 0
-const FAME_MAX = 100
+import './Settings.css'
 
 const GENDERS = [
     {
@@ -55,7 +44,8 @@ const getUserSettings = (login, setUser) => {
 }
 
 const saveUserImages = async (login, pictures) => {
-    if (!pictures) return
+    if (!pictures)
+        return
 
     // I need to convert url pictures to file pictures to be able to same them
     for (let i = 0; i < pictures.length; i++) {
@@ -131,17 +121,7 @@ const saveUserInfos = (login, userData, setUser) => {
 
 const UserSettings = () => {
     const login = useSelector((state) => state.userState.userInfos.login)
-    const dispatch = useDispatch()
-    const navigate = useNavigate()
     const [user, setUser] = useState(null)
-    const [maxDistance, setMaxDistance] = useState(DIST_MAX)
-    const [ageMin, setAgeMin] = useState(AGE_MIN)
-    const [ageMax, setAgeMax] = useState(AGE_MAX)
-    const [fameMin, setFameMin] = useState(FAME_MIN)
-    const [fameMax, setFameMax] = useState(FAME_MAX)
-    const [discoveryGender, setDiscoveryGender] = useState('Female')
-    const [searchTags, setSearchTags] = useState([])
-
     const [personalGender, setPersonalGender] = useState('')
     const [personalBio, setPersonalBio] = useState('')
     const [personalTags, setPersonalTags] = useState([])
@@ -192,116 +172,20 @@ const UserSettings = () => {
         saveUserInfos(login, userData, setUser)
     }
 
-    const logOut = () => {
-        dispatch({ type: USER_STATE_ACTIONS.LOG_OUT })
-        navigate('/')
-    }
-
     if (!user) return <div>Loading ... Please wait</div>
     return (
         <div id="user-settings">
             <div id="settings-container">
-                <h2>Discovery settings</h2>
-                <div className="setting">
-                    <div>Show me</div>
-                    <Select
-                        options={GENDERS.map((gender) => gender.name)}
-                        defaultSelected={discoveryGender}
-                        onChange={(e) => setDiscoveryGender(e.target.value)}
-                    ></Select>
-                </div>
-                <div className="setting complex-setting">
-                    <div className="setting-infos">
-                        <div>Maximum distance</div>
-                        <div>{maxDistance} km</div>
-                    </div>
-                    <RangeSlider
-                        min={DIST_MIN}
-                        max={DIST_MAX}
-                        onChange={({ value }) => setMaxDistance(value)}
-                    />
-                </div>
-                <div className="setting complex-setting">
-                    <div className="setting-infos">
-                        <div>Age range</div>
-                        <div>
-                            {ageMin}-{ageMax}
-                            {+ageMax === AGE_MAX ? '+' : ''}
-                        </div>
-                    </div>
-                    <DualRangeSlider
-                        min={AGE_MIN}
-                        max={AGE_MAX}
-                        onChange={({ min, max }) => {
-                            setAgeMin(min)
-                            setAgeMax(max)
-                        }}
-                    />
-                </div>
-                <div className="setting complex-setting">
-                    <div className="setting-infos">Interests</div>
-                    <TagsAutocomplete
-                        value={searchTags}
-                        setValue={(e, tagsList) => setSearchTags(tagsList)}
-                    />
-                </div>
-                <div className="setting complex-setting">
-                    <div className="setting-infos">
-                        <div>Popularity range</div>
-                        <div>
-                            {fameMin}%-{fameMax}%
-                        </div>
-                    </div>
-                    <DualRangeSlider
-                        min={FAME_MIN}
-                        max={FAME_MAX}
-                        onChange={({ min, max }) => {
-                            setFameMin(min)
-                            setFameMax(max)
-                        }}
-                    />
-                </div>
-                <Button
-                    text={'Save discovery settings'}
-                    btnClass={'grey mrg-top-30'}
-                />
-
                 <h2>Personal infos</h2>
-                <div className="setting">
-                    <div>You identify yourself as</div>
-                    <Select
-                        options={GENDERS.map((gender) => gender.name)}
-                        defaultSelected={personalGender}
-                        onChange={(e) => setPersonalGender(e.target.value)}
-                    ></Select>
-                </div>
-                <div className="setting complex-setting">
-                    <div className="setting-infos">Your biography</div>
-                    <textarea
-                        className="setting-biography"
-                        value={personalBio}
-                        onChange={(e) => setPersonalBio(e.target.value)}
-                    ></textarea>
-                </div>
-                <div className="setting complex-setting personal-setting">
-                    <div className="setting-infos">You are interested in</div>
-                    <TagsAutocomplete
-                        value={personalTags}
-                        setValue={(e, tagsList) => setPersonalTags(tagsList)}
-                    />
-                </div>
-                <ImageUpload
-                    defaultImages={personalPictures}
-                    setFileList={setPersonalPictures}
-                />
+                <ImageUpload defaultImages={personalPictures} setFileList={setPersonalPictures} />
+
                 <div className="setting">
                     <div>Last name</div>
-                    <input
-                        className="setting-input"
-                        value={lastName}
+                    <input className="setting-input" value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
                 </div>
+                
                 <div className="setting">
                     <div>First name</div>
                     <input
@@ -310,6 +194,7 @@ const UserSettings = () => {
                         onChange={(e) => setFirstName(e.target.value)}
                     />
                 </div>
+                
                 <div className="setting">
                     <div>Email adress</div>
                     <input
@@ -318,13 +203,36 @@ const UserSettings = () => {
                         onChange={(e) => setEmail(e.target.value)}
                     />
                 </div>
+
+                <div className="setting">
+                    <div>You identify yourself as</div>
+                    <Select
+                        options={GENDERS.map((gender) => gender.name)}
+                        defaultSelected={personalGender}
+                        onChange={(e) => setPersonalGender(e.target.value)}
+                    ></Select>
+                </div>
+
+                <div className="setting complex-setting">
+                    <div className="setting-infos">Your biography</div>
+                    <textarea
+                        className="setting-biography"
+                        value={personalBio}
+                        onChange={(e) => setPersonalBio(e.target.value)}
+                    ></textarea>
+                </div>
+
+                <div className="setting complex-setting personal-setting">
+                    <div className="setting-infos">You are interested in</div>
+                    <TagsAutocomplete value={personalTags} setValue={(e, tagsList) => setPersonalTags(tagsList)}/>
+                </div>
+                
                 <Button
                     text={'Save personal infos'}
                     btnClass={'grey mrg-top-30'}
                     onClick={savePersonalInfos}
                     disabled={personalBtnDisabled}
                 />
-                <div className="settings-divider"></div>
             </div>
         </div>
     )

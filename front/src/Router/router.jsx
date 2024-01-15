@@ -32,7 +32,8 @@ import {
     redirectToWelcome,
 } from './loaders'
 import MessagesContainer from '../Components/MessagesContainer/MessagesContainer'
-import UserSettings from '../Components/UserSettings/UserSettings'
+import UserSettings from '../Components/Settings/UserSettings'
+import DiscoverySettings from '../Components/Settings/DiscoverySettings'
 import Notifications from '../Components/Notifications/Notifications'
 import ProfileMatching from '../Components/ProfileMatching'
 import LoginPage, { action as loginAction } from '../Pages/Login/Login'
@@ -136,6 +137,10 @@ const router = createBrowserRouter([
                     {
                         path: 'userSettings',
                         element: <UserSettings />,
+                    },
+                    {
+                        path: 'discoverySettings',
+                        element: <DiscoverySettings />,
                     },
                     {
                         path: 'notifications',
