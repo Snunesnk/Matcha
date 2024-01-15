@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import './index.css'
-import '../UserSettings/UserSettings.css'
+import '../Settings/Settings.css'
 
-const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
+const ImageUpload = ({ defaultImages = [], setFileList = () => { } }) => {
     const [imgs, setImgs] = useState(defaultImages)
 
     useEffect(() => {
@@ -33,57 +33,34 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
     }
 
     return (
-        <div
-            className={
-                'setting complex-setting' +
-                (imgs.length === 0 ? ' no-img' : ' has-imgs')
-            }
-        >
+        <div className={'setting complex-setting'}>
             <div className="setting-infos">
                 <div>Your pictures</div>
                 <div>
-                    <label
-                        htmlFor="picture_upload_btn"
-                        id="upload_pictures_btn_label"
-                        className={imgs.length >= 5 ? 'disabled' : ''}
-                    >
+                    <label htmlFor="picture_upload_btn" id="upload_pictures_btn_label" className={imgs.length >= 5 ? 'disabled' : ''}>
                         Upload
                     </label>
                 </div>
             </div>
-            {imgs.length === 0 && (
-                <p>Add pictures to show everyone how beautiful you are !</p>
-            )}
-            <div id="user-settings-pictures-container">
-                {imgs.length > 0 &&
-                    imgs.map((img, i) => {
-                        // Create URL if it not a URL
-                        const imgUrl =
-                            img.name !== undefined
-                                ? URL.createObjectURL(img)
-                                : img.includes('http')
-                                ? img
-                                : 'http://localhost:8080/api' + img
 
-                        return (
-                            <div className="setting-picture-container" key={i}>
-                                <div
-                                    className="user-setting-picture"
-                                    style={{
-                                        background: 'url(' + imgUrl + ')',
-                                    }}
-                                ></div>
-                                <div className="setting-picture-delete">
-                                    <button
-                                        className="setting-picture-delete-btn"
-                                        onClick={() => removeImg(img)}
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
+            {imgs.length === 0 && (<p>Add pictures to show everyone how beautiful you are !</p>)}
+
+            <div id="user-settings-pictures-container">
+                {imgs.length > 0 && imgs.map((img, i) => {
+                    // Create URL if it not a URL
+                    const imgUrl = img.name !== undefined ? URL.createObjectURL(img) : img.includes('http') ? img : 'http://localhost:8080/api' + img
+
+                    return (
+                        <div className="setting-picture-container" key={i}>
+                            <div className="user-setting-picture" style={{ background: 'url(' + imgUrl + ')', }}></div>
+                            <div className="setting-picture-delete">
+                                <button className="setting-picture-delete-btn" onClick={() => removeImg(img)}>
+                                    Delete
+                                </button>
                             </div>
-                        )
-                    })}
+                        </div>
+                    )
+                })}
             </div>
 
             <input

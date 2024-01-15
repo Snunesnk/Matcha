@@ -111,21 +111,17 @@ const Navbar = () => {
                         {isDropdownOpen && (
                             <div className="dropdown-menu">
                                 <Link to="/profile">
-                                    <Portrait />
-                                    View profile
+                                    <Portrait />View profile
                                 </Link>
-                                <Link to="/userSettings">
-                                    <EditNote />
-                                    Edit profile
+                                <Link to="dashboard/userSettings">
+                                    <EditNote />Edit profile
                                 </Link>
-                                <Link to="/dashboard/userSettings">
-                                    <Settings />
-                                    Settings
+                                <Link to="/dashboard/discoverySettings">
+                                    <Settings />Settings
                                 </Link>
-                                <button>
-                                    <Logout />
-                                    Logout
-                                </button>
+                                <Link to="/dashboard" onClick={handleLogout}>
+                                    <Logout />Logout
+                                </Link>
                             </div>
                         )}
                     </div>

@@ -22,27 +22,24 @@
 #user-settings-pictures-container {
     display: grid;
     width: 100%;
-    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
 }
 
 .setting-picture-container {
-    position: relative;
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: center;
-    margin: 10px;
     transition: all 100ms ease-out;
     animation: slideUp 0.5s;
     overflow: hidden;
 }
 
 .user-setting-picture {
-    width: 7vw;
-    height: 10vw;
     border-radius: 10px;
     transition: all 100ms ease-out;
     min-width: 100px;
-    min-height: 142px;
+    min-height: 140px;
     background-size: cover !important;
     background-position: center !important;
 }
