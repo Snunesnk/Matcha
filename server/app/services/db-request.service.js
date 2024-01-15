@@ -356,4 +356,20 @@ WHERE
       });
     });
   }
+
+  static async countAllUsers() {
+    return new Promise((resolve, reject) => {
+      const query = `
+      SELECT COUNT(*) AS count FROM user
+    `;
+
+      connection.query(query, (err, res) => {
+        if (err) {
+          reject(err);
+          return 0;
+        }
+        resolve(res[0].count);
+      });
+    });
+  }
 }

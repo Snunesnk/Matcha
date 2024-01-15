@@ -95,6 +95,7 @@ const ProfileMatching = () => {
     const [nextUser, setNextUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [match, setMatch] = useState(false)
+    const [matchAnimation, setMatchAnimation] = useState(false)
     const profileRef = useRef(null)
 
     useEffect(() => {
@@ -166,6 +167,13 @@ const ProfileMatching = () => {
 
                 // Third timeout, to have time to see transition between cards
                 setTimeout(() => {
+                    if (match) {
+                        setMatchAnimation(true)
+                        setTimeout(() => {
+                            setMatchAnimation(false)
+                            setMatch(false)
+                        }, 3000)
+                    }
                     setEvaluation('')
                     ////////////////// NEED TO CHANGE THIS TO GET NEXT BATCH, OR DISPLAY "NO MORE USERS"
                     setUserList((prev) => {
@@ -218,6 +226,56 @@ const ProfileMatching = () => {
                     ) : (
                         <div className="card_img_container next-user">
                             <div className="name_and_age_container"></div>
+                        </div>
+                    )}
+
+                    {matchAnimation && (
+                        <div className="match-animation">
+                            <div className="match-animation-container">
+                                <div className="match-animation-img-container">
+                                    <img
+                                        src={
+                                            'http://localhost:8080/api' +
+                                            actualUser.imgA
+                                        }
+                                        alt="user avatar"
+                                        className="avatar"
+                                    />
+                                    <div className="match-animation-img-container">
+                                        <img
+                                            src={
+                                                'http://localhost:8080/api' +
+                                                actualUser.imgA
+                                            }
+                                            alt="user avatar"
+                                            className="avatar"
+                                        />
+                                    </div>
+                                </div>
+                                <div className="match-animation-text">
+                                    <p>It's a match !</p>
+                                </div>
+                                <div className="match-animation-img-container">
+                                    <img
+                                        src={
+                                            'http://localhost:8080/api' +
+                                            actualUser.imgA
+                                        }
+                                        alt="user avatar"
+                                        className="avatar"
+                                    />
+                                    <div className="match-animation-img-container">
+                                        <img
+                                            src={
+                                                'http://localhost:8080/api' +
+                                                actualUser.imgA
+                                            }
+                                            alt="user avatar"
+                                            className="avatar"
+                                        />
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     )}
 

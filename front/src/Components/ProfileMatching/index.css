@@ -144,7 +144,8 @@
     height: fit-content;
 }
 
-.profile_matching_btn:hover {}
+.profile_matching_btn:hover {
+}
 
 .profile_matching_btn:active {
     transform: scale(0.9);
@@ -165,4 +166,38 @@
 .profile_matching_dislike svg {
     background-color: transparent;
     font-size: 50px;
+}
+
+.match-animation {
+    position: absolute;
+    z-index: 3;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.match-animation .match-animation-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    background-color: white;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.match-animation .match-animation-container img {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.match-animation .match-animation-container p {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 20px;
 }
