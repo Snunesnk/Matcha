@@ -38,7 +38,6 @@
     background-color: #dc21b8;
 }
 
-
 .btn.pink {
     background-color: #dc21b8;
 }
@@ -46,6 +45,14 @@
 .btn.pink:hover {
     background-color: white;
     color: #dc21b8;
+}
+
+.btn.pink-scale {
+    background-color: #dc21b8;
+}
+
+.btn.pink-scale:hover {
+    transform: scale(1.05);
 }
 
 .btn.grey {
@@ -65,6 +72,15 @@
 .btn.white:hover {
     background-color: #dc21b8;
     color: #fffdfc;
+}
+
+.btn.white-scale {
+    background-color: #fffdfc;
+    color: #dc21b8;
+}
+
+.btn.white-scale:hover {
+    transform: scale(1.05);
 }
 
 .log_in {

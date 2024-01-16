@@ -3,7 +3,7 @@ import ClearIcon from '@mui/icons-material/Clear'
 import './index.css'
 import { Favorite } from '@mui/icons-material'
 import UserProfile from '../UserProfile/UserProfile'
-import { useSelector } from 'react-redux'
+import Button from '../Button/Button'
 
 const getUserLocation = async () => {
     return new Promise((resolve) => {
@@ -141,7 +141,6 @@ const ProfileMatching = () => {
             const res = await sendLike(actualUser.login)
             if (res.match) {
                 setMatch(true)
-                return
             }
         }
 
@@ -167,15 +166,8 @@ const ProfileMatching = () => {
 
                 // Third timeout, to have time to see transition between cards
                 setTimeout(() => {
-                    if (match) {
-                        console.log('match')
-                        setMatchAnimation(true)
-                        setTimeout(() => {
-                            setMatchAnimation(false)
-                            setMatch(false)
-                        }, 3000)
-                    }
                     setEvaluation('')
+
                     ////////////////// NEED TO CHANGE THIS TO GET NEXT BATCH, OR DISPLAY "NO MORE USERS"
                     setUserList((prev) => {
                         if (prev.length <= 2) prev = prev.concat([])
@@ -230,52 +222,39 @@ const ProfileMatching = () => {
                         </div>
                     )}
 
-                    {matchAnimation && (
+                    {match && (
                         <div className="match-animation">
                             <div className="match-animation-container">
                                 <div className="match-animation-img-container">
                                     <img
                                         src={
-                                            'http://localhost:8080/api' +
+                                            (actualUser.imgA?.includes('http')
+                                                ? ''
+                                                : 'http://localhost:8080/api') +
                                             actualUser.imgA
                                         }
                                         alt="user avatar"
                                         className="avatar"
                                     />
-                                    <div className="match-animation-img-container">
-                                        <img
-                                            src={
-                                                'http://localhost:8080/api' +
-                                                actualUser.imgA
-                                            }
-                                            alt="user avatar"
-                                            className="avatar"
-                                        />
-                                    </div>
                                 </div>
                                 <div className="match-animation-text">
-                                    <p>It's a match !</p>
+                                    <p>
+                                        <span className="itsa-span">
+                                            It's a
+                                        </span>
+                                        <span className="match-span">
+                                            match!
+                                        </span>
+                                    </p>
                                 </div>
-                                <div className="match-animation-img-container">
-                                    <img
-                                        src={
-                                            'http://localhost:8080/api' +
-                                            actualUser.imgA
-                                        }
-                                        alt="user avatar"
-                                        className="avatar"
-                                    />
-                                    <div className="match-animation-img-container">
-                                        <img
-                                            src={
-                                                'http://localhost:8080/api' +
-                                                actualUser.imgA
-                                            }
-                                            alt="user avatar"
-                                            className="avatar"
-                                        />
-                                    </div>
-                                </div>
+                                <Button
+                                    text={'Send a message'}
+                                    btnClass={'pink-scale'}
+                                />
+                                <Button
+                                    text={'Keep looking'}
+                                    btnClass={'white-scale'}
+                                />
                             </div>
                         </div>
                     )}

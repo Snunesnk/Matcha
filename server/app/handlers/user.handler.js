@@ -47,19 +47,6 @@ export default class {
         return;
       }
 
-      // Create remember-me cookie
-      const jwtToken = await authenticationService.generateToken(
-        user,
-        rememberMe
-      );
-      const cookieOptions = {
-        httpOnly: true, // Cookie inaccessible to browser's JavaScript
-        maxAge: rememberMe
-          ? 1000 * 60 * 60 * 24 * 7 // 7 days
-          : 1000 * 60 * 15, // 15 minutes
-        path: "/",
-      };
-
       try {
         getIpAddress(req).then(async (ip) => {
           const loc = await getIpInfo(ip);
@@ -77,6 +64,19 @@ export default class {
         console.log("error while getting ip address", err);
       }
 
+      // Create remember-me cookie
+      const jwtToken = await authenticationService.generateToken(
+        user,
+        rememberMe
+      );
+      const cookieOptions = {
+        httpOnly: true, // Cookie inaccessible to browser's JavaScript
+        maxAge: rememberMe
+          ? 1000 * 60 * 60 * 24 * 7 // 7 days
+          : 1000 * 60 * 15, // 15 minutes
+        path: "/",
+        sameSite: "strict",
+      };
       res.cookie("remember_me", jwtToken, cookieOptions);
       res.status(200).send({
         message: "LOG_IN_SUCCESS",
