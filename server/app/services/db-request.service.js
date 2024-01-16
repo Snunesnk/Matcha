@@ -231,39 +231,39 @@ WHERE
         query += ", ?";
       }
       query += `)\n
-      AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) BETWEEN ? AND ?`;
-      // AND u.rating BETWEEN ? AND ?\n
-      // AND ST_Distance_Sphere(u.coordinate, ST_GeomFromText(?)) BETWEEN ? AND ?\n`;
+      AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) BETWEEN ? AND ?
+      AND u.rating BETWEEN ? AND ?\n
+      AND ST_Distance_Sphere(u.coordinate, ST_GeomFromText(?)) BETWEEN ? AND ?\n`;
 
-      // if (matchingParameters.tags.length > 0) {
-      //   query += `
-      // AND EXISTS (
-      //     SELECT 1
-      //     FROM userTag ut
-      //     WHERE
-      //         ut.userLogin = u.login
-      //         AND ut.tagBwid IN (?`;
+      if (matchingParameters.tags.length > 0) {
+        query += `
+      AND EXISTS (
+          SELECT 1
+          FROM userTag ut
+          WHERE
+              ut.userLogin = u.login
+              AND ut.tagBwid IN (?`;
 
-      //   for (let i = 1; i < matchingParameters.tags.length; i++) {
-      //     query += ", ?";
-      //   }
+        for (let i = 1; i < matchingParameters.tags.length; i++) {
+          query += ", ?";
+        }
 
-      //   query += ")\n    )";
-      // }
+        query += ")\n    )";
+      }
 
-      // query += `
-      // AND (
-      //   (currentUser.gender = 'm' AND u.prefMale = 1) OR
-      //   (currentUser.gender = 'f' AND u.prefFemale = 1) OR
-      //   (currentUser.gender = 'nb' AND u.prefEnby = 1)
-      // )
-      // AND TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) BETWEEN us.ageMin AND us.ageMax
-      // AND currentUser.rating BETWEEN us.fameMin AND us.fameMax
-      // AND ST_Distance_Sphere(currentUser.coordinate, u.coordinate) <= us.distMax
-      // AND NOT EXISTS (
-      //   SELECT 1 FROM \`like\` WHERE issuer = currentUser.login AND receiver = u.login
-      // )
-      // `;
+      query += `
+      AND (
+        (currentUser.gender = 'm' AND u.prefMale = 1) OR
+        (currentUser.gender = 'f' AND u.prefFemale = 1) OR
+        (currentUser.gender = 'nb' AND u.prefEnby = 1)
+      )
+      AND TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) BETWEEN us.ageMin AND us.ageMax
+      AND currentUser.rating BETWEEN us.fameMin AND us.fameMax
+      AND ST_Distance_Sphere(currentUser.coordinate, u.coordinate) <= us.distMax * 1000
+      AND NOT EXISTS (
+        SELECT 1 FROM \`like\` WHERE issuer = currentUser.login AND receiver = u.login
+      )
+      `;
 
       query += `
       GROUP BY u.login
