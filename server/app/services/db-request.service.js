@@ -251,7 +251,7 @@ WHERE
         query += ")\n    )";
       }
 
-      query += `    
+      query += `
       AND (
         (currentUser.gender = 'm' AND u.prefMale = 1) OR
         (currentUser.gender = 'f' AND u.prefFemale = 1) OR
