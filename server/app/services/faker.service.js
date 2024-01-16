@@ -2,10 +2,28 @@ import { faker } from "@faker-js/faker";
 import { User } from "../models/user.model.js";
 import { cryptPassword } from "./password.service.js";
 import { UserSetting } from "../models/user-settings.model.js";
+import crypto from "crypto";
+
+function sha256(data) {
+  return new Promise((resolve, reject) => {
+    try {
+      const hash = crypto.createHash("sha256");
+
+      hash.update(Buffer.from(data));
+
+      const digest = hash.digest("hex");
+
+      resolve(digest);
+    } catch (error) {
+      reject(error);
+    }
+  });
+}
 
 async function createRandomUser() {
   const login = faker.helpers.unique(faker.internet.userName);
-  const password = await cryptPassword(faker.internet.password());
+  const hashedPassword = await sha256(login);
+  const password = await cryptPassword(hashedPassword);
   const name = faker.name.firstName();
   const surname = faker.name.lastName();
   const email = faker.helpers.unique(faker.internet.email, [name, surname]);
@@ -93,7 +111,7 @@ async function fillRandomUserProfile() {
     faker.random.words(tagsNb).split(" ")
   );
   const tags = randomsTags.map((tag) => {
-    return { bwid: tag };
+    return tag;
   });
 
   // Corresponds to 96 boulevard bessières, 75017 Paris
@@ -101,9 +119,7 @@ async function fillRandomUserProfile() {
 
   // Generate a random point within 100km of the center coordinates
   const { latitude, longitude } = generateRandomPoint(centerCoords, 100);
-
-  console.log("latitude", latitude);
-  console.log("longitude", longitude);
+  const coordinate = { x: longitude, y: latitude };
 
   return {
     bio,
@@ -121,8 +137,7 @@ async function fillRandomUserProfile() {
     imgD,
     imgE,
     tags,
-    latitude,
-    longitude,
+    coordinate,
   };
 }
 
@@ -145,38 +160,62 @@ function fillRandomUserSettings(login) {
   };
 }
 
+const addAdminUser = async () => {
+  const adminUser = await createRandomUser();
+  adminUser.login = "admin";
+  const hashedPassword = await sha256("admin");
+  adminUser.password = await cryptPassword(hashedPassword);
+
+  const adminProfile = await fillRandomUserProfile();
+  adminProfile.prefMale = true;
+  adminProfile.prefFemale = true;
+  adminProfile.prefEnby = true;
+
+  const newUser = await User.create(adminUser);
+  try {
+    await User.updateByLogin(newUser.login, adminProfile);
+  } catch (err) {
+    console.log(err);
+  }
+
+  const userSettings = {
+    userLogin: newUser.login,
+    ageMin: 18,
+    ageMax: 99,
+    distMin: 0,
+    distMax: 100,
+    fameMin: 0,
+    fameMax: 100,
+  };
+  await UserSetting.create(userSettings);
+  console.log("Admin user created");
+};
+
 const populateDB = async () => {
   console.log("Populating DB");
   const userCount = await User.count();
 
   console.log(`Current user count: ${userCount}`);
-
-  for (let i = 0; i < 10; i++) {
+  for (let i = userCount; i < 300; i++) {
     const user = await createRandomUser();
     const userProfile = await fillRandomUserProfile();
 
     const newUser = await User.create(user);
-    await User.updateByLogin(newUser.login, userProfile);
+    try {
+      await User.updateByLogin(newUser.login, userProfile);
+    } catch (err) {
+      console.log(err);
+    }
 
     const userSettings = fillRandomUserSettings(newUser.login);
     await UserSetting.create(userSettings);
+    console.log(`User ${i} created. Login: ${newUser.login}`);
   }
 
   // Check if there's "admin" user
   const admin = await User.getUserByLogin("admin");
   if (!admin) {
-    const adminUser = await createRandomUser();
-    adminUser.login = "admin";
-    adminUser.password = await cryptPassword("admin");
-
-    const adminProfile = await fillRandomUserProfile();
-
-    const newUser = await User.create(adminUser);
-    await User.updateByLogin(newUser.login, adminProfile);
-
-    const userSettings = fillRandomUserSettings(newUser.login);
-    await UserSetting.create(userSettings);
-    console.log("Admin user created");
+    await addAdminUser();
   }
 
   console.log("DB populated");
