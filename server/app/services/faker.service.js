@@ -144,8 +144,8 @@ async function fillRandomUserProfile() {
 function fillRandomUserSettings(login) {
   const ageMin = faker.datatype.number({ min: 18, max: 54 });
   const ageMax = faker.datatype.number({ min: ageMin, max: 55 });
-  const distMin = faker.datatype.number({ min: 0, max: 99 });
-  const distMax = faker.datatype.number({ min: distMin, max: 100 });
+  const distMin = 0;
+  const distMax = 100;
   const fameMin = faker.datatype.number({ min: 0, max: 99 });
   const fameMax = faker.datatype.number({ min: fameMin, max: 100 });
 
