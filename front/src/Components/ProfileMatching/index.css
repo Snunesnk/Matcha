@@ -168,6 +168,20 @@
     font-size: 50px;
 }
 
+@keyframes match-animation {
+    0% {
+        filter: opacity(0);
+    }
+
+    40% {
+        filter: opacity(0);
+    }
+
+    100% {
+        filter: opacity(1);
+    }
+}
+
 .match-animation {
     position: absolute;
     z-index: 4;
@@ -182,6 +196,7 @@
         rgba(0, 0, 0, 0.5) 0%,
         rgba(32, 6, 24, 1) 70%
     );
+    animation: match-animation 700ms ease-in;
 }
 
 .match-animation .match-animation-container {
@@ -193,11 +208,40 @@
     padding: 20px;
 }
 
+@keyframes match-animation-img {
+    0% {
+        filter: opacity(0);
+    }
+
+    80% {
+        filter: opacity(0);
+    }
+
+    100% {
+        filter: opacity(1);
+    }
+}
+
 .match-animation .match-animation-container img {
     width: 200px;
     height: 200px;
     border-radius: 50%;
     margin-bottom: 20px;
+    animation: match-animation-img 1100ms ease-in;
+}
+
+@keyframes match-animation-p {
+    0% {
+        filter: opacity(0);
+    }
+
+    80% {
+        filter: opacity(0);
+    }
+
+    100% {
+        filter: opacity(1);
+    }
 }
 
 .match-animation .match-animation-container p {
@@ -205,6 +249,7 @@
     display: flex;
     flex-direction: column;
     line-height: 2.5rem;
+    animation: match-animation-p 1200ms ease-in;
 }
 
 .match-animation .itsa-span {
@@ -220,4 +265,31 @@
 
 .match-animation .btn {
     margin-top: 20px;
+}
+
+@keyframes match-animation-btn-msg {
+    0% {
+        transform: scale(0);
+        filter: opacity(0);
+    }
+
+    80% {
+        filter: opacity(0);
+        transform: scale(0);
+    }
+
+    81% {
+        transform: scale(1.1);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.match-animation .btn.match-msg {
+    animation: match-animation-btn-msg 1300ms ease-in;
+}
+.match-animation .btn.match-keep {
+    animation: match-animation-btn-msg 1400ms ease-in;
 }

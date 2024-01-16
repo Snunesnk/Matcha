@@ -142,6 +142,7 @@ const ProfileMatching = () => {
             const res = await sendLike(actualUser.login)
             if (res.match) {
                 setMatch(true)
+                setEvaluation('liked')
                 return
             }
         }
@@ -251,7 +252,7 @@ const ProfileMatching = () => {
                                 </div>
                                 <Button
                                     text={'Send a message'}
-                                    btnClass={'pink-scale'}
+                                    btnClass={'pink-scale match-msg'}
                                     onClick={() => {
                                         naviguate(
                                             '/dashboard/messages/' +
@@ -261,7 +262,7 @@ const ProfileMatching = () => {
                                 />
                                 <Button
                                     text={'Keep looking'}
-                                    btnClass={'white-scale'}
+                                    btnClass={'white-scale match-keep'}
                                     onClick={() => {
                                         setMatch(false)
                                         transition('liked')
