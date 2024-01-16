@@ -5,29 +5,23 @@ import { UserSetting } from "../models/user-settings.model.js";
 import crypto from "crypto";
 
 function sha256(data) {
-  return new Promise((resolve, reject) => {
-    try {
-      const hash = crypto.createHash("sha256");
-
-      hash.update(Buffer.from(data));
-
-      const digest = hash.digest("hex");
-
-      resolve(digest);
-    } catch (error) {
-      reject(error);
-    }
-  });
+  const hash = crypto.createHash("sha256");
+  hash.update(Buffer.from(data));
+  const digest = hash.digest("hex");
+  return digest;
 }
 
 async function createRandomUser() {
   const login = faker.helpers.unique(faker.internet.userName);
-  const hashedPassword = await sha256(login);
+  const hashedPassword = sha256(login);
   const password = await cryptPassword(hashedPassword);
   const name = faker.name.firstName();
   const surname = faker.name.lastName();
   const email = faker.helpers.unique(faker.internet.email, [name, surname]);
-  const dateOfBirth = faker.date.birthdate({ min: 18 });
+  const dateOfBirth = faker.date
+    .birthdate({ min: 18, max: 55, mode: "age" })
+    .toISOString()
+    .slice(0, 10);
 
   return {
     login,
@@ -106,13 +100,12 @@ async function fillRandomUserProfile() {
   const imgD = imgNb >= 4 ? faker.image.cats(640, 480, true) : null;
   const imgE = imgNb == 5 ? faker.image.cats(640, 480, true) : null;
 
-  const tagsNb = faker.datatype.number({ min: 1, max: 5 });
-  const randomsTags = faker.helpers.unique(() =>
-    faker.random.words(tagsNb).split(" ")
-  );
-  const tags = randomsTags.map((tag) => {
-    return tag;
-  });
+  const hasTags = faker.datatype.boolean();
+  let tags = [];
+  if (hasTags) {
+    const tagsNb = faker.datatype.number({ min: 1, max: 5 });
+    tags = faker.helpers.unique(() => faker.random.words(tagsNb).split(" "));
+  }
 
   // Corresponds to 96 boulevard bessières, 75017 Paris
   const centerCoords = { lat: 48.89639, lng: 2.31845 };
@@ -142,12 +135,12 @@ async function fillRandomUserProfile() {
 }
 
 function fillRandomUserSettings(login) {
-  const ageMin = faker.datatype.number({ min: 18, max: 54 });
-  const ageMax = faker.datatype.number({ min: ageMin, max: 55 });
+  const ageMin = 18;
+  const ageMax = 55;
   const distMin = 0;
   const distMax = 100;
-  const fameMin = faker.datatype.number({ min: 0, max: 99 });
-  const fameMax = faker.datatype.number({ min: fameMin, max: 100 });
+  const fameMin = 0;
+  const fameMax = 100;
 
   return {
     userLogin: login,
@@ -163,7 +156,7 @@ function fillRandomUserSettings(login) {
 const addAdminUser = async () => {
   const adminUser = await createRandomUser();
   adminUser.login = "admin";
-  const hashedPassword = await sha256("admin");
+  const hashedPassword = sha256("admin");
   adminUser.password = await cryptPassword(hashedPassword);
 
   const adminProfile = await fillRandomUserProfile();
@@ -196,20 +189,19 @@ const populateDB = async () => {
   const userCount = await User.count();
 
   console.log(`Current user count: ${userCount}`);
-  for (let i = userCount; i < 300; i++) {
-    const user = await createRandomUser();
-    const userProfile = await fillRandomUserProfile();
-
-    const newUser = await User.create(user);
-    try {
-      await User.updateByLogin(newUser.login, userProfile);
-    } catch (err) {
-      console.log(err);
-    }
-
-    const userSettings = fillRandomUserSettings(newUser.login);
-    await UserSetting.create(userSettings);
-    console.log(`User ${i} created. Login: ${newUser.login}`);
+  for (let i = userCount; i < 500; i++) {
+    createRandomUser().then((user) => {
+      User.create(user).then((newUser) => {
+        fillRandomUserProfile().then((userProfile) => {
+          User.updateByLogin(newUser.login, userProfile).then(() => {
+            const userSettings = fillRandomUserSettings(newUser.login);
+            UserSetting.create(userSettings).then(() => {
+              console.log(`User ${i} created. Login: ${newUser.login}`);
+            });
+          });
+        });
+      });
+    });
   }
 
   // Check if there's "admin" user
