@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ClearIcon from '@mui/icons-material/Clear'
 import './index.css'
 import { Favorite } from '@mui/icons-material'
@@ -95,8 +96,8 @@ const ProfileMatching = () => {
     const [nextUser, setNextUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [match, setMatch] = useState(false)
-    const [matchAnimation, setMatchAnimation] = useState(false)
     const profileRef = useRef(null)
+    const naviguate = useNavigate()
 
     useEffect(() => {
         setLoading(true)
@@ -141,6 +142,7 @@ const ProfileMatching = () => {
             const res = await sendLike(actualUser.login)
             if (res.match) {
                 setMatch(true)
+                return
             }
         }
 
@@ -250,10 +252,20 @@ const ProfileMatching = () => {
                                 <Button
                                     text={'Send a message'}
                                     btnClass={'pink-scale'}
+                                    onClick={() => {
+                                        naviguate(
+                                            '/dashboard/messages/' +
+                                                actualUser.login
+                                        )
+                                    }}
                                 />
                                 <Button
                                     text={'Keep looking'}
                                     btnClass={'white-scale'}
+                                    onClick={() => {
+                                        setMatch(false)
+                                        transition('liked')
+                                    }}
                                 />
                             </div>
                         </div>
