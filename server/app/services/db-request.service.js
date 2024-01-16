@@ -270,9 +270,6 @@ WHERE
       ORDER BY u.rating DESC
       `;
 
-      console.log(query);
-      console.log(parameters);
-
       connection.query(query, parameters, (err, res) => {
         if (err) {
           reject(err);
@@ -302,7 +299,7 @@ WHERE
     )
     AND TIMESTAMPDIFF(YEAR, liker.dateOfBirth, CURDATE()) BETWEEN likeeSettings.ageMin AND likeeSettings.ageMax
     AND liker.rating BETWEEN likeeSettings.fameMin AND likeeSettings.fameMax
-    AND ST_Distance_Sphere(liker.coordinate, likee.coordinate) <= likeeSettings.distMax
+    AND ST_Distance_Sphere(liker.coordinate, likee.coordinate) <= likeeSettings.distMax * 1000
     AND (
         (likee.gender = 'm' AND liker.prefMale) OR
         (likee.gender = 'f' AND liker.prefFemale) OR
@@ -310,7 +307,7 @@ WHERE
     )
     AND TIMESTAMPDIFF(YEAR, likee.dateOfBirth, CURDATE()) BETWEEN likerSettings.ageMin AND likerSettings.ageMax
     AND likee.rating BETWEEN likerSettings.fameMin AND likerSettings.fameMax
-    AND ST_Distance_Sphere(likee.coordinate, liker.coordinate) <= likerSettings.distMax;
+    AND ST_Distance_Sphere(likee.coordinate, liker.coordinate) <= likerSettings.distMax * 1000;
     `;
 
       connection.query(query, parameters, (err, res) => {

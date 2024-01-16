@@ -168,6 +168,7 @@ const ProfileMatching = () => {
                 // Third timeout, to have time to see transition between cards
                 setTimeout(() => {
                     if (match) {
+                        console.log('match')
                         setMatchAnimation(true)
                         setTimeout(() => {
                             setMatchAnimation(false)

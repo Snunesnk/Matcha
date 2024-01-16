@@ -33,6 +33,7 @@ export default class {
     }
 
     const match = await User.checkBiDirectionnalMatch(issuer, receiver);
+    console.log("match", match);
     if (!match || match.match_count === 0) {
       res.status(400).send({
         message: "CANNOT_LIKE_THIS_PROFILE",
