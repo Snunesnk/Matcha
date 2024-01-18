@@ -2,7 +2,7 @@ import authenticationService from "../services/authentication.service.js";
 
 const socketList = [];
 
-export const NOTIFICATION_TYPES = {
+export const NOTIFICATION_TYPE = {
   LIKE: "like",
   UNLIKE: "unlike",
   MATCH: "match",
