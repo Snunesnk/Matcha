@@ -450,6 +450,10 @@ export class User extends UserChunk {
     return data[0];
   }
 
+  static async count() {
+    return DbRequestService.countAllUsers();
+  }
+
   toJSON() {
     return {
       ...super.toJSON(),

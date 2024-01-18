@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import ClearIcon from '@mui/icons-material/Clear'
 import './index.css'
 import { Favorite } from '@mui/icons-material'
 import UserProfile from '../UserProfile/UserProfile'
-import { useSelector } from 'react-redux'
+import Button from '../Button/Button'
 
 const getUserLocation = async () => {
     return new Promise((resolve) => {
@@ -96,6 +97,7 @@ const ProfileMatching = () => {
     const [loading, setLoading] = useState(true)
     const [match, setMatch] = useState(false)
     const profileRef = useRef(null)
+    const naviguate = useNavigate()
 
     useEffect(() => {
         setLoading(true)
@@ -140,6 +142,7 @@ const ProfileMatching = () => {
             const res = await sendLike(actualUser.login)
             if (res.match) {
                 setMatch(true)
+                setEvaluation('liked')
                 return
             }
         }
@@ -167,6 +170,7 @@ const ProfileMatching = () => {
                 // Third timeout, to have time to see transition between cards
                 setTimeout(() => {
                     setEvaluation('')
+
                     ////////////////// NEED TO CHANGE THIS TO GET NEXT BATCH, OR DISPLAY "NO MORE USERS"
                     setUserList((prev) => {
                         if (prev.length <= 2) prev = prev.concat([])
@@ -218,6 +222,53 @@ const ProfileMatching = () => {
                     ) : (
                         <div className="card_img_container next-user">
                             <div className="name_and_age_container"></div>
+                        </div>
+                    )}
+
+                    {match && (
+                        <div className="match-animation">
+                            <div className="match-animation-container">
+                                <div className="match-animation-img-container">
+                                    <img
+                                        src={
+                                            (actualUser.imgA?.includes('http')
+                                                ? ''
+                                                : 'http://localhost:8080/api') +
+                                            actualUser.imgA
+                                        }
+                                        alt="user avatar"
+                                        className="avatar"
+                                    />
+                                </div>
+                                <div className="match-animation-text">
+                                    <p>
+                                        <span className="itsa-span">
+                                            It's a
+                                        </span>
+                                        <span className="match-span">
+                                            match!
+                                        </span>
+                                    </p>
+                                </div>
+                                <Button
+                                    text={'Send a message'}
+                                    btnClass={'pink-scale match-msg'}
+                                    onClick={() => {
+                                        naviguate(
+                                            '/dashboard/messages/' +
+                                                actualUser.login
+                                        )
+                                    }}
+                                />
+                                <Button
+                                    text={'Keep looking'}
+                                    btnClass={'white-scale match-keep'}
+                                    onClick={() => {
+                                        setMatch(false)
+                                        transition('liked')
+                                    }}
+                                />
+                            </div>
                         </div>
                     )}
 

@@ -22,6 +22,7 @@ export default class {
           maxAge: 1000 * 60 * 15,
           httpOnly: true,
           path: "/",
+          sameSite: "strict",
         });
 
         res.json({

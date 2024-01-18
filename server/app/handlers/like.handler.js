@@ -2,7 +2,7 @@ import { Like } from "../models/like.model.js";
 import { Match } from "../models/matches.model.js";
 import { Notifications } from "../models/notifications.model.js";
 import { User } from "../models/user.model.js";
-import { NOTIFICATION_TYPES, sendNotification } from "../socket/socket.js";
+import { NOTIFICATION_TYPE, sendNotification } from "../socket/socket.js";
 
 export default class {
   // Create and Save a new Like
@@ -49,11 +49,11 @@ export default class {
     try {
       const result = await Like.create(like);
       if (result !== null) {
-        sendNotification(NOTIFICATION_TYPES.LIKE, { user: issuer });
+        sendNotification(NOTIFICATION_TYPE.LIKE, { user: issuer });
         Notifications.create({
           login: receiver,
           trigger_login: issuer,
-          type: NOTIFICATION_TYPES.LIKE,
+          type: NOTIFICATION_TYPE.LIKE,
           message: `${issuer} liked you!`,
         });
 
@@ -63,17 +63,17 @@ export default class {
         });
 
         if (receiverMatch !== null) {
-          sendNotification(NOTIFICATION_TYPES.MATCH, { user: issuer });
+          sendNotification(NOTIFICATION_TYPE.MATCH, { user: issuer });
           Notifications.create({
             login: receiver,
             trigger_login: issuer,
-            type: NOTIFICATION_TYPES.MATCH,
+            type: NOTIFICATION_TYPE.MATCH,
             message: `You matched with ${issuer}!`,
           });
           Notifications.create({
             login: issuer,
             trigger_login: receiver,
-            type: NOTIFICATION_TYPES.MATCH,
+            type: NOTIFICATION_TYPE.MATCH,
             message: `You matched with ${receiver}!`,
             read: true,
           });

@@ -95,7 +95,7 @@ export class DbRequestService {
         reject(new Error("Table does not exist in database"));
       }
 
-      const query = `INSERT INTO \`${tableName}\` SET ?`;
+      const query = `INSERT IGNORE INTO \`${tableName}\` SET ?`;
       const params = _.pick(
         objectToAdd,
         Object.getOwnPropertyNames(objectToAdd).map((prop) =>
@@ -251,7 +251,7 @@ WHERE
         query += ")\n    )";
       }
 
-      query += `    
+      query += `
       AND (
         (currentUser.gender = 'm' AND u.prefMale = 1) OR
         (currentUser.gender = 'f' AND u.prefFemale = 1) OR
@@ -259,7 +259,7 @@ WHERE
       )
       AND TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) BETWEEN us.ageMin AND us.ageMax
       AND currentUser.rating BETWEEN us.fameMin AND us.fameMax
-      AND ST_Distance_Sphere(currentUser.coordinate, u.coordinate) <= us.distMax
+      AND ST_Distance_Sphere(currentUser.coordinate, u.coordinate) <= us.distMax * 1000
       AND NOT EXISTS (
         SELECT 1 FROM \`like\` WHERE issuer = currentUser.login AND receiver = u.login
       )
@@ -299,7 +299,7 @@ WHERE
     )
     AND TIMESTAMPDIFF(YEAR, liker.dateOfBirth, CURDATE()) BETWEEN likeeSettings.ageMin AND likeeSettings.ageMax
     AND liker.rating BETWEEN likeeSettings.fameMin AND likeeSettings.fameMax
-    AND ST_Distance_Sphere(liker.coordinate, likee.coordinate) <= likeeSettings.distMax
+    AND ST_Distance_Sphere(liker.coordinate, likee.coordinate) <= likeeSettings.distMax * 1000
     AND (
         (likee.gender = 'm' AND liker.prefMale) OR
         (likee.gender = 'f' AND liker.prefFemale) OR
@@ -307,7 +307,7 @@ WHERE
     )
     AND TIMESTAMPDIFF(YEAR, likee.dateOfBirth, CURDATE()) BETWEEN likerSettings.ageMin AND likerSettings.ageMax
     AND likee.rating BETWEEN likerSettings.fameMin AND likerSettings.fameMax
-    AND ST_Distance_Sphere(likee.coordinate, liker.coordinate) <= likerSettings.distMax;
+    AND ST_Distance_Sphere(likee.coordinate, liker.coordinate) <= likerSettings.distMax * 1000;
     `;
 
       connection.query(query, parameters, (err, res) => {
@@ -353,6 +353,22 @@ WHERE
           return;
         }
         resolve(res);
+      });
+    });
+  }
+
+  static async countAllUsers() {
+    return new Promise((resolve, reject) => {
+      const query = `
+      SELECT COUNT(*) AS count FROM user
+    `;
+
+      connection.query(query, (err, res) => {
+        if (err) {
+          reject(err);
+          return 0;
+        }
+        resolve(res[0].count);
       });
     });
   }
