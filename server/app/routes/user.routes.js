@@ -41,6 +41,9 @@ router.post("/user/reset-password", userHandler.resetPassword);
 // Get current user
 router.get("/user/me", needOnboardedMiddleware, userHandler.currentUser);
 
+// Logout
+router.get("/user/logout", needVerifiedMiddleware, userHandler.logout);
+
 // Retrieve a single User with login
 router.get("/user/:login", userHandler.getUserByLogin);
 
