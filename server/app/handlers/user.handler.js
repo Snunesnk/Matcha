@@ -600,4 +600,27 @@ export default class {
       console.log(err);
     }
   };
+
+  static logout = async (req, res) => {
+    const login = req.decodedUser._login;
+
+    if (!login) {
+      res.status(400).send({
+        message: "MISSING_DATA",
+      });
+    }
+
+    const user = {
+      token: crypto.randomBytes(64).toString("base64url"),
+    };
+
+    const data = await User.updateByLogin(login, user);
+    if (!data) {
+      res.status(404).send({
+        message: "USER_NOT_FOUND",
+      });
+    }
+
+    res.clearCookie("remember_me").status(200).send("Logout successful");
+  };
 }
