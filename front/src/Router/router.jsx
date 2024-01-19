@@ -137,7 +137,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: 'myprofile',
-                        element: <UserProfile user={me}/>,
+                        element: <UserProfile />,
                     },
                     {
                         path: 'userSettings',
