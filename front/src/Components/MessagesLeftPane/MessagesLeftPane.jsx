@@ -27,7 +27,11 @@ const NewMatch = ({ match }) => (
     <div className="new-match">
         <div className="new-match-img-container">
             <img
-                src={'http://localhost:8080/api' + match.imgA}
+                src={
+                    match.imgA.startsWith('http')
+                        ? match.imgA
+                        : 'http://localhost:8080/api' + match.imgA
+                }
                 alt={`${match.name}'s avatar`}
                 className="avatar"
             />
