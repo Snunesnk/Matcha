@@ -392,7 +392,7 @@ export default class {
   };
 
   static currentUser = async (req, res) => {
-    const user = req.user;
+    const user = req.decodedUser;
 
     if (!user) {
       res.status(200).send({
