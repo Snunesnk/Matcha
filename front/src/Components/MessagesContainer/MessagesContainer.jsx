@@ -2,11 +2,6 @@ import { useEffect, useState } from 'react'
 import ChatComponent from '../ChatComponent'
 import UserProfile from '../UserProfile/UserProfile'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-<<<<<<< HEAD
-=======
-import socket from '../../Socket/socket'
-
->>>>>>> 830d00c (feat(messages): Chat is working + scroll to bottom active on new messages)
 import './MessagesContainer.css'
 import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
 import { useLocation } from 'react-router-dom'
