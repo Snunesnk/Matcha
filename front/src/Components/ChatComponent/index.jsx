@@ -37,10 +37,8 @@ const DUMMY_MESSAGES = [
 ]
 
 const ChatComponent = ({ user, components, setActiveComponent }) => {
-    const params = useParams()
     const [newMessage, setNewMessage] = useState('')
-    const [messages, setMessages] = useState(DUMMY_MESSAGES)
-    const [person, setPerson] = useState(user)
+    const [messages, setMessages] = useState(null)
 
     const messageEnd = useRef(null)
     const messageInput = useRef(null)
@@ -60,9 +58,28 @@ const ChatComponent = ({ user, components, setActiveComponent }) => {
     }
 
     useEffect(() => {
-        // Scroll to bottom only if user send a message
-        if (messages[messages.length - 1].from != params.id)
-            messageEnd.current?.scrollIntoView({ behavior: 'auto' })
+        fetch('http://localhost:8080/api/conversations/' + user.login, {
+            method: 'GET',
+            credentials: 'include',
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                } else if (response.status === 401) {
+                    window.location.href = '/login'
+                } else throw new Error('Something went wrong ...')
+            })
+            .then((data) => {
+                console.log(data)
+                // setMessages(data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [])
+
+    useEffect(() => {
+        messageEnd.current?.scrollIntoView({ behavior: 'auto' })
 
         messageInput.current?.focus()
     }, [messages])
@@ -77,8 +94,8 @@ const ChatComponent = ({ user, components, setActiveComponent }) => {
                             setActiveComponent(components.MESSAGE_LIST)
                         }}
                     />
-                    <img src={person.imgA} alt="profile_pic" />
-                    <div className="message_username">{person.login}</div>
+                    <img src={user.imgA} alt="profile_pic" />
+                    <div className="message_username">{user.name}</div>
                 </div>
                 <div id="user-chat-more">
                     <PersonIcon
@@ -89,17 +106,29 @@ const ChatComponent = ({ user, components, setActiveComponent }) => {
                 </div>
             </div>
             <div id="chat_body">
-                {messages.map((message, i) => (
-                    <div
-                        className={
-                            'messsage_line' +
-                            (message.from == 0 ? ' other' : ' self')
-                        }
-                        key={i}
-                    >
-                        <div className="message">{message.content}</div>
+                {messages === null && (
+                    <div className="loading">
+                        <p>Loading...</p>
                     </div>
-                ))}
+                )}
+                {messages !== null && messages.length === 0 && (
+                    <div className="no-messages">
+                        <p>Start the conversation</p>
+                    </div>
+                )}
+                {messages !== null &&
+                    messages.length > 0 &&
+                    messages.map((message, i) => (
+                        <div
+                            className={
+                                'messsage_line' +
+                                (message.from == 0 ? ' other' : ' self')
+                            }
+                            key={i}
+                        >
+                            <div className="message">{message.content}</div>
+                        </div>
+                    ))}
             </div>
             <div id="chat_footer">
                 <input
