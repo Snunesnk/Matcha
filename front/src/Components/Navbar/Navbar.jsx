@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link, useMatch, useLocation } from 'react-router-dom'
+import { Link, useMatch, useLocation, useNavigate } from 'react-router-dom'
 import { AlreadyHaveAccountBtn, CreateAccountButton } from '../Button/Button'
 import {
     AccountCircle,
@@ -43,6 +43,7 @@ const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const dropdownRef = useRef(null)
     const location = useLocation()
+    const navigate = useNavigate()
 
     useEffect(() => {
         setLoggedIn(checkIfLoggedInRoute(location.pathname))
@@ -56,6 +57,8 @@ const Navbar = () => {
         fetch('http://localhost:8080/api/user/logout', {
             method: 'GET',
             credentials: 'include',
+        }).then(() => {
+            navigate('/login')
         })
 
     // Effet pour gérer le clic à l'extérieur du menu déroulant
@@ -122,10 +125,10 @@ const Navbar = () => {
                                     <Settings />
                                     Settings
                                 </Link>
-                                <Link to="/login" onClick={handleLogout}>
+                                <a onClick={handleLogout}>
                                     <Logout />
                                     Logout
-                                </Link>
+                                </a>
                             </div>
                         )}
                     </div>
