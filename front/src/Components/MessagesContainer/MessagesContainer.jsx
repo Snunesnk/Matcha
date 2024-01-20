@@ -4,22 +4,7 @@ import UserProfile from '../UserProfile/UserProfile'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import './MessagesContainer.css'
 import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
-
-const DUMMY_USER = {
-    firstname: 'John',
-    surname: 'Doe',
-    gender: 'f',
-    dateOfBirth: '2000-01-10',
-    email: 'john.doe@test.com',
-    login: 'john.doe',
-    bio: 'A happy go lucky girl with a sharp tongue and wise eyes.',
-    imgA: 'https://picsum.photos/200/300?random=1',
-    imgB: 'https://picsum.photos/200/300?random=2',
-    imgC: 'https://picsum.photos/200/300?random=3',
-    imgD: 'https://picsum.photos/200/300?random=4',
-    imgE: 'https://picsum.photos/200/300?random=5',
-    tags: 'pizza, workout, video games, hiking',
-}
+import { useLocation } from 'react-router-dom'
 
 const COMPONENTS = {
     MESSAGE_LIST: 'MESSAGE_LIST',
@@ -34,10 +19,12 @@ const MessagesContainer = () => {
     )
     const [conversations, setConversations] = useState([])
     const [newMatches, setNewMatches] = useState([])
+    const [activeConversation, setActiveConversation] = useState(null)
+    const [activeUser, setActiveUser] = useState(null)
 
-    useEffect(() => {
-        console.log('activeComponent', activeComponent)
-    }, [activeComponent])
+    const location = useLocation()
+    const searchParams = new URLSearchParams(location.search)
+    const user = searchParams.get('user')
 
     useEffect(() => {
         const getMatches = async () => {
@@ -48,15 +35,33 @@ const MessagesContainer = () => {
                 .then((response) => {
                     if (response.ok) {
                         return response.json()
-                    }
-                    throw new Error('Something went wrong ...')
+                    } else if (response.status === 401) {
+                        window.location.href = '/login'
+                    } else throw new Error('Something went wrong ...')
                 })
                 .then((data) => {
-                    console.log('data', data)
                     const newMatches = data.filter((m) => !m.last_message_id)
                     setNewMatches(newMatches)
                     const conversations = data.filter((m) => m.last_message_id)
                     setConversations(conversations)
+
+                    if (user) {
+                        const conversation = conversations.find(
+                            (c) => c.login === user
+                        )
+                        if (conversation) {
+                            setActiveConversation(conversation)
+                        } else {
+                            const match = newMatches.find(
+                                (m) => m.login === user
+                            )
+                            if (match) {
+                                setActiveConversation(match)
+                            }
+                        }
+                    } else if (conversations.length > 0) {
+                        setActiveConversation(conversations[0])
+                    }
                 })
                 .catch((error) => {
                     console.log(error)
@@ -64,6 +69,29 @@ const MessagesContainer = () => {
         }
         getMatches()
     }, [])
+
+    useEffect(() => {
+        if (!activeConversation) return
+
+        setActiveUser(null)
+        fetch('http://localhost:8080/api/user/' + activeConversation.login, {
+            method: 'GET',
+            credentials: 'include',
+        })
+            .then((response) => {
+                if (response.ok) {
+                    return response.json()
+                } else if (response.status === 401) {
+                    window.location.href = '/login'
+                } else throw new Error('Something went wrong ...')
+            })
+            .then((data) => {
+                setActiveUser(data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+    }, [activeConversation])
 
     return (
         <div id="message-pannel">

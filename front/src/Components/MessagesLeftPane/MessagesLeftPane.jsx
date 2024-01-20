@@ -1,30 +1,49 @@
 import React from 'react'
 import './MessagesLeftPane.css'
 
-const MessagesLeftPane = ({ newMatches, conversations }) => {
+const MessagesLeftPane = ({
+    newMatches,
+    conversations,
+    setActiveConversation,
+}) => {
     return (
         <div className="chat-sidebar">
-            <NewMatchesSection matches={newMatches} />
-            <MessagesSection conversations={conversations} />
+            <NewMatchesSection
+                matches={newMatches}
+                setActiveConversation={setActiveConversation}
+            />
+            <MessagesSection
+                conversations={conversations}
+                setActiveConversation={setActiveConversation}
+            />
         </div>
     )
 }
 
-const NewMatchesSection = ({ matches }) => (
+const NewMatchesSection = ({ matches, setActiveConversation }) => (
     <div className="new-matches-section">
         <h4>New matches</h4>
         <div className="new-matches">
             <div className="new-matches-container">
                 {matches.map((match) => (
-                    <NewMatch key={match.id} match={match} />
+                    <NewMatch
+                        key={match.id}
+                        match={match}
+                        setActiveConversation={setActiveConversation}
+                    />
                 ))}
             </div>
         </div>
     </div>
 )
 
-const NewMatch = ({ match }) => (
-    <div className="new-match">
+const NewMatch = ({ match, setActiveConversation }) => (
+    <div
+        className="new-match"
+        onClick={() => {
+            setActiveConversation(match)
+        }}
+    >
         <div className="new-match-img-container">
             <img
                 src={
@@ -45,7 +64,7 @@ const NewMatch = ({ match }) => (
     </div>
 )
 
-const MessagesSection = ({ conversations }) => (
+const MessagesSection = ({ conversations, setActiveConversation }) => (
     <div className="messages">
         <h4>Messages</h4>
         <div className="messages-list">
@@ -53,14 +72,20 @@ const MessagesSection = ({ conversations }) => (
                 <MessageSnippet
                     key={conversation.id}
                     conversation={conversation}
+                    setActiveConversation={setActiveConversation}
                 />
             ))}
         </div>
     </div>
 )
 
-const MessageSnippet = ({ conversation }) => (
-    <div className={`message ${conversation.unread ? 'unread' : ''}`}>
+const MessageSnippet = ({ conversation, setActiveConversation }) => (
+    <div
+        className={`message ${conversation.unread ? 'unread' : ''}`}
+        onClick={() => {
+            setActiveConversation(match)
+        }}
+    >
         <div className="message-img-container">
             <img
                 src={'http://localhost:8080/api' + conversation.imgA}
@@ -82,4 +107,5 @@ const MessageSnippet = ({ conversation }) => (
         </div>
     </div>
 )
+
 export default MessagesLeftPane

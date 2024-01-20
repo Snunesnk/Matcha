@@ -1,7 +1,9 @@
 #message-pannel {
-    height: 100%;
+    min-height: 99%;
+    height: 99%;
     padding: 5px;
-    min-width: 70%;
+    min-width: 99%;
+    width: 99%;
 }
 
 #messages_component_container {
@@ -114,6 +116,14 @@
 .user-profile-go-back svg {
     font-size: 1.8rem;
     color: #dc21b8;
+}
+
+.no-conversation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
 }
 
 @media screen and (max-width: 950px) {
