@@ -53,13 +53,9 @@ const MessagesContainer = () => {
                 })
                 .then((data) => {
                     console.log('data', data)
-                    const newMatches = data.filter(
-                        (m) => m.last_message_id === null
-                    )
+                    const newMatches = data.filter((m) => !m.last_message_id)
                     setNewMatches(newMatches)
-                    const conversations = data.filter(
-                        (m) => m.last_message_id !== null
-                    )
+                    const conversations = data.filter((m) => m.last_message_id)
                     setConversations(conversations)
                 })
                 .catch((error) => {
