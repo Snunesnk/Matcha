@@ -24,6 +24,11 @@ export const initSocket = (io) => {
       sendMessage(io, { ...message, from: socket.decoded.login });
     });
 
+    socket.on("message", (message) => {
+      const { to, content } = message;
+      sendMessage(to, { content, from: socket.decoded.login });
+    });
+
     socket.on("disconnect", () => {
       socket.leave(userLogin);
     });
