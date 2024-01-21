@@ -2,8 +2,6 @@ import { Message } from "../models/message.model.js";
 import { Notifications } from "../models/notifications.model.js";
 import authenticationService from "../services/authentication.service.js";
 
-const socketList = [];
-
 export const NOTIFICATION_TYPE = {
   LIKE: "like",
   UNLIKE: "unlike",
@@ -15,28 +13,16 @@ export const initSocket = (io) => {
   io.use(socketMiddleware);
 
   io.on("connection", (socket) => {
-    console.log("connected");
-    const user = socketList.find(
-      (user) => user.user.login === socket.decoded.login
-    );
-    if (user) {
-      user.clientSocket.disconnect();
-      socketList.splice(socketList.indexOf(user), 1);
-    }
+    const userLogin = socket.decoded.login;
 
-    socketList.push({ clientSocket: socket, user: socket.decoded });
+    socket.join(userLogin);
 
     socket.on("message", (message) => {
-      const { to } = message;
-
-      sendMessage(to, { ...message, from: socket.decoded.login });
+      sendMessage(io, { ...message, from: socket.decoded.login });
     });
 
     socket.on("disconnect", () => {
-      const socketIndex = socketList.findIndex(
-        (user) => user.clientSocket.id === socket.id
-      );
-      socketList.splice(socketList.indexOf(socketIndex), 1);
+      socket.leave(userLogin);
     });
   })
     .on("error", function (err) {
@@ -80,11 +66,21 @@ export const checkIfUserIsOnline = (login) => {
   return user ? true : false;
 };
 
-export const sendMessage = (login, message) => {
+function doesRoomHaveMembers(io, roomName) {
+  const allRooms = io.sockets.adapter.rooms;
+  const room = allRooms.get(roomName);
+
+  // Check if the room exists and has at least one member
+  return room && room.size > 0;
+}
+
+export const sendMessage = (io, message) => {
   Message.create(message);
-  const user = socketList.find((user) => user.user.login === login);
-  if (user) {
-    user.clientSocket.emit("message", message);
+
+  const userConnected = doesRoomHaveMembers(io, message.to);
+
+  if (userConnected) {
+    io.to(message.to).emit("message", message);
   } else {
     Notifications.create({
       type: NOTIFICATION_TYPE.MESSAGE,
