@@ -66,13 +66,23 @@ const ChatComponent = ({
 
         if (socketMessage.from !== user.login) return
 
-        setMessages((prev) => [
-            ...prev,
-            {
-                from: socketMessage.from,
-                content: socketMessage.content,
-            },
-        ])
+        setMessages((prev) => {
+            if (!prev) {
+                return [
+                    {
+                        from: socketMessage.from,
+                        content: socketMessage.content,
+                    },
+                ]
+            }
+            return [
+                ...prev,
+                {
+                    from: socketMessage.from,
+                    content: socketMessage.content,
+                },
+            ]
+        })
     }, [socketMessage])
 
     useEffect(() => {

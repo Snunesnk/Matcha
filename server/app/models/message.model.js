@@ -88,6 +88,7 @@ export class Message {
       sender: newMessage.from,
       receiver: newMessage.to,
       message_content: newMessage.content,
+      timestamp: new Date(Date.now()),
     });
 
     const data = await DbRequestService.create(MESSAGE_TABLE, message);

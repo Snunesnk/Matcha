@@ -9,7 +9,10 @@ export const NOTIFICATION_TYPE = {
   MESSAGE: "message",
 };
 
+let _io = null;
+
 export const initSocket = (io) => {
+  _io = io;
   io.use(socketMiddleware);
 
   io.on("connection", (socket) => {
@@ -62,11 +65,10 @@ export const socketMiddleware = async (socket, next) => {
 };
 
 export const checkIfUserIsOnline = (login) => {
-  const user = socketList.find((user) => user.user.login === login);
-  return user ? true : false;
+  return isUserConnected(_io, login);
 };
 
-function doesRoomHaveMembers(io, roomName) {
+function isUserConnected(io, roomName) {
   const allRooms = io.sockets.adapter.rooms;
   const room = allRooms.get(roomName);
 
@@ -77,7 +79,7 @@ function doesRoomHaveMembers(io, roomName) {
 export const sendMessage = (io, message) => {
   Message.create(message);
 
-  const userConnected = doesRoomHaveMembers(io, message.to);
+  const userConnected = isUserConnected(io, message.to);
 
   if (userConnected) {
     io.to(message.to).emit("message", message);
@@ -92,9 +94,10 @@ export const sendMessage = (io, message) => {
 };
 
 export const sendNotification = (login, notificationType, payload) => {
-  const user = socketList.find((user) => user.user.login === login);
-  if (user) {
-    user.clientSocket.emit(notificationType, payload);
+  const userConnected = isUserConnected(_io, login);
+
+  if (userConnected) {
+    _io.to(login).emit(notificationType, payload);
   }
 };
 
