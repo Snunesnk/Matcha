@@ -2,6 +2,11 @@ import { useEffect, useState } from 'react'
 import ChatComponent from '../ChatComponent'
 import UserProfile from '../UserProfile/UserProfile'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+<<<<<<< HEAD
+=======
+import socket from '../../Socket/socket'
+
+>>>>>>> 830d00c (feat(messages): Chat is working + scroll to bottom active on new messages)
 import './MessagesContainer.css'
 import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
 import { useLocation } from 'react-router-dom'
@@ -21,6 +26,7 @@ const MessagesContainer = () => {
     const [newMatches, setNewMatches] = useState([])
     const [activeConversation, setActiveConversation] = useState(null)
     const [activeUser, setActiveUser] = useState(null)
+    const [socketMessage, setSocketMessage] = useState(null)
 
     const location = useLocation()
     const searchParams = new URLSearchParams(location.search)
@@ -71,6 +77,12 @@ const MessagesContainer = () => {
     }, [])
 
     useEffect(() => {
+        socket.on('message', (message) => {
+            setSocketMessage(message)
+        })
+    }, [socket])
+
+    useEffect(() => {
         if (!activeConversation) return
 
         setActiveUser(null)
@@ -99,8 +111,23 @@ const MessagesContainer = () => {
                 <div id="chat_list_container" data-active={ activeComponent === COMPONENTS.MESSAGE_LIST || activeComponent === COMPONENTS.NOTIFICATION} className="responsive-component">
                     <MessagesLeftPane newMatches={newMatches} conversations={conversations}/>
                 </div>
-                <div id="chat_container" data-active={activeComponent === COMPONENTS.CHAT} className="responsive-component">
-                    <ChatComponent user={DUMMY_USER} components={COMPONENTS} setActiveComponent={setActiveComponent}/>
+                <div
+                    id="chat_container"
+                    data-active={activeComponent === COMPONENTS.CHAT}
+                    className="responsive-component"
+                >
+                    {activeConversation ? (
+                        <ChatComponent
+                            user={activeConversation}
+                            components={COMPONENTS}
+                            setActiveComponent={setActiveComponent}
+                            socketMessage={socketMessage}
+                        />
+                    ) : (
+                        <div className="no-conversation">
+                            <p>Still waiting for the purr-fect match ?</p>
+                        </div>
+                    )}
                 </div>
                 <div id="user_info_container" data-active={activeComponent === COMPONENTS.USER_PROFILE} className="responsive-component">
                     <UserProfile user={DUMMY_USER} />
