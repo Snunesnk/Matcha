@@ -13,6 +13,7 @@ export class Match {
     this.created_at = obj.created_at;
     this.last_message_id = obj.last_message_id;
     this.last_message_timestamp = obj.last_message_timestamp;
+    this.last_message_content = obj.last_message_content;
     this.name = obj.name;
     this.surname = obj.surname;
     this.login = obj.login;
@@ -65,6 +66,14 @@ export class Match {
 
   set last_message_timestamp(last_message_timestamp) {
     this._last_message_timestamp = last_message_timestamp;
+  }
+
+  get last_message_content() {
+    return this._last_message_content;
+  }
+
+  set last_message_content(last_message_content) {
+    this._last_message_content = last_message_content;
   }
 
   get name() {
@@ -121,6 +130,8 @@ export class Match {
       return null;
     }
 
+    console.log(matches);
+
     return matches.map((match) => new Match(match).toJSON());
   }
 
@@ -157,6 +168,7 @@ export class Match {
       created_at: this.created_at,
       last_message_id: this.last_message_id,
       last_message_timestamp: this.last_message_timestamp,
+      last_message_content: this.last_message_content,
       name: this.name,
       surname: this.surname,
       login: this.login,

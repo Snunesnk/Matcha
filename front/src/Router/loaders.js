@@ -9,7 +9,7 @@ const checkAuthStatus = async () => {
         const userData = await response.json()
         return userData // Contains user data if the token is valid
     } else {
-        throw new Response('Unauthorized', { status: 401 })
+        return redirect('/login')
     }
 }
 
