@@ -41,11 +41,14 @@ router.post("/user/reset-password", userHandler.resetPassword);
 // Get current user
 router.get("/user/me", needOnboardedMiddleware, userHandler.currentUser);
 
+// Logout
+router.get("/user/logout", needVerifiedMiddleware, userHandler.logout);
+
 // Retrieve a single User with login
 router.get("/user/:login", userHandler.getUserByLogin);
 
 // Delete a User with login
-router.delete("/user/:login", userHandler.delete);
+router.delete("/user/:login", needOnboardedMiddleware, userHandler.delete);
 
 // Update a User with login (first uploads user's 5 images)
 router.put("/upload-pictures", needVerifiedMiddleware, picturesUpload);

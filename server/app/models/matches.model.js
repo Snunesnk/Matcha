@@ -101,10 +101,11 @@ export class Match {
 
   static async create(newMatch) {
     try {
-      const data = await DbRequestService.create(
-        "matches",
-        new Match(newMatch)
-      );
+      const match = new Match(newMatch);
+      const data = await DbRequestService.create("matches", {
+        user1: match.user1,
+        user2: match.user2,
+      });
       if (data.affectedRows === 0) {
         return null;
       }

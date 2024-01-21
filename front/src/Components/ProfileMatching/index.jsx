@@ -254,9 +254,11 @@ const ProfileMatching = () => {
                                     text={'Send a message'}
                                     btnClass={'pink-scale match-msg'}
                                     onClick={() => {
+                                        const param = encodeURIComponent(
+                                            actualUser.login
+                                        )
                                         naviguate(
-                                            '/dashboard/messages/' +
-                                                actualUser.login
+                                            `/dashboard/messages?user=${param}`
                                         )
                                     }}
                                 />

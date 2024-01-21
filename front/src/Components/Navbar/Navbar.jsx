@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
-import { Link, useMatch, useLocation } from 'react-router-dom'
+import { Link, useMatch, useLocation, useNavigate } from 'react-router-dom'
 import { AlreadyHaveAccountBtn, CreateAccountButton } from '../Button/Button'
 import {
     AccountCircle,
@@ -43,6 +43,7 @@ const Navbar = () => {
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const dropdownRef = useRef(null)
     const location = useLocation()
+    const navigate = useNavigate()
 
     useEffect(() => {
         setLoggedIn(checkIfLoggedInRoute(location.pathname))
@@ -52,10 +53,13 @@ const Navbar = () => {
     // Fonction pour basculer l'affichage du menu déroulant
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen)
 
-    const handleLogout = () => {
-        // Gestion de la déconnexion ici
-        // Par exemple, nettoyage du local storage, mise à jour de l'état global, redirection, etc.
-    }
+    const handleLogout = () =>
+        fetch('http://localhost:8080/api/user/logout', {
+            method: 'GET',
+            credentials: 'include',
+        }).then(() => {
+            navigate('/login')
+        })
 
     // Effet pour gérer le clic à l'extérieur du menu déroulant
     useEffect(() => {
@@ -111,17 +115,21 @@ const Navbar = () => {
                         {isDropdownOpen && (
                             <div className="dropdown-menu">
                                 <Link to="/profile">
-                                    <Portrait />View profile
+                                    <Portrait />
+                                    View profile
                                 </Link>
                                 <Link to="dashboard/userSettings">
-                                    <EditNote />Edit profile
+                                    <EditNote />
+                                    Edit profile
                                 </Link>
                                 <Link to="/dashboard/discoverySettings">
-                                    <Settings />Settings
+                                    <Settings />
+                                    Settings
                                 </Link>
-                                <Link to="/dashboard" onClick={handleLogout}>
-                                    <Logout />Logout
-                                </Link>
+                                <a onClick={handleLogout}>
+                                    <Logout />
+                                    Logout
+                                </a>
                             </div>
                         )}
                     </div>
