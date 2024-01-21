@@ -14,7 +14,6 @@ export default class {
     const conversation = await Conversation.getConversationFomMatch(matchId);
     if (!conversation) return res.json([]);
 
-    console.log("conversation", conversation);
     const messages = await Message.getMessagesFromConversation(
       conversation.conversation_id
     );
