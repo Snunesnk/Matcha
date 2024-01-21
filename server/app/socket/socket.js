@@ -13,7 +13,21 @@ export const initSocket = (io) => {
   io.use(socketMiddleware);
 
   io.on("connection", (socket) => {
+    console.log("connected");
+    const user = socketList.find(
+      (user) => user.user.login === socket.decoded.login
+    );
+    if (user) {
+      user.clientSocket.disconnect();
+      socketList.splice(socketList.indexOf(user), 1);
+    }
+
     socketList.push({ clientSocket: socket, user: socket.decoded });
+
+    socket.on("message", (message) => {
+      const { to, content } = message;
+      sendMessage(to, { content, from: socket.decoded.login });
+    });
 
     socket.on("disconnect", () => {
       const socketIndex = socketList.findIndex(
@@ -65,8 +79,11 @@ export const checkIfUserIsOnline = (login) => {
 
 export const sendMessage = (login, message) => {
   const user = socketList.find((user) => user.user.login === login);
-  if (socket) {
-    socket.clientSocket.emit("message", message);
+  if (user) {
+    console.log("sending message to", login);
+    user.clientSocket.emit("message", message);
+  } else {
+    console.log("user " + login + " not found");
   }
 };
 

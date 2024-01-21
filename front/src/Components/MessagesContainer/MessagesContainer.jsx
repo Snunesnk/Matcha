@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import ChatComponent from '../ChatComponent'
 import UserProfile from '../UserProfile/UserProfile'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import socket from '../../Socket/socket'
 
 import './MessagesContainer.css'
 import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
@@ -22,6 +23,7 @@ const MessagesContainer = () => {
     const [newMatches, setNewMatches] = useState([])
     const [activeConversation, setActiveConversation] = useState(null)
     const [activeUser, setActiveUser] = useState(null)
+    const [socketMessage, setSocketMessage] = useState(null)
 
     const location = useLocation()
     const searchParams = new URLSearchParams(location.search)
@@ -70,6 +72,12 @@ const MessagesContainer = () => {
         }
         getMatches()
     }, [])
+
+    useEffect(() => {
+        socket.on('message', (message) => {
+            setSocketMessage(message)
+        })
+    }, [socket])
 
     useEffect(() => {
         if (!activeConversation) return
@@ -121,6 +129,7 @@ const MessagesContainer = () => {
                             user={activeConversation}
                             components={COMPONENTS}
                             setActiveComponent={setActiveComponent}
+                            socketMessage={socketMessage}
                         />
                     ) : (
                         <div className="no-conversation">
