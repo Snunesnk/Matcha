@@ -22,6 +22,8 @@ export class DbRequestService {
     "userSettingsTags",
     "notifications",
     "matches",
+    "conversations",
+    "messages",
   ];
 
   /*
