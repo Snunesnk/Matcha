@@ -125,9 +125,10 @@ export class Match {
   }
 
   static async getMatch(user1, user2) {
+    const userMatch = new Match({ user1: user1, user2: user2 });
     const match = await DbRequestService.read("matches", {
-      user1: `${user1}`,
-      user2: `${user2}`,
+      user1: `${userMatch.user1}`,
+      user2: `${userMatch.user2}`,
     });
     if (match.length === 0) {
       return null;

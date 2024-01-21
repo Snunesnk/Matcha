@@ -1,3 +1,5 @@
+import { Message } from "../models/message.model.js";
+import { Notifications } from "../models/notifications.model.js";
 import authenticationService from "../services/authentication.service.js";
 
 const socketList = [];
@@ -25,8 +27,9 @@ export const initSocket = (io) => {
     socketList.push({ clientSocket: socket, user: socket.decoded });
 
     socket.on("message", (message) => {
-      const { to, content } = message;
-      sendMessage(to, { content, from: socket.decoded.login });
+      const { to } = message;
+
+      sendMessage(to, { ...message, from: socket.decoded.login });
     });
 
     socket.on("disconnect", () => {
@@ -78,12 +81,17 @@ export const checkIfUserIsOnline = (login) => {
 };
 
 export const sendMessage = (login, message) => {
+  Message.create(message);
   const user = socketList.find((user) => user.user.login === login);
   if (user) {
-    console.log("sending message to", login);
     user.clientSocket.emit("message", message);
   } else {
-    console.log("user " + login + " not found");
+    Notifications.create({
+      type: NOTIFICATION_TYPE.MESSAGE,
+      login: message.to,
+      trigger_login: message.from,
+      message: message.content,
+    });
   }
 };
 
@@ -93,3 +101,9 @@ export const sendNotification = (login, notificationType, payload) => {
     user.clientSocket.emit(notificationType, payload);
   }
 };
+
+// send new conversation
+// => A new match become a conversation because of a message
+
+// Send conversation update
+// => A new message is sent to a conversation

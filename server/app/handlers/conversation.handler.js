@@ -1,4 +1,5 @@
 import { Conversation } from "../models/conversation.model.js";
+import { Message } from "../models/message.model.js";
 
 export default class {
   static async createConversation(req, res) {
@@ -13,9 +14,19 @@ export default class {
     const conversation = await Conversation.getConversationFomMatch(matchId);
     if (!conversation) return res.json([]);
 
-    console.log("conversations", conversation);
+    console.log("conversation", conversation);
+    const messages = await Message.getMessagesFromConversation(
+      conversation.conversation_id
+    );
 
-    res.json(conversation);
+    const messagesWithLogin = messages.map((message) => {
+      return {
+        from: message.sender,
+        content: message.message_content,
+      };
+    });
+
+    res.json(messagesWithLogin);
   }
 
   static async deleteConversation(req, res) {
