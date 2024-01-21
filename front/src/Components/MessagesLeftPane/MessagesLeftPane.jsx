@@ -83,12 +83,16 @@ const MessageSnippet = ({ conversation, setActiveConversation }) => (
     <div
         className={`message ${conversation.unread ? 'unread' : ''}`}
         onClick={() => {
-            setActiveConversation(match)
+            setActiveConversation(conversation)
         }}
     >
         <div className="message-img-container">
             <img
-                src={'http://localhost:8080/api' + conversation.imgA}
+                src={
+                    conversation.imgA.startsWith('http')
+                        ? conversation.imgA
+                        : 'http://localhost:8080/api' + conversation.imgA
+                }
                 alt="user avatar"
                 className="avatar"
             />

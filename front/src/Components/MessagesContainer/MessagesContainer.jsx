@@ -78,6 +78,27 @@ const MessagesContainer = () => {
 
     useEffect(() => {
         socket.on('message', (message) => {
+            const matchUser = newMatches.find(
+                (match) => match.login === message.from
+            )
+            if (matchUser) {
+                setNewMatches((prev) => {
+                    const newMatches = [...prev]
+                    const index = newMatches.findIndex(
+                        (match) => match.login === message.from
+                    )
+                    newMatches.splice(index, 1)
+                    return newMatches
+                })
+                setConversations((prev) => [
+                    {
+                        ...matchUser,
+                        lastMessage: message.content,
+                        lastMessageDate: Date.now(),
+                    },
+                    ...prev,
+                ])
+            }
             setSocketMessage(message)
         })
     }, [socket])

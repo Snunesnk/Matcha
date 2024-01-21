@@ -29,13 +29,14 @@ const ChatComponent = ({
             },
         })
 
-        setMessages((prev) => [
-            ...prev,
-            {
+        setMessages((prev) => {
+            const newMes = {
                 from: null,
                 content: newMessage,
-            },
-        ])
+            }
+            if (!prev) return [newMes]
+            return [...prev, newMes]
+        })
 
         setNewMessage('')
     }
@@ -86,7 +87,6 @@ const ChatComponent = ({
                 <div id="person_info">
                     <ArrowBackIcon
                         onClick={() => {
-                            console.log('clicked')
                             setActiveComponent(components.MESSAGE_LIST)
                         }}
                     />
