@@ -4,7 +4,6 @@ export default class {
   static async getMatches(req, res) {
     const user = req.decodedUser;
     try {
-      console.log("user.login", user.login);
       const newMatches = await Match.getMatches(user.login);
       res.status(200).send(newMatches);
     } catch (err) {

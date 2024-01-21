@@ -1,10 +1,6 @@
-export default class {
-  static async getConversations(req, res) {
-    const login = req.params.login;
-    const conversations = await Conversation.getConversations(login);
-    res.json(conversations);
-  }
+import { Conversation } from "../models/conversation.model.js";
 
+export default class {
   static async createConversation(req, res) {
     const login = req.params.login;
     const login2 = req.params.login2;
@@ -13,9 +9,12 @@ export default class {
   }
 
   static async getConversation(req, res) {
-    const login = req.decodedUser.login;
-    const login2 = req.params.login;
-    const conversation = await Conversation.getConversation(login, login2);
+    const matchId = req.params.matchId;
+    const conversation = await Conversation.getConversationFomMatch(matchId);
+    if (!conversation) return res.json([]);
+
+    console.log("conversations", conversation);
+
     res.json(conversation);
   }
 

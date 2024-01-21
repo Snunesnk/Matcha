@@ -13,6 +13,7 @@ import viewRoute from "./routes/view.routes.js";
 import imageRoute from "./routes/images.routes.js";
 import authenticationRoute from "./routes/authentication.routes.js";
 import matchRoute from "./routes/matches.routes.js";
+import conversationRoute from "./routes/conversations.routes.js";
 import populateDB from "./services/faker.service.js";
 import { initSocket, socketMiddleware } from "./socket/socket.js";
 
@@ -56,6 +57,7 @@ app.use("/api", viewRoute);
 app.use("/api", imageRoute);
 app.use("/api", authenticationRoute);
 app.use("/api", matchRoute);
+app.use("/api", conversationRoute);
 
 // Populate DB with fake accounts if flag is set
 if (

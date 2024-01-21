@@ -58,7 +58,7 @@ const ChatComponent = ({ user, components, setActiveComponent }) => {
     }
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/conversations/' + user.login, {
+        fetch('http://localhost:8080/api/conversations/' + user.id, {
             method: 'GET',
             credentials: 'include',
         })
@@ -70,8 +70,7 @@ const ChatComponent = ({ user, components, setActiveComponent }) => {
                 } else throw new Error('Something went wrong ...')
             })
             .then((data) => {
-                console.log(data)
-                // setMessages(data)
+                setMessages(data)
             })
             .catch((error) => {
                 console.log(error)
