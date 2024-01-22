@@ -38,8 +38,7 @@ import Notifications from '../Components/Notifications/Notifications'
 import ProfileMatching from '../Components/ProfileMatching'
 import LoginPage, { action as loginAction } from '../Pages/Login/Login'
 import ResetPasswordPage from '../Pages/ResetPassword/ResetPassword'
-import UserProfile from '../Components/UserProfile/UserProfile'
-
+import Profile from '../Pages/Profile/Profile'
 
 const router = createBrowserRouter([
     {
@@ -137,7 +136,7 @@ const router = createBrowserRouter([
                     },
                     {
                         path: 'myprofile',
-                        element: <UserProfile />,
+                        element: <Profile />,
                     },
                     {
                         path: 'userSettings',

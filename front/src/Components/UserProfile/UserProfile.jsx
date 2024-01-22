@@ -7,6 +7,7 @@ import ClearIcon from '@mui/icons-material/Clear'
 import './UserProfile.css'
 
 const UserProfile = ({ user, scroll = 0 }) => {
+    console.log(user)
 	const [selectedPicture, setSelectedPicture] = useState(-1)
 	const profileRef = useRef(null)
 	const infosRef = useRef(null)
