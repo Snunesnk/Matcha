@@ -11,4 +11,10 @@ router.get(
   notificationsHandler.getNotifications
 );
 
+router.get(
+  "/notifications/count",
+  needOnboardedMiddleware,
+  notificationsHandler.getNotificationCount
+);
+
 export default router;
