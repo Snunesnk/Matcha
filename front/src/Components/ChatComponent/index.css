@@ -157,11 +157,6 @@
     font-size: 0.9rem;
 }
 
-.self+.other,
-.other+.self {
-    margin-top: 20px;
-}
-
 @media screen and (max-width: 950px) {
     #person_info svg {
         color: #dc21b8;

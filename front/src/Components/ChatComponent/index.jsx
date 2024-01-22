@@ -1,58 +1,42 @@
 import { useEffect, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import SendIcon from '@mui/icons-material/Send'
 import PersonIcon from '@mui/icons-material/Person'
 import './index.css'
+import { useDispatch } from 'react-redux'
+import { USER_STATE_ACTIONS } from '../../constants'
 
-const DUMMY_MESSAGES = [
-    {
-        from: 0,
-        content: "What's a girl like you doing on an app like this",
-    },
-    {
-        from: 1,
-        content: 'seeing what I can find',
-    },
-    {
-        from: 1,
-        content: 'lol',
-    },
-    {
-        from: 1,
-        content: 'Who are you?',
-    },
-    {
-        from: 0,
-        content: 'Same question, who are you ???',
-    },
-    {
-        from: 1,
-        content: 'Well,that actually is a good question',
-    },
-    {
-        from: 0,
-        content: 'Glad you acknowlegde it',
-    },
-]
-
-const ChatComponent = ({ user, components, setActiveComponent }) => {
+const ChatComponent = ({
+    user,
+    components,
+    setActiveComponent,
+    socketMessage,
+}) => {
     const [newMessage, setNewMessage] = useState('')
     const [messages, setMessages] = useState(null)
-
+    const dispatch = useDispatch()
     const messageEnd = useRef(null)
     const messageInput = useRef(null)
 
     const sendMessage = () => {
         if (newMessage.length == 0) return
 
-        setMessages((prev) => [
-            ...prev,
-            {
-                from: 0,
+        dispatch({
+            type: USER_STATE_ACTIONS.SEND_MESSAGE,
+            payload: {
+                to: user.login,
                 content: newMessage,
             },
-        ])
+        })
+
+        setMessages((prev) => {
+            const newMes = {
+                from: null,
+                content: newMessage,
+            }
+            if (!prev) return [newMes]
+            return [...prev, newMes]
+        })
 
         setNewMessage('')
     }
@@ -75,7 +59,31 @@ const ChatComponent = ({ user, components, setActiveComponent }) => {
             .catch((error) => {
                 console.log(error)
             })
-    }, [])
+    }, [user])
+
+    useEffect(() => {
+        if (!socketMessage) return
+
+        if (socketMessage.from !== user.login) return
+
+        setMessages((prev) => {
+            if (!prev) {
+                return [
+                    {
+                        from: socketMessage.from,
+                        content: socketMessage.content,
+                    },
+                ]
+            }
+            return [
+                ...prev,
+                {
+                    from: socketMessage.from,
+                    content: socketMessage.content,
+                },
+            ]
+        })
+    }, [socketMessage])
 
     useEffect(() => {
         messageEnd.current?.scrollIntoView({ behavior: 'auto' })
@@ -89,7 +97,6 @@ const ChatComponent = ({ user, components, setActiveComponent }) => {
                 <div id="person_info">
                     <ArrowBackIcon
                         onClick={() => {
-                            console.log('clicked')
                             setActiveComponent(components.MESSAGE_LIST)
                         }}
                     />
@@ -121,13 +128,16 @@ const ChatComponent = ({ user, components, setActiveComponent }) => {
                         <div
                             className={
                                 'messsage_line' +
-                                (message.from == 0 ? ' other' : ' self')
+                                (message.from === user.login
+                                    ? ' other'
+                                    : ' self')
                             }
                             key={i}
                         >
                             <div className="message">{message.content}</div>
                         </div>
                     ))}
+                <div ref={messageEnd}></div>
             </div>
             <div id="chat_footer">
                 <input

@@ -1,6 +1,6 @@
+import { Message } from "../models/message.model.js";
+import { Notifications } from "../models/notifications.model.js";
 import authenticationService from "../services/authentication.service.js";
-
-const socketList = [];
 
 export const NOTIFICATION_TYPE = {
   LIKE: "like",
@@ -9,30 +9,33 @@ export const NOTIFICATION_TYPE = {
   MESSAGE: "message",
 };
 
+let _io = null;
+
 export const initSocket = (io) => {
+  _io = io;
   io.use(socketMiddleware);
 
   io.on("connection", (socket) => {
-    socketList.push({ clientSocket: socket, user: socket.decoded });
+    const userLogin = socket.decoded.login;
+
+    socket.join(userLogin);
+
+    socket.on("message", (message) => {
+      sendMessage(io, { ...message, from: socket.decoded.login });
+    });
 
     socket.on("disconnect", () => {
-      const socketIndex = socketList.findIndex(
-        (user) => user.clientSocket.id === socket.id
-      );
-      socketList.splice(socketList.indexOf(socketIndex), 1);
+      socket.leave(userLogin);
     });
   })
     .on("error", function (err) {
       if (err.code == "ENOTFOUND") {
         console.log("[ERROR] No device found at this address!");
-        // device.clientSocket.destroy();
-        // socketList.splice(socketList.indexOf(device), 1);
         return;
       }
 
       if (err.code == "ECONNREFUSED") {
         console.log("[ERROR] Connection refused! Please check the IP.");
-        // device.clientSocket.destroy();
         return;
       }
 
@@ -59,20 +62,44 @@ export const socketMiddleware = async (socket, next) => {
 };
 
 export const checkIfUserIsOnline = (login) => {
-  const user = socketList.find((user) => user.user.login === login);
-  return user ? true : false;
+  return isUserConnected(_io, login);
 };
 
-export const sendMessage = (login, message) => {
-  const user = socketList.find((user) => user.user.login === login);
-  if (socket) {
-    socket.clientSocket.emit("message", message);
+function isUserConnected(io, roomName) {
+  const allRooms = io.sockets.adapter.rooms;
+  const room = allRooms.get(roomName);
+
+  // Check if the room exists and has at least one member
+  return room && room.size > 0;
+}
+
+export const sendMessage = (io, message) => {
+  Message.create(message);
+
+  const userConnected = isUserConnected(io, message.to);
+
+  if (userConnected) {
+    io.to(message.to).emit("message", message);
+  } else {
+    Notifications.create({
+      type: NOTIFICATION_TYPE.MESSAGE,
+      login: message.to,
+      trigger_login: message.from,
+      message: message.content,
+    });
   }
 };
 
 export const sendNotification = (login, notificationType, payload) => {
-  const user = socketList.find((user) => user.user.login === login);
-  if (user) {
-    user.clientSocket.emit(notificationType, payload);
+  const userConnected = isUserConnected(_io, login);
+
+  if (userConnected) {
+    _io.to(login).emit(notificationType, payload);
   }
 };
+
+// send new conversation
+// => A new match become a conversation because of a message
+
+// Send conversation update
+// => A new message is sent to a conversation

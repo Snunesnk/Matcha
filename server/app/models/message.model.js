@@ -1,4 +1,5 @@
 import { DbRequestService } from "../services/db-request.service.js";
+import { Conversation } from "./conversation.model.js";
 
 const MESSAGE_TABLE = "messages";
 
@@ -9,7 +10,7 @@ export class Message {
     this.sender = obj.sender;
     this.receiver = obj.receiver;
     this.message_content = obj.message_content;
-    this.message_timestamp = obj.message_timestamp;
+    this.timestamp = obj.timestamp;
     this.read_status = obj.read_status;
   }
 
@@ -53,12 +54,12 @@ export class Message {
     this._message_content = message_content;
   }
 
-  get message_timestamp() {
-    return this._message_timestamp;
+  get timestamp() {
+    return this._timestamp;
   }
 
-  set message_timestamp(message_timestamp) {
-    this._message_timestamp = message_timestamp;
+  set timestamp(timestamp) {
+    this._timestamp = timestamp;
   }
 
   get read_status() {
@@ -70,10 +71,37 @@ export class Message {
   }
 
   static async create(newMessage) {
-    const data = await DbRequestService.create(MESSAGE_TABLE, newMessage);
+    let conv = await DbRequestService.getConversationFromLogins(
+      newMessage.to,
+      newMessage.from
+    );
+
+    if (!conv) {
+      conv = await Conversation.createConvFromLogin(
+        newMessage.to,
+        newMessage.from
+      );
+    }
+
+    const message = new Message({
+      conversation_id: conv.conversation_id,
+      sender: newMessage.from,
+      receiver: newMessage.to,
+      message_content: newMessage.content,
+      timestamp: new Date(Date.now()),
+    });
+
+    const data = await DbRequestService.create(MESSAGE_TABLE, message);
     if (data.affectedRows === 0) {
       return null;
     }
+
+    await DbRequestService.update(
+      "conversations",
+      new Conversation({ ...conv, last_message_id: data.insertId }),
+      { conversation_id: conv.conversation_id }
+    );
+
     return await Message.getMessageById(data.insertId);
   }
 
@@ -101,7 +129,7 @@ export class Message {
       sender: this.sender,
       receiver: this.receiver,
       message_content: this.message_content,
-      message_timestamp: this.message_timestamp,
+      timestamp: this.timestamp,
       read_status: this.read_status,
     };
   }

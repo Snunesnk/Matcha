@@ -4,7 +4,7 @@ CREATE TABLE messages (
     sender VARCHAR(50) NOT NULL,
     receiver VARCHAR(50) NOT NULL,
     message_content TEXT,
-    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP,
+    timestamp DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     read_status BOOLEAN DEFAULT FALSE,
     FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id),
     FOREIGN KEY (sender) REFERENCES user(login),

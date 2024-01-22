@@ -12,6 +12,8 @@ import {
     Logout,
 } from '@mui/icons-material'
 import './Navbar.css'
+import { useDispatch } from 'react-redux'
+import { USER_STATE_ACTIONS } from '../../constants'
 
 const LOGGED_IN_ROUTES = [
     '/onboarding',
@@ -44,6 +46,7 @@ const Navbar = () => {
     const dropdownRef = useRef(null)
     const location = useLocation()
     const navigate = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         setLoggedIn(checkIfLoggedInRoute(location.pathname))
@@ -53,13 +56,17 @@ const Navbar = () => {
     // Fonction pour basculer l'affichage du menu déroulant
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen)
 
-    const handleLogout = () =>
+    const handleLogout = () => {
+        dispatch({
+            type: USER_STATE_ACTIONS.LOG_OUT,
+        })
         fetch('http://localhost:8080/api/user/logout', {
             method: 'GET',
             credentials: 'include',
         }).then(() => {
             navigate('/login')
         })
+    }
 
     // Effet pour gérer le clic à l'extérieur du menu déroulant
     useEffect(() => {

@@ -330,6 +330,7 @@ WHERE
     m.*,
     c.last_message_id,
     msg.timestamp AS last_message_timestamp,
+    msg.message_content AS last_message_content,
     u.name,
     u.login,
     u.surname,
@@ -371,6 +372,38 @@ WHERE
           return 0;
         }
         resolve(res[0].count);
+      });
+    });
+  }
+
+  static async getConversationFromLogins(login1, login2) {
+    return new Promise((resolve, reject) => {
+      const parameters = [login1, login2, login2, login1];
+      const query = `
+      SELECT
+        c.conversation_id,
+        c.match_id,
+        c.last_message_id
+      FROM
+        conversations c
+      WHERE
+        c.match_id = (
+          SELECT
+            m.id
+          FROM
+            matches m
+          WHERE
+            (m.user1 = ? AND m.user2 = ?)
+            OR (m.user1 = ? AND m.user2 = ?)
+        )
+    `;
+
+      connection.query(query, parameters, (err, res) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(res[0]);
       });
     });
   }

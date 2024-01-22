@@ -13,6 +13,7 @@ export class Match {
     this.created_at = obj.created_at;
     this.last_message_id = obj.last_message_id;
     this.last_message_timestamp = obj.last_message_timestamp;
+    this.last_message_content = obj.last_message_content;
     this.name = obj.name;
     this.surname = obj.surname;
     this.login = obj.login;
@@ -65,6 +66,14 @@ export class Match {
 
   set last_message_timestamp(last_message_timestamp) {
     this._last_message_timestamp = last_message_timestamp;
+  }
+
+  get last_message_content() {
+    return this._last_message_content;
+  }
+
+  set last_message_content(last_message_content) {
+    this._last_message_content = last_message_content;
   }
 
   get name() {
@@ -125,9 +134,10 @@ export class Match {
   }
 
   static async getMatch(user1, user2) {
+    const userMatch = new Match({ user1: user1, user2: user2 });
     const match = await DbRequestService.read("matches", {
-      user1: `${user1}`,
-      user2: `${user2}`,
+      user1: `${userMatch.user1}`,
+      user2: `${userMatch.user2}`,
     });
     if (match.length === 0) {
       return null;
@@ -156,6 +166,7 @@ export class Match {
       created_at: this.created_at,
       last_message_id: this.last_message_id,
       last_message_timestamp: this.last_message_timestamp,
+      last_message_content: this.last_message_content,
       name: this.name,
       surname: this.surname,
       login: this.login,
