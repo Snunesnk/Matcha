@@ -14,27 +14,22 @@
 
 .new-matches-section {
     padding: 10px;
-    min-height: 20%;
-    max-height: 20%;
+    min-height: 23%;
+    max-height: 23%;
 }
 
 .new-matches {
     display: flex;
     flex-direction: column;
-    overflow-x: auto;
     white-space: nowrap;
-
-    /* hide scrollbar */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-}
-
-.new-matches::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
+    height: 100%;
+    min-height: 100%;
 }
 
 .new-matches-container {
     padding-top: 10px;
+    overflow-x: auto;
+    min-height: 100%;
 }
 
 .new-match {
@@ -78,7 +73,8 @@
     width: 19px;
     height: 19px;
     border-radius: 50%;
-    border: 3px solid #200618; /* Optional: a white border around the avatar */
+    border: 3px solid #200618;
+    /* Optional: a white border around the avatar */
     z-index: 10;
 }
 
@@ -108,13 +104,16 @@
     flex-grow: 1;
 
     /* hide scrollbar */
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none;
+    /* IE and Edge */
+    scrollbar-width: none;
+    /* Firefox */
     transition: all 0.1s ease-in-out;
 }
 
 .messages .messages-list::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, Opera*/
+    display: none;
+    /* Chrome, Safari, Opera*/
 }
 
 .messages .message {
@@ -140,13 +139,11 @@
 
 .new-match:hover .name,
 .messages .message:hover .conv-name {
-    background: linear-gradient(
-        to right,
-        #dc21b8 20%,
-        #4ac0fc 40%,
-        #4ac0fc 60%,
-        #dc21b8 80%
-    );
+    background: linear-gradient(to right,
+            #dc21b8 20%,
+            #4ac0fc 40%,
+            #4ac0fc 60%,
+            #dc21b8 80%);
 
     /* Make the gradient background larger than the element to slide it */
     background-size: 200% auto;
@@ -185,11 +182,13 @@
 }
 
 .message img.avatar {
-    width: 60px; /* Adjust avatar size as desired */
+    width: 60px;
+    /* Adjust avatar size as desired */
     min-width: 60px;
     height: 60px;
     min-height: 60px;
-    border-radius: 50%; /* Circle shape */
+    border-radius: 50%;
+    /* Circle shape */
     position: relative;
 }
 
@@ -209,10 +208,12 @@
 }
 
 .message-info-header time {
-    font-size: 0.75rem; /* Smaller font size for date */
+    font-size: 0.75rem;
+    /* Smaller font size for date */
     color: #999999;
     margin-bottom: 5px;
-    align-self: flex-end; /* Align the date to the right */
+    align-self: flex-end;
+    /* Align the date to the right */
 }
 
 .message .message-info .message-snippet {
