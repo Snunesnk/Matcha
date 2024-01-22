@@ -92,7 +92,10 @@ export class Notifications {
     }
 
     // Send socket notification
-    sendNotification(newNotification.login, newNotification.type);
+    sendNotification(newNotification.login, newNotification.type, {
+      name,
+      imgA,
+    });
 
     return newNotification;
   }
@@ -116,15 +119,18 @@ export class Notifications {
     return data.map((notification) => new Notifications(notification));
   }
 
-  static async updateNotifications(notification) {
+  static async updateNotifications(notification, filters) {
     notification.read = 1;
-    const id = notification.id;
     notification.id = undefined;
     notification.name = undefined;
     notification.imgA = undefined;
-    const data = await DbRequestService.update("notifications", notification, {
-      id: id,
-    });
+
+    const data = await DbRequestService.update(
+      "notifications",
+      notification,
+      filters
+    );
+
     if (data.affectedRows === 0) {
       return null;
     }
@@ -142,6 +148,8 @@ export class Notifications {
     }
     return data;
   }
+
+  static async;
 
   toJSON() {
     return {

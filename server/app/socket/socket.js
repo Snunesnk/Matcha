@@ -162,10 +162,12 @@ const sendMessage = async (io, message) => {
   });
 };
 
-export const sendNotification = (login, notificationType) => {
+export const sendNotification = (login, notificationType, payload = {}) => {
   const userConnected = isUserConnected(_io, login);
 
   if (userConnected) {
-    _io.to(login).emit("notification", { type: notificationType });
+    _io
+      .to(login)
+      .emit("notification", { type: notificationType, payload: payload });
   }
 };
