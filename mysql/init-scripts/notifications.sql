@@ -3,7 +3,6 @@ create table notifications (
     `login` varchar(50) not null,
     `trigger_login` varchar(50),
     `type` varchar(50) not null,
-    `message` text,
     `created_at` timestamp default CURRENT_TIMESTAMP,
     `read` boolean default false,
 

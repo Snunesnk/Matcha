@@ -100,9 +100,9 @@ export class DbRequestService {
       const query = `INSERT IGNORE INTO \`${tableName}\` SET ?`;
       const params = _.pick(
         objectToAdd,
-        Object.getOwnPropertyNames(objectToAdd).map((prop) =>
-          prop.replace("_", "")
-        )
+        Object.entries(objectToAdd)
+          .filter(([key, value]) => value)
+          .map(([key]) => key.replace("_", ""))
       );
 
       connection.query(query, params, (err, res) => {
@@ -404,6 +404,34 @@ WHERE
           return;
         }
         resolve(res[0]);
+      });
+    });
+  }
+
+  static async getNotificationsForLogin(login) {
+    return new Promise((resolve, reject) => {
+      const parameters = [login];
+      const query = `
+      SELECT
+        n.type,
+        n.created_at,
+        n.read,
+        u.name,
+        u.imgA
+      FROM
+        notifications n
+      LEFT JOIN user u ON n.trigger_login = u.login
+      WHERE
+        n.login = ? AND n.type != 'message'
+      ORDER BY n.created_at DESC, n.id DESC
+    `;
+
+      connection.query(query, parameters, (err, res) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(res);
       });
     });
   }
