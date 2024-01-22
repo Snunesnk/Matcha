@@ -6,9 +6,10 @@ export class Notifications {
     this.login = obj.login;
     this.trigger_login = obj.trigger_login;
     this.type = obj.type;
-    this.message = obj.message;
-    this.created_at = obj.created_at;
-    this.read = obj.read;
+    this.created_at = obj.created_at || new Date(Date.now());
+    this.read = obj.read || 0;
+    this.name = obj.name;
+    this.imgA = obj.imgA;
   }
 
   get login() {
@@ -35,14 +36,6 @@ export class Notifications {
     this._type = type;
   }
 
-  get message() {
-    return this._message;
-  }
-
-  set message(message) {
-    this._message = message;
-  }
-
   get created_at() {
     return this._created_at;
   }
@@ -57,6 +50,22 @@ export class Notifications {
 
   set read(read) {
     this._read = read;
+  }
+
+  get name() {
+    return this._name;
+  }
+
+  set name(name) {
+    this._name = name;
+  }
+
+  get imgA() {
+    return this._imgA;
+  }
+
+  set imgA(imgA) {
+    this._imgA = imgA;
   }
 
   static async create(newNotification) {
@@ -75,9 +84,7 @@ export class Notifications {
   }
 
   static async getNotifications(login) {
-    const data = await DbRequestService.read("notifications", {
-      login: `${login}`,
-    });
+    const data = await DbRequestService.getNotificationsForLogin(login);
     if (data.length === 0) {
       return null;
     }
@@ -100,9 +107,10 @@ export class Notifications {
       login: this.login,
       trigger_login: this.trigger_login,
       type: this.type,
-      message: this.message,
       created_at: this.created_at,
       read: this.read,
+      name: this.name,
+      imgA: this.imgA,
     };
   }
 }
