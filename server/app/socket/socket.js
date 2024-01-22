@@ -31,14 +31,11 @@ export const initSocket = (io) => {
     .on("error", function (err) {
       if (err.code == "ENOTFOUND") {
         console.log("[ERROR] No device found at this address!");
-        // device.clientSocket.destroy();
-        // socketList.splice(socketList.indexOf(device), 1);
         return;
       }
 
       if (err.code == "ECONNREFUSED") {
         console.log("[ERROR] Connection refused! Please check the IP.");
-        // device.clientSocket.destroy();
         return;
       }
 

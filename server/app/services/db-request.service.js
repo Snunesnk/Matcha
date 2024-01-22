@@ -330,6 +330,7 @@ WHERE
     m.*,
     c.last_message_id,
     msg.timestamp AS last_message_timestamp,
+    msg.message_content AS last_message_content,
     u.name,
     u.login,
     u.surname,

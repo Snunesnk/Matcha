@@ -14,16 +14,7 @@ socket.on('connect', () => {
 })
 
 export const reconnectSocket = () => {
-    socket = io(SOCKET_SERVER_URL, {
-        withCredentials: true,
-        reconnection: true,
-        reconnectionAttempts: 5,
-        reconnectionDelay: 1000,
-        reconnectionDelayMax: 5000,
-    })
-    socket.on('connect', () => {
-        console.log('Socket connected:', socket.id)
-    })
+    socket.connect()
 }
 
 export const disconnectSocket = () => {
