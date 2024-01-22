@@ -3,6 +3,7 @@ import { sendNotification } from "../socket/socket.js";
 
 export class Notifications {
   constructor(obj = {}) {
+    this.id = obj.id;
     this.login = obj.login;
     this.trigger_login = obj.trigger_login;
     this.type = obj.type;
@@ -10,6 +11,14 @@ export class Notifications {
     this.read = obj.read || 0;
     this.name = obj.name;
     this.imgA = obj.imgA;
+  }
+
+  get id() {
+    return this._id;
+  }
+
+  set id(id) {
+    this._id = id;
   }
 
   get login() {
@@ -102,8 +111,24 @@ export class Notifications {
     return data.map((notification) => new Notifications(notification));
   }
 
+  static async updateNotifications(notification) {
+    notification.read = 1;
+    const id = notification.id;
+    notification.id = undefined;
+    notification.name = undefined;
+    notification.imgA = undefined;
+    const data = await DbRequestService.update("notifications", notification, {
+      id: id,
+    });
+    if (data.affectedRows === 0) {
+      return null;
+    }
+    return data;
+  }
+
   toJSON() {
     return {
+      id: this.id,
       login: this.login,
       trigger_login: this.trigger_login,
       type: this.type,
