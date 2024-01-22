@@ -112,12 +112,12 @@ const ChatComponent = ({
                 </div>
             </div>
             <div id="chat_body">
-                {messages === null && (
+                {!messages && (
                     <div className="loading">
                         <p>Loading...</p>
                     </div>
                 )}
-                {messages !== null && messages.length === 0 && (
+                {messages && messages.length === 0 && (
                     <div className="no-messages">
                         <p>Start the conversation</p>
                     </div>

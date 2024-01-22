@@ -37,8 +37,13 @@
     gap: 1em;
 }
 
-.navbar-menu svg:hover {
+.navbar-menu a:hover svg {
     color: #ef99de;
+}
+
+.nav-user-account:hover>svg {
+    color: #ef99de;
+    cursor: pointer;
 }
 
 .log-in-btn-container {
@@ -48,8 +53,13 @@
 }
 
 @keyframes fade-in {
-    0% {opacity: 0;}
-    100% {opacity: 1;}
+    0% {
+        opacity: 0;
+    }
+
+    100% {
+        opacity: 1;
+    }
 }
 
 @media screen and (max-width: 480px) {

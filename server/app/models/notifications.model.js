@@ -1,4 +1,5 @@
 import { DbRequestService } from "../services/db-request.service.js";
+import { sendNotification } from "../socket/socket.js";
 
 export class Notifications {
   constructor(obj = {}) {
@@ -66,6 +67,10 @@ export class Notifications {
     if (data.affectedRows === 0) {
       return null;
     }
+
+    // Send socket notification
+    sendNotification(newNotification.login, newNotification.type);
+
     return newNotification;
   }
 

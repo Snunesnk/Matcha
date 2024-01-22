@@ -188,7 +188,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    filter: drop-shadow(0 0 2px #4b3244);
+    filter: drop-shadow(0 0 1px black);
 }
 
 .user-picture-nav svg {
@@ -214,6 +214,7 @@
     background-color: #ffffff80;
     transition: all 100ms;
     cursor: pointer;
+    filter: drop-shadow(0 0 1px #4b3244);
 }
 
 .img-indicator.img-selected {
@@ -221,7 +222,7 @@
 }
 
 #btn-close-magnify-picture {
-    background-color: #ffffff40;
+    background-color: #ffffff90;
     color: #dc21b8;
     transition: all 100ms ease;
     position: absolute;
@@ -232,7 +233,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    box-shadow: 0 0 9px -3px black;
+    box-shadow: 0 0 6px -2px black;
 }
 
 #btn-close-magnify-picture:hover {

@@ -5,6 +5,7 @@ import authenticationService from "../services/authentication.service.js";
 export const NOTIFICATION_TYPE = {
   LIKE: "like",
   UNLIKE: "unlike",
+  VISIT: "visit",
   MATCH: "match",
   MESSAGE: "message",
 };
@@ -80,21 +81,20 @@ export const sendMessage = (io, message) => {
 
   if (userConnected) {
     io.to(message.to).emit("message", message);
-  } else {
-    Notifications.create({
-      type: NOTIFICATION_TYPE.MESSAGE,
-      login: message.to,
-      trigger_login: message.from,
-      message: message.content,
-    });
   }
+  Notifications.create({
+    type: NOTIFICATION_TYPE.MESSAGE,
+    login: message.to,
+    trigger_login: message.from,
+    message: message.content,
+  });
 };
 
-export const sendNotification = (login, notificationType, payload) => {
+export const sendNotification = (login, notificationType) => {
   const userConnected = isUserConnected(_io, login);
 
   if (userConnected) {
-    _io.to(login).emit(notificationType, payload);
+    _io.to(login).emit("notification", { type: notificationType });
   }
 };
 

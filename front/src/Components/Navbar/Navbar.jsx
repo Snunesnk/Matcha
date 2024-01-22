@@ -14,6 +14,8 @@ import {
 import './Navbar.css'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
+import socket from '../../Socket/socket'
+import { Badge } from '@mui/material'
 
 const LOGGED_IN_ROUTES = [
     '/onboarding',
@@ -24,6 +26,9 @@ const LOGGED_IN_ROUTES = [
     '/verify',
 ]
 const ONBOARDED_ROUTES = ['/dashboard', '/dashboard/*']
+const NOTIFICATION_ROUTE = '/dashboard/notifications'
+const MESSAGE_ROUTE = '/dashboard/messages'
+
 const checkIfLoggedInRoute = (path) => {
     if (LOGGED_IN_ROUTES.some((route) => path.startsWith(route))) {
         return true
@@ -41,17 +46,50 @@ const checkIfOnboardedRoute = (path) => {
 const Navbar = () => {
     const [loggedIn, setLoggedIn] = useState(false)
     const [onboarded, setOnboarded] = useState(false)
-    const match = useMatch('/login')
+    const onLogin = useMatch('/login')
     const [isDropdownOpen, setIsDropdownOpen] = useState(false)
     const dropdownRef = useRef(null)
     const location = useLocation()
     const navigate = useNavigate()
     const dispatch = useDispatch()
+    const [newNotification, setNewNotification] = useState(0)
+    const [newMessage, setNewMessage] = useState(0)
+    const [onNotif, setOnNotif] = useState(false)
+    const [onMessage, setOnMessage] = useState(false)
+
+    const handleSocketMessage = (notif, currentLocation) => {
+        const onNotif = currentLocation.pathname.startsWith(NOTIFICATION_ROUTE)
+        const onMessage = currentLocation.pathname.startsWith(MESSAGE_ROUTE)
+
+        if (
+            notif.type === 'like' ||
+            notif.type === 'unlike' ||
+            notif.type === 'match'
+        ) {
+            if (!onNotif) setNewNotification((prev) => prev + 1)
+        } else if (notif.type === 'message' && !onMessage) {
+            setNewMessage((prev) => prev + 1)
+        } else if (notif.type === 'match') {
+            if (!onNotif) setNewMessage((prev) => prev + 1)
+            if (!onMessage) setNewNotification((prev) => prev + 1)
+        }
+    }
 
     useEffect(() => {
         setLoggedIn(checkIfLoggedInRoute(location.pathname))
         setOnboarded(checkIfOnboardedRoute(location.pathname))
     }, [location])
+
+    useEffect(() => {
+        const handleSocketEvent = (notif) =>
+            handleSocketMessage(notif, location)
+
+        socket.on('notification', handleSocketEvent)
+
+        return () => {
+            socket.off('notification', handleSocketEvent)
+        }
+    }, [socket, location])
 
     // Fonction pour basculer l'affichage du menu déroulant
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen)
@@ -94,7 +132,7 @@ const Navbar = () => {
             </Link>
             {!loggedIn && (
                 <div className="center log-in-btn-container">
-                    {match ? (
+                    {onLogin ? (
                         <CreateAccountButton />
                     ) : (
                         <AlreadyHaveAccountBtn />
@@ -103,17 +141,30 @@ const Navbar = () => {
             )}
             {loggedIn && onboarded && (
                 <div className="navbar-menu">
-                    <Link to="/dashboard/notifications">
-                        <Notifications
-                            fontSize="large"
-                            sx={{ color: 'white' }}
-                        ></Notifications>
+                    <Link
+                        to="/dashboard/notifications"
+                        onClick={() => setNewNotification(0)}
+                    >
+                        <Badge badgeContent={newNotification} color="error">
+                            <Notifications
+                                fontSize="large"
+                                sx={{ color: 'white' }}
+                            ></Notifications>
+                        </Badge>
                     </Link>
-                    <Link to="/dashboard/messages">
-                        <Chat fontSize="large" sx={{ color: 'white' }}></Chat>
+                    <Link
+                        to="/dashboard/messages"
+                        onClick={() => setNewMessage(0)}
+                    >
+                        <Badge badgeContent={newMessage} color="error">
+                            <Chat
+                                fontSize="large"
+                                sx={{ color: 'white' }}
+                            ></Chat>
+                        </Badge>
                     </Link>
 
-                    <div ref={dropdownRef}>
+                    <div ref={dropdownRef} className="nav-user-account">
                         <AccountCircle
                             fontSize="large"
                             sx={{ color: 'white' }}
@@ -122,7 +173,8 @@ const Navbar = () => {
                         {isDropdownOpen && (
                             <div className="dropdown-menu">
                                 <Link to="dashboard/myprofile">
-                                    <Portrait />View profile
+                                    <Portrait />
+                                    View profile
                                 </Link>
                                 <Link to="dashboard/userSettings">
                                     <EditNote />
