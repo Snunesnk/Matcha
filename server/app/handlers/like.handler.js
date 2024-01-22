@@ -68,15 +68,11 @@ export default class {
             login: receiver,
             trigger_login: issuer,
             type: NOTIFICATION_TYPE.MATCH,
-            name: match.likeeName,
-            imgA: match.likeeImgA,
           });
           Notifications.create({
             login: issuer,
             trigger_login: receiver,
             type: NOTIFICATION_TYPE.MATCH,
-            name: match.likerName,
-            imgA: match.likerImgA,
           });
 
           Match.create({

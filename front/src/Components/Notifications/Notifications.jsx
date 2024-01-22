@@ -9,53 +9,31 @@ import {
 } from '@mui/icons-material'
 import { formatTimeDifference } from '../MessagesLeftPane/MessagesLeftPane'
 
+function formatTimeDifference(dateString) {
+    const currentDate = new Date()
+    const inputDate = new Date(dateString)
+
+    const timeDifference = currentDate - inputDate
+
+    const minutes = Math.floor(timeDifference / (1000 * 60))
+    const hours = Math.floor(timeDifference / (1000 * 60 * 60))
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+
+    if (minutes < 60) {
+        if (minutes < 1) {
+            return 'now'
+        }
+        return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`
+    } else if (hours < 24) {
+        return `${hours} hour${hours !== 1 ? 's' : ''} ago`
+    } else {
+        const options = { day: 'numeric', month: 'short' }
+        return inputDate.toLocaleDateString('fr-FR', options)
+    }
+}
+
 function Notifications() {
     const [notifications, setNotifications] = useState()
-    // const notifications = [
-    //     {
-    //         type: 'like',
-    //         user: 'John Doe',
-    //         timestamp: 'Il y a 10 minutes',
-    //         image: 'https://i.imgur.com/zYxDCQT.jpg',
-    //         read: 'false',
-    //     },
-    //     {
-    //         type: 'unlike',
-    //         user: 'Richard Miles',
-    //         timestamp: 'Il y a 20 minutes',
-    //         image: 'https://i.imgur.com/w4Mp4ny.jpg',
-    //         read: 'true',
-    //     },
-    //     {
-    //         type: 'match',
-    //         user: 'Sarah',
-    //         timestamp: 'Il y a 30 minutes',
-    //         image: 'https://i.imgur.com/ltXdE4K.jpg',
-    //         read: 'true',
-    //     },
-    //     {
-    //         type: 'match',
-    //         user: 'Lisa',
-    //         timestamp: 'Il y a 40 minutes',
-    //         image: 'https://i.imgur.com/AbZqFnR.jpg',
-    //         read: 'true',
-    //     },
-    //     {
-    //         type: 'visit',
-    //         user: 'Brian Cumin',
-    //         timestamp: 'Il y a 50 minutes',
-    //         image: 'https://i.imgur.com/ltXdE4K.jpg',
-    //         read: 'true',
-    //     },
-    //     {
-    //         type: 'visit',
-    //         user: 'Lance Bogrol',
-    //         timestamp: 'Il y a 60 minutes',
-    //         image: 'https://i.imgur.com/CtAQDCP.jpg',
-    //         read: 'true',
-    //     },
-    //     // Ajoutez plus de notifications ici si nécessaire
-    // ]
 
     const getMessageByType = (type) => {
         switch (type) {
@@ -112,7 +90,13 @@ function Notifications() {
                 )}
                 {notifications &&
                     notifications.map((notification, index) => (
-                        <div key={index} className="notification-list">
+                        <div
+                            key={index}
+                            className={
+                                'notification-list' +
+                                (notification.read ? ' read' : '')
+                            }
+                        >
                             <div className="notification-list_content">
                                 <div className="notification-list_img">
                                     <img
@@ -127,7 +111,11 @@ function Notifications() {
                                         {getMessageByType(notification.type)}
                                     </p>
                                     <p>
-                                        <small>{notification.timestamp}</small>
+                                        <small>
+                                            {formatTimeDifference(
+                                                notification.created_at
+                                            )}
+                                        </small>
                                     </p>
                                 </div>
                             </div>

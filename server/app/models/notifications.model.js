@@ -13,6 +13,14 @@ export class Notifications {
     this.imgA = obj.imgA;
   }
 
+  get id() {
+    return this._id;
+  }
+
+  set id(id) {
+    this._id = id;
+  }
+
   get login() {
     return this._login;
   }
@@ -108,37 +116,20 @@ export class Notifications {
     return data.map((notification) => new Notifications(notification));
   }
 
-  static async updateNotifications(notification, filters) {
+  static async updateNotifications(notification) {
     notification.read = 1;
+    const id = notification.id;
     notification.id = undefined;
     notification.name = undefined;
     notification.imgA = undefined;
-
-    const data = await DbRequestService.update(
-      "notifications",
-      notification,
-      filters
-    );
-
+    const data = await DbRequestService.update("notifications", notification, {
+      id: id,
+    });
     if (data.affectedRows === 0) {
       return null;
     }
     return data;
   }
-
-  static async getUnreadNotificationsCount(login) {
-    const data = await DbRequestService.read("notifications", {
-      login: `${login}`,
-      read: 0,
-    });
-
-    if (data.length === 0) {
-      return null;
-    }
-    return data;
-  }
-
-  static async;
 
   toJSON() {
     return {
