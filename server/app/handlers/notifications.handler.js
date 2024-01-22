@@ -25,6 +25,11 @@ export default class {
 
     if (!notifications) res.json([]);
     else res.json(notifications);
+
+    // Update notifications to read
+    notifications.forEach((notif) => {
+      Notifications.updateNotifications(notif);
+    });
   }
 
   static async readNotification(req, res) {
