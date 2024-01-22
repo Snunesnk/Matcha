@@ -25,9 +25,9 @@ const NewMatchesSection = ({ matches, setActiveConversation }) => (
         <h4>New matches</h4>
         <div className="new-matches">
             <div className="new-matches-container">
-                {matches.map((match) => (
+                {matches.map((match, i) => (
                     <NewMatch
-                        key={match.id}
+                        key={i}
                         match={match}
                         setActiveConversation={setActiveConversation}
                     />

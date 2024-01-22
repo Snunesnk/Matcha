@@ -286,12 +286,12 @@ WHERE
     return new Promise((resolve, reject) => {
       const parameters = [likee, liker];
       const query = `
-    SELECT COUNT(*) AS match_count
+    SELECT liker.name AS likerName, liker.imgA AS likerImgA, likee.name AS likeeName, likee.imgA AS likeeImgA 
 FROM
     user liker
     INNER JOIN userSettings likerSettings ON liker.login = likerSettings.userLogin
     INNER JOIN user likee ON likee.login = ?
-    INNER JOIN userSettings likeeSettings ON likee.login = likeeSettings.userLogin
+    LEFT JOIN userSettings likeeSettings ON likee.login = likeeSettings.userLogin
 WHERE
     liker.login = ?
     AND (
