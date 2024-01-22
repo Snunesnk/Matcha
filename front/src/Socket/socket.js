@@ -9,9 +9,7 @@ let socket = io(SOCKET_SERVER_URL, {
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
 })
-socket.on('connect', () => {
-    console.log('Socket connected:', socket.id)
-})
+socket.on('connect', () => {})
 
 export const reconnectSocket = () => {
     socket.connect()
