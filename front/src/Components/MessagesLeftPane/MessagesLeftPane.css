@@ -168,28 +168,29 @@
     height: 60px;
     border-radius: 50%;
     position: relative;
+    margin-left: 1%;
 }
 
 .message:hover .message-img-container:after {
     position: absolute;
     content: '';
-    height: 100%;
-    width: 100%;
-    top: 0;
-    left: 0;
-    background: linear-gradient(-135deg, #4ac0fc9c 0%, #dc21b89c 100%);
+    top: -4%;
+    left: -4%;
+    bottom: -4%;
+    right: -4%;
+    z-index: 1;
+    background: linear-gradient(-135deg, #4ac0fc 0%, #dc21b8 100%);
     border-radius: 50%;
 }
 
 .message img.avatar {
     width: 60px;
-    /* Adjust avatar size as desired */
     min-width: 60px;
     height: 60px;
     min-height: 60px;
     border-radius: 50%;
-    /* Circle shape */
     position: relative;
+    z-index: 2;
 }
 
 .message .message-info {

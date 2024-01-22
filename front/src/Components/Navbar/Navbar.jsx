@@ -60,11 +60,7 @@ const Navbar = () => {
         const onNotif = currentLocation.pathname.startsWith(NOTIFICATION_ROUTE)
         const onMessage = currentLocation.pathname.startsWith(MESSAGE_ROUTE)
 
-        if (
-            notif.type === 'like' ||
-            notif.type === 'unlike' ||
-            notif.type === 'match'
-        ) {
+        if (notif.type === 'like' || notif.type === 'unlike') {
             if (!onNotif) setNewNotification((prev) => prev + 1)
         } else if (notif.type === 'message' && !onMessage) {
             setNewMessage((prev) => prev + 1)

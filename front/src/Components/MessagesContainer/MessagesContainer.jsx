@@ -34,23 +34,56 @@ const MessagesContainer = () => {
         )
         if (matchUser) {
             setNewMatches((prev) => {
-                const newMatches = [...prev]
-                const index = newMatches.findIndex(
-                    (match) => match.login === message.from
-                )
-                newMatches.splice(index, 1)
-                return newMatches
+                prev.splice(newMatches.indexOf(matchUser), 1)
+                return prev
             })
             setConversations((prev) => [
                 {
                     ...matchUser,
-                    lastMessage: message.content,
-                    lastMessageDate: Date.now(),
+                    last_message_content: message.content,
+                    last_message_timestamp: new Date(Date.now()),
+                    unread: activeUser.login !== message.from,
                 },
                 ...prev,
             ])
         }
-        setSocketMessage(message)
+
+        if (activeUser && message.from === activeUser.login) {
+            setSocketMessage(message)
+        } else {
+            setConversations((prev) => {
+                const conversation = prev.find((c) => c.login === message.from)
+                if (conversation) {
+                    conversation.last_message_content = message.content
+                    conversation.last_message_timestamp = new Date(Date.now())
+                    conversation.unread = true
+                    prev.splice(prev.indexOf(conversation), 1)
+                    return [conversation, ...prev].sort((a, b) => {
+                        const timestampA = new Date(
+                            a.last_message_timestamp
+                        ).getTime()
+                        const timestampB = new Date(
+                            b.last_message_timestamp
+                        ).getTime()
+
+                        return timestampB - timestampA
+                    })
+                } else {
+                    return prev
+                }
+            })
+        }
+    }
+
+    const checkForNewMatch = (message) => {
+        if (message.type !== 'match') return
+
+        const matchUser = newMatches.find(
+            (match) => match.name === message.payload.name
+        )
+        if (matchUser) return
+
+        setNewMatches((prev) => [message.payload, ...prev])
     }
 
     useEffect(() => {
@@ -99,6 +132,8 @@ const MessagesContainer = () => {
                         }
                     } else if (conversations.length > 0) {
                         setActiveConversation(conversations[0])
+                    } else if (newMatches.length > 0) {
+                        setActiveConversation(newMatches[0])
                     }
                 })
                 .catch((error) => {
@@ -111,6 +146,8 @@ const MessagesContainer = () => {
     useEffect(() => {
         socket.on('message', handleSocketMessage)
 
+        socket.on('notification', checkForNewMatch)
+
         return () => {
             socket.off('message', handleSocketMessage)
         }
@@ -118,6 +155,18 @@ const MessagesContainer = () => {
 
     useEffect(() => {
         if (!activeConversation) return
+
+        setConversations((prev) => {
+            const conversation = prev.find(
+                (c) => c.login === activeConversation.login
+            )
+            if (conversation) {
+                conversation.unread = false
+                return [...prev]
+            } else {
+                return prev
+            }
+        })
 
         setActiveUser(null)
         fetch('http://localhost:8080/api/user/' + activeConversation.login, {
@@ -137,6 +186,15 @@ const MessagesContainer = () => {
             .catch((error) => {
                 console.log(error)
             })
+
+        fetch(
+            'http://localhost:8080/api/notifications/read/' +
+                activeConversation.login,
+            {
+                method: 'PUT',
+                credentials: 'include',
+            }
+        )
     }, [activeConversation])
 
     return (
@@ -167,6 +225,7 @@ const MessagesContainer = () => {
                             components={COMPONENTS}
                             setActiveComponent={setActiveComponent}
                             socketMessage={socketMessage}
+                            setConversations={setConversations}
                         />
                     ) : (
                         <div className="no-conversation">

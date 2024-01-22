@@ -90,16 +90,12 @@ export const sendMessage = (io, message) => {
   });
 };
 
-export const sendNotification = (login, notificationType) => {
+export const sendNotification = (login, notificationType, payload = {}) => {
   const userConnected = isUserConnected(_io, login);
 
   if (userConnected) {
-    _io.to(login).emit("notification", { type: notificationType });
+    _io
+      .to(login)
+      .emit("notification", { type: notificationType, payload: payload });
   }
 };
-
-// send new conversation
-// => A new match become a conversation because of a message
-
-// Send conversation update
-// => A new message is sent to a conversation
