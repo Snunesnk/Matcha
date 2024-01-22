@@ -47,6 +47,21 @@ export default class {
     res.status(200).send({ count: data?.affectedRows });
   }
 
+  static async readNotification(req, res) {
+    const login = req.decodedUser._login;
+    const login2 = req.params.login;
+    const notif = new Notifications({ trigger_login: login2 });
+    notif.created_at = undefined;
+
+    const data = await Notifications.updateNotifications(notif, {
+      type: "message",
+      trigger_login: login2,
+      login: login,
+    });
+
+    res.status(200).send({ count: data?.affectedRows });
+  }
+
   static async deleteNotification(req, res) {
     const login = req.params.login;
     const login2 = req.params.login2;

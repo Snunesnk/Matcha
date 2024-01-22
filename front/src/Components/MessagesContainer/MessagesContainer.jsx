@@ -183,6 +183,8 @@ const MessagesContainer = () => {
         socket.on('notification', checkForNewMatch)
         socket.on('online-status', handleSocketStatusEvent)
 
+        socket.on('notification', checkForNewMatch)
+
         return () => {
             socket.off('message', handleSocketMessageEvent)
             socket.off('notification', checkForNewMatch)
