@@ -74,9 +74,9 @@ export class DbRequestService {
           }
           // if value has mysql function like POINT(), we don't want to add quotes
           if (typeof value === "string" && value.includes("POINT")) {
-            queryCommand += ` ${startsWith} ${field} = ST_GeomFromText(?)`;
+            queryCommand += ` ${startsWith} \`${field}\` = ST_GeomFromText(?)`;
           } else {
-            queryCommand += ` ${startsWith} ${field} = ?`;
+            queryCommand += ` ${startsWith} \`${field}\` = ?`;
           }
           result.push(value);
         }
@@ -413,6 +413,7 @@ WHERE
       const parameters = [login];
       const query = `
       SELECT
+        n.id,
         n.type,
         n.created_at,
         n.read,

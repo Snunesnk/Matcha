@@ -68,14 +68,11 @@ export default class {
             login: receiver,
             trigger_login: issuer,
             type: NOTIFICATION_TYPE.MATCH,
-            message: `You matched with ${issuer}!`,
           });
           Notifications.create({
             login: issuer,
             trigger_login: receiver,
             type: NOTIFICATION_TYPE.MATCH,
-            message: `You matched with ${receiver}!`,
-            read: true,
           });
 
           Match.create({
