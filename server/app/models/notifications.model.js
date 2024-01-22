@@ -101,11 +101,7 @@ export class Notifications {
     }
 
     // Send socket notification
-    sendNotification(newNotification.login, newNotification.type, {
-      name,
-      imgA,
-      login: newNotification.trigger_login,
-    });
+    sendNotification(newNotification.login, newNotification.type);
 
     return newNotification;
   }

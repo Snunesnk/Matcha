@@ -158,16 +158,14 @@ const sendMessage = async (io, message) => {
     type: NOTIFICATION_TYPE.MESSAGE,
     login: message.to,
     trigger_login: message.from,
-    message_id: newMessage.message_id,
+    message: message.content,
   });
 };
 
-export const sendNotification = (login, notificationType, payload = {}) => {
+export const sendNotification = (login, notificationType) => {
   const userConnected = isUserConnected(_io, login);
 
   if (userConnected) {
-    _io
-      .to(login)
-      .emit("notification", { type: notificationType, payload: payload });
+    _io.to(login).emit("notification", { type: notificationType });
   }
 };

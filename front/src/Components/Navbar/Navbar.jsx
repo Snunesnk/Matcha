@@ -54,7 +54,8 @@ const Navbar = () => {
     const dispatch = useDispatch()
     const [newNotification, setNewNotification] = useState(0)
     const [newMessage, setNewMessage] = useState(0)
-    const [userImage, setUserImage] = useState(null)
+    const [onNotif, setOnNotif] = useState(false)
+    const [onMessage, setOnMessage] = useState(false)
 
     const handleSocketMessage = (notif, currentLocation) => {
         const onNotif = currentLocation.pathname.startsWith(NOTIFICATION_ROUTE)
@@ -63,8 +64,7 @@ const Navbar = () => {
         if (
             notif.type === 'like' ||
             notif.type === 'unlike' ||
-            notif.type === 'visit' ||
-            notif.type === 'interested'
+            notif.type === 'match'
         ) {
             if (!onNotif) setNewNotification((prev) => prev + 1)
         } else if (notif.type === 'message' && !onMessage) {
@@ -79,16 +79,6 @@ const Navbar = () => {
         setLoggedIn(checkIfLoggedInRoute(location.pathname))
         setOnboarded(checkIfOnboardedRoute(location.pathname))
     }, [location])
-
-    useEffect(() => {
-        if (!onboarded) return
-
-        const userInfos = sessionStorage.getItem('user_infos')
-        if (userInfos) {
-            const userImg = JSON.parse(userInfos).imgA
-            setUserImage(userImg)
-        }
-    }, [onboarded])
 
     useEffect(() => {
         const handleSocketEvent = (notif) =>
@@ -204,25 +194,11 @@ const Navbar = () => {
                     </Link>
 
                     <div ref={dropdownRef} className="nav-user-account">
-                        {userImage ? (
-                            <img
-                                src={
-                                    userImage.startsWith('http')
-                                        ? userImage
-                                        : 'http://localhost:8080/api' +
-                                          userImage
-                                }
-                                className="avatar"
-                                onClick={toggleDropdown}
-                            />
-                        ) : (
-                            <AccountCircle
-                                fontSize="large"
-                                sx={{ color: 'white' }}
-                                onClick={toggleDropdown}
-                                className={isDropdownOpen ? 'active' : ''}
-                            />
-                        )}
+                        <AccountCircle
+                            fontSize="large"
+                            sx={{ color: 'white' }}
+                            onClick={toggleDropdown}
+                        />
                         {isDropdownOpen && (
                             <div className="dropdown-menu">
                                 <Link to="dashboard/myprofile">
