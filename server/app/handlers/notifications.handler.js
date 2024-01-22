@@ -13,6 +13,16 @@ export default class {
     });
   }
 
+  static async getNotificationCount(req, res) {
+    const login = req.decodedUser._login;
+    const notifications = await Notifications.getUnreadNotificationsCount(
+      login
+    );
+
+    if (!notifications) res.json([]);
+    else res.json(notifications);
+  }
+
   static async deleteNotification(req, res) {
     const login = req.params.login;
     const login2 = req.params.login2;

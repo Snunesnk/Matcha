@@ -46,7 +46,7 @@ export class DbRequestService {
           value = `%${value}`;
         }
         const likeOrNot = index < whereLikeSize ? "LIKE" : "NOT LIKE";
-        queryCondition += ` ${startsWith} ${field} ${likeOrNot} ?`;
+        queryCondition += ` ${startsWith} \`${field}\` ${likeOrNot} ?`;
         result.push(value);
       },
       []

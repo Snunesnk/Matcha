@@ -131,6 +131,35 @@ const Navbar = () => {
         }
     }, [])
 
+    useEffect(() => {
+        if (!onboarded) return
+        fetch('http://localhost:8080/api/notifications/count', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                const messageCount = data.filter(
+                    (notif) =>
+                        notif.type === 'message' || notif.type === 'match'
+                ).length
+                const notifCount = data.filter(
+                    (notif) =>
+                        notif.type === 'like' ||
+                        notif.type === 'unlike' ||
+                        notif.type === 'match' ||
+                        notif.type === 'visit'
+                ).length
+                const onNotif = location.pathname.startsWith(NOTIFICATION_ROUTE)
+                if (!onNotif) setNewNotification(notifCount)
+                const onMessage = location.pathname.startsWith(MESSAGE_ROUTE)
+                if (!onMessage) setNewMessage(messageCount)
+            })
+    }, [onboarded])
+
     return (
         <div id="navbar">
             <Link to={loggedIn ? '/dashboard' : '/'}>

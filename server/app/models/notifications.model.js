@@ -126,6 +126,18 @@ export class Notifications {
     return data;
   }
 
+  static async getUnreadNotificationsCount(login) {
+    const data = await DbRequestService.read("notifications", {
+      login: `${login}`,
+      read: 0,
+    });
+
+    if (data.length === 0) {
+      return null;
+    }
+    return data;
+  }
+
   toJSON() {
     return {
       id: this.id,
