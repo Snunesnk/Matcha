@@ -40,6 +40,7 @@ import LoginPage, { action as loginAction } from '../Pages/Login/Login'
 import ResetPasswordPage from '../Pages/ResetPassword/ResetPassword'
 import Profile from '../Pages/Profile/Profile'
 
+
 const router = createBrowserRouter([
     {
         path: '/',

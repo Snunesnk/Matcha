@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import ChatComponent from '../ChatComponent'
 import UserProfile from '../UserProfile/UserProfile'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import socket from '../../Socket/socket'
 import './MessagesContainer.css'
 import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
 import { useLocation } from 'react-router-dom'
@@ -141,8 +142,19 @@ const MessagesContainer = () => {
     return (
         <div id="message-pannel">
             <div id="messages_component_container">
-                <div id="chat_list_container" data-active={ activeComponent === COMPONENTS.MESSAGE_LIST || activeComponent === COMPONENTS.NOTIFICATION} className="responsive-component">
-                    <MessagesLeftPane newMatches={newMatches} conversations={conversations}/>
+                <div
+                    id="chat_list_container"
+                    data-active={
+                        activeComponent === COMPONENTS.MESSAGE_LIST ||
+                        activeComponent === COMPONENTS.NOTIFICATION
+                    }
+                    className="responsive-component"
+                >
+                    <MessagesLeftPane
+                        newMatches={newMatches}
+                        conversations={conversations}
+                        setActiveConversation={setActiveConversation}
+                    />
                 </div>
                 <div
                     id="chat_container"
@@ -162,11 +174,27 @@ const MessagesContainer = () => {
                         </div>
                     )}
                 </div>
-                <div id="user_info_container" data-active={activeComponent === COMPONENTS.USER_PROFILE} className="responsive-component">
-                    <UserProfile user={DUMMY_USER} />
-                    <div className="user-profile-go-back">
-                        <ArrowBackIcon onClick={() => {setActiveComponent(COMPONENTS.CHAT)}}/>
-                    </div>
+                <div
+                    id="user_info_container"
+                    data-active={activeComponent === COMPONENTS.USER_PROFILE}
+                    className="responsive-component"
+                >
+                    {activeUser ? (
+                        <>
+                            <UserProfile user={activeUser} />
+                            <div className="user-profile-go-back">
+                                <ArrowBackIcon
+                                    onClick={() => {
+                                        setActiveComponent(COMPONENTS.CHAT)
+                                    }}
+                                />
+                            </div>
+                        </>
+                    ) : (
+                        <div className="no-conversation">
+                            {/* <p>Still waiting for the purr-fect match ?</p> */}
+                        </div>
+                    )}
                 </div>
             </div>
         </div>

@@ -20,15 +20,6 @@ const saveCredsToSessionMiddleware = (store) => (next) => (action) => {
         sendMessage(action.payload)
     }
 
-    if (action.type === USER_STATE_ACTIONS.LOG_OUT) {
-        sessionStorage.removeItem('user_infos')
-        disconnectSocket()
-    }
-
-    if (action.type === USER_STATE_ACTIONS.SEND_MESSAGE) {
-        sendMessage(action.payload)
-    }
-
     return next(action)
 }
 
