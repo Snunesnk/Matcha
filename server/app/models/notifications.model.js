@@ -11,15 +11,6 @@ export class Notifications {
     this.read = obj.read || 0;
     this.name = obj.name;
     this.imgA = obj.imgA;
-    this.message_id = obj.message_id;
-  }
-
-  get id() {
-    return this._id;
-  }
-
-  set id(id) {
-    this._id = id;
   }
 
   get login() {
@@ -76,14 +67,6 @@ export class Notifications {
 
   set imgA(imgA) {
     this._imgA = imgA;
-  }
-
-  get message_id() {
-    return this._message_id;
-  }
-
-  set message_id(message_id) {
-    this._message_id = message_id;
   }
 
   static async create(newNotification) {
@@ -167,7 +150,6 @@ export class Notifications {
       read: this.read,
       name: this.name,
       imgA: this.imgA,
-      message_id: this.message_id,
     };
   }
 }

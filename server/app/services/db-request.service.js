@@ -519,7 +519,6 @@ WHERE
       const parameters = [login];
       const query = `
       SELECT
-        n.id,
         n.type,
         n.created_at,
         n.read,
