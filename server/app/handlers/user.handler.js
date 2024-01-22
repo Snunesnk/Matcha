@@ -80,9 +80,10 @@ export default class {
       res.cookie("remember_me", jwtToken, cookieOptions);
       res.status(200).send({
         message: "LOG_IN_SUCCESS",
-        email: user._email,
-        name: user._name,
-        login: user._login,
+        email: user.email,
+        name: user.name,
+        login: user.login,
+        imgA: user.imgA,
       });
     } catch (error) {
       res.status(500).send({

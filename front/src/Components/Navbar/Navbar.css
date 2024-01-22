@@ -34,7 +34,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1em;
+    gap: 2em;
 }
 
 .navbar-menu a:hover svg {
@@ -44,6 +44,27 @@
 .nav-user-account:hover>svg {
     color: #ef99de;
     cursor: pointer;
+}
+
+.nav-user-account>svg.active {
+    color: #ef99de;
+}
+
+.nav-user-account>.avatar {
+    width: 3em;
+    height: 3em;
+    border-radius: 50%;
+    background-color: #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    cursor: pointer;
+    position: relative;
+}
+
+.nav-user-account>.avatar:hover {
+    box-shadow: 0 0 11px #ef99de;
 }
 
 .log-in-btn-container {
