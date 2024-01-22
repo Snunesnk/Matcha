@@ -11,8 +11,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
     const profileRef = useRef(null)
     const infosRef = useRef(null)
     const imgs = []
-    const userAge =
-        new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
+    const userAge = new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
 
     if (user.imgA) imgs.push(user.imgA)
     if (user.imgB) imgs.push(user.imgB)

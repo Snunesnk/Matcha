@@ -121,9 +121,8 @@ const Navbar = () => {
                         />
                         {isDropdownOpen && (
                             <div className="dropdown-menu">
-                                <Link to="/profile">
-                                    <Portrait />
-                                    View profile
+                                <Link to="dashboard/myprofile">
+                                    <Portrait />View profile
                                 </Link>
                                 <Link to="dashboard/userSettings">
                                     <EditNote />

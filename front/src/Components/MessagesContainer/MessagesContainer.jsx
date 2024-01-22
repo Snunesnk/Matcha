@@ -3,7 +3,6 @@ import ChatComponent from '../ChatComponent'
 import UserProfile from '../UserProfile/UserProfile'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import socket from '../../Socket/socket'
-
 import './MessagesContainer.css'
 import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
 import { useLocation } from 'react-router-dom'
