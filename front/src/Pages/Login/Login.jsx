@@ -66,7 +66,7 @@ const LoginPage = () => {
                         email: formResult.email,
                         name: formResult.name,
                         login: formResult.login,
-                        loggedIn: true,
+                        imgA: formResult.imgA,
                     },
                 })
                 if (formResult.message === 'EMAIL_NOT_VERIFIED')
