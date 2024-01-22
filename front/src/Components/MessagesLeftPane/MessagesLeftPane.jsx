@@ -79,37 +79,65 @@ const MessagesSection = ({ conversations, setActiveConversation }) => (
     </div>
 )
 
-const MessageSnippet = ({ conversation, setActiveConversation }) => (
-    <div
-        className={`message ${conversation.unread ? 'unread' : ''}`}
-        onClick={() => {
-            setActiveConversation(conversation)
-        }}
-    >
-        <div className="message-img-container">
-            <img
-                src={
-                    conversation.imgA.startsWith('http')
-                        ? conversation.imgA
-                        : 'http://localhost:8080/api' + conversation.imgA
-                }
-                alt="user avatar"
-                className="avatar"
-            />
-            <div
-                className={`status-indicator ${
-                    conversation.isOnline ? 'online' : 'offline'
-                }`}
-            ></div>
-        </div>
-        <div className="message-info">
-            <div className="message-info-header">
-                <div className="conv-name">{conversation.name}</div>
-                <time>{conversation.lastMessageDate}</time>
+function formatTimeDifference(dateString) {
+    const currentDate = new Date()
+    const inputDate = new Date(dateString)
+
+    const timeDifference = currentDate - inputDate
+
+    const minutes = Math.floor(timeDifference / (1000 * 60))
+    const hours = Math.floor(timeDifference / (1000 * 60 * 60))
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+
+    if (minutes < 60) {
+        if (minutes < 1) {
+            return 'now'
+        }
+        return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`
+    } else if (hours < 24) {
+        return `${hours} hour${hours !== 1 ? 's' : ''} ago`
+    } else {
+        const options = { day: 'numeric', month: 'short' }
+        return inputDate.toLocaleDateString('fr-FR', options)
+    }
+}
+
+const MessageSnippet = ({ conversation, setActiveConversation }) => {
+    const date = formatTimeDifference(conversation.last_message_timestamp)
+    return (
+        <div
+            className={`message ${conversation.unread ? 'unread' : ''}`}
+            onClick={() => {
+                setActiveConversation(conversation)
+            }}
+        >
+            <div className="message-img-container">
+                <img
+                    src={
+                        conversation.imgA.startsWith('http')
+                            ? conversation.imgA
+                            : 'http://localhost:8080/api' + conversation.imgA
+                    }
+                    alt="user avatar"
+                    className="avatar"
+                />
+                <div
+                    className={`status-indicator ${
+                        conversation.isOnline ? 'online' : 'offline'
+                    }`}
+                ></div>
             </div>
-            <p className="message-snippet">{conversation.lastMessage}</p>
+            <div className="message-info">
+                <div className="message-info-header">
+                    <div className="conv-name">{conversation.name}</div>
+                    <time>{date}</time>
+                </div>
+                <p className="message-snippet">
+                    {conversation.last_message_content}
+                </p>
+            </div>
         </div>
-    </div>
-)
+    )
+}
 
 export default MessagesLeftPane

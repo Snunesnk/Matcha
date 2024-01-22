@@ -29,6 +29,31 @@ const MessagesContainer = () => {
     const searchParams = new URLSearchParams(location.search)
     const user = searchParams.get('user')
 
+    const handleSocketMessage = (message) => {
+        const matchUser = newMatches.find(
+            (match) => match.login === message.from
+        )
+        if (matchUser) {
+            setNewMatches((prev) => {
+                const newMatches = [...prev]
+                const index = newMatches.findIndex(
+                    (match) => match.login === message.from
+                )
+                newMatches.splice(index, 1)
+                return newMatches
+            })
+            setConversations((prev) => [
+                {
+                    ...matchUser,
+                    lastMessage: message.content,
+                    lastMessageDate: Date.now(),
+                },
+                ...prev,
+            ])
+        }
+        setSocketMessage(message)
+    }
+
     useEffect(() => {
         const getMatches = async () => {
             fetch('http://localhost:8080/api/matches', {
@@ -45,7 +70,18 @@ const MessagesContainer = () => {
                 .then((data) => {
                     const newMatches = data.filter((m) => !m.last_message_id)
                     setNewMatches(newMatches)
-                    const conversations = data.filter((m) => m.last_message_id)
+                    const conversations = data
+                        .filter((m) => m.last_message_id)
+                        .sort((a, b) => {
+                            const timestampA = new Date(
+                                a.last_message_timestamp
+                            ).getTime()
+                            const timestampB = new Date(
+                                b.last_message_timestamp
+                            ).getTime()
+
+                            return timestampB - timestampA
+                        })
                     setConversations(conversations)
 
                     if (user) {
@@ -74,30 +110,11 @@ const MessagesContainer = () => {
     }, [])
 
     useEffect(() => {
-        socket.on('message', (message) => {
-            const matchUser = newMatches.find(
-                (match) => match.login === message.from
-            )
-            if (matchUser) {
-                setNewMatches((prev) => {
-                    const newMatches = [...prev]
-                    const index = newMatches.findIndex(
-                        (match) => match.login === message.from
-                    )
-                    newMatches.splice(index, 1)
-                    return newMatches
-                })
-                setConversations((prev) => [
-                    {
-                        ...matchUser,
-                        lastMessage: message.content,
-                        lastMessageDate: Date.now(),
-                    },
-                    ...prev,
-                ])
-            }
-            setSocketMessage(message)
-        })
+        socket.on('message', handleSocketMessage)
+
+        return () => {
+            socket.off('message', handleSocketMessage)
+        }
     }, [socket])
 
     useEffect(() => {

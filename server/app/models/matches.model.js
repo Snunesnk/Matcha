@@ -130,8 +130,6 @@ export class Match {
       return null;
     }
 
-    console.log(matches);
-
     return matches.map((match) => new Match(match).toJSON());
   }
 
