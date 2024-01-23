@@ -1,9 +1,9 @@
 import { useState, useRef, useCallback, useEffect } from 'react'
 import './DualRangeSlider.css'
 
-const DualRangeSlider = ({ min, max, onChange }) => {
-    const [minVal, setMinVal] = useState(min)
-    const [maxVal, setMaxVal] = useState(max)
+const DualRangeSlider = ({ min, max, defaultValue, onChange }) => {
+    const [minVal, setMinVal] = useState(defaultValue.min)
+    const [maxVal, setMaxVal] = useState(defaultValue.max)
     const minValRef = useRef(null)
     const maxValRef = useRef(null)
     const range = useRef(null)

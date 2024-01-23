@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import Button from '../Button/Button'
 import ImageUpload from '../ImageUpload'
-import Select from '../Select/Select'
+import Select, { MultiSelect } from '../Select/Select'
 import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
 import './Settings.css'
 
@@ -44,8 +44,7 @@ const getUserSettings = (login, setUser) => {
 }
 
 const saveUserImages = async (login, pictures) => {
-    if (!pictures)
-        return
+    if (!pictures) return
 
     // I need to convert url pictures to file pictures to be able to same them
     for (let i = 0; i < pictures.length; i++) {
@@ -177,15 +176,20 @@ const UserSettings = () => {
         <div id="user-settings">
             <div id="settings-container">
                 <h2>Personal infos</h2>
-                <ImageUpload defaultImages={personalPictures} setFileList={setPersonalPictures} />
+                <ImageUpload
+                    defaultImages={personalPictures}
+                    setFileList={setPersonalPictures}
+                />
 
                 <div className="setting">
                     <div>Last name</div>
-                    <input className="setting-input" value={lastName}
+                    <input
+                        className="setting-input"
+                        value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
                     />
                 </div>
-                
+
                 <div className="setting">
                     <div>First name</div>
                     <input
@@ -194,7 +198,7 @@ const UserSettings = () => {
                         onChange={(e) => setFirstName(e.target.value)}
                     />
                 </div>
-                
+
                 <div className="setting">
                     <div>Email adress</div>
                     <input
@@ -224,9 +228,12 @@ const UserSettings = () => {
 
                 <div className="setting complex-setting personal-setting">
                     <div className="setting-infos">You are interested in</div>
-                    <TagsAutocomplete value={personalTags} setValue={(e, tagsList) => setPersonalTags(tagsList)}/>
+                    <TagsAutocomplete
+                        value={personalTags}
+                        setValue={(e, tagsList) => setPersonalTags(tagsList)}
+                    />
                 </div>
-                
+
                 <Button
                     text={'Save personal infos'}
                     btnClass={'grey mrg-top-30'}
