@@ -63,7 +63,8 @@ const Navbar = () => {
         if (
             notif.type === 'like' ||
             notif.type === 'unlike' ||
-            notif.type === 'visit'
+            notif.type === 'visit' ||
+            notif.type === 'interested'
         ) {
             if (!onNotif) setNewNotification((prev) => prev + 1)
         } else if (notif.type === 'message' && !onMessage) {

@@ -32,6 +32,11 @@ export const initSocket = (io) => {
       sendVisit(io, visit);
     });
 
+    socket.on("interested", (payload) => {
+      payload.from = socket.decoded.login;
+      sendInterest(io, payload);
+    });
+
     socket.on("online-check", async (payload) => {
       const status = isUserConnected(io, payload.login);
       let lastOnline = null;
@@ -109,6 +114,19 @@ function isUserConnected(io, roomName) {
   // Check if the room exists and has at least one member
   return room && room.size > 0;
 }
+
+const sendInterest = async (io, interest) => {
+  const userConnected = isUserConnected(io, interest.to);
+
+  if (userConnected) {
+    io.to(interest.to).emit("interested", interest);
+  }
+  Notifications.create({
+    type: NOTIFICATION_TYPE.INTERESTED,
+    login: interest.to,
+    trigger_login: interest.from,
+  });
+};
 
 const sendVisit = async (io, visit) => {
   const userConnected = isUserConnected(io, visit.to);

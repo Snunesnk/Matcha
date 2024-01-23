@@ -24,6 +24,9 @@ const saveCredsToSessionMiddleware = (store) => (next) => (action) => {
         case USER_STATE_ACTIONS.CHECK_ONLINE_STATUS:
             sendNotif('online-check', action.payload)
             break
+        case USER_STATE_ACTIONS.INTERESTED:
+            sendNotif('interested', action.payload)
+            break
         default:
             break
     }

@@ -213,12 +213,8 @@ SELECT DISTINCT
   u.login,
   u.bio,
   u.rating,
-  u.gender,
   GROUP_CONCAT(ut.tagBwid ORDER BY ut.tagBwid ASC SEPARATOR ', ') AS tags,
-  CASE WHEN n.type IS NULL THEN 0 ELSE 1 END AS alreadySeen,
-  COALESCE(tc.tagCount, 0) AS tagMatchCount,
-  COALESCE(matchingTags.tagCount, 0) AS commonTagsCount,
-  ST_Distance_Sphere(u.coordinate, currentUser.coordinate) * 0.001 AS distance
+  CASE WHEN n.type IS NULL THEN 0 ELSE 1 END AS alreadySeen
 FROM
     user u
   INNER JOIN userSettings us ON u.login = us.userLogin
@@ -226,38 +222,7 @@ FROM
   INNER JOIN userSettings currentUs ON currentUser.login = currentUs.userLogin
   LEFT JOIN userTag ut ON u.login = ut.userLogin
   LEFT JOIN notifications n ON u.login = n.login AND n.type = 'visit' AND n.trigger_login = currentUser.login
-  LEFT JOIN (
-    SELECT
-      ut.userLogin,
-      COUNT(*) AS tagCount
-    FROM
-      userTag ut\n`;
-      if (userFilters.tags && userFilters.tags.length > 0) {
-        query += `
-          WHERE
-            ut.tagBwid IN (?`;
-        for (let i = 1; i < userFilters.tags.length; i++) {
-          query += ", ?";
-        }
-        query += `)\n`;
-      }
-      query += `
-            GROUP BY ut.userLogin
-  ) tc ON tc.userLogin = u.login
-  LEFT JOIN (
-    SELECT 
-      ut1.userLogin, 
-      COUNT(*) as tagCount
-    FROM 
-      userTag ut1
-      INNER JOIN user currentUser ON currentUser.login = ?
-      INNER JOIN userTag ut2 ON ut1.tagBwid = ut2.tagBwid AND ut2.userLogin = currentUser.login
-    WHERE 
-      ut1.userLogin <> currentUser.login
-    GROUP BY 
-      ut1.userLogin
-  ) matchingTags ON u.login = matchingTags.userLogin
-  WHERE
+WHERE
       u.login <> currentUser.login
       AND u.verified = 1
       AND u.onboarded = 1
@@ -337,30 +302,8 @@ FROM
 
       query += `
       GROUP BY u.login
-      ORDER BY alreadySeen ASC,`;
-
-      switch (userFilters.sort) {
-        case "Age":
-          query += " TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE())";
-          break;
-        case "Popularity":
-          query += " u.rating";
-          break;
-        case "Distance":
-          query += " ST_Distance_Sphere(currentUser.coordinate, u.coordinate)";
-          break;
-        case "Tags":
-          query += " tagMatchCount";
-          break;
-        default:
-          query += " u.rating";
-      }
-
-      query += userFilters.sortDirection
-        ? " " + userFilters.sortDirection
-        : " DESC";
-
-      query += `, u.rating DESC, commonTagsCount DESC`;
+      ORDER BY alreadySeen ASC, u.rating DESC
+      `;
 
       connection.query(query, parameters, (err, res) => {
         if (err) {

@@ -104,6 +104,8 @@ const MessagesSection = ({
 )
 
 export function formatTimeDifference(dateString) {
+    if (!dateString) return 'a while ago'
+
     const currentDate = new Date()
     const inputDate = new Date(dateString)
 
