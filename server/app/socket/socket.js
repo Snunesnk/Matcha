@@ -25,6 +25,11 @@ export const initSocket = (io) => {
       sendMessage(io, { ...message, from: socket.decoded.login });
     });
 
+    socket.on("visit", (visit) => {
+      visit.from = socket.decoded.login;
+      sendVisit(io, visit);
+    });
+
     socket.on("disconnect", () => {
       socket.leave(userLogin);
     });
@@ -74,7 +79,20 @@ function isUserConnected(io, roomName) {
   return room && room.size > 0;
 }
 
-export const sendMessage = async (io, message) => {
+const sendVisit = async (io, visit) => {
+  const userConnected = isUserConnected(io, visit.to);
+
+  if (userConnected) {
+    io.to(visit.to).emit("visit", visit);
+  }
+  Notifications.create({
+    type: NOTIFICATION_TYPE.VISIT,
+    login: visit.to,
+    trigger_login: visit.from,
+  });
+};
+
+const sendMessage = async (io, message) => {
   const newMessage = await Message.create(message);
 
   const userConnected = isUserConnected(io, message.to);
