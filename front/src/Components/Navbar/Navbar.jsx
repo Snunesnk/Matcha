@@ -94,9 +94,6 @@ const Navbar = () => {
             handleSocketMessage(notif, location)
 
         socket.on('notification', handleSocketEvent)
-        socket.on('online-status', () => {
-            console.log('online status received')
-        })
 
         return () => {
             socket.off('notification', handleSocketEvent)

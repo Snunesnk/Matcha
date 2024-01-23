@@ -86,7 +86,6 @@ async function fillRandomUserProfile() {
 
   const verified = true;
   const onboarded = true;
-  const isOnline = faker.datatype.boolean();
   const lastOnline = faker.date.between("2023-01-01", "2023-03-30");
 
   const prefMale = faker.datatype.boolean();
@@ -119,7 +118,6 @@ async function fillRandomUserProfile() {
     gender,
     verified,
     onboarded,
-    isOnline,
     lastOnline,
     prefMale,
     prefFemale,
