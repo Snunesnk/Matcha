@@ -32,12 +32,15 @@ export const initSocket = (io) => {
       sendVisit(io, visit);
     });
 
+    // socket.on("online-status", (status) => {
+    //   socket.broadcast.emit("online-status", {
+    //     login: socket.decoded.login,
+    //     status,
+    //   });
+    // });
+
     socket.on("disconnect", () => {
-      socket.broadcast.emit("online-status", {
-        login: socket.decoded.login,
-        online: false,
-        lastOnline: new Date(Date.now()),
-      });
+      console.log("user disconnected", socket.decoded.login);
       socket.leave(userLogin);
       User.updateByLogin(userLogin, { lastOnline: new Date(Date.now()) });
     });
@@ -50,6 +53,11 @@ export const initSocket = (io) => {
     socket.broadcast.emit("online-status", {
       login: socket.decoded.login,
       online: true,
+    });
+
+    socket.broadcast.emit("online-status", {
+      login: socket.decoded.login,
+      status: true,
     });
   })
     .on("error", function (err) {
