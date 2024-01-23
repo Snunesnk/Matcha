@@ -120,33 +120,7 @@ function isUserConnected(io, roomName) {
   return room && room.size > 0;
 }
 
-const sendInterest = async (io, interest) => {
-  const userConnected = isUserConnected(io, interest.to);
-
-  if (userConnected) {
-    io.to(interest.to).emit("interested", interest);
-  }
-  Notifications.create({
-    type: NOTIFICATION_TYPE.INTERESTED,
-    login: interest.to,
-    trigger_login: interest.from,
-  });
-};
-
-const sendVisit = async (io, visit) => {
-  const userConnected = isUserConnected(io, visit.to);
-
-  if (userConnected) {
-    io.to(visit.to).emit("visit", visit);
-  }
-  Notifications.create({
-    type: NOTIFICATION_TYPE.VISIT,
-    login: visit.to,
-    trigger_login: visit.from,
-  });
-};
-
-const sendMessage = async (io, message) => {
+export const sendMessage = async (io, message) => {
   const newMessage = await Message.create(message);
 
   const userConnected = isUserConnected(io, message.to);
@@ -158,7 +132,7 @@ const sendMessage = async (io, message) => {
     type: NOTIFICATION_TYPE.MESSAGE,
     login: message.to,
     trigger_login: message.from,
-    message: message.content,
+    message_id: newMessage.message_id,
   });
 };
 
