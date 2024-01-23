@@ -19,8 +19,8 @@ export const disconnectSocket = () => {
     if (socket) socket.disconnect()
 }
 
-export const sendMessage = (payload) => {
-    socket.emit('message', payload)
+export const sendNotif = (type, payload) => {
+    socket.emit(type, payload)
 }
 
 export default socket

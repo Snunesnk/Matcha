@@ -2,7 +2,7 @@ import { USER_STATE_ACTIONS } from '../constants'
 import {
     disconnectSocket,
     reconnectSocket,
-    sendMessage,
+    sendNotif,
 } from '../Socket/socket.js'
 
 const saveCredsToSessionMiddleware = (store) => (next) => (action) => {
@@ -17,7 +17,11 @@ const saveCredsToSessionMiddleware = (store) => (next) => (action) => {
     }
 
     if (action.type === USER_STATE_ACTIONS.SEND_MESSAGE) {
-        sendMessage(action.payload)
+        sendNotif('message', action.payload)
+    }
+
+    if (action.type === USER_STATE_ACTIONS.SEND_VISIT) {
+        sendNotif('visit', action.payload)
     }
 
     return next(action)
