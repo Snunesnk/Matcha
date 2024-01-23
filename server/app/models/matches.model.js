@@ -18,6 +18,7 @@ export class Match {
     this.surname = obj.surname;
     this.login = obj.login;
     this.imgA = obj.imgA;
+    this.read = obj.read;
   }
 
   get user1() {
@@ -108,6 +109,14 @@ export class Match {
     this._imgA = imgA;
   }
 
+  get read() {
+    return this._read;
+  }
+
+  set read(read) {
+    this._read = read;
+  }
+
   static async create(newMatch) {
     try {
       const match = new Match(newMatch);
@@ -171,6 +180,7 @@ export class Match {
       surname: this.surname,
       login: this.login,
       imgA: this.imgA,
+      read: this.read,
     };
   }
 }

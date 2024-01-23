@@ -74,8 +74,8 @@ function isUserConnected(io, roomName) {
   return room && room.size > 0;
 }
 
-export const sendMessage = (io, message) => {
-  Message.create(message);
+export const sendMessage = async (io, message) => {
+  const newMessage = await Message.create(message);
 
   const userConnected = isUserConnected(io, message.to);
 
@@ -86,7 +86,7 @@ export const sendMessage = (io, message) => {
     type: NOTIFICATION_TYPE.MESSAGE,
     login: message.to,
     trigger_login: message.from,
-    message: message.content,
+    message_id: newMessage.message_id,
   });
 };
 

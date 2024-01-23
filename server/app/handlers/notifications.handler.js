@@ -4,8 +4,10 @@ export default class {
   static async getNotifications(req, res) {
     const login = req.decodedUser._login;
     const notifications = await Notifications.getNotifications(login);
-    if (!notifications) res.json([]);
-    else res.json(notifications);
+    if (!notifications) {
+      res.json([]);
+      return;
+    } else res.json(notifications);
 
     // Update notifications to read
     notifications.forEach((notif) => {

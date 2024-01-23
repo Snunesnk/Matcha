@@ -5,6 +5,7 @@ create table notifications (
     `type` varchar(50) not null,
     `created_at` timestamp default CURRENT_TIMESTAMP,
     `read` boolean default false,
+    `message_id` int,
 
     foreign key (login) references user(login) on delete cascade,
     foreign key (trigger_login) references user(login) on delete set null
