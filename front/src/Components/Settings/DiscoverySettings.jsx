@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import Button from '../Button/Button'
 import DualRangeSlider from '../DualRangeSlider/DualRangeSlider'
 import RangeSlider from '../RangeSlider/RangeSlider'
 import { MultiSelect } from '../Select/Select'
@@ -16,7 +15,8 @@ const FAME_MAX = 100
 
 const GENDERS = ['Female', 'Male', 'Non-binary']
 
-const getUserSettings = (setUser) => {
+const getUserSettings = (setUser, setLoading) => {
+    setLoading(true)
     const options = {
         method: 'GET',
         headers: {
@@ -85,91 +85,6 @@ const savePreferences = (
         })
 }
 
-const savePreferences = (
-    userPreferences,
-    maxDistance,
-    ageMin,
-    ageMax,
-    searchTags,
-    fameMin,
-    fameMax,
-    setLoading
-) => {
-    setLoading(true)
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-            userPreferences,
-            distMax: maxDistance,
-            ageMin,
-            ageMax,
-            tags: searchTags,
-            fameMin,
-            fameMax,
-        }),
-    }
-    fetch('http://localhost:8080/api/user-settings', options)
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            } else if (response.status === 401) {
-                window.location.href = '/'
-            } else throw new Error('Something went wrong ...')
-        })
-        .then((data) => {
-            setLoading(false)
-            alert('Discovery settings saved')
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-}
-
-const savePreferences = (
-    userPreferences,
-    maxDistance,
-    ageMin,
-    ageMax,
-    searchTags,
-    fameMin,
-    fameMax
-) => {
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-            userPreferences,
-            distMax: maxDistance,
-            ageMin,
-            ageMax,
-            tags: searchTags,
-            fameMin,
-            fameMax,
-        }),
-    }
-    fetch('http://localhost:8080/api/user-settings', options)
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            } else if (response.status === 401) {
-                window.location.href = '/'
-            } else throw new Error('Something went wrong ...')
-        })
-        .then((data) => {
-            console.log(data)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-}
-
 const DiscoverySettings = () => {
     const [user, setUser] = useState(null)
     const [maxDistance, setMaxDistance] = useState(DIST_MAX)
@@ -179,9 +94,10 @@ const DiscoverySettings = () => {
     const [fameMax, setFameMax] = useState(FAME_MAX)
     const [searchTags, setSearchTags] = useState([])
     const [userPreferences, setUserPreferences] = useState([])
+    const [loading, setLoading] = useState(false)
 
     useEffect(() => {
-        getUserSettings(setUser)
+        getUserSettings(setUser, setLoading)
     }, [])
 
     useEffect(() => {
@@ -291,9 +207,8 @@ const DiscoverySettings = () => {
                             }}
                         />
                     </div>
-                    <Button
-                        text={'Save discovery settings'}
-                        btnClass={'grey mrg-top-30'}
+                    <button
+                        className="btn grey mrg-top-30"
                         onClick={() => {
                             savePreferences(
                                 userPreferences,
@@ -302,10 +217,14 @@ const DiscoverySettings = () => {
                                 ageMax,
                                 searchTags,
                                 fameMin,
-                                fameMax
+                                fameMax,
+                                setLoading
                             )
                         }}
-                    />
+                        disabled={loading}
+                    >
+                        Save discovery settings
+                    </button>
                 </div>
             ) : (
                 <p>Loading...</p>
