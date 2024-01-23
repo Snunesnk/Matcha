@@ -66,7 +66,6 @@
 .user-location-infos {
     display: flex;
     align-items: center;
-    margin-top: 10px;
 }
 
 .user-location-infos svg {
@@ -93,8 +92,6 @@
     width: 100%;
     display: flex;
     justify-content: left;
-    margin-top: 20px;
-    margin-bottom: 20px;
     font-weight: 500;
 }
 
@@ -251,21 +248,17 @@
     }
 }
 
-.icons-bar {
-    display: flex;
-    
 .info-chip-container {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: 10px;
 }
 
 .info-chip-container .indicator {
     border-radius: 50%;
     width: 10px;
     height: 10px;
-    margin: 0 5px;
+    margin: 0 5px 0px 15px;
 }
 
 .info-chip-container .indicator.online {
@@ -280,7 +273,24 @@
     font-size: 0.8rem;
     font-weight: 300;
     color: #ffffff80;
-.icons-bar {
+}
+
+.info-row {
+    width: 100%;
     display: flex;
-    
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: last baseline;
+}
+
+.info-rating {
+    display: flex;
+    flex-direction:row;
+    gap: 5px;
+}
+
+.like-block {
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
 }
