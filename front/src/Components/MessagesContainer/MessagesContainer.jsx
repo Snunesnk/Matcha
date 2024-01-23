@@ -60,6 +60,26 @@ const handleSocketMessage = (
         })
     }
 }
+const handleSocketStatus = (status, setNewMatches, setConversations) => {
+    setConversations((prev) => {
+        const conversation = prev.find((c) => c.login === status.login)
+        if (conversation) {
+            conversation.online = status.online
+            return [...prev]
+        } else {
+            return prev
+        }
+    })
+    setNewMatches((prev) => {
+        const match = prev.find((m) => m.login === status.login)
+        if (match) {
+            match.online = status.online
+            return [...prev]
+        } else {
+            return prev
+        }
+    })
+}
 
 const MessagesContainer = () => {
     const [activeComponent, setActiveComponent] = useState(
@@ -153,13 +173,17 @@ const MessagesContainer = () => {
                 setConversations
             )
         }
+        const handleSocketStatusEvent = (status) => {
+            handleSocketStatus(status, setNewMatches, setConversations)
+        }
         socket.on('message', handleSocketMessageEvent)
-
         socket.on('notification', checkForNewMatch)
+        socket.on('online-status', handleSocketStatusEvent)
 
         return () => {
             socket.off('message', handleSocketMessageEvent)
             socket.off('notification', checkForNewMatch)
+            socket.off('online-status', handleSocketStatusEvent)
         }
     }, [socket, newMatches, activeConversation])
 

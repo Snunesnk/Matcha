@@ -311,33 +311,23 @@
     margin-top: 10px;
 }
 
-.indicator-container {
-    display: flex;
-    justify-content: start;
-    align-items: center;
-    flex-direction: row;
-    margin-left: 10px;
-}
-
-
-#user-profile-container .indicator {
+.info-chip-container .indicator {
     border-radius: 50%;
     width: 10px;
     height: 10px;
     margin: 0 5px;
 }
 
-#user-profile-container .indicator.online {
+.info-chip-container .indicator.online {
     background-color: #37c898;
 }
 
-#user-profile-container .indicator.offline {
+.info-chip-container .indicator.offline {
     background-color: red;
 }
 
-#user-profile-container .last-online {
+.info-chip-container p {
     font-size: 0.8rem;
     font-weight: 300;
     color: #ffffff80;
-    margin: 0;
 }

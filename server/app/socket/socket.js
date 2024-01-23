@@ -32,15 +32,30 @@ export const initSocket = (io) => {
       sendVisit(io, visit);
     });
 
-    // socket.on("online-status", (status) => {
-    //   socket.broadcast.emit("online-status", {
-    //     login: socket.decoded.login,
-    //     status,
-    //   });
-    // });
+    socket.on("online-check", async (payload) => {
+      const status = isUserConnected(io, payload.login);
+      let lastOnline = null;
+
+      if (!status) {
+        const user = await User.getUserByLogin(payload.login);
+        if (user) {
+          lastOnline = user.lastOnline;
+        }
+      }
+
+      socket.emit("online-status", {
+        login: payload.login,
+        online: status === true,
+        lastOnline: lastOnline,
+      });
+    });
 
     socket.on("disconnect", () => {
-      console.log("user disconnected", socket.decoded.login);
+      socket.broadcast.emit("online-status", {
+        login: socket.decoded.login,
+        online: false,
+        lastOnline: new Date(Date.now()),
+      });
       socket.leave(userLogin);
       User.updateByLogin(userLogin, { lastOnline: new Date(Date.now()) });
     });
@@ -48,16 +63,6 @@ export const initSocket = (io) => {
     socket.broadcast.emit("online-status", {
       login: socket.decoded.login,
       online: true,
-    });
-
-    socket.broadcast.emit("online-status", {
-      login: socket.decoded.login,
-      online: true,
-    });
-
-    socket.broadcast.emit("online-status", {
-      login: socket.decoded.login,
-      status: true,
     });
   })
     .on("error", function (err) {

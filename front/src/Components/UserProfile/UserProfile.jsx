@@ -17,17 +17,6 @@ const updateOnlineStatus = (status, actualUser, setCurrentOnline) => {
     }
 }
 
-function calculateAge(birthdate) {
-    var today = new Date()
-    var birthDate = new Date(birthdate)
-    var age = today.getFullYear() - birthDate.getFullYear()
-    var m = today.getMonth() - birthDate.getMonth()
-    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
-        age--
-    }
-    return age
-}
-
 const StarRating = ({ percentage }) => {
     const ratingOutOfThree = (percentage / 100) * 3;
     const fullStars = Math.floor(ratingOutOfThree);
@@ -60,7 +49,8 @@ const UserProfile = ({ user, scroll = 0 }) => {
     const infosRef = useRef(null)
     const dispatch = useDispatch()
     const imgs = []
-    const userAge = calculateAge(user.dateOfBirth)
+    const userAge =
+        new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
 
     if (user.imgA) imgs.push(user.imgA)
     if (user.imgB) imgs.push(user.imgB)
