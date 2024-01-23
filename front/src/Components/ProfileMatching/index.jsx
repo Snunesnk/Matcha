@@ -194,7 +194,6 @@ const ProfileMatching = () => {
 
     useEffect(() => {
         if (!hasScrolled) return
-        console.log('dispatching')
         dispatch({
             type: USER_STATE_ACTIONS.INTERESTED,
             payload: {

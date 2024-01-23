@@ -85,6 +85,47 @@ const savePreferences = (
         })
 }
 
+const savePreferences = (
+    userPreferences,
+    maxDistance,
+    ageMin,
+    ageMax,
+    searchTags,
+    fameMin,
+    fameMax
+) => {
+    const options = {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+            userPreferences,
+            distMax: maxDistance,
+            ageMin,
+            ageMax,
+            tags: searchTags,
+            fameMin,
+            fameMax,
+        }),
+    }
+    fetch('http://localhost:8080/api/user-settings', options)
+        .then((response) => {
+            if (response.ok) {
+                return response.json()
+            } else if (response.status === 401) {
+                window.location.href = '/'
+            } else throw new Error('Something went wrong ...')
+        })
+        .then((data) => {
+            console.log(data)
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}
+
 const DiscoverySettings = () => {
     const [user, setUser] = useState(null)
     const [maxDistance, setMaxDistance] = useState(DIST_MAX)
