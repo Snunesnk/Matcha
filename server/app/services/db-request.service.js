@@ -331,6 +331,7 @@ WHERE
     c.last_message_id,
     msg.timestamp AS last_message_timestamp,
     msg.message_content AS last_message_content,
+    n.read,
     u.name,
     u.login,
     u.surname,
@@ -341,6 +342,8 @@ WHERE
     conversations c ON m.id = c.match_id
   LEFT JOIN
     messages msg ON c.last_message_id = msg.message_id
+  LEFT JOIN
+      notifications n ON n.message_id = msg.message_id
   LEFT JOIN
     user u ON u.login = CASE
       WHEN m.user1 = ? THEN m.user2
