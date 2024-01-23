@@ -547,23 +547,7 @@ export default class {
   };
 
   static getMatchingProfile = async (req, res) => {
-    const { distMin, distMax, ageMin, ageMax, fameMin, fameMax, tags } =
-      req.body;
     const login = req.decodedUser._login;
-
-    if (
-      distMin === undefined ||
-      distMax === undefined ||
-      ageMin === undefined ||
-      ageMin < 18 ||
-      ageMax === undefined ||
-      fameMin === undefined ||
-      fameMax === undefined ||
-      !tags
-    ) {
-      res.status(400).send({ message: "INVALID_PARAMETERS" });
-      return;
-    }
 
     try {
       const user = await User.getUserByLogin(login);
@@ -574,17 +558,10 @@ export default class {
 
       const matchingParameters = {
         login,
-        distMin,
-        distMax,
-        ageMin,
-        ageMax,
-        fameMin,
-        fameMax,
-        tags,
+        tags: user.tags,
         enby: user.prefEnby,
         male: user.prefMale,
         female: user.prefFemale,
-        coordinate: user.coordinate,
       };
 
       const results = await User.getMatchingProfiles(matchingParameters);
