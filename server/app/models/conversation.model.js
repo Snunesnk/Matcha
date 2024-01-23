@@ -49,6 +49,7 @@ export class Conversation {
 
   static async createConvFromLogin(login, login2) {
     const match = await Match.getMatch(login, login2);
+    if (!match) return null;
     const conversation = await Conversation.createConvFromMatchId(match.id);
     return conversation;
   }

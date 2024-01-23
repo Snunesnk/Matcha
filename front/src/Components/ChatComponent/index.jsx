@@ -11,6 +11,7 @@ const ChatComponent = ({
     components,
     setActiveComponent,
     socketMessage,
+    setConversations,
 }) => {
     const [newMessage, setNewMessage] = useState('')
     const [messages, setMessages] = useState(null)
@@ -36,6 +37,35 @@ const ChatComponent = ({
             }
             if (!prev) return [newMes]
             return [...prev, newMes]
+        })
+
+        setConversations((prev) => {
+            const conversation = prev.find((c) => c.login === user.login)
+            if (conversation) {
+                conversation.last_message_content = newMessage
+                conversation.last_message_timestamp = new Date(Date.now())
+                prev.splice(prev.indexOf(conversation), 1)
+                return [conversation, ...prev].sort((a, b) => {
+                    const timestampA = new Date(
+                        a.last_message_timestamp
+                    ).getTime()
+                    const timestampB = new Date(
+                        b.last_message_timestamp
+                    ).getTime()
+
+                    return timestampB - timestampA
+                })
+            } else {
+                return [
+                    {
+                        ...user,
+                        last_message_content: newMessage,
+                        last_message_timestamp: new Date(Date.now()),
+                        read: true,
+                    },
+                    ...prev,
+                ]
+            }
         })
 
         setNewMessage('')
@@ -87,7 +117,6 @@ const ChatComponent = ({
 
     useEffect(() => {
         messageEnd.current?.scrollIntoView({ behavior: 'auto' })
-
         messageInput.current?.focus()
     }, [messages])
 
@@ -112,12 +141,12 @@ const ChatComponent = ({
                 </div>
             </div>
             <div id="chat_body">
-                {messages === null && (
+                {!messages && (
                     <div className="loading">
                         <p>Loading...</p>
                     </div>
                 )}
-                {messages !== null && messages.length === 0 && (
+                {messages && messages.length === 0 && (
                     <div className="no-messages">
                         <p>Start the conversation</p>
                     </div>

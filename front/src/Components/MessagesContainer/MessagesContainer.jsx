@@ -14,6 +14,54 @@ const COMPONENTS = {
     USER_PROFILE: 'USER_PROFILE',
 }
 
+const handleSocketMessage = (
+    message,
+    newMatches,
+    activeConversation,
+    setSocketMessage,
+    setConversations
+) => {
+    const matchUser = newMatches.find((match) => match.login === message.from)
+    if (matchUser) {
+        setNewMatches((prev) => {
+            prev.splice(newMatches.indexOf(matchUser), 1)
+            return prev
+        })
+        setConversations((prev) => [
+            {
+                ...matchUser,
+                last_message_content: message.content,
+                last_message_timestamp: new Date(Date.now()),
+                read: activeUser.login === message.from,
+            },
+            ...prev,
+        ])
+    } else {
+        setSocketMessage(message)
+        setConversations((prev) => {
+            const conversation = prev.find((c) => c.login === message.from)
+            if (conversation) {
+                conversation.last_message_content = message.content
+                conversation.last_message_timestamp = new Date(Date.now())
+                conversation.read = message.from === activeConversation?.login
+                prev.splice(prev.indexOf(conversation), 1)
+                return [conversation, ...prev].sort((a, b) => {
+                    const timestampA = new Date(
+                        a.last_message_timestamp
+                    ).getTime()
+                    const timestampB = new Date(
+                        b.last_message_timestamp
+                    ).getTime()
+
+                    return timestampB - timestampA
+                })
+            } else {
+                return prev
+            }
+        })
+    }
+}
+
 const MessagesContainer = () => {
     const [activeComponent, setActiveComponent] = useState(
         COMPONENTS.MESSAGE_LIST
@@ -28,29 +76,15 @@ const MessagesContainer = () => {
     const searchParams = new URLSearchParams(location.search)
     const user = searchParams.get('user')
 
-    const handleSocketMessage = (message) => {
+    const checkForNewMatch = (message) => {
+        if (message.type !== 'match') return
+
         const matchUser = newMatches.find(
-            (match) => match.login === message.from
+            (match) => match.name === message.payload.name
         )
-        if (matchUser) {
-            setNewMatches((prev) => {
-                const newMatches = [...prev]
-                const index = newMatches.findIndex(
-                    (match) => match.login === message.from
-                )
-                newMatches.splice(index, 1)
-                return newMatches
-            })
-            setConversations((prev) => [
-                {
-                    ...matchUser,
-                    lastMessage: message.content,
-                    lastMessageDate: Date.now(),
-                },
-                ...prev,
-            ])
-        }
-        setSocketMessage(message)
+        if (matchUser) return
+
+        setNewMatches((prev) => [message.payload, ...prev])
     }
 
     useEffect(() => {
@@ -99,6 +133,8 @@ const MessagesContainer = () => {
                         }
                     } else if (conversations.length > 0) {
                         setActiveConversation(conversations[0])
+                    } else if (newMatches.length > 0) {
+                        setActiveConversation(newMatches[0])
                     }
                 })
                 .catch((error) => {
@@ -109,17 +145,40 @@ const MessagesContainer = () => {
     }, [])
 
     useEffect(() => {
-        socket.on('message', handleSocketMessage)
+        const handleSocketMessageEvent = (message) => {
+            handleSocketMessage(
+                message,
+                newMatches,
+                activeConversation,
+                setSocketMessage,
+                setConversations
+            )
+        }
+        socket.on('message', handleSocketMessageEvent)
+
+        socket.on('notification', checkForNewMatch)
 
         return () => {
-            socket.off('message', handleSocketMessage)
+            socket.off('message', handleSocketMessageEvent)
+            socket.off('notification', checkForNewMatch)
         }
-    }, [socket])
+    }, [socket, newMatches, activeConversation])
 
     useEffect(() => {
         if (!activeConversation) return
 
-        setActiveUser(null)
+        setConversations((prev) => {
+            const conversation = prev.find(
+                (c) => c.login === activeConversation.login
+            )
+            if (conversation) {
+                conversation.read = true
+                return [...prev]
+            } else {
+                return prev
+            }
+        })
+
         fetch('http://localhost:8080/api/user/' + activeConversation.login, {
             method: 'GET',
             credentials: 'include',
@@ -137,7 +196,35 @@ const MessagesContainer = () => {
             .catch((error) => {
                 console.log(error)
             })
+
+        fetch(
+            'http://localhost:8080/api/notifications/read/' +
+                activeConversation.login,
+            {
+                method: 'PUT',
+                credentials: 'include',
+            }
+        )
     }, [activeConversation])
+
+    useEffect(() => {
+        const matchConversation = conversations.filter(
+            (c) => newMatches.findIndex((m) => m.login === c.login) !== -1
+        )
+
+        if (matchConversation) {
+            setNewMatches((prev) => {
+                const newMatchesCopy = [...prev]
+                matchConversation.forEach((c) => {
+                    const index = newMatchesCopy.findIndex(
+                        (m) => m.login === c.login
+                    )
+                    newMatchesCopy.splice(index, 1)
+                })
+                return newMatchesCopy
+            })
+        }
+    }, [conversations])
 
     return (
         <div id="message-pannel">
@@ -167,6 +254,7 @@ const MessagesContainer = () => {
                             components={COMPONENTS}
                             setActiveComponent={setActiveComponent}
                             socketMessage={socketMessage}
+                            setConversations={setConversations}
                         />
                     ) : (
                         <div className="no-conversation">

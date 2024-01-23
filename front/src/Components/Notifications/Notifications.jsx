@@ -1,80 +1,130 @@
-import "./Notifications.css"
-import React from 'react';
+import './Notifications.css'
+import React, { useEffect, useState } from 'react'
 import {
-  Visibility,
-  Favorite, 
-  PeopleAlt,
-  FavoriteBorder ,
-  FiberNew
+    Visibility,
+    Favorite,
+    PeopleAlt,
+    FavoriteBorder,
+    FiberNew,
 } from '@mui/icons-material'
 
-function Notifications() {
-  const notifications = [
-    { type: 'like', user: 'John Doe', timestamp: 'Il y a 10 minutes', image: 'https://i.imgur.com/zYxDCQT.jpg', read: 'false'},
-    { type: 'unlike', user: 'Richard Miles', timestamp: 'Il y a 20 minutes', image: 'https://i.imgur.com/w4Mp4ny.jpg', read: 'true'},
-    { type: 'match', user: 'Sarah', timestamp: 'Il y a 30 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg', read: 'true'},
-    { type: 'match', user: 'Lisa', timestamp: 'Il y a 40 minutes', image: 'https://i.imgur.com/AbZqFnR.jpg', read: 'true'},
-    { type: 'visit', user: 'Brian Cumin', timestamp: 'Il y a 50 minutes', image: 'https://i.imgur.com/ltXdE4K.jpg', read: 'true'},
-    { type: 'visit', user: 'Lance Bogrol', timestamp: 'Il y a 60 minutes', image: 'https://i.imgur.com/CtAQDCP.jpg', read: 'true'},
-    // Ajoutez plus de notifications ici si nécessaire
-  ];
+function formatTimeDifference(dateString) {
+    const currentDate = new Date()
+    const inputDate = new Date(dateString)
 
-  const getMessageByType = (type) => {
-    switch (type) {
-      case 'like':
-        return 'has liked your profile';
-      case 'unlike':
-        return 'has unliked your profile';
-      case 'match':
-        return 'has matched with you';
-      case 'visit':
-        return 'has visited your profile';
-      default:
-        return '';
+    const timeDifference = currentDate - inputDate
+
+    const minutes = Math.floor(timeDifference / (1000 * 60))
+    const hours = Math.floor(timeDifference / (1000 * 60 * 60))
+    const days = Math.floor(timeDifference / (1000 * 60 * 60 * 24))
+
+    if (minutes < 60) {
+        if (minutes < 1) {
+            return 'now'
+        }
+        return `${minutes} minute${minutes !== 1 ? 's' : ''} ago`
+    } else if (hours < 24) {
+        return `${hours} hour${hours !== 1 ? 's' : ''} ago`
+    } else {
+        const options = { day: 'numeric', month: 'short' }
+        return inputDate.toLocaleDateString('fr-FR', options)
     }
-  };
-
-  const getIconByType = (type) => {
-    switch (type) {
-      case 'like':
-        return <Favorite />;
-      case 'unlike':
-        return <FavoriteBorder />;
-      case 'match':
-        return <PeopleAlt />;
-      case 'visit':
-        return <Visibility />;
-      default:
-        return <></>;
-    }
-  };
-
-  return (
-    <div className="container">
-      <h2>Notifications</h2>
-
-      <div className="notification-content">
-        {notifications.map((notification, index) => (
-          <div key={index} className="notification-list">
-            <div className="notification-list_content">
-
-              <div className="notification-list_img">
-                <img src={notification.image} alt={notification.user} />
-              </div>
-
-              <div className="notification-list_detail">
-                <p><b>{notification.user}</b> {getMessageByType(notification.type)}</p>
-                <p><small>{notification.timestamp}</small></p>
-              </div>
-            </div>
-            
-            {getIconByType(notification.type)}
-
-          </div>
-        ))}
-      </div>
-    </div>
-  );
 }
 
-export default Notifications;
+function Notifications() {
+    const [notifications, setNotifications] = useState()
+
+    const getMessageByType = (type) => {
+        switch (type) {
+            case 'like':
+                return 'has liked your profile'
+            case 'unlike':
+                return 'has unliked your profile'
+            case 'match':
+                return 'has matched with you'
+            case 'visit':
+                return 'has visited your profile'
+            default:
+                return ''
+        }
+    }
+
+    const getIconByType = (type) => {
+        switch (type) {
+            case 'like':
+                return <Favorite />
+            case 'unlike':
+                return <FavoriteBorder />
+            case 'match':
+                return <PeopleAlt />
+            case 'visit':
+                return <Visibility />
+            default:
+                return <></>
+        }
+    }
+
+    useEffect(() => {
+        fetch('http://localhost:8080/api/notifications', {
+            method: 'GET',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            credentials: 'include',
+        })
+            .then((res) => res.json())
+            .then((data) => {
+                setNotifications(data)
+            })
+    }, [])
+
+    return (
+        <div className="container">
+            <h2>Notifications</h2>
+
+            <div className="notification-content">
+                {!notifications && <p>Loading...</p>}
+                {notifications && notifications.length === 0 && (
+                    <p>Nothing to see yet... Cat got your notifications?</p>
+                )}
+                {notifications &&
+                    notifications.map((notification, index) => (
+                        <div
+                            key={index}
+                            className={
+                                'notification-list' +
+                                (notification.read ? ' read' : '')
+                            }
+                        >
+                            <div className="notification-list_content">
+                                <div className="notification-list_img">
+                                    <img
+                                        src={notification.imgA}
+                                        alt={notification.name}
+                                    />
+                                </div>
+
+                                <div className="notification-list_detail">
+                                    <p>
+                                        <b>{notification.name}</b>{' '}
+                                        {getMessageByType(notification.type)}
+                                    </p>
+                                    <p>
+                                        <small>
+                                            {formatTimeDifference(
+                                                notification.created_at
+                                            )}
+                                        </small>
+                                    </p>
+                                </div>
+                            </div>
+
+                            {getIconByType(notification.type)}
+                        </div>
+                    ))}
+            </div>
+        </div>
+    )
+}
+
+export default Notifications

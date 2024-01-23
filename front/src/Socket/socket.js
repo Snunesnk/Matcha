@@ -9,21 +9,18 @@ let socket = io(SOCKET_SERVER_URL, {
     reconnectionDelay: 1000,
     reconnectionDelayMax: 5000,
 })
-socket.on('connect', () => {
-    console.log('Socket connected:', socket.id)
-})
+socket.on('connect', () => {})
 
 export const reconnectSocket = () => {
     socket.connect()
 }
 
 export const disconnectSocket = () => {
-    console.log('Disconnecting socket...')
     if (socket) socket.disconnect()
 }
 
-export const sendMessage = (payload) => {
-    socket.emit('message', payload)
+export const sendNotif = (type, payload) => {
+    socket.emit(type, payload)
 }
 
 export default socket

@@ -46,7 +46,7 @@ export class DbRequestService {
           value = `%${value}`;
         }
         const likeOrNot = index < whereLikeSize ? "LIKE" : "NOT LIKE";
-        queryCondition += ` ${startsWith} ${field} ${likeOrNot} ?`;
+        queryCondition += ` ${startsWith} \`${field}\` ${likeOrNot} ?`;
         result.push(value);
       },
       []
@@ -74,9 +74,9 @@ export class DbRequestService {
           }
           // if value has mysql function like POINT(), we don't want to add quotes
           if (typeof value === "string" && value.includes("POINT")) {
-            queryCommand += ` ${startsWith} ${field} = ST_GeomFromText(?)`;
+            queryCommand += ` ${startsWith} \`${field}\` = ST_GeomFromText(?)`;
           } else {
-            queryCommand += ` ${startsWith} ${field} = ?`;
+            queryCommand += ` ${startsWith} \`${field}\` = ?`;
           }
           result.push(value);
         }
@@ -100,9 +100,9 @@ export class DbRequestService {
       const query = `INSERT IGNORE INTO \`${tableName}\` SET ?`;
       const params = _.pick(
         objectToAdd,
-        Object.getOwnPropertyNames(objectToAdd).map((prop) =>
-          prop.replace("_", "")
-        )
+        Object.entries(objectToAdd)
+          .filter(([key, value]) => value)
+          .map(([key]) => key.replace("_", ""))
       );
 
       connection.query(query, params, (err, res) => {
@@ -286,12 +286,12 @@ WHERE
     return new Promise((resolve, reject) => {
       const parameters = [likee, liker];
       const query = `
-    SELECT COUNT(*) AS match_count
+    SELECT liker.name AS likerName, liker.imgA AS likerImgA, likee.name AS likeeName, likee.imgA AS likeeImgA 
 FROM
     user liker
     INNER JOIN userSettings likerSettings ON liker.login = likerSettings.userLogin
     INNER JOIN user likee ON likee.login = ?
-    INNER JOIN userSettings likeeSettings ON likee.login = likeeSettings.userLogin
+    LEFT JOIN userSettings likeeSettings ON likee.login = likeeSettings.userLogin
 WHERE
     liker.login = ?
     AND (
@@ -324,7 +324,7 @@ WHERE
 
   static async getMatches(login) {
     return new Promise((resolve, reject) => {
-      const parameters = [login, login, login];
+      const parameters = [login, login, login, login];
       const query = `
   SELECT
     m.*,
@@ -334,13 +334,19 @@ WHERE
     u.name,
     u.login,
     u.surname,
-    u.imgA
+    u.imgA,
+    CASE 
+      WHEN n.trigger_login = ? THEN 1
+      ELSE n.read
+    END AS \`read\`
   FROM
     matches m
   LEFT JOIN
     conversations c ON m.id = c.match_id
   LEFT JOIN
     messages msg ON c.last_message_id = msg.message_id
+  LEFT JOIN
+      notifications n ON n.message_id = msg.message_id
   LEFT JOIN
     user u ON u.login = CASE
       WHEN m.user1 = ? THEN m.user2
@@ -404,6 +410,35 @@ WHERE
           return;
         }
         resolve(res[0]);
+      });
+    });
+  }
+
+  static async getNotificationsForLogin(login) {
+    return new Promise((resolve, reject) => {
+      const parameters = [login];
+      const query = `
+      SELECT
+        n.id,
+        n.type,
+        n.created_at,
+        n.read,
+        u.name,
+        u.imgA
+      FROM
+        notifications n
+      LEFT JOIN user u ON n.trigger_login = u.login
+      WHERE
+        n.login = ? AND n.type != 'message'
+      ORDER BY n.created_at DESC, n.id DESC
+    `;
+
+      connection.query(query, parameters, (err, res) => {
+        if (err) {
+          reject(err);
+          return;
+        }
+        resolve(res);
       });
     });
   }

@@ -25,9 +25,9 @@ const NewMatchesSection = ({ matches, setActiveConversation }) => (
         <h4>New matches</h4>
         <div className="new-matches">
             <div className="new-matches-container">
-                {matches.map((match) => (
+                {matches.map((match, i) => (
                     <NewMatch
-                        key={match.id}
+                        key={i}
                         match={match}
                         setActiveConversation={setActiveConversation}
                     />
@@ -68,9 +68,9 @@ const MessagesSection = ({ conversations, setActiveConversation }) => (
     <div className="messages">
         <h4>Messages</h4>
         <div className="messages-list">
-            {conversations.map((conversation) => (
+            {conversations.map((conversation, i) => (
                 <MessageSnippet
-                    key={conversation.id}
+                    key={i}
                     conversation={conversation}
                     setActiveConversation={setActiveConversation}
                 />
@@ -106,7 +106,7 @@ const MessageSnippet = ({ conversation, setActiveConversation }) => {
     const date = formatTimeDifference(conversation.last_message_timestamp)
     return (
         <div
-            className={`message ${conversation.unread ? 'unread' : ''}`}
+            className={`message ${conversation.read ? '' : 'unread'}`}
             onClick={() => {
                 setActiveConversation(conversation)
             }}
@@ -135,6 +135,10 @@ const MessageSnippet = ({ conversation, setActiveConversation }) => {
                 <p className="message-snippet">
                     {conversation.last_message_content}
                 </p>
+
+                {conversation.read ? null : (
+                    <div className="new-message-icon"></div>
+                )}
             </div>
         </div>
     )

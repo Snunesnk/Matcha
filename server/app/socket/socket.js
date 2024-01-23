@@ -5,6 +5,7 @@ import authenticationService from "../services/authentication.service.js";
 export const NOTIFICATION_TYPE = {
   LIKE: "like",
   UNLIKE: "unlike",
+  VISIT: "visit",
   MATCH: "match",
   MESSAGE: "message",
 };
@@ -22,6 +23,11 @@ export const initSocket = (io) => {
 
     socket.on("message", (message) => {
       sendMessage(io, { ...message, from: socket.decoded.login });
+    });
+
+    socket.on("visit", (visit) => {
+      visit.from = socket.decoded.login;
+      sendVisit(io, visit);
     });
 
     socket.on("disconnect", () => {
@@ -73,33 +79,41 @@ function isUserConnected(io, roomName) {
   return room && room.size > 0;
 }
 
-export const sendMessage = (io, message) => {
-  Message.create(message);
+const sendVisit = async (io, visit) => {
+  const userConnected = isUserConnected(io, visit.to);
+
+  if (userConnected) {
+    io.to(visit.to).emit("visit", visit);
+  }
+  Notifications.create({
+    type: NOTIFICATION_TYPE.VISIT,
+    login: visit.to,
+    trigger_login: visit.from,
+  });
+};
+
+const sendMessage = async (io, message) => {
+  const newMessage = await Message.create(message);
 
   const userConnected = isUserConnected(io, message.to);
 
   if (userConnected) {
     io.to(message.to).emit("message", message);
-  } else {
-    Notifications.create({
-      type: NOTIFICATION_TYPE.MESSAGE,
-      login: message.to,
-      trigger_login: message.from,
-      message: message.content,
-    });
   }
+  Notifications.create({
+    type: NOTIFICATION_TYPE.MESSAGE,
+    login: message.to,
+    trigger_login: message.from,
+    message_id: newMessage.message_id,
+  });
 };
 
-export const sendNotification = (login, notificationType, payload) => {
+export const sendNotification = (login, notificationType, payload = {}) => {
   const userConnected = isUserConnected(_io, login);
 
   if (userConnected) {
-    _io.to(login).emit(notificationType, payload);
+    _io
+      .to(login)
+      .emit("notification", { type: notificationType, payload: payload });
   }
 };
-
-// send new conversation
-// => A new match become a conversation because of a message
-
-// Send conversation update
-// => A new message is sent to a conversation

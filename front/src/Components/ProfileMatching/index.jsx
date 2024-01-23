@@ -5,6 +5,9 @@ import './index.css'
 import { Favorite } from '@mui/icons-material'
 import UserProfile from '../UserProfile/UserProfile'
 import Button from '../Button/Button'
+import { useDispatch } from 'react-redux'
+import { USER_STATE_ACTIONS } from '../../constants'
+import { throttle } from 'lodash'
 
 const getUserLocation = async () => {
     return new Promise((resolve) => {
@@ -96,8 +99,10 @@ const ProfileMatching = () => {
     const [nextUser, setNextUser] = useState(null)
     const [loading, setLoading] = useState(true)
     const [match, setMatch] = useState(false)
+    const [hasScrolled, setHasScrolled] = useState(false)
     const profileRef = useRef(null)
     const naviguate = useNavigate()
+    const dispatch = useDispatch()
 
     useEffect(() => {
         setLoading(true)
@@ -136,6 +141,41 @@ const ProfileMatching = () => {
         }
         getLocation()
     }, [])
+
+    useEffect(() => {
+        if (!hasScrolled) return
+        dispatch({
+            type: USER_STATE_ACTIONS.SEND_VISIT,
+            payload: {
+                to: actualUser.login,
+            },
+        })
+    }, [hasScrolled])
+
+    const handleScroll = () => {
+        const { scrollTop, scrollHeight, clientHeight } = profileRef.current
+        const scrolled = (scrollTop / (scrollHeight - clientHeight)) * 100
+        // If user has scrolled for at least 42% of the profile, then consider it as a visit
+        if (scrolled > 42) setHasScrolled(true)
+    }
+
+    const throttleHandledScroll = throttle(handleScroll, 100)
+
+    useEffect(() => {
+        const scrollContainer = profileRef.current
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', throttleHandledScroll)
+        }
+
+        return () => {
+            if (scrollContainer) {
+                scrollContainer.removeEventListener(
+                    'scroll',
+                    throttleHandledScroll
+                )
+            }
+        }
+    }, [profileRef.current])
 
     const setCardState = async (state) => {
         if (state === 'liked') {
@@ -180,6 +220,10 @@ const ProfileMatching = () => {
             }, 200)
         }, firstTimeout)
     }
+
+    useEffect(() => {
+        setHasScrolled(false)
+    }, [actualUser])
 
     useEffect(() => {
         setActualUser(userList[0] || null)
