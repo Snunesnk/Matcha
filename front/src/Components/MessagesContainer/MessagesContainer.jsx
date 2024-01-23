@@ -14,47 +14,36 @@ const COMPONENTS = {
     USER_PROFILE: 'USER_PROFILE',
 }
 
-const MessagesContainer = () => {
-    const [activeComponent, setActiveComponent] = useState(
-        COMPONENTS.MESSAGE_LIST
-    )
-    const [conversations, setConversations] = useState([])
-    const [newMatches, setNewMatches] = useState([])
-    const [activeConversation, setActiveConversation] = useState(null)
-    const [activeUser, setActiveUser] = useState(null)
-    const [socketMessage, setSocketMessage] = useState(null)
-
-    const location = useLocation()
-    const searchParams = new URLSearchParams(location.search)
-    const user = searchParams.get('user')
-
-    const handleSocketMessage = (message) => {
-        const matchUser = newMatches.find(
-            (match) => match.login === message.from
-        )
-        if (matchUser) {
-            setNewMatches((prev) => {
-                prev.splice(newMatches.indexOf(matchUser), 1)
-                return prev
-            })
-            setConversations((prev) => [
-                {
-                    ...matchUser,
-                    last_message_content: message.content,
-                    last_message_timestamp: new Date(Date.now()),
-                    read: activeUser.login === message.from,
-                },
-                ...prev,
-            ])
-        }
-
+const handleSocketMessage = (
+    message,
+    newMatches,
+    activeConversation,
+    setSocketMessage,
+    setConversations
+) => {
+    const matchUser = newMatches.find((match) => match.login === message.from)
+    if (matchUser) {
+        setNewMatches((prev) => {
+            prev.splice(newMatches.indexOf(matchUser), 1)
+            return prev
+        })
+        setConversations((prev) => [
+            {
+                ...matchUser,
+                last_message_content: message.content,
+                last_message_timestamp: new Date(Date.now()),
+                read: activeUser.login === message.from,
+            },
+            ...prev,
+        ])
+    } else {
         setSocketMessage(message)
         setConversations((prev) => {
             const conversation = prev.find((c) => c.login === message.from)
             if (conversation) {
                 conversation.last_message_content = message.content
                 conversation.last_message_timestamp = new Date(Date.now())
-                conversation.read = message.from === activeUser?.login
+                conversation.read = message.from === activeConversation?.login
                 prev.splice(prev.indexOf(conversation), 1)
                 return [conversation, ...prev].sort((a, b) => {
                     const timestampA = new Date(
@@ -71,6 +60,21 @@ const MessagesContainer = () => {
             }
         })
     }
+}
+
+const MessagesContainer = () => {
+    const [activeComponent, setActiveComponent] = useState(
+        COMPONENTS.MESSAGE_LIST
+    )
+    const [conversations, setConversations] = useState([])
+    const [newMatches, setNewMatches] = useState([])
+    const [activeConversation, setActiveConversation] = useState(null)
+    const [activeUser, setActiveUser] = useState(null)
+    const [socketMessage, setSocketMessage] = useState(null)
+
+    const location = useLocation()
+    const searchParams = new URLSearchParams(location.search)
+    const user = searchParams.get('user')
 
     const checkForNewMatch = (message) => {
         if (message.type !== 'match') return
@@ -141,14 +145,24 @@ const MessagesContainer = () => {
     }, [])
 
     useEffect(() => {
-        socket.on('message', handleSocketMessage)
+        const handleSocketMessageEvent = (message) => {
+            handleSocketMessage(
+                message,
+                newMatches,
+                activeConversation,
+                setSocketMessage,
+                setConversations
+            )
+        }
+        socket.on('message', handleSocketMessageEvent)
 
         socket.on('notification', checkForNewMatch)
 
         return () => {
-            socket.off('message', handleSocketMessage)
+            socket.off('message', handleSocketMessageEvent)
+            socket.off('notification', checkForNewMatch)
         }
-    }, [socket])
+    }, [socket, newMatches, activeConversation])
 
     useEffect(() => {
         if (!activeConversation) return
@@ -192,6 +206,25 @@ const MessagesContainer = () => {
             }
         )
     }, [activeConversation])
+
+    useEffect(() => {
+        const matchConversation = conversations.filter(
+            (c) => newMatches.findIndex((m) => m.login === c.login) !== -1
+        )
+
+        if (matchConversation) {
+            setNewMatches((prev) => {
+                const newMatchesCopy = [...prev]
+                matchConversation.forEach((c) => {
+                    const index = newMatchesCopy.findIndex(
+                        (m) => m.login === c.login
+                    )
+                    newMatchesCopy.splice(index, 1)
+                })
+                return newMatchesCopy
+            })
+        }
+    }, [conversations])
 
     return (
         <div id="message-pannel">
