@@ -81,6 +81,7 @@
     color: #dc21b8;
     padding: 0;
 }
+
 .setting-biography {
     width: 100%;
     background-color: #4b3244;
@@ -119,4 +120,38 @@
 
 .setting-input:focus {
     border: 1px solid #4ac0fc;
+}
+
+#settings-container button.grey {
+    margin-top: 30px;
+}
+
+.multi-select {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+.multi-select .multi-select-item {
+    padding: 10px;
+    border-radius: 4px;
+    border: 1px solid #dc21b8;
+    cursor: pointer;
+}
+
+.multi-select .multi-select-item:hover {
+    background-color: #dc21b850;
+}
+
+.multi-select .multi-select-item label,
+.multi-select .multi-select-item input {
+    cursor: pointer;
+}
+
+.multi-select .multi-select-item.checked {
+    background-color: #dc21b8;
+}
+
+.multi-select .multi-select-item.checked:hover {
+    background-color: #dc21b8a0;
 }

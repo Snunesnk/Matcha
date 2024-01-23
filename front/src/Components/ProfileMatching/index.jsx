@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ClearIcon from '@mui/icons-material/Clear'
 import './index.css'
-import { Favorite } from '@mui/icons-material'
+import { Favorite, Settings } from '@mui/icons-material'
 import UserProfile from '../UserProfile/UserProfile'
 import Button from '../Button/Button'
 import { useDispatch } from 'react-redux'
@@ -143,7 +143,6 @@ const ProfileMatching = () => {
 
     useEffect(() => {
         if (!hasScrolled) return
-        console.log('dispatching')
         dispatch({
             type: USER_STATE_ACTIONS.INTERESTED,
             payload: {
