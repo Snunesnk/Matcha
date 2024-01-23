@@ -107,6 +107,24 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         </div>
                     </div>
 
+                    <div className="info-chip-container">
+                        <button className="info-chip" onClick={toggleScroll}>
+                            {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
+                        </button>
+                        <div
+                            className={
+                                'indicator' +
+                                (currentOnline.online ? ' online' : ' offline')
+                            }
+                        ></div>
+                        {currentOnline.online ? (
+                            <p>Connected</p>
+                        ) : (
+                            <p>
+                                {formatTimeDifference(currentOnline.lastOnline)}
+                            </p>
+                        )}
+                    </div>
                     <div ref={profileRef} className="name_and_age">
                         {user.surname} {user.name}, {userAge}
                         <i id="user-login"> @{user.login}</i>
