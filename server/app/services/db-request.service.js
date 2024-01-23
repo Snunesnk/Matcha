@@ -324,18 +324,21 @@ WHERE
 
   static async getMatches(login) {
     return new Promise((resolve, reject) => {
-      const parameters = [login, login, login];
+      const parameters = [login, login, login, login];
       const query = `
   SELECT
     m.*,
     c.last_message_id,
     msg.timestamp AS last_message_timestamp,
     msg.message_content AS last_message_content,
-    n.read,
     u.name,
     u.login,
     u.surname,
-    u.imgA
+    u.imgA,
+    CASE 
+      WHEN n.trigger_login = ? THEN 1
+      ELSE n.read
+    END AS \`read\`
   FROM
     matches m
   LEFT JOIN

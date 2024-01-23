@@ -106,7 +106,7 @@ const MessageSnippet = ({ conversation, setActiveConversation }) => {
     const date = formatTimeDifference(conversation.last_message_timestamp)
     return (
         <div
-            className={`message ${conversation.unread ? 'unread' : ''}`}
+            className={`message ${conversation.read ? '' : 'unread'}`}
             onClick={() => {
                 setActiveConversation(conversation)
             }}
@@ -135,6 +135,10 @@ const MessageSnippet = ({ conversation, setActiveConversation }) => {
                 <p className="message-snippet">
                     {conversation.last_message_content}
                 </p>
+
+                {conversation.read ? null : (
+                    <div className="new-message-icon"></div>
+                )}
             </div>
         </div>
     )
