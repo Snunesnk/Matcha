@@ -184,6 +184,7 @@ const MessagesContainer = () => {
         socket.on('online-status', handleSocketStatusEvent)
 
         socket.on('notification', checkForNewMatch)
+        socket.on('online-status', handleSocketStatusEvent)
 
         return () => {
             socket.off('message', handleSocketMessageEvent)

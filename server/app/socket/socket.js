@@ -72,7 +72,7 @@ export const initSocket = (io) => {
 
     socket.broadcast.emit("online-status", {
       login: socket.decoded.login,
-      status: true,
+      online: true,
     });
   })
     .on("error", function (err) {
