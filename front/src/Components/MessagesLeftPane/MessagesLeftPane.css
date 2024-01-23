@@ -124,7 +124,6 @@
     padding: 10px 0;
     border-bottom: 1px solid #e0e0e0;
     cursor: pointer;
-    box-sizing: content-box;
 }
 
 @keyframes sliding-gradient {
@@ -200,6 +199,7 @@
     flex-grow: 1;
     max-width: calc(100% - 70px);
     width: 100%;
+    position: relative;
 }
 
 .message-info-header {
@@ -233,4 +233,18 @@
 
 .opaque {
     opacity: 0.6;
+}
+
+.message.unread .message-info-header time {
+    color: white;
+}
+
+.message.unread .new-message-icon {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: #4ac0fc;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
 }
