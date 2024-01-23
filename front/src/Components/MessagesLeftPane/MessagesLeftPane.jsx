@@ -68,9 +68,9 @@ const MessagesSection = ({ conversations, setActiveConversation }) => (
     <div className="messages">
         <h4>Messages</h4>
         <div className="messages-list">
-            {conversations.map((conversation) => (
+            {conversations.map((conversation, i) => (
                 <MessageSnippet
-                    key={conversation.id}
+                    key={i}
                     conversation={conversation}
                     setActiveConversation={setActiveConversation}
                 />

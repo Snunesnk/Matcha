@@ -104,6 +104,7 @@ export class Notifications {
     sendNotification(newNotification.login, newNotification.type, {
       name,
       imgA,
+      login: newNotification.trigger_login,
     });
 
     return newNotification;

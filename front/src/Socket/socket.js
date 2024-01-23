@@ -16,7 +16,6 @@ export const reconnectSocket = () => {
 }
 
 export const disconnectSocket = () => {
-    console.log('Disconnecting socket...')
     if (socket) socket.disconnect()
 }
 
