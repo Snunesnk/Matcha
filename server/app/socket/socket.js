@@ -69,6 +69,11 @@ export const initSocket = (io) => {
       login: socket.decoded.login,
       online: true,
     });
+
+    socket.broadcast.emit("online-status", {
+      login: socket.decoded.login,
+      status: true,
+    });
   })
     .on("error", function (err) {
       if (err.code == "ENOTFOUND") {
