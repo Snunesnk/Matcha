@@ -16,6 +16,17 @@ const updateOnlineStatus = (status, actualUser, setCurrentOnline) => {
     }
 }
 
+function calculateAge(birthdate) {
+    var today = new Date()
+    var birthDate = new Date(birthdate)
+    var age = today.getFullYear() - birthDate.getFullYear()
+    var m = today.getMonth() - birthDate.getMonth()
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--
+    }
+    return age
+}
+
 const UserProfile = ({ user, scroll = 0 }) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
     const [currentOnline, setCurrentOnline] = useState(false)
@@ -24,8 +35,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
     const infosRef = useRef(null)
     const dispatch = useDispatch()
     const imgs = []
-    const userAge =
-        new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
+    const userAge = calculateAge(user.dateOfBirth)
 
     if (user.imgA) imgs.push(user.imgA)
     if (user.imgB) imgs.push(user.imgB)

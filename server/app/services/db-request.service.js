@@ -194,13 +194,6 @@ export class DbRequestService {
       const parameters = [
         matchingParameters.login,
         ...genderPreferences,
-        matchingParameters.ageMin,
-        matchingParameters.ageMax,
-        matchingParameters.fameMin,
-        matchingParameters.fameMax,
-        matchingParameters.coordinate,
-        matchingParameters.distMin * 1000, // Distances in meters.
-        matchingParameters.distMax * 1000,
         ...matchingParameters.tags,
       ];
 
@@ -235,9 +228,9 @@ WHERE
         query += ", ?";
       }
       query += `)\n
-      AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) BETWEEN ? AND ?
-      AND u.rating BETWEEN ? AND ?\n
-      AND ST_Distance_Sphere(u.coordinate, ST_GeomFromText(?)) BETWEEN ? AND ?\n`;
+      AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) BETWEEN currentUs.ageMin AND currentUs.ageMax
+      AND u.rating BETWEEN currentUs.fameMin AND currentUs.fameMax
+      AND ST_Distance_Sphere(u.coordinate, currentUser.coordinate) BETWEEN currentUs.distMin * 1000 AND currentUs.distMax * 1000\n`;
 
       if (matchingParameters.tags.length > 0) {
         query += `
