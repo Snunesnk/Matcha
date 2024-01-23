@@ -216,13 +216,15 @@ SELECT DISTINCT
   u.login,
   u.bio,
   u.rating,
-  GROUP_CONCAT(ut.tagBwid ORDER BY ut.tagBwid ASC SEPARATOR ', ') AS tags
+  GROUP_CONCAT(ut.tagBwid ORDER BY ut.tagBwid ASC SEPARATOR ', ') AS tags,
+  CASE WHEN n.type IS NULL THEN 0 ELSE 1 END AS alreadySeen
 FROM
     user u
-    INNER JOIN userSettings us ON u.login = us.userLogin
-    INNER JOIN user currentUser ON currentUser.login = ?
-    INNER JOIN userSettings currentUs ON currentUser.login = currentUs.userLogin
-    LEFT JOIN userTag ut ON u.login = ut.userLogin
+  INNER JOIN userSettings us ON u.login = us.userLogin
+  INNER JOIN user currentUser ON currentUser.login = ?
+  INNER JOIN userSettings currentUs ON currentUser.login = currentUs.userLogin
+  LEFT JOIN userTag ut ON u.login = ut.userLogin
+  LEFT JOIN notifications n ON u.login = n.login AND n.type = 'visit' AND n.trigger_login = currentUser.login
 WHERE
       u.login <> currentUser.login
       AND u.verified = 1
@@ -269,7 +271,7 @@ WHERE
 
       query += `
       GROUP BY u.login
-      ORDER BY u.rating DESC
+      ORDER BY alreadySeen ASC, u.rating DESC
       `;
 
       connection.query(query, parameters, (err, res) => {
