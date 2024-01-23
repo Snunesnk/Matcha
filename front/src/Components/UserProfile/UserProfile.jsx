@@ -1,9 +1,7 @@
 import React, { useRef, useState } from 'react'
-import PlaceIcon from '@mui/icons-material/Place'
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
-import ArrowLeftIcon from '@mui/icons-material/ArrowLeft'
-import ArrowRightIcon from '@mui/icons-material/ArrowRight'
-import ClearIcon from '@mui/icons-material/Clear'
+import { ArrowDropUp, ArrowLeft, ArrowRight, Clear, Place, 
+    Favorite, FavoriteBorder, Block, ReportOff,
+    Star, StarBorder, StarHalf} from '@mui/icons-material'
 import './UserProfile.css'
 
 const UserProfile = ({ user, scroll = 0 }) => {
@@ -49,32 +47,30 @@ const UserProfile = ({ user, scroll = 0 }) => {
     }
 
     return (
-        <div
-            id="user-profile-container"
-            className={selectedPicture !== -1 ? 'no-overflow' : ''}
-        >
-            <div
-                className="card_img_container"
-                style={{
-                    background:
-                        'url(' +
-                        (user.imgA?.includes('http')
-                            ? ''
-                            : 'http://localhost:8080/api') +
-                        user.imgA +
-                        ') 50% 50% / cover no-repeat',
-                }}
+        <div id="user-profile-container" className={selectedPicture !== -1 ? 'no-overflow' : ''}>
+            <div className="card_img_container"
+                style={{ background: 'url('
+                    + (user.imgA?.includes('http') ? '' : 'http://localhost:8080/api') 
+                    + user.imgA + ') 50% 50% / cover no-repeat',}}
             >
                 <div className="name_and_age_container">
-                    <button className="info-chip" onClick={toggleScroll}>
-                        {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
-                    </button>
+                    
+                    <div className='icons-bar'>
+                        <button className="info-chip" onClick={toggleScroll}>
+                            {scroll <= 50 ? 'Info' : <ArrowDropUp />}
+                        </button>
+
+                        <Star/><StarHalf/><StarBorder/>
+                        
+                        <Block/><FavoriteBorder/>
+                    </div>
+
                     <div ref={profileRef} className="name_and_age">
-                        {user.name}, {userAge}
-                        <i id="user-login">, @{user.login}</i>
+                        {user.surname} {user.name}, {userAge}
+                        <i id="user-login"> @{user.login}</i>
                     </div>
                     <div ref={infosRef} className="user-location-infos">
-                        <PlaceIcon /> 19km away
+                        <Place /> 19km away
                     </div>
                 </div>
             </div>
@@ -83,20 +79,11 @@ const UserProfile = ({ user, scroll = 0 }) => {
 
             <div id="user-profile-pictures-container">
                 {imgs.map((img, i) => (
-                    <div
+                    <div className="user-profile-picture"
                         key={i}
-                        className="user-profile-picture"
-                        style={{
-                            background:
-                                'url(' +
-                                (!img || img.includes('http')
-                                    ? ''
-                                    : 'http://localhost:8080/api') +
-                                img +
-                                ') center',
-                        }}
-                        onClick={() => setSelectedPicture(i)}
-                    ></div>
+                        style={{background:'url(' + (!img || img.includes('http') ? '' : 'http://localhost:8080/api') + img + ') center',}}
+                        onClick={() => setSelectedPicture(i)}>
+                    </div>
                 ))}
             </div>
 
@@ -118,55 +105,32 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         </div>
                     ))}
             </div>
-            <div
-                id="display-user-picture"
-                className={
-                    'card_img_container' +
-                    (selectedPicture === -1 ? ' hidden' : '')
-                }
-                style={{
-                    background:
-                        'url(' +
-                        (selectedPicture >= imgs.length ||
-                        selectedPicture == -1 ||
-                        imgs[selectedPicture].indexOf('http') > -1
-                            ? ''
-                            : 'http://localhost:8080/api') +
-                        imgs[selectedPicture] +
-                        ') 50% 50% / cover no-repeat',
-                }}
-            >
+            <div id="display-user-picture"
+                className={ 'card_img_container' + (selectedPicture === -1 ? ' hidden' : '')}
+                style={{ background: 'url(' +
+                    (selectedPicture >= imgs.length ||
+                    selectedPicture == -1 ||
+                    imgs[selectedPicture].indexOf('http') > -1
+                        ? ''
+                        : 'http://localhost:8080/api') +
+                    imgs[selectedPicture] +
+                    ') 50% 50% / cover no-repeat',}}>
                 <div id="picture-navigation">
-                    <div
-                        className="user-picture-nav user-picture-prev"
-                        onClick={prevPicture}
-                    >
-                        <ArrowLeftIcon />
+                    <div className="user-picture-nav user-picture-prev" onClick={prevPicture}>
+                        <ArrowLeft />
                     </div>
                     {imgs.map((img, i) => (
-                        <div
-                            className={
-                                'img-indicator' +
-                                (selectedPicture === i ? ' img-selected' : '')
-                            }
+                        <div className={ 'img-indicator' + (selectedPicture === i ? ' img-selected' : '')}
                             key={i}
-                            onClick={() => {
-                                setSelectedPicture(i)
-                            }}
-                        ></div>
+                            onClick={() => { setSelectedPicture(i)}}>
+                        </div>
                     ))}
-                    <div
-                        className="user-picture-nav user-picture-next"
-                        onClick={nextPicture}
-                    >
-                        <ArrowRightIcon />
+                    <div className="user-picture-nav user-picture-next" onClick={nextPicture}>
+                        <ArrowRight />
                     </div>
                 </div>
-                <button
-                    id="btn-close-magnify-picture"
-                    onClick={() => setSelectedPicture(-1)}
-                >
-                    <ClearIcon />
+                <button id="btn-close-magnify-picture" onClick={() => setSelectedPicture(-1)}>
+                    <Clear />
                 </button>
             </div>
         </div>

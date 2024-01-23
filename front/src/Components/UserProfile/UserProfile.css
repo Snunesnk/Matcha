@@ -83,8 +83,7 @@
     transform: rotate(-20deg);
 }
 
-#user-login,
-#user-email {
+#user-login, #user-email {
     width: 100%;
     font-size: 0.9rem;
     font-weight: 300;
@@ -93,7 +92,7 @@
 #user-profile-bio {
     width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: left;
     margin-top: 20px;
     margin-bottom: 20px;
     font-weight: 500;
@@ -249,4 +248,9 @@
         min-height: min(642px, calc(70.86vh - 50px));
         width: 100%;
     }
+}
+
+.icons-bar {
+    display: flex;
+    
 }
