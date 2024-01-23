@@ -581,137 +581,8 @@ export default class {
     res.status(200).send("Location updated");
   };
 
-  static parseParams = (params) => {
-    const defaultParams = {
-      sort: "Popularity",
-      sortDirection: "DESC",
-    };
-    const SORT_VALUES = ["Age", "Distance", "Popularity", "Tags"];
-    const SORT_DIRECTION_VALUES = ["Asc.", "Desc."];
-    const AGE_VALUES = ["all", "18-25", "25-35", "35-45", "45-55", "55+"];
-    const DISTANCE_VALUES = ["all", "<5km", "<10km", "<25km", "<50km"];
-    const POPULARITY_VALUES = ["all", "100", ">80", ">60", ">40", ">20"];
-
-    if (params.sort) {
-      switch (SORT_VALUES.indexOf(params.sort)) {
-        case 0:
-          defaultParams.sort = "Age";
-          break;
-        case 1:
-          defaultParams.sort = "Distance";
-          break;
-        case 2:
-          defaultParams.sort = "Popularity";
-          break;
-        case 3:
-          defaultParams.sort = "Tags";
-          break;
-        default:
-          break;
-      }
-    }
-
-    if (params.sortDirection) {
-      switch (SORT_DIRECTION_VALUES.indexOf(params.sortDirection)) {
-        case 0:
-          defaultParams.sortDirection = "ASC";
-          break;
-        case 1:
-          defaultParams.sortDirection = "DESC";
-          break;
-        default:
-          break;
-      }
-    }
-
-    if (params.age) {
-      switch (AGE_VALUES.indexOf(params.age)) {
-        case 0:
-          defaultParams.ageMin = 18;
-          defaultParams.ageMax = 55;
-          break;
-        case 1:
-          defaultParams.ageMin = 18;
-          defaultParams.ageMax = 25;
-          break;
-        case 2:
-          defaultParams.ageMin = 25;
-          defaultParams.ageMax = 35;
-          break;
-        case 3:
-          defaultParams.ageMin = 35;
-          defaultParams.ageMax = 45;
-          break;
-        case 4:
-          defaultParams.ageMin = 45;
-          defaultParams.ageMax = 55;
-          break;
-        case 5:
-          defaultParams.ageMin = 55;
-          defaultParams.ageMax = 55;
-          break;
-        default:
-          break;
-      }
-    }
-
-    if (params.location) {
-      switch (DISTANCE_VALUES.indexOf(params.location)) {
-        case 0:
-          defaultParams.distMax = 100;
-          break;
-        case 1:
-          defaultParams.distMax = 5;
-          break;
-        case 2:
-          defaultParams.distMax = 10;
-          break;
-        case 3:
-          defaultParams.distMax = 25;
-          break;
-        case 4:
-          defaultParams.distMax = 50;
-          break;
-        default:
-          break;
-      }
-    }
-
-    if (params.popularity) {
-      switch (POPULARITY_VALUES.indexOf(params.popularity)) {
-        case 0:
-          defaultParams.fameMin = 0;
-          break;
-        case 1:
-          defaultParams.fameMin = 100;
-          break;
-        case 2:
-          defaultParams.fameMin = 80;
-          break;
-        case 3:
-          defaultParams.fameMin = 60;
-          break;
-        case 4:
-          defaultParams.fameMin = 40;
-          break;
-        case 5:
-          defaultParams.fameMin = 20;
-          break;
-        default:
-          break;
-      }
-    }
-
-    if (params.tags && params.tags.length > 0) {
-      defaultParams.tags = params.tags;
-    } else defaultParams.tags = [];
-
-    return defaultParams;
-  };
-
   static getMatchingProfile = async (req, res) => {
     const login = req.decodedUser._login;
-    const params = this.parseParams(req.body);
 
     try {
       const user = await User.getUserByLogin(login);
@@ -722,6 +593,7 @@ export default class {
 
       const matchingParameters = {
         login,
+        tags: user.tags,
         enby: user.prefEnby,
         male: user.prefMale,
         female: user.prefFemale,

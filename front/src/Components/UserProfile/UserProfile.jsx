@@ -49,8 +49,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
     const infosRef = useRef(null)
     const dispatch = useDispatch()
     const imgs = []
-    const userAge =
-        new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
+    const userAge = calculateAge(user.dateOfBirth)
 
     if (user.imgA) imgs.push(user.imgA)
     if (user.imgB) imgs.push(user.imgB)

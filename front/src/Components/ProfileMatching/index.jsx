@@ -40,14 +40,13 @@ const GradientCross = () => (
     </>
 )
 
-const getProfileList = (setUserList, userFilters) => {
+const getProfileList = (setUserList) => {
     const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(userFilters),
     }
     fetch('http://localhost:8080/api/matching-profiles', options)
         .then((response) => {
@@ -127,7 +126,7 @@ const ProfileMatching = () => {
     useEffect(() => {
         setLoading(true)
 
-        getProfileList(setUserList, userFilters)
+        getProfileList(setUserList)
 
         const getLocation = async () => {
             const loc = await getUserLocation()
@@ -145,7 +144,7 @@ const ProfileMatching = () => {
 
                 fetch('http://localhost:8080/api/location', option).then(
                     (res) => {
-                        if (res.ok) getProfileList(setUserList, userFilters)
+                        if (res.ok) getProfileList(setUserList)
                     }
                 )
             }

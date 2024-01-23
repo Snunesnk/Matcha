@@ -231,12 +231,7 @@ WHERE
         query += ", ?";
       }
       query += `)\n
-    AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) >= currentUs.ageMin
-    AND (
-      currentUs.ageMax < 55 
-      OR currentUs.ageMax IS NULL
-      OR TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) <= currentUs.ageMax
-    )
+      AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) BETWEEN currentUs.ageMin AND currentUs.ageMax
       AND u.rating BETWEEN currentUs.fameMin AND currentUs.fameMax
       AND ST_Distance_Sphere(u.coordinate, currentUser.coordinate) BETWEEN currentUs.distMin * 1000 AND currentUs.distMax * 1000\n`;
 
