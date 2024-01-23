@@ -192,6 +192,41 @@ const ProfileMatching = () => {
         }
     }, [profileRef.current])
 
+    useEffect(() => {
+        if (!hasScrolled) return
+        dispatch({
+            type: USER_STATE_ACTIONS.SEND_VISIT,
+            payload: {
+                to: actualUser.login,
+            },
+        })
+    }, [hasScrolled])
+
+    const handleScroll = () => {
+        const { scrollTop, scrollHeight, clientHeight } = profileRef.current
+        const scrolled = (scrollTop / (scrollHeight - clientHeight)) * 100
+        // If user has scrolled for at least 42% of the profile, then consider it as a visit
+        if (scrolled > 42) setHasScrolled(true)
+    }
+
+    const throttleHandledScroll = throttle(handleScroll, 100)
+
+    useEffect(() => {
+        const scrollContainer = profileRef.current
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', throttleHandledScroll)
+        }
+
+        return () => {
+            if (scrollContainer) {
+                scrollContainer.removeEventListener(
+                    'scroll',
+                    throttleHandledScroll
+                )
+            }
+        }
+    }, [profileRef.current])
+
     const setCardState = async (state) => {
         dispatch({
             type: USER_STATE_ACTIONS.SEND_VISIT,
