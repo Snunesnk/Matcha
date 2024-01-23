@@ -87,7 +87,6 @@ const sendLike = async (receiver) => {
             return false
         })
 }
-
 // I think there should be a loading animation
 // Plus a last card that tells "No more user"
 

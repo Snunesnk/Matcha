@@ -56,7 +56,7 @@ const NewMatch = ({ match, setActiveConversation }) => (
             />
             <div
                 className={`status-indicator ${
-                    match.isOnline ? 'online' : 'offline'
+                    match.online ? 'online' : 'offline'
                 }`}
             ></div>
         </div>
@@ -79,7 +79,7 @@ const MessagesSection = ({ conversations, setActiveConversation }) => (
     </div>
 )
 
-function formatTimeDifference(dateString) {
+export function formatTimeDifference(dateString) {
     const currentDate = new Date()
     const inputDate = new Date(dateString)
 
@@ -123,7 +123,7 @@ const MessageSnippet = ({ conversation, setActiveConversation }) => {
                 />
                 <div
                     className={`status-indicator ${
-                        conversation.isOnline ? 'online' : 'offline'
+                        conversation.online ? 'online' : 'offline'
                     }`}
                 ></div>
             </div>
