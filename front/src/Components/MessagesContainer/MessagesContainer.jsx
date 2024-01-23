@@ -18,8 +18,7 @@ const handleSocketMessage = (
     newMatches,
     activeConversation,
     setSocketMessage,
-    setConversations,
-    setNewMatches
+    setConversations
 ) => {
     const matchUser = newMatches.find((match) => match.login === message.from)
     if (matchUser) {
@@ -61,26 +60,6 @@ const handleSocketMessage = (
         })
     }
 }
-const handleSocketStatus = (status, setNewMatches, setConversations) => {
-    setConversations((prev) => {
-        const conversation = prev.find((c) => c.login === status.login)
-        if (conversation) {
-            conversation.online = status.online
-            return [...prev]
-        } else {
-            return prev
-        }
-    })
-    setNewMatches((prev) => {
-        const match = prev.find((m) => m.login === status.login)
-        if (match) {
-            match.online = status.online
-            return [...prev]
-        } else {
-            return prev
-        }
-    })
-}
 
 const MessagesContainer = () => {
     const [activeComponent, setActiveComponent] = useState(
@@ -95,52 +74,6 @@ const MessagesContainer = () => {
     const location = useLocation()
     const searchParams = new URLSearchParams(location.search)
     const user = searchParams.get('user')
-
-    const checkForNewMatch = (message) => {
-        if (message.type !== 'match') return
-
-        const matchUser = newMatches.find(
-            (match) => match.name === message.payload.name
-        )
-        if (matchUser) {
-            setNewMatches((prev) => {
-                prev.splice(newMatches.indexOf(matchUser), 1)
-                return prev
-            })
-            setConversations((prev) => [
-                {
-                    ...matchUser,
-                    last_message_content: message.content,
-                    last_message_timestamp: new Date(Date.now()),
-                    read: activeUser.login === message.from,
-                },
-                ...prev,
-            ])
-        }
-
-        setSocketMessage(message)
-        setConversations((prev) => {
-            const conversation = prev.find((c) => c.login === message.from)
-            if (conversation) {
-                conversation.last_message_content = message.content
-                conversation.last_message_timestamp = new Date(Date.now())
-                conversation.read = message.from === activeUser?.login
-                prev.splice(prev.indexOf(conversation), 1)
-                return [conversation, ...prev].sort((a, b) => {
-                    const timestampA = new Date(
-                        a.last_message_timestamp
-                    ).getTime()
-                    const timestampB = new Date(
-                        b.last_message_timestamp
-                    ).getTime()
-
-                    return timestampB - timestampA
-                })
-            } else {
-                return prev
-            }
-        })
-    }
 
     const checkForNewMatch = (message) => {
         if (message.type !== 'match') return
@@ -217,26 +150,16 @@ const MessagesContainer = () => {
                 newMatches,
                 activeConversation,
                 setSocketMessage,
-                setConversations,
-                setNewMatches
+                setConversations
             )
         }
-        const handleSocketStatusEvent = (status) => {
-            handleSocketStatus(status, setNewMatches, setConversations)
-        }
         socket.on('message', handleSocketMessageEvent)
-        socket.on('notification', checkForNewMatch)
-        socket.on('online-status', handleSocketStatusEvent)
-
-        socket.on('notification', checkForNewMatch)
-        socket.on('online-status', handleSocketStatusEvent)
 
         socket.on('notification', checkForNewMatch)
 
         return () => {
             socket.off('message', handleSocketMessageEvent)
             socket.off('notification', checkForNewMatch)
-            socket.off('online-status', handleSocketStatusEvent)
         }
     }, [socket, newMatches, activeConversation])
 

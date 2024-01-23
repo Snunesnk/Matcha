@@ -56,7 +56,15 @@ const ChatComponent = ({
                     return timestampB - timestampA
                 })
             } else {
-                return prev
+                return [
+                    {
+                        ...user,
+                        last_message_content: newMessage,
+                        last_message_timestamp: new Date(Date.now()),
+                        read: true,
+                    },
+                    ...prev,
+                ]
             }
         })
 
