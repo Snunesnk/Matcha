@@ -32,29 +32,6 @@ export const initSocket = (io) => {
       sendVisit(io, visit);
     });
 
-    socket.on("interested", (payload) => {
-      payload.from = socket.decoded.login;
-      sendInterest(io, payload);
-    });
-
-    socket.on("online-check", async (payload) => {
-      const status = isUserConnected(io, payload.login);
-      let lastOnline = null;
-
-      if (!status) {
-        const user = await User.getUserByLogin(payload.login);
-        if (user) {
-          lastOnline = user.lastOnline;
-        }
-      }
-
-      socket.emit("online-status", {
-        login: payload.login,
-        online: status === true,
-        lastOnline: lastOnline,
-      });
-    });
-
     socket.on("disconnect", () => {
       socket.broadcast.emit("online-status", {
         login: socket.decoded.login,
@@ -120,7 +97,20 @@ function isUserConnected(io, roomName) {
   return room && room.size > 0;
 }
 
-export const sendMessage = async (io, message) => {
+const sendVisit = async (io, visit) => {
+  const userConnected = isUserConnected(io, visit.to);
+
+  if (userConnected) {
+    io.to(visit.to).emit("visit", visit);
+  }
+  Notifications.create({
+    type: NOTIFICATION_TYPE.VISIT,
+    login: visit.to,
+    trigger_login: visit.from,
+  });
+};
+
+const sendMessage = async (io, message) => {
   const newMessage = await Message.create(message);
 
   const userConnected = isUserConnected(io, message.to);

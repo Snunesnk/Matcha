@@ -8,8 +8,6 @@ import Button from '../Button/Button'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { throttle } from 'lodash'
-import SortAndFilter from '../SortAndFilter/SortAndFilter'
-import { CircularProgress } from '@mui/material'
 
 const getUserLocation = async () => {
     return new Promise((resolve) => {
@@ -122,8 +120,6 @@ const ProfileMatching = () => {
     const [loading, setLoading] = useState(true)
     const [match, setMatch] = useState(false)
     const [hasScrolled, setHasScrolled] = useState(false)
-    const [filterActive, setFilterActive] = useState(false)
-    const [userFilters, setUserFilters] = useState(getUserFilters)
     const profileRef = useRef(null)
     const naviguate = useNavigate()
     const dispatch = useDispatch()
@@ -196,6 +192,41 @@ const ProfileMatching = () => {
         if (!hasScrolled) return
         dispatch({
             type: USER_STATE_ACTIONS.INTERESTED,
+            payload: {
+                to: actualUser.login,
+            },
+        })
+    }, [hasScrolled])
+
+    const handleScroll = () => {
+        const { scrollTop, scrollHeight, clientHeight } = profileRef.current
+        const scrolled = (scrollTop / (scrollHeight - clientHeight)) * 100
+        // If user has scrolled for at least 42% of the profile, then consider it as a visit
+        if (scrolled > 42) setHasScrolled(true)
+    }
+
+    const throttleHandledScroll = throttle(handleScroll, 100)
+
+    useEffect(() => {
+        const scrollContainer = profileRef.current
+        if (scrollContainer) {
+            scrollContainer.addEventListener('scroll', throttleHandledScroll)
+        }
+
+        return () => {
+            if (scrollContainer) {
+                scrollContainer.removeEventListener(
+                    'scroll',
+                    throttleHandledScroll
+                )
+            }
+        }
+    }, [profileRef.current])
+
+    useEffect(() => {
+        if (!hasScrolled) return
+        dispatch({
+            type: USER_STATE_ACTIONS.SEND_VISIT,
             payload: {
                 to: actualUser.login,
             },
