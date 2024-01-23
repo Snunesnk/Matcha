@@ -323,6 +323,38 @@
     font-size: 0.8rem;
     font-weight: 300;
     color: #ffffff80;
+    margin: 0;
+}
+
+.icons-bar {
+    display: flex;
+}
+    
+.info-chip-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.info-chip-container .indicator {
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    margin: 0 5px 0px 15px;
+}
+
+.info-chip-container .indicator.online {
+    background-color: #37c898;
+}
+
+.info-chip-container .indicator.offline {
+    background-color: red;
+}
+
+.info-chip-container p {
+    font-size: 0.8rem;
+    font-weight: 300;
+    color: #ffffff80;
 }
 
 .info-row {

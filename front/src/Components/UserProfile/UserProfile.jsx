@@ -128,9 +128,10 @@ const UserProfile = ({ user, scroll = 0 }) => {
                             {scroll <= 50 ? 'Info' : <ArrowDropUp />}
                         </button>
 
-                        <Star/><StarHalf/><StarBorder/>
-                        
-                        <Block/><FavoriteBorder/>
+                        <div className='like-block'>
+                            <Block fontSize='large' />
+                            {like ? <Favorite fontSize='large' /> : <FavoriteBorder fontSize='large' />}
+                        </div>
                     </div>
 
                     <div ref={profileRef} className="name_and_age">
