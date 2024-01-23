@@ -122,6 +122,17 @@ const UserProfile = ({ user, scroll = 0 }) => {
                             {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
                         </button>
                     </div>
+                    
+                    <div className='icons-bar'>
+                        <button className="info-chip" onClick={toggleScroll}>
+                            {scroll <= 50 ? 'Info' : <ArrowDropUp />}
+                        </button>
+
+                        <Star/><StarHalf/><StarBorder/>
+                        
+                        <Block/><FavoriteBorder/>
+                    </div>
+
                     <div ref={profileRef} className="name_and_age">
                         {user.surname}, {userAge}
                     </div>
