@@ -30,8 +30,21 @@ export const initSocket = (io) => {
       sendVisit(io, visit);
     });
 
+    // socket.on("online-status", (status) => {
+    //   socket.broadcast.emit("online-status", {
+    //     login: socket.decoded.login,
+    //     status,
+    //   });
+    // });
+
     socket.on("disconnect", () => {
+      console.log("user disconnected", socket.decoded.login);
       socket.leave(userLogin);
+    });
+
+    socket.broadcast.emit("online-status", {
+      login: socket.decoded.login,
+      status: true,
     });
   })
     .on("error", function (err) {
