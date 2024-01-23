@@ -92,8 +92,10 @@ const savePreferences = (
     ageMax,
     searchTags,
     fameMin,
-    fameMax
+    fameMax,
+    setLoading
 ) => {
+    setLoading(true)
     const options = {
         method: 'POST',
         headers: {
@@ -119,7 +121,8 @@ const savePreferences = (
             } else throw new Error('Something went wrong ...')
         })
         .then((data) => {
-            console.log(data)
+            setLoading(false)
+            alert('Discovery settings saved')
         })
         .catch((error) => {
             console.log(error)
