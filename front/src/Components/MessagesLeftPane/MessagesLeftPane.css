@@ -235,3 +235,17 @@
 .opaque {
     opacity: 0.6;
 }
+
+.message.unread .message-info-header time {
+    color: white;
+}
+
+.message.unread .new-message-icon {
+    width: 13px;
+    height: 13px;
+    border-radius: 50%;
+    background-color: #4ac0fc;
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+}
