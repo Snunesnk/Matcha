@@ -1,23 +1,57 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import PlaceIcon from '@mui/icons-material/Place'
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown'
 import ArrowLeftIcon from '@mui/icons-material/ArrowLeft'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
 import ClearIcon from '@mui/icons-material/Clear'
 import './UserProfile.css'
+import socket from '../../Socket/socket'
+import { useDispatch } from 'react-redux'
+import { USER_STATE_ACTIONS } from '../../constants'
+import { formatTimeDifference } from '../MessagesLeftPane/MessagesLeftPane'
+
+const updateOnlineStatus = (status, actualUser, setCurrentOnline) => {
+    if (actualUser?.login === status.login) {
+        setCurrentOnline(status)
+    }
+}
 
 const UserProfile = ({ user, scroll = 0 }) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
+    const [currentOnline, setCurrentOnline] = useState(false)
     const profileRef = useRef(null)
     const infosRef = useRef(null)
+    const dispatch = useDispatch()
     const imgs = []
-    const userAge = new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
+    const userAge =
+        new Date().getFullYear() - new Date(user.dateOfBirth).getFullYear()
 
     if (user.imgA) imgs.push(user.imgA)
     if (user.imgB) imgs.push(user.imgB)
     if (user.imgC) imgs.push(user.imgC)
     if (user.imgD) imgs.push(user.imgD)
     if (user.imgE) imgs.push(user.imgE)
+
+    useEffect(() => {
+        const handleOnlineStatus = (status) => {
+            updateOnlineStatus(status, user, setCurrentOnline)
+        }
+        socket.on('online-status', handleOnlineStatus)
+
+        setCurrentOnline(false)
+        if (user) {
+            dispatch({
+                type: USER_STATE_ACTIONS.CHECK_ONLINE_STATUS,
+                payload: {
+                    login: user.login,
+                },
+            })
+        }
+
+        return () => {
+            socket.off('online-status', handleOnlineStatus)
+        }
+    }, [user])
 
     const prevPicture = () => {
         if (selectedPicture === 0) {
@@ -66,9 +100,24 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 }}
             >
                 <div className="name_and_age_container">
-                    <button className="info-chip" onClick={toggleScroll}>
-                        {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
-                    </button>
+                    <div className="info-chip-container">
+                        <button className="info-chip" onClick={toggleScroll}>
+                            {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
+                        </button>
+                        <div
+                            className={
+                                'indicator' +
+                                (currentOnline.online ? ' online' : ' offline')
+                            }
+                        ></div>
+                        {currentOnline.online ? (
+                            <p>Connected</p>
+                        ) : (
+                            <p>
+                                {formatTimeDifference(currentOnline.lastOnline)}
+                            </p>
+                        )}
+                    </div>
                     <div ref={profileRef} className="name_and_age">
                         {user.name}, {userAge}
                         <i id="user-login">, @{user.login}</i>

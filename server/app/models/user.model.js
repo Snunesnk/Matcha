@@ -16,7 +16,6 @@ export class User extends UserChunk {
 
     this.verified = obj.verified || obj._verified;
     this.onboarded = obj.onboarded || obj._onboarded;
-    this.isOnline = obj.isOnline || obj._isOnline;
     this.lastOnline = obj.lastOnline || obj._lastOnline;
 
     this.prefMale = obj.prefMale || obj._prefMale;
@@ -84,18 +83,6 @@ export class User extends UserChunk {
     } else {
       this._longitude = undefined;
     }
-  }
-
-  get isOnline() {
-    return this._isOnline;
-  }
-
-  set isOnline(isOnline) {
-    if (isOnline === true || isOnline === "true" || isOnline === 1) {
-      this._isOnline = true;
-      return;
-    }
-    this._isOnline = false;
   }
 
   get lastOnline() {
@@ -310,7 +297,7 @@ export class User extends UserChunk {
     }
     user.password = "XXXXX";
     user.token = "YYYYY";
-    return user;
+    return new User(user);
   }
 
   static async getUserByToken(token) {
@@ -470,7 +457,6 @@ export class User extends UserChunk {
       imgD: this.imgD,
       imgE: this.imgE,
       tags: this.tags,
-      isOnline: this.isOnline,
       lastOnline: this.lastOnline,
       coordinate: this.coordinate,
       latitude: this.latitude,
