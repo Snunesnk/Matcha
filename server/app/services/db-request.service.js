@@ -1,6 +1,7 @@
 import mysql from "mysql2";
 import _ from "lodash";
 import { HOST, USER, PASSWORD, DB } from "../config/db.config.js";
+import { query } from "express";
 
 // Create a connection to the database
 const connection = mysql.createConnection({
@@ -184,7 +185,7 @@ export class DbRequestService {
     });
   }
 
-  static async getMatchList(matchingParameters) {
+  static async getMatchList(matchingParameters, userFilters) {
     return new Promise((resolve, reject) => {
       const genderPreferences = [];
       if (matchingParameters.enby) genderPreferences.push("nb");
@@ -193,6 +194,7 @@ export class DbRequestService {
 
       const parameters = [
         matchingParameters.login,
+        ...userFilters.tags,
         ...genderPreferences,
         ...matchingParameters.tags,
       ];
@@ -210,7 +212,8 @@ SELECT DISTINCT
   u.bio,
   u.rating,
   GROUP_CONCAT(ut.tagBwid ORDER BY ut.tagBwid ASC SEPARATOR ', ') AS tags,
-  CASE WHEN n.type IS NULL THEN 0 ELSE 1 END AS alreadySeen
+  CASE WHEN n.type IS NULL THEN 0 ELSE 1 END AS alreadySeen,
+  COALESCE(tc.tagCount, 0) AS tagMatchCount
 FROM
     user u
   INNER JOIN userSettings us ON u.login = us.userLogin
@@ -218,7 +221,25 @@ FROM
   INNER JOIN userSettings currentUs ON currentUser.login = currentUs.userLogin
   LEFT JOIN userTag ut ON u.login = ut.userLogin
   LEFT JOIN notifications n ON u.login = n.login AND n.type = 'visit' AND n.trigger_login = currentUser.login
-WHERE
+  LEFT JOIN (
+    SELECT
+      ut.userLogin,
+      COUNT(*) AS tagCount
+    FROM
+      userTag ut\n`;
+      if (userFilters.tags && userFilters.tags.length > 0) {
+        query += `
+          WHERE
+            ut.tagBwid IN (?`;
+        for (let i = 1; i < userFilters.tags.length; i++) {
+          query += ", ?";
+        }
+        query += `)\n`;
+      }
+      query += `
+            GROUP BY ut.userLogin
+  ) tc ON tc.userLogin = u.login\n
+  WHERE
       u.login <> currentUser.login
       AND u.verified = 1
       AND u.onboarded = 1
@@ -228,7 +249,12 @@ WHERE
         query += ", ?";
       }
       query += `)\n
-      AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) BETWEEN currentUs.ageMin AND currentUs.ageMax
+    AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) >= currentUs.ageMin
+    AND (
+      currentUs.ageMax < 55 
+      OR currentUs.ageMax IS NULL
+      OR TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) <= currentUs.ageMax
+    )
       AND u.rating BETWEEN currentUs.fameMin AND currentUs.fameMax
       AND ST_Distance_Sphere(u.coordinate, currentUser.coordinate) BETWEEN currentUs.distMin * 1000 AND currentUs.distMax * 1000\n`;
 
@@ -254,7 +280,12 @@ WHERE
         (currentUser.gender = 'f' AND u.prefFemale = 1) OR
         (currentUser.gender = 'nb' AND u.prefEnby = 1)
       )
-      AND TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) BETWEEN us.ageMin AND us.ageMax
+      AND TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) >= us.ageMin
+      AND (
+        us.ageMax < 55 
+        OR us.ageMax IS NULL
+        OR TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) <= us.ageMax
+      )
       AND currentUser.rating BETWEEN us.fameMin AND us.fameMax
       AND ST_Distance_Sphere(currentUser.coordinate, u.coordinate) <= us.distMax * 1000
       AND NOT EXISTS (
@@ -264,8 +295,30 @@ WHERE
 
       query += `
       GROUP BY u.login
-      ORDER BY alreadySeen ASC, u.rating DESC
-      `;
+      ORDER BY alreadySeen ASC,`;
+
+      switch (userFilters.sort) {
+        case "Age":
+          query += " TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE())";
+          break;
+        case "Popularity":
+          query += " u.rating";
+          break;
+        case "Distance":
+          query += " ST_Distance_Sphere(currentUser.coordinate, u.coordinate)";
+          break;
+        case "Tags":
+          query += " tagMatchCount";
+          break;
+        default:
+          query += " u.rating";
+      }
+
+      query += userFilters.sortDirection
+        ? " " + userFilters.sortDirection
+        : " DESC";
+
+      query += `, u.rating DESC`;
 
       connection.query(query, parameters, (err, res) => {
         if (err) {
@@ -294,7 +347,12 @@ WHERE
         (liker.gender = 'f' AND likee.prefFemale) OR
         (liker.gender = 'nb' AND likee.prefEnby)
     )
-    AND TIMESTAMPDIFF(YEAR, liker.dateOfBirth, CURDATE()) BETWEEN likeeSettings.ageMin AND likeeSettings.ageMax
+    AND TIMESTAMPDIFF(YEAR, liker.dateOfBirth, CURDATE()) >= likeeSettings.ageMin
+    AND (
+      likeeSettings.ageMax < 55 
+      OR likeeSettings.ageMax IS NULL
+      OR TIMESTAMPDIFF(YEAR, liker.dateOfBirth, CURDATE()) <= likeeSettings.ageMax
+    )
     AND liker.rating BETWEEN likeeSettings.fameMin AND likeeSettings.fameMax
     AND ST_Distance_Sphere(liker.coordinate, likee.coordinate) <= likeeSettings.distMax * 1000
     AND (
@@ -302,7 +360,12 @@ WHERE
         (likee.gender = 'f' AND liker.prefFemale) OR
         (likee.gender = 'nb' AND liker.prefEnby)
     )
-    AND TIMESTAMPDIFF(YEAR, likee.dateOfBirth, CURDATE()) BETWEEN likerSettings.ageMin AND likerSettings.ageMax
+    AND TIMESTAMPDIFF(YEAR, likee.dateOfBirth, CURDATE()) >= likerSettings.ageMin
+    AND (
+      likerSettings.ageMax < 55 
+      OR likerSettings.ageMax IS NULL
+      OR TIMESTAMPDIFF(YEAR, likee.dateOfBirth, CURDATE()) <= likerSettings.ageMax
+    )
     AND likee.rating BETWEEN likerSettings.fameMin AND likerSettings.fameMax
     AND ST_Distance_Sphere(likee.coordinate, liker.coordinate) <= likerSettings.distMax * 1000;
     `;

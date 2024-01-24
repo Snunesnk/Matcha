@@ -7,8 +7,9 @@ import UserProfile from '../UserProfile/UserProfile'
 import Button from '../Button/Button'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
-import { filter, throttle } from 'lodash'
+import { throttle } from 'lodash'
 import SortAndFilter from '../SortAndFilter/SortAndFilter'
+import { CircularProgress } from '@mui/material'
 
 const getUserLocation = async () => {
     return new Promise((resolve) => {
@@ -41,13 +42,14 @@ const GradientCross = () => (
     </>
 )
 
-const getProfileList = (setUserList) => {
+const getProfileList = (setUserList, userFilters) => {
     const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         credentials: 'include',
+        body: JSON.stringify(userFilters),
     }
     fetch('http://localhost:8080/api/matching-profiles', options)
         .then((response) => {
@@ -92,6 +94,25 @@ const sendLike = async (receiver) => {
 // I think there should be a loading animation
 // Plus a last card that tells "No more user"
 
+const getUserFilters = () => {
+    const defaultFilters = {
+        sort: 'Popularity',
+        sortDirection: 'Desc.',
+        age: '',
+        location: '',
+        popularity: '',
+        tags: [],
+    }
+
+    const localFilters = localStorage.getItem('userFilters')
+    if (!localFilters) return defaultFilters
+
+    const filters = JSON.parse(localFilters)
+    if (!filters) return defaultFilters
+
+    return filters
+}
+
 const ProfileMatching = () => {
     const [evaluation, setEvaluation] = useState('')
     const [scroll, setScroll] = useState(0)
@@ -102,6 +123,7 @@ const ProfileMatching = () => {
     const [match, setMatch] = useState(false)
     const [hasScrolled, setHasScrolled] = useState(false)
     const [filterActive, setFilterActive] = useState(false)
+    const [userFilters, setUserFilters] = useState(getUserFilters)
     const profileRef = useRef(null)
     const naviguate = useNavigate()
     const dispatch = useDispatch()
@@ -109,7 +131,7 @@ const ProfileMatching = () => {
     useEffect(() => {
         setLoading(true)
 
-        getProfileList(setUserList)
+        getProfileList(setUserList, userFilters)
 
         const getLocation = async () => {
             const loc = await getUserLocation()
@@ -127,13 +149,13 @@ const ProfileMatching = () => {
 
                 fetch('http://localhost:8080/api/location', option).then(
                     (res) => {
-                        if (res.ok) getProfileList(setUserList)
+                        if (res.ok) getProfileList(setUserList, userFilters)
                     }
                 )
             }
         }
         getLocation()
-    }, [])
+    }, [userFilters])
 
     useEffect(() => {
         if (!hasScrolled) return
@@ -231,7 +253,38 @@ const ProfileMatching = () => {
         setLoading(false)
     }, [userList])
 
-    if (loading) return <div>Loading...</div>
+    useEffect(() => {
+        if (!userFilters) return
+        localStorage.setItem('userFilters', JSON.stringify(userFilters))
+    }, [userFilters])
+
+    if (loading)
+        return (
+            <div id="profile_matching">
+                <div
+                    id="profile_matching-container"
+                    className={
+                        evaluation + ' ' + (filterActive ? 'no-scroll' : '')
+                    }
+                    onScroll={(e) => setScroll(e.target.scrollTop)}
+                    ref={profileRef}
+                >
+                    {filterActive && (
+                        <>
+                            <ClearIcon
+                                className="matching-settings clear"
+                                onClick={() => setFilterActive(!filterActive)}
+                            />
+                            <SortAndFilter
+                                active={filterActive}
+                                filters={userFilters}
+                                setFilter={setUserFilters}
+                            />
+                        </>
+                    )}
+                </div>
+            </div>
+        )
     if (actualUser !== null) {
         return (
             <div id="profile_matching">
@@ -255,9 +308,22 @@ const ProfileMatching = () => {
                         />
                     )}
 
-                    {filterActive && <SortAndFilter active={filterActive} />}
+                    {filterActive && (
+                        <SortAndFilter
+                            active={filterActive}
+                            filters={userFilters}
+                            setFilter={setUserFilters}
+                        />
+                    )}
 
-                    <UserProfile scroll={scroll} user={actualUser} />
+                    {loading ? (
+                        <div className="matching-loading">
+                            <CircularProgress />
+                            <p>Loading profiles...</p>
+                        </div>
+                    ) : (
+                        <UserProfile scroll={scroll} user={actualUser} />
+                    )}
 
                     <div className="profile-evaluation">
                         <p id="profile-disliked">Nope</p>
@@ -334,20 +400,22 @@ const ProfileMatching = () => {
                         </div>
                     )}
 
-                    <div className="profile_matching_btn_container">
-                        <button
-                            className="profile_matching_btn profile_matching_dislike"
-                            onClick={() => setCardState('disliked')}
-                        >
-                            <GradientCross />
-                        </button>
-                        <button
-                            className="profile_matching_btn profile_matching_like"
-                            onClick={() => setCardState('liked')}
-                        >
-                            <Favorite />
-                        </button>
-                    </div>
+                    {!loading && (
+                        <div className="profile_matching_btn_container">
+                            <button
+                                className="profile_matching_btn profile_matching_dislike"
+                                onClick={() => setCardState('disliked')}
+                            >
+                                <GradientCross />
+                            </button>
+                            <button
+                                className="profile_matching_btn profile_matching_like"
+                                onClick={() => setCardState('liked')}
+                            >
+                                <Favorite />
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         )

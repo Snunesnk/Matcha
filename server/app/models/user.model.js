@@ -421,8 +421,11 @@ export class User extends UserChunk {
     return true;
   }
 
-  static async getMatchingProfiles(matchingParameters) {
-    const data = await DbRequestService.getMatchList(matchingParameters);
+  static async getMatchingProfiles(matchingParameters, userFilters) {
+    const data = await DbRequestService.getMatchList(
+      matchingParameters,
+      userFilters
+    );
 
     if (!data) return null;
 
