@@ -204,6 +204,16 @@ export class UserSetting {
     return this.getUserSettingByLogin(userLogin);
   }
 
+  static async getUserSettingsTagsAsStringByLogin(userLogin) {
+    const data = await DbRequestService.read("userSettingsTags", {
+      userLogin: `${userLogin}`,
+    });
+    if (data.length === 0) {
+      return [];
+    }
+    return data.map((tag) => tag.tagBwid);
+  }
+
   static async deleteUserSettingByLogin(userLogin) {
     return DbRequestService.delete("userSettings", {
       userLogin: `${userLogin}`,
