@@ -11,8 +11,6 @@ export default class {
     const message = await Message.getMessageFomMatch(matchId);
     if (!message) return res.json([]);
 
-    console.log("messages", message);
-
     res.json(message);
   }
 
