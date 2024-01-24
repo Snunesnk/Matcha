@@ -722,11 +722,13 @@ export default class {
 
       const matchingParameters = {
         login,
-        tags: user.tags,
         enby: user.prefEnby,
         male: user.prefMale,
         female: user.prefFemale,
       };
+
+      matchingParameters.tags =
+        await UserSetting.getUserSettingsTagsAsStringByLogin(login);
 
       const results = await User.getMatchingProfiles(
         matchingParameters,

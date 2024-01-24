@@ -192,9 +192,6 @@ export class DbRequestService {
       if (matchingParameters.male) genderPreferences.push("m");
       if (matchingParameters.female) genderPreferences.push("f");
 
-      matchingParameters.tags =
-        matchingParameters.tags?.map((tag) => tag.bwid) || [];
-
       const parameters = [
         matchingParameters.login,
         ...userFilters.tags,
