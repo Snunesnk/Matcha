@@ -136,21 +136,6 @@ const DiscoverySettings = () => {
             {user ? (
                 <div id="settings-container">
                     <h2>Discovery settings</h2>
-                    <div className="setting">
-                        <div>Sort by</div>
-                        <div>
-                            <SimpleSelect
-                                options={GENDERS.map((gender) => gender)}
-                                defaultSelected={userPreferences}
-                                onChange={handlePreferenceChange}
-                            />
-                            <SimpleSelect
-                                options={GENDERS.map((gender) => gender)}
-                                defaultSelected={userPreferences}
-                                onChange={handlePreferenceChange}
-                            />
-                        </div>
-                    </div>
 
                     <div className="setting">
                         <div>Show me</div>

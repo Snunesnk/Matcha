@@ -1,20 +1,25 @@
+import SimpleSelect from '../Select/Select'
 import './SortAndFilter.css'
+
+const GENDERS = ['f', 'm', 'nb']
 
 const SortAndFilter = ({ setSort, setFilter, active }) => {
     return (
         <div className={'sort-and-filter ' + (active ? 'active' : 'inactive')}>
-            <div className="sort">
-                <label htmlFor="sort">Sort by</label>
-                <select
-                    name="sort"
-                    id="sort"
-                    onChange={(e) => setSort(e.target.value)}
-                >
-                    <option value="age">Age</option>
-                    <option value="fame">Fame</option>
-                    <option value="distance">Distance</option>
-                    <option value="tags">Tags</option>
-                </select>
+            <div className="setting">
+                <div>Sort by</div>
+                <div>
+                    <SimpleSelect
+                        options={GENDERS.map((gender) => gender)}
+                        // defaultSelected={userPreferences}
+                        // onChange={handlePreferenceChange}
+                    />
+                    <SimpleSelect
+                        options={GENDERS.map((gender) => gender)}
+                        // defaultSelected={userPreferences}
+                        // onChange={handlePreferenceChange}
+                    />
+                </div>
             </div>
             <div className="filter">
                 <label htmlFor="filter">Filter by</label>

@@ -15,7 +15,7 @@
 
     100% {
         opacity: 0;
-        z-index: 0;
+        z-index: 0 !important;
         display: none;
     }
 }
@@ -30,12 +30,12 @@
 
 .sort-and-filter.active,
 .sort-and-filter.inactive {
-    z-index: 4;
     display: flex;
     flex-direction: column;
     justify-content: start;
     align-items: center;
     padding: 60px;
+    z-index: 4;
     background-color: #200518D0;
 }
 
