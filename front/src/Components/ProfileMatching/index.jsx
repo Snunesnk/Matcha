@@ -258,73 +258,6 @@ const ProfileMatching = () => {
         localStorage.setItem('userFilters', JSON.stringify(userFilters))
     }, [userFilters])
 
-    if (loading)
-        return (
-            <div id="profile_matching">
-                <div
-                    id="profile_matching-container"
-                    className={
-                        evaluation + ' ' + (filterActive ? 'no-scroll' : '')
-                    }
-                    onScroll={(e) => setScroll(e.target.scrollTop)}
-                    ref={profileRef}
-                >
-                    {filterActive && (
-                        <>
-                            <ClearIcon
-                                className="matching-settings clear"
-                                onClick={() => setFilterActive(!filterActive)}
-                            />
-                            <SortAndFilter
-                                active={filterActive}
-                                filters={userFilters}
-                                setFilter={setUserFilters}
-                            />
-                        </>
-                    )}
-                </div>
-            </div>
-        )
-    if (actualUser !== null) {
-        return (
-            <div id="profile_matching">
-                <div
-                    id="profile_matching-container"
-                    className={
-                        evaluation + ' ' + (filterActive ? 'no-scroll' : '')
-                    }
-                    onScroll={(e) => setScroll(e.target.scrollTop)}
-                    ref={profileRef}
-                >
-                    {filterActive ? (
-                        <ClearIcon
-                            className="matching-settings clear"
-                            onClick={() => setFilterActive(!filterActive)}
-                        />
-                    ) : (
-                        <Settings
-                            className="matching-settings"
-                            onClick={() => setFilterActive(!filterActive)}
-                        />
-                    )}
-
-                    {filterActive && (
-                        <SortAndFilter
-                            active={filterActive}
-                            filters={userFilters}
-                            setFilter={setUserFilters}
-                        />
-                    )}
-
-                    {loading ? (
-                        <div className="matching-loading">
-                            <CircularProgress />
-                            <p>Loading profiles...</p>
-                        </div>
-                    ) : (
-                        <UserProfile scroll={scroll} user={actualUser} />
-                    )}
-
     return (
         <div id="profile_matching">
             <div
@@ -441,23 +374,22 @@ const ProfileMatching = () => {
                     </div>
                 )}
 
-                    {!loading && (
-                        <div className="profile_matching_btn_container">
-                            <button
-                                className="profile_matching_btn profile_matching_dislike"
-                                onClick={() => setCardState('disliked')}
-                            >
-                                <GradientCross />
-                            </button>
-                            <button
-                                className="profile_matching_btn profile_matching_like"
-                                onClick={() => setCardState('liked')}
-                            >
-                                <Favorite />
-                            </button>
-                        </div>
-                    )}
-                </div>
+                {!loading && actualUser && (
+                    <div className="profile_matching_btn_container">
+                        <button
+                            className="profile_matching_btn profile_matching_dislike"
+                            onClick={() => setCardState('disliked')}
+                        >
+                            <GradientCross />
+                        </button>
+                        <button
+                            className="profile_matching_btn profile_matching_like"
+                            onClick={() => setCardState('liked')}
+                        >
+                            <Favorite />
+                        </button>
+                    </div>
+                )}
             </div>
         </div>
     )
