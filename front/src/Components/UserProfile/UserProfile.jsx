@@ -129,11 +129,11 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         )}
                     </div>
                     <div ref={profileRef} className="name_and_age">
-                        {user.name}, {userAge}
-                        <i id="user-login">, @{user.login}</i>
+                        {user.name} {user.surname}, {userAge} {user.gender}
+                        <i id="user-login"> @{user.login}</i>
                     </div>
                     <div ref={infosRef} className="user-location-infos">
-                        <PlaceIcon /> 19km away
+                        <PlaceIcon /> {Math.floor(user.distance)}km away
                     </div>
                 </div>
             </div>
