@@ -27,6 +27,7 @@ const getUserSettings = (login, setUser) => {
         headers: {
             'Content-Type': 'application/json',
         },
+        credentials: 'include',
     }
     fetch('http://localhost:8080/api/user/' + login, options)
         .then((response) => {
@@ -74,6 +75,7 @@ const saveUserImages = async (login, pictures) => {
     const options = {
         method: 'PUT',
         body: formData,
+        credetials: 'include',
     }
 
     await fetch('http://localhost:8080/api/user/' + login, options)
@@ -209,7 +211,7 @@ const UserSettings = () => {
                 </div>
 
                 <div className="setting">
-                    <div>You identify yourself as</div>
+                    <div>You identify as</div>
                     <Select
                         options={GENDERS.map((gender) => gender.name)}
                         defaultSelected={personalGender}
