@@ -7,7 +7,7 @@ import UserProfile from '../UserProfile/UserProfile'
 import Button from '../Button/Button'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
-import { throttle } from 'lodash'
+import { filter, throttle } from 'lodash'
 import SortAndFilter from '../SortAndFilter/SortAndFilter'
 import { CircularProgress } from '@mui/material'
 
