@@ -2,12 +2,14 @@ import React, { useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import ClearIcon from '@mui/icons-material/Clear'
 import './index.css'
-import { Favorite } from '@mui/icons-material'
+import { Favorite, Settings } from '@mui/icons-material'
 import UserProfile from '../UserProfile/UserProfile'
 import Button from '../Button/Button'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { throttle } from 'lodash'
+import SortAndFilter from '../SortAndFilter/SortAndFilter'
+import { CircularProgress } from '@mui/material'
 
 const getUserLocation = async () => {
     return new Promise((resolve) => {
@@ -40,21 +42,22 @@ const GradientCross = () => (
     </>
 )
 
-const getProfileList = (setUserList, matchingParameters) => {
+const getProfileList = (setUserList, userFilters) => {
     const options = {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
         },
         credentials: 'include',
-        body: JSON.stringify(matchingParameters),
+        body: JSON.stringify(userFilters),
     }
     fetch('http://localhost:8080/api/matching-profiles', options)
         .then((response) => {
             if (response.ok) {
                 return response.json()
-            }
-            throw new Error('Something went wrong ...')
+            } else if (response.status === 401) {
+                window.location.href = '/'
+            } else throw new Error('Something went wrong ...')
         })
         .then((data) => {
             setUserList(data.results)
@@ -76,8 +79,9 @@ const sendLike = async (receiver) => {
         .then((response) => {
             if (response.ok) {
                 return response.json()
-            }
-            throw new Error('Something went wrong ...')
+            } else if (response.status === 401) {
+                window.location.href = '/'
+            } else throw new Error('Something went wrong ...')
         })
         .then((data) => {
             return data
@@ -90,6 +94,25 @@ const sendLike = async (receiver) => {
 // I think there should be a loading animation
 // Plus a last card that tells "No more user"
 
+const getUserFilters = () => {
+    const defaultFilters = {
+        sort: 'Popularity',
+        sortDirection: 'Desc.',
+        age: '',
+        location: '',
+        popularity: '',
+        tags: [],
+    }
+
+    const localFilters = localStorage.getItem('userFilters')
+    if (!localFilters) return defaultFilters
+
+    const filters = JSON.parse(localFilters)
+    if (!filters) return defaultFilters
+
+    return filters
+}
+
 const ProfileMatching = () => {
     const [evaluation, setEvaluation] = useState('')
     const [scroll, setScroll] = useState(0)
@@ -99,22 +122,16 @@ const ProfileMatching = () => {
     const [loading, setLoading] = useState(true)
     const [match, setMatch] = useState(false)
     const [hasScrolled, setHasScrolled] = useState(false)
+    const [filterActive, setFilterActive] = useState(false)
+    const [userFilters, setUserFilters] = useState(getUserFilters)
     const profileRef = useRef(null)
     const naviguate = useNavigate()
     const dispatch = useDispatch()
 
     useEffect(() => {
         setLoading(true)
-        const matchingParameters = {
-            distMin: 0,
-            distMax: 100,
-            ageMin: 18,
-            ageMax: 55,
-            fameMin: 0,
-            fameMax: 100,
-            tags: [],
-        }
-        getProfileList(setUserList, matchingParameters)
+
+        getProfileList(setUserList, userFilters)
 
         const getLocation = async () => {
             const loc = await getUserLocation()
@@ -132,19 +149,18 @@ const ProfileMatching = () => {
 
                 fetch('http://localhost:8080/api/location', option).then(
                     (res) => {
-                        if (res.ok)
-                            getProfileList(setUserList, matchingParameters)
+                        if (res.ok) getProfileList(setUserList, userFilters)
                     }
                 )
             }
         }
         getLocation()
-    }, [])
+    }, [userFilters])
 
     useEffect(() => {
         if (!hasScrolled) return
         dispatch({
-            type: USER_STATE_ACTIONS.SEND_VISIT,
+            type: USER_STATE_ACTIONS.INTERESTED,
             payload: {
                 to: actualUser.login,
             },
@@ -177,6 +193,13 @@ const ProfileMatching = () => {
     }, [profileRef.current])
 
     const setCardState = async (state) => {
+        dispatch({
+            type: USER_STATE_ACTIONS.SEND_VISIT,
+            payload: {
+                to: actualUser.login,
+            },
+        })
+
         if (state === 'liked') {
             const res = await sendLike(actualUser.login)
             if (res.match) {
@@ -230,93 +253,128 @@ const ProfileMatching = () => {
         setLoading(false)
     }, [userList])
 
-    if (loading) return <div>Loading...</div>
-    if (actualUser !== null) {
-        return (
-            <div id="profile_matching">
-                <div
-                    id="profile_matching-container"
-                    className={evaluation}
-                    onScroll={(e) => setScroll(e.target.scrollTop)}
-                    ref={profileRef}
-                >
-                    <UserProfile scroll={scroll} user={actualUser} />
+    useEffect(() => {
+        if (!userFilters) return
+        localStorage.setItem('userFilters', JSON.stringify(userFilters))
+    }, [userFilters])
 
-                    <div className="profile-evaluation">
-                        <p id="profile-disliked">Nope</p>
-                        <p id="profile-liked">Like</p>
+    return (
+        <div id="profile_matching">
+            <div
+                id="profile_matching-container"
+                className={evaluation + ' ' + (filterActive ? 'no-scroll' : '')}
+                onScroll={(e) => setScroll(e.target.scrollTop)}
+                ref={profileRef}
+            >
+                {filterActive ? (
+                    <ClearIcon
+                        className="matching-settings clear"
+                        onClick={() => setFilterActive(!filterActive)}
+                    />
+                ) : (
+                    <Settings
+                        className="matching-settings"
+                        onClick={() => setFilterActive(!filterActive)}
+                    />
+                )}
+
+                {filterActive && (
+                    <SortAndFilter
+                        active={filterActive}
+                        filters={userFilters}
+                        setFilter={setUserFilters}
+                    />
+                )}
+
+                {loading ? (
+                    <div className="matching-loading">
+                        <CircularProgress />
+                        <p>Loading profiles...</p>
                     </div>
+                ) : (
+                    actualUser && (
+                        <UserProfile scroll={scroll} user={actualUser} />
+                    )
+                )}
+                {!loading && !actualUser && (
+                    <div className="no-match">
+                        Oh no, we've run out of profiles! Try tweaking your
+                        filters or check back soon for new pawsibilities
+                    </div>
+                )}
 
-                    {nextUser ? (
-                        <div
-                            className="card_img_container next-user"
-                            style={{
-                                background:
-                                    'url(' +
-                                    (nextUser.imgA?.includes('http')
-                                        ? ''
-                                        : 'http://localhost:8080/api') +
-                                    nextUser.imgA +
-                                    ') 50% 50% / cover no-repeat',
-                            }}
-                        >
-                            <div className="name_and_age_container"></div>
-                        </div>
-                    ) : (
-                        <div className="card_img_container next-user">
-                            <div className="name_and_age_container"></div>
-                        </div>
-                    )}
+                <div className="profile-evaluation">
+                    <p id="profile-disliked">Nope</p>
+                    <p id="profile-liked">Like</p>
+                </div>
 
-                    {match && (
-                        <div className="match-animation">
-                            <div className="match-animation-container">
-                                <div className="match-animation-img-container">
-                                    <img
-                                        src={
-                                            (actualUser.imgA?.includes('http')
-                                                ? ''
-                                                : 'http://localhost:8080/api') +
-                                            actualUser.imgA
-                                        }
-                                        alt="user avatar"
-                                        className="avatar"
-                                    />
-                                </div>
-                                <div className="match-animation-text">
-                                    <p>
-                                        <span className="itsa-span">
-                                            It's a
-                                        </span>
-                                        <span className="match-span">
-                                            match!
-                                        </span>
-                                    </p>
-                                </div>
-                                <Button
-                                    text={'Send a message'}
-                                    btnClass={'pink-scale match-msg'}
-                                    onClick={() => {
-                                        const param = encodeURIComponent(
-                                            actualUser.login
-                                        )
-                                        naviguate(
-                                            `/dashboard/messages?user=${param}`
-                                        )
-                                    }}
-                                />
-                                <Button
-                                    text={'Keep looking'}
-                                    btnClass={'white-scale match-keep'}
-                                    onClick={() => {
-                                        setMatch(false)
-                                        transition('liked')
-                                    }}
+                {nextUser ? (
+                    <div
+                        className="card_img_container next-user"
+                        style={{
+                            background:
+                                'url(' +
+                                (nextUser.imgA?.includes('http')
+                                    ? ''
+                                    : 'http://localhost:8080/api') +
+                                nextUser.imgA +
+                                ') 50% 50% / cover no-repeat',
+                        }}
+                    >
+                        <div className="name_and_age_container"></div>
+                    </div>
+                ) : (
+                    <div className="card_img_container next-user">
+                        <div className="name_and_age_container"></div>
+                    </div>
+                )}
+
+                {match && (
+                    <div className="match-animation">
+                        <div className="match-animation-container">
+                            <div className="match-animation-img-container">
+                                <img
+                                    src={
+                                        (actualUser.imgA?.includes('http')
+                                            ? ''
+                                            : 'http://localhost:8080/api') +
+                                        actualUser.imgA
+                                    }
+                                    alt="user avatar"
+                                    className="avatar"
                                 />
                             </div>
+                            <div className="match-animation-text">
+                                <p>
+                                    <span className="itsa-span">It's a</span>
+                                    <span className="match-span">match!</span>
+                                </p>
+                            </div>
+                            <Button
+                                text={'Send a message'}
+                                btnClass={'pink-scale match-msg'}
+                                onClick={() => {
+                                    const param = encodeURIComponent(
+                                        actualUser.login
+                                    )
+                                    naviguate(
+                                        `/dashboard/messages?user=${param}`
+                                    )
+                                }}
+                            />
+                            <Button
+                                text={'Keep looking'}
+                                btnClass={'white-scale match-keep'}
+                                onClick={() => {
+                                    setMatch(false)
+                                    transition('liked')
+                                }}
+                            />
                         </div>
-                    )}
+                    </div>
+                )}
 
+                {!loading && actualUser && (
                     <div className="profile_matching_btn_container">
                         <button
                             className="profile_matching_btn profile_matching_dislike"
@@ -331,21 +389,10 @@ const ProfileMatching = () => {
                             <Favorite />
                         </button>
                     </div>
-                </div>
+                )}
             </div>
-        )
-    } else
-        return (
-            // TODO: Add a "Sorry" title in big, plus a short description
-            <div id="profile_matching">
-                <div id="user-profile-container">
-                    <div>
-                        We're sorry, we can't find anymore corresponding
-                        profiles. Please try again later.
-                    </div>
-                </div>
-            </div>
-        )
+        </div>
+    )
 }
 
 export default ProfileMatching
