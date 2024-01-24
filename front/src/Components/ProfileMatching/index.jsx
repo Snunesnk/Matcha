@@ -8,6 +8,7 @@ import Button from '../Button/Button'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { throttle } from 'lodash'
+import SortAndFilter from '../SortAndFilter/SortAndFilter'
 
 const getUserLocation = async () => {
     return new Promise((resolve) => {
@@ -119,6 +120,7 @@ const ProfileMatching = () => {
     const [loading, setLoading] = useState(true)
     const [match, setMatch] = useState(false)
     const [hasScrolled, setHasScrolled] = useState(false)
+    const [filterActive, setFilterActive] = useState(false)
     const profileRef = useRef(null)
     const naviguate = useNavigate()
     const dispatch = useDispatch()
@@ -318,10 +320,26 @@ const ProfileMatching = () => {
         setLoading(false)
     }, [userList])
 
-    useEffect(() => {
-        if (!userFilters) return
-        localStorage.setItem('userFilters', JSON.stringify(userFilters))
-    }, [userFilters])
+    if (loading) return <div>Loading...</div>
+    if (actualUser !== null) {
+        return (
+            <div id="profile_matching">
+                <div
+                    id="profile_matching-container"
+                    className={
+                        evaluation + ' ' + (filterActive ? 'no-scroll' : '')
+                    }
+                    onScroll={(e) => setScroll(e.target.scrollTop)}
+                    ref={profileRef}
+                >
+                    <Settings
+                        className="matching-settings"
+                        onClick={() => setFilterActive(!filterActive)}
+                    />
+
+                    <SortAndFilter active={filterActive} />
+
+                    <UserProfile scroll={scroll} user={actualUser} />
 
     return (
         <div id="profile_matching">

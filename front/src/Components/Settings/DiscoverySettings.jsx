@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import DualRangeSlider from '../DualRangeSlider/DualRangeSlider'
 import RangeSlider from '../RangeSlider/RangeSlider'
-import { MultiSelect } from '../Select/Select'
+import SimpleSelect, { MultiSelect } from '../Select/Select'
 import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
 import './Settings.css'
 import { CircularProgress } from '@mui/material'
@@ -136,6 +136,21 @@ const DiscoverySettings = () => {
             {user ? (
                 <div id="settings-container">
                     <h2>Discovery settings</h2>
+                    <div className="setting">
+                        <div>Sort by</div>
+                        <div>
+                            <SimpleSelect
+                                options={GENDERS.map((gender) => gender)}
+                                defaultSelected={userPreferences}
+                                onChange={handlePreferenceChange}
+                            />
+                            <SimpleSelect
+                                options={GENDERS.map((gender) => gender)}
+                                defaultSelected={userPreferences}
+                                onChange={handlePreferenceChange}
+                            />
+                        </div>
+                    </div>
 
                     <div className="setting">
                         <div>Show me</div>
