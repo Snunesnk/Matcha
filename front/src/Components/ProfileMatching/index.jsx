@@ -8,6 +8,7 @@ import Button from '../Button/Button'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { throttle } from 'lodash'
+import SortAndFilter from '../SortAndFilter/SortAndFilter'
 
 const getUserLocation = async () => {
     return new Promise((resolve) => {
@@ -52,8 +53,9 @@ const getProfileList = (setUserList) => {
         .then((response) => {
             if (response.ok) {
                 return response.json()
-            }
-            throw new Error('Something went wrong ...')
+            } else if (response.status === 401) {
+                window.location.href = '/'
+            } else throw new Error('Something went wrong ...')
         })
         .then((data) => {
             setUserList(data.results)
@@ -75,8 +77,9 @@ const sendLike = async (receiver) => {
         .then((response) => {
             if (response.ok) {
                 return response.json()
-            }
-            throw new Error('Something went wrong ...')
+            } else if (response.status === 401) {
+                window.location.href = '/'
+            } else throw new Error('Something went wrong ...')
         })
         .then((data) => {
             return data
@@ -98,6 +101,7 @@ const ProfileMatching = () => {
     const [loading, setLoading] = useState(true)
     const [match, setMatch] = useState(false)
     const [hasScrolled, setHasScrolled] = useState(false)
+    const [filterActive, setFilterActive] = useState(false)
     const profileRef = useRef(null)
     const naviguate = useNavigate()
     const dispatch = useDispatch()
@@ -233,10 +237,19 @@ const ProfileMatching = () => {
             <div id="profile_matching">
                 <div
                     id="profile_matching-container"
-                    className={evaluation}
+                    className={
+                        evaluation + ' ' + (filterActive ? 'no-scroll' : '')
+                    }
                     onScroll={(e) => setScroll(e.target.scrollTop)}
                     ref={profileRef}
                 >
+                    <Settings
+                        className="matching-settings"
+                        onClick={() => setFilterActive(!filterActive)}
+                    />
+
+                    <SortAndFilter active={filterActive} />
+
                     <UserProfile scroll={scroll} user={actualUser} />
 
                     <div className="profile-evaluation">
