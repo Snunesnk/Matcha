@@ -9,7 +9,6 @@ import { useLocation } from 'react-router-dom'
 
 const COMPONENTS = {
     MESSAGE_LIST: 'MESSAGE_LIST',
-    NOTIFICATION: 'NOTIFICATION',
     CHAT: 'CHAT',
     USER_PROFILE: 'USER_PROFILE',
 }
@@ -270,6 +269,7 @@ const MessagesContainer = () => {
                         newMatches={newMatches}
                         conversations={conversations}
                         setActiveConversation={setActiveConversation}
+                        setActiveComponent={setActiveComponent}
                     />
                 </div>
                 <div
