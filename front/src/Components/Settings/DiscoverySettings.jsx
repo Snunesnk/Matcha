@@ -137,7 +137,7 @@ const DiscoverySettings = () => {
                 <div id="settings-container">
                     <h2>Discovery settings</h2>
 
-                    <div className="setting">
+                    <div className="setting multi-select-setting">
                         <div>Show me</div>
                         <MultiSelect
                             options={GENDERS.map((gender) => gender)}
