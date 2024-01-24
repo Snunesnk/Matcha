@@ -6,11 +6,17 @@ export class UserSetting {
   constructor(obj = {}) {
     this.userLogin = obj.userLogin;
     this.ageMin = obj.ageMin || 18;
+    if (this.ageMin < 18) this.ageMin = 18;
     this.ageMax = obj.ageMax || 55;
+    if (this.ageMax > 55) this.ageMax = 5;
     this.distMin = obj.distMin || 0;
+    if (this.distMin < 0) this.distMin = 0;
     this.distMax = obj.distMax || 100;
+    if (this.distMax > 100) this.distMax = 100;
     this.fameMin = obj.fameMin || 0;
+    if (this.fameMin < 0) this.fameMin = 0;
     this.fameMax = obj.fameMax || 100;
+    if (this.fameMax > 100) this.fameMax = 100;
     this.prefMale = obj.prefMale;
     this.prefFemale = obj.prefFemale;
     this.prefEnby = obj.prefEnby;
