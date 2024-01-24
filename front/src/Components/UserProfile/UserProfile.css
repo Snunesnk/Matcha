@@ -341,23 +341,3 @@
     color: #ffffff80;
     margin: 0;
 }
-
-.info-row {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: last baseline;
-}
-
-.info-rating {
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-}
-
-.like-block {
-    display: flex;
-    flex-direction: row;
-    gap: 5px;
-}
