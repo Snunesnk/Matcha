@@ -244,7 +244,6 @@ FROM
       AND u.verified = 1
       AND u.onboarded = 1
       AND u.gender IN (?`;
-
       for (let i = 1; i < genderPreferences.length; i++) {
         query += ", ?";
       }
@@ -292,6 +291,31 @@ FROM
         SELECT 1 FROM \`like\` WHERE issuer = currentUser.login AND receiver = u.login
       )
       `;
+
+      // Apply all filters
+      if (userFilters.ageMin) {
+        query +=
+          `
+          AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) >= ` +
+          userFilters.ageMin;
+      }
+      if (userFilters.ageMax && userFilters.ageMax < 55) {
+        query +=
+          `
+          AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) <= ` +
+          userFilters.ageMax;
+      }
+      if (userFilters.distMax) {
+        query +=
+          `
+          AND ST_Distance_Sphere(u.coordinate, currentUser.coordinate) <= ` +
+          userFilters.distMax * 1000;
+      }
+      if (userFilters.fameMin) {
+        query +=
+          `
+          AND u.rating >= ` + userFilters.fameMin;
+      }
 
       query += `
       GROUP BY u.login
