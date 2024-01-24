@@ -124,28 +124,28 @@ const UserProfile = ({ user, scroll = 0 }) => {
                     </div>
                     <div ref={profileRef} className="name_and_age">
                         {user.surname}, {userAge}
-                        <div className="indicator-container">
-                            <div
-                                className={
-                                    'indicator' +
-                                    (currentOnline.online
-                                        ? ' online'
-                                        : ' offline')
-                                }
-                            ></div>
-                            <p className="last-online">
-                                {currentOnline.online
-                                    ? 'Connected'
-                                    : formatTimeDifference(
-                                          currentOnline.lastOnline
-                                      )}
-                            </p>
-                        </div>
                     </div>
                     <div className="connected-and-login"></div>
                     <div ref={infosRef} className="user-location-infos">
                         <div className="location">
                             <PlaceIcon /> {Math.floor(user.distance)}km away
+                            <div className="indicator-container">
+                                <div
+                                    className={
+                                        'indicator' +
+                                        (currentOnline.online
+                                            ? ' online'
+                                            : ' offline')
+                                    }
+                                ></div>
+                                <p className="last-online">
+                                    {currentOnline.online
+                                        ? 'Connected'
+                                        : formatTimeDifference(
+                                              currentOnline.lastOnline
+                                          )}
+                                </p>
+                            </div>
                         </div>
                     </div>
 
