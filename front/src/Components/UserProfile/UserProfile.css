@@ -49,7 +49,7 @@
     color: white;
     border-radius: 15px;
     width: 100px;
-    height: 26px;
+    height: 20px;
     display: flex;
     justify-content: center;
     align-content: center;
@@ -61,15 +61,50 @@
     font-size: 2em;
     color: white;
     padding-top: 10px;
+    display: flex;
+}
+
+.connected-and-login {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
 }
 
 .user-location-infos {
     display: flex;
+    justify-content: start;
     align-items: center;
 }
 
 .user-location-infos svg {
     margin-right: 5px;
+}
+
+.user-location-infos .location {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+}
+
+#user-profile-infos {
+    margin-top: 5px;
+}
+
+#user-profile-infos,
+.user-login-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    width: 100%;
+}
+
+#user-profile-infos span {
+    background-color: #dc21b8;
+    color: white;
+    padding: 0 10px;
+    margin-left: 10px;
+    border-radius: 4px;
 }
 
 #profile-disliked p {
@@ -86,6 +121,7 @@
     width: 100%;
     font-size: 0.9rem;
     font-weight: 300;
+    color: #ffffff80;
 }
 
 #user-profile-bio {
@@ -93,6 +129,11 @@
     display: flex;
     justify-content: left;
     font-weight: 500;
+}
+
+#user-profile-bio b {
+    color: #4ac0fc;
+
 }
 
 #user-profile-pictures-container {
@@ -254,22 +295,31 @@
     align-items: center;
 }
 
-.info-chip-container .indicator {
+.indicator-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: row;
+    margin-left: 10px;
+}
+
+
+#user-profile-container .indicator {
     border-radius: 50%;
     width: 10px;
     height: 10px;
     margin: 0 5px 0px 15px;
 }
 
-.info-chip-container .indicator.online {
+#user-profile-container .indicator.online {
     background-color: #37c898;
 }
 
-.info-chip-container .indicator.offline {
+#user-profile-container .indicator.offline {
     background-color: red;
 }
 
-.info-chip-container p {
+#user-profile-container .last-online {
     font-size: 0.8rem;
     font-weight: 300;
     color: #ffffff80;
