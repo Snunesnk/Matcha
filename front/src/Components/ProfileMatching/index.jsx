@@ -7,7 +7,7 @@ import UserProfile from '../UserProfile/UserProfile'
 import Button from '../Button/Button'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
-import { throttle } from 'lodash'
+import { filter, throttle } from 'lodash'
 import SortAndFilter from '../SortAndFilter/SortAndFilter'
 
 const getUserLocation = async () => {
@@ -243,10 +243,17 @@ const ProfileMatching = () => {
                     onScroll={(e) => setScroll(e.target.scrollTop)}
                     ref={profileRef}
                 >
-                    <Settings
-                        className="matching-settings"
-                        onClick={() => setFilterActive(!filterActive)}
-                    />
+                    {filterActive ? (
+                        <ClearIcon
+                            className="matching-settings clear"
+                            onClick={() => setFilterActive(!filterActive)}
+                        />
+                    ) : (
+                        <Settings
+                            className="matching-settings"
+                            onClick={() => setFilterActive(!filterActive)}
+                        />
+                    )}
 
                     {filterActive && <SortAndFilter active={filterActive} />}
 
