@@ -198,6 +198,7 @@ export class DbRequestService {
       const parameters = [
         matchingParameters.login,
         ...userFilters.tags,
+        matchingParameters.login,
         ...genderPreferences,
         ...matchingParameters.tags,
       ];
@@ -219,6 +220,7 @@ SELECT DISTINCT
   GROUP_CONCAT(ut.tagBwid ORDER BY ut.tagBwid ASC SEPARATOR ', ') AS tags,
   CASE WHEN n.type IS NULL THEN 0 ELSE 1 END AS alreadySeen,
   COALESCE(tc.tagCount, 0) AS tagMatchCount,
+  COALESCE(matchingTags.tagCount, 0) AS commonTagsCount,
   ST_Distance_Sphere(u.coordinate, currentUser.coordinate) * 0.001 AS distance
 FROM
     user u
@@ -244,7 +246,20 @@ FROM
       }
       query += `
             GROUP BY ut.userLogin
-  ) tc ON tc.userLogin = u.login\n
+  ) tc ON tc.userLogin = u.login
+  LEFT JOIN (
+    SELECT 
+      ut1.userLogin, 
+      COUNT(*) as tagCount
+    FROM 
+      userTag ut1
+      INNER JOIN user currentUser ON currentUser.login = ?
+      INNER JOIN userTag ut2 ON ut1.tagBwid = ut2.tagBwid AND ut2.userLogin = currentUser.login
+    WHERE 
+      ut1.userLogin <> currentUser.login
+    GROUP BY 
+      ut1.userLogin
+  ) matchingTags ON u.login = matchingTags.userLogin
   WHERE
       u.login <> currentUser.login
       AND u.verified = 1
@@ -348,7 +363,7 @@ FROM
         ? " " + userFilters.sortDirection
         : " DESC";
 
-      query += `, u.rating DESC`;
+      query += `, u.rating DESC, commonTagsCount DESC`;
 
       connection.query(query, parameters, (err, res) => {
         if (err) {
