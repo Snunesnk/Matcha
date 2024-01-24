@@ -45,6 +45,7 @@
     height: 100%;
     justify-content: start;
     overflow: auto;
+    position: relative;
 
     /* Hide scrollbar for IE, Edge and Firefox */
     -ms-overflow-style: none;
