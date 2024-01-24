@@ -248,7 +248,7 @@ const ProfileMatching = () => {
                         onClick={() => setFilterActive(!filterActive)}
                     />
 
-                    <SortAndFilter active={filterActive} />
+                    {filterActive && <SortAndFilter active={filterActive} />}
 
                     <UserProfile scroll={scroll} user={actualUser} />
 
