@@ -1,20 +1,26 @@
 import { useEffect, useState } from 'react'
 import './Profile.css'
-import UserProfile from '../../Components/UserProfile/UserProfile';
+import UserProfile from '../../Components/UserProfile/UserProfile'
 
 const Profile = () => {
     const [me, setMe] = useState(null);
     const [scroll, setScroll] = useState(0)
 
-    useEffect(() => { fetch('http://localhost:8080/api/user/me', {
+    useEffect(() => {
+        fetch('http://localhost:8080/api/user/me', {
             method: 'GET',
             credentials: 'include',
         })
-        .then((response) => { return response.json() })
-        .then((data) => {
-            data.user.tags = data.user.tags.map(tag => tag.bwid).join(', ');
-            setMe(data.user);
-        });
+            .then((response) => {
+                return response.json()
+            })
+            .then((data) => {
+                data.user.tags = data.user.tags
+                    .map((tag) => tag.bwid)
+                    .join(', ')
+                data.user.distance = 0
+                setMe(data.user)
+            })
     }, [])
 
     return(

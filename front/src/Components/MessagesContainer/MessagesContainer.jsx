@@ -19,7 +19,8 @@ const handleSocketMessage = (
     newMatches,
     activeConversation,
     setSocketMessage,
-    setConversations
+    setConversations,
+    setNewMatches
 ) => {
     const matchUser = newMatches.find((match) => match.login === message.from)
     if (matchUser) {
@@ -171,7 +172,8 @@ const MessagesContainer = () => {
                 newMatches,
                 activeConversation,
                 setSocketMessage,
-                setConversations
+                setConversations,
+                setNewMatches
             )
         }
         const handleSocketStatusEvent = (status) => {

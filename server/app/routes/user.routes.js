@@ -45,7 +45,7 @@ router.get("/user/me", needOnboardedMiddleware, userHandler.currentUser);
 router.get("/user/logout", needVerifiedMiddleware, userHandler.logout);
 
 // Retrieve a single User with login
-router.get("/user/:login", userHandler.getUserByLogin);
+router.get("/user/:login", needOnboardedMiddleware, userHandler.getUserByLogin);
 
 // Delete a User with login
 router.delete("/user/:login", needOnboardedMiddleware, userHandler.delete);
