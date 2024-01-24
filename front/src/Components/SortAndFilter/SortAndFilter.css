@@ -58,9 +58,9 @@
     animation: popIn 200ms ease-in-out forwards;
 }
 
-/* .sort-and-filter.inactive {
+.sort-and-filter.inactive {
     animation: popOut 200ms ease-in-out forwards;
-} */
+}
 
 .sort-and-filter .double-select {
     display: flex;
