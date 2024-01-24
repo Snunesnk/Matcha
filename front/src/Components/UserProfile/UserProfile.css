@@ -311,23 +311,33 @@
     margin-top: 10px;
 }
 
-.info-chip-container .indicator {
+.indicator-container {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    flex-direction: row;
+    margin-left: 10px;
+}
+
+
+#user-profile-container .indicator {
     border-radius: 50%;
     width: 10px;
     height: 10px;
     margin: 0 5px;
 }
 
-.info-chip-container .indicator.online {
+#user-profile-container .indicator.online {
     background-color: #37c898;
 }
 
-.info-chip-container .indicator.offline {
+#user-profile-container .indicator.offline {
     background-color: red;
 }
 
-.info-chip-container p {
+#user-profile-container .last-online {
     font-size: 0.8rem;
     font-weight: 300;
     color: #ffffff80;
+    margin: 0;
 }
