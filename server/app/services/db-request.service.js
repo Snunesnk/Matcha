@@ -208,12 +208,15 @@ SELECT DISTINCT
   u.imgD,
   u.imgE,
   u.name,
+  u.surname,
   u.login,
   u.bio,
   u.rating,
+  u.gender,
   GROUP_CONCAT(ut.tagBwid ORDER BY ut.tagBwid ASC SEPARATOR ', ') AS tags,
   CASE WHEN n.type IS NULL THEN 0 ELSE 1 END AS alreadySeen,
-  COALESCE(tc.tagCount, 0) AS tagMatchCount
+  COALESCE(tc.tagCount, 0) AS tagMatchCount,
+  ST_Distance_Sphere(u.coordinate, currentUser.coordinate) * 0.001 AS distance
 FROM
     user u
   INNER JOIN userSettings us ON u.login = us.userLogin

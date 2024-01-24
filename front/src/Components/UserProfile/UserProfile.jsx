@@ -136,7 +136,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         )}
                     </div>
                     <div ref={profileRef} className="name_and_age">
-                        {user.surname} {user.name}, {userAge}
+                        {user.name} {user.surname}, {userAge} {user.gender}
                         <i id="user-login"> @{user.login}</i>
                     </div>
 
@@ -151,6 +151,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                                 <p>{formatTimeDifference(currentOnline.lastOnline)}</p>
                             )}
                         </div>
+                        <PlaceIcon /> {Math.floor(user.distance)}km away
                     </div>
 
                 </div>
