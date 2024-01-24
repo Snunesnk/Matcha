@@ -57,9 +57,9 @@
     animation: popIn 200ms ease-in-out forwards;
 }
 
-/* .sort-and-filter.inactive {
+.sort-and-filter.inactive {
     animation: popOut 200ms ease-in-out forwards;
-} */
+}
 
 .sort-and-filter .double-select {
     display: flex;
@@ -70,4 +70,28 @@
     font-size: 1.3rem;
     margin-bottom: 0;
     margin-top: 5px;
+}
+
+.filters-reset {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}
+
+.filters-reset button {
+    background-color: #dc21b8;
+    color: white;
+    border: none;
+    outline: none;
+    font-size: 1em;
+    font-weight: 600;
+    padding: 5px;
+    border: 1px solid #4b3244;
+    border-radius: 4px;
+    transition: all 0.2s
+}
+
+.filters-reset button:hover {
+    background-color: white;
+    color: #dc21b8;
 }
