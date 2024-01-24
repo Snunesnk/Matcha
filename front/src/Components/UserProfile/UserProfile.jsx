@@ -114,31 +114,47 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         <button className="info-chip" onClick={toggleScroll}>
                             {scroll <= 50 ? 'Info' : <ArrowDropDownIcon />}
                         </button>
-                        <div
-                            className={
-                                'indicator' +
-                                (currentOnline.online ? ' online' : ' offline')
-                            }
-                        ></div>
-                        {currentOnline.online ? (
-                            <p>Connected</p>
-                        ) : (
-                            <p>
-                                {formatTimeDifference(currentOnline.lastOnline)}
-                            </p>
-                        )}
                     </div>
                     <div ref={profileRef} className="name_and_age">
-                        {user.name}, {userAge}
-                        <i id="user-login">, @{user.login}</i>
+                        {user.surname}, {userAge}
                     </div>
+                    <div className="connected-and-login"></div>
                     <div ref={infosRef} className="user-location-infos">
-                        <PlaceIcon /> 19km away
+                        <div className="location">
+                            <PlaceIcon /> {Math.floor(user.distance)}km away
+                            <div className="indicator-container">
+                                <div
+                                    className={
+                                        'indicator' +
+                                        (currentOnline.online
+                                            ? ' online'
+                                            : ' offline')
+                                    }
+                                ></div>
+                                <p className="last-online">
+                                    {currentOnline.online
+                                        ? 'Connected'
+                                        : formatTimeDifference(
+                                              currentOnline.lastOnline
+                                          )}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div id="user-profile-bio">{user.bio}</div>
+            <div id="user-profile-infos">
+                {user.surname} {user.name}, {userAge}{' '}
+                <span>{user.gender.toUpperCase()}</span>
+            </div>
+            <div className="user-login-container">
+                <i id="user-login"> @{user.login}</i>
+            </div>
+            <div id="user-profile-bio">
+                <b>About me</b>
+                {user.bio}
+            </div>
 
             <div id="user-profile-pictures-container">
                 {imgs.map((img, i) => (

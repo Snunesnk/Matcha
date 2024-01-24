@@ -19,7 +19,7 @@ async function createRandomUser() {
   const surname = faker.name.lastName();
   const email = faker.helpers.unique(faker.internet.email, [name, surname]);
   const dateOfBirth = faker.date
-    .birthdate({ min: 18, max: 55, mode: "age" })
+    .birthdate({ min: 18, max: 99, mode: "age" })
     .toISOString()
     .slice(0, 10);
 

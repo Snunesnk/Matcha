@@ -263,6 +263,34 @@ export default class {
     }
   };
 
+  static getCoordinates = (pointString) => {
+    const matches = pointString.match(/POINT\(([^ ]+) ([^)]+)\)/);
+    return {
+      longitude: parseFloat(matches[1]),
+      latitude: parseFloat(matches[2]),
+    };
+  };
+
+  static calculateDistance = (point1, point2) => {
+    const earthRadiusKm = 6371;
+
+    const dLat = this.degreesToRadians(point2.latitude - point1.latitude);
+    const dLon = this.degreesToRadians(point2.longitude - point1.longitude);
+
+    const lat1 = this.degreesToRadians(point1.latitude);
+    const lat2 = this.degreesToRadians(point2.latitude);
+
+    const a =
+      Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+      Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2);
+    const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+    return earthRadiusKm * c;
+  };
+
+  static degreesToRadians = (degrees) => {
+    return (degrees * Math.PI) / 180;
+  };
+
   // Find a single User with a login
   static getUserByLogin = async (req, res) => {
     const login = req.params.login;
@@ -276,6 +304,13 @@ export default class {
 
     try {
       const data = await User.getUserByLogin(login);
+      const targetCoordinates = this.getCoordinates(data.coordinate);
+      const userCoordinates = this.getCoordinates(req.decodedUser._coordinate);
+      data.distance = this.calculateDistance(
+        targetCoordinates,
+        userCoordinates
+      );
+      console.log(data.distance);
 
       if (data === null) {
         res.status(404).send({

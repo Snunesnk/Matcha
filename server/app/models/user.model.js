@@ -33,6 +33,7 @@ export class User extends UserChunk {
     this.latitude = obj.coordinate || obj._coordinate;
     this.longitude = obj.coordinate || obj._coordinate;
     this.coordinate = obj.coordinate || obj._coordinate;
+    this.distance = obj.distance || obj._distance;
   }
 
   get coordinate() {
@@ -237,6 +238,14 @@ export class User extends UserChunk {
     }
   }
 
+  get distance() {
+    return this._distance;
+  }
+
+  set distance(distance) {
+    this._distance = distance;
+  }
+
   async passwordMatch(password) {
     return await comparePassword(password, this.password);
   }
@@ -347,6 +356,7 @@ export class User extends UserChunk {
       ...data[0],
       tags,
     };
+
     return new User(user);
   }
 
@@ -464,6 +474,7 @@ export class User extends UserChunk {
       coordinate: this.coordinate,
       latitude: this.latitude,
       longitude: this.longitude,
+      distance: this.distance,
     };
   }
 }
