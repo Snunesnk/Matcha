@@ -16,6 +16,7 @@ export class UserSetting {
     this.fameMin = obj.fameMin || 0;
     if (this.fameMin < 0) this.fameMin = 0;
     this.fameMax = obj.fameMax || 100;
+    if (this.fameMax > 100) this.fameMax = 100;
     this.prefMale = obj.prefMale;
     this.prefFemale = obj.prefFemale;
     this.prefEnby = obj.prefEnby;
