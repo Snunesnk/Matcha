@@ -69,9 +69,9 @@
 .status-indicator {
     position: absolute;
     right: 0;
-    bottom: 0;
-    width: 19px;
-    height: 19px;
+    bottom: 2px;
+    width: 15px;
+    height: 15px;
     border-radius: 50%;
     border: 3px solid #200618;
     /* Optional: a white border around the avatar */
@@ -79,11 +79,12 @@
 }
 
 .online {
-    background-color: #37c898;
+    background-color: #dc21b8;
 }
 
 .offline {
-    background-color: red;
+    background-color: transparent;
+    border: none;
 }
 
 .new-match .name {
