@@ -11,6 +11,22 @@ const POPULARITY_FILTER = ['all', '100', '>80', '>60', '>40', '>20']
 const SortAndFilter = ({ filters, setFilter, active }) => {
     return (
         <div className={'sort-and-filter ' + (active ? 'active' : 'inactive')}>
+            <div className="filters-reset">
+                <button
+                    onClick={() =>
+                        setFilter({
+                            sort: 'Popularity',
+                            sortDirection: 'Desc.',
+                            age: '',
+                            location: '',
+                            popularity: '',
+                            tags: [],
+                        })
+                    }
+                >
+                    Reset
+                </button>
+            </div>
             <div className="setting">
                 <div>Sort by</div>
                 <div className="double-select">
