@@ -20,23 +20,34 @@
     }
 }
 
+@media (max-width: 450px) {
+    .sort-and-filter {
+        position: fixed;
+        top: 68px;
+        bottom: 0;
+    }
+}
+
+@media (min-width: 451px) {
+    .sort-and-filter {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+    }
+}
+
 .sort-and-filter {
-    position: absolute;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
+    width: 100%;
 }
 
 .sort-and-filter.active,
 .sort-and-filter.inactive {
     display: flex;
     flex-direction: column;
-    justify-content: start;
-    align-items: center;
+    gap: 10px;
     padding: 60px;
     z-index: 4;
-    background-color: #200518D0;
+    background-color: #200618f0;
 }
 
 .sort-and-filter.active {

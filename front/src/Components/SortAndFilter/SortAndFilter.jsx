@@ -1,4 +1,5 @@
 import SimpleSelect from '../Select/Select'
+import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
 import './SortAndFilter.css'
 
 const GENDERS = ['f', 'm', 'nb']
@@ -21,19 +22,44 @@ const SortAndFilter = ({ setSort, setFilter, active }) => {
                     />
                 </div>
             </div>
-            <div className="filter">
-                <label htmlFor="filter">Filter by</label>
-                <select
-                    name="filter"
-                    id="filter"
-                    onChange={(e) => setFilter(e.target.value)}
-                >
-                    <option value="all">All</option>
-                    <option value="tags">Tags</option>
-                    <option value="age">Age</option>
-                    <option value="fame">Fame</option>
-                    <option value="distance">Distance</option>
-                </select>
+            <div className="setting">
+                <div>Filter age</div>
+                <div>
+                    <SimpleSelect
+                        options={GENDERS.map((gender) => gender)}
+                        // defaultSelected={userPreferences}
+                        // onChange={handlePreferenceChange}
+                    />
+                </div>
+            </div>
+            <div className="setting">
+                <div>Filter location</div>
+                <div>
+                    <SimpleSelect
+                        options={GENDERS.map((gender) => gender)}
+                        // defaultSelected={userPreferences}
+                        // onChange={handlePreferenceChange}
+                    />
+                </div>
+            </div>
+
+            <div className="setting">
+                <div>Filter popularity</div>
+                <div>
+                    <SimpleSelect
+                        options={GENDERS.map((gender) => gender)}
+                        // defaultSelected={userPreferences}
+                        // onChange={handlePreferenceChange}
+                    />
+                </div>
+            </div>
+
+            <div className="setting complex-setting">
+                <div className="setting-infos">Filter tags</div>
+                <TagsAutocomplete
+                // value={searchTags}
+                // setValue={(e, tagsList) => setSearchTags(tagsList)}
+                />
             </div>
         </div>
     )

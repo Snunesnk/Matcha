@@ -77,6 +77,13 @@
     transition: all 50ms ease-in-out;
 }
 
+#profile_matching-container .matching-settings.clear {
+    color: #4ac0fc;
+    height: 40px;
+    width: 40px;
+    padding: 0;
+}
+
 #profile_matching-container .matching-settings:hover {
     background-color: #200618;
 }
