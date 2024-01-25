@@ -1,9 +1,20 @@
 import React, { useEffect, useRef, useState } from 'react'
 import {
-    ArrowDropUp, ArrowLeft, ArrowRight, Clear, Place,
-    Favorite, FavoriteBorder, Block, ReportOff,
-    Star, StarBorder, StarHalf,
-    Female, Male, Transgender
+    ArrowDropUp,
+    ArrowLeft,
+    ArrowRight,
+    Clear,
+    Place,
+    Favorite,
+    FavoriteBorder,
+    Block,
+    ReportOff,
+    Star,
+    StarBorder,
+    StarHalf,
+    Female,
+    Male,
+    Transgender,
 } from '@mui/icons-material'
 import './UserProfile.css'
 import socket from '../../Socket/socket'
@@ -18,28 +29,48 @@ const updateOnlineStatus = (status, actualUser, setCurrentOnline) => {
 }
 
 const StarRating = ({ percentage }) => {
-    const ratingOutOfThree = (percentage / 100) * 3;
-    const fullStars = Math.floor(ratingOutOfThree);
-    const halfStar = ratingOutOfThree % 1 >= 0.5 ? 1 : 0;
-    const emptyStars = 3 - fullStars - halfStar;
+    const ratingOutOfThree = (percentage / 100) * 3
+    const fullStars = Math.floor(ratingOutOfThree)
+    const halfStar = ratingOutOfThree % 1 >= 0.5 ? 1 : 0
+    const emptyStars = 3 - fullStars - halfStar
 
-    const fullStarsElements = Array(fullStars).fill(<Star />);
-    const halfStarElement = halfStar ? <StarHalf /> : null;
-    const emptyStarsElements = Array(emptyStars).fill(<StarBorder />);
-    const starElements = [...fullStarsElements, halfStarElement, ...emptyStarsElements];
+    const fullStarsElements = Array(fullStars).fill(<Star />)
+    const halfStarElement = halfStar ? true : false
+    const emptyStarsElements = Array(emptyStars).fill(<StarBorder />)
 
-    return <div>{starElements}</div>;
+    return (
+        <div>
+            {fullStarsElements.map((star, i) => (
+                <Star key={i} />
+            ))}
+            {halfStarElement && <StarHalf />}
+            {emptyStarsElements.map((star, i) => (
+                <StarBorder key={i} />
+            ))}
+        </div>
+    )
 }
 
 const GenderIcon = ({ gender }) => {
     switch (gender.toLowerCase()) {
         case 'f':
-            return <Female fontSize='large' />;
+            return <Female fontSize="large" />
         case 'm':
-            return <Male fontSize='large' />;
+            return <Male fontSize="large" />
         default:
-            return <Transgender fontSize='large' />;
+            return <Transgender fontSize="large" />
     }
+}
+
+function calculateAge(birthdate) {
+    var today = new Date()
+    var birthDate = new Date(birthdate)
+    var age = today.getFullYear() - birthDate.getFullYear()
+    var m = today.getMonth() - birthDate.getMonth()
+    if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--
+    }
+    return age
 }
 
 const UserProfile = ({ user, scroll = 0 }) => {
@@ -108,28 +139,53 @@ const UserProfile = ({ user, scroll = 0 }) => {
     }
 
     return (
-        <div id="user-profile-container" className={selectedPicture !== -1 ? 'no-overflow' : ''}>
-            <div className="card_img_container" style={{ background: 'url(' + (user.imgA?.includes('http') ? '' : 'http://localhost:8080/api') + user.imgA + ') 50% 50% / cover no-repeat' }}>
+        <div
+            id="user-profile-container"
+            className={selectedPicture !== -1 ? 'no-overflow' : ''}
+        >
+            <div
+                className="card_img_container"
+                style={{
+                    background:
+                        'url(' +
+                        (user.imgA?.includes('http')
+                            ? ''
+                            : 'http://localhost:8080/api') +
+                        user.imgA +
+                        ') 50% 50% / cover no-repeat',
+                }}
+            >
                 <div className="name_and_age_container">
-
                     <button className="info-chip" onClick={toggleScroll}>
                         {scroll <= 50 ? 'Info' : <ArrowDropUp />}
                     </button>
 
                     <div className="main-info">
                         <div ref={profileRef} className="name_and_age">
-                            {user.surname}, {userAge} <GenderIcon gender={user.gender} />
+                            {user.surname}, {userAge}{' '}
+                            <GenderIcon gender={user.gender} />
                         </div>
-                        <StarRating percentage={50} />
+                        <StarRating percentage={user.rating} />
                     </div>
 
                     <div ref={infosRef} className="user-location-infos">
                         <div className="location">
                             <Place /> {Math.floor(user.distance)}km away
                             <div className="indicator-container">
-                                <div className={'indicator' + (currentOnline.online ? ' online' : ' offline')}></div>
+                                <div
+                                    className={
+                                        'indicator' +
+                                        (currentOnline.online
+                                            ? ' online'
+                                            : ' offline')
+                                    }
+                                ></div>
                                 <p className="last-online">
-                                    {currentOnline.online ? 'Connected' : formatTimeDifference(currentOnline.lastOnline)}
+                                    {currentOnline.online
+                                        ? 'Connected'
+                                        : formatTimeDifference(
+                                              currentOnline.lastOnline
+                                          )}
                                 </p>
                             </div>
                         </div>
@@ -194,8 +250,8 @@ const UserProfile = ({ user, scroll = 0 }) => {
                     background:
                         'url(' +
                         (selectedPicture >= imgs.length ||
-                            selectedPicture == -1 ||
-                            imgs[selectedPicture].indexOf('http') > -1
+                        selectedPicture == -1 ||
+                        imgs[selectedPicture].indexOf('http') > -1
                             ? ''
                             : 'http://localhost:8080/api') +
                         imgs[selectedPicture] +

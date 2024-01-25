@@ -10,6 +10,7 @@ import { USER_STATE_ACTIONS } from '../../constants'
 import { throttle } from 'lodash'
 import SortAndFilter from '../SortAndFilter/SortAndFilter'
 import { CircularProgress } from '@mui/material'
+import ApiService from '../../Services/api.service'
 
 const getUserLocation = async () => {
     return new Promise((resolve) => {
@@ -43,22 +44,7 @@ const GradientCross = () => (
 )
 
 const getProfileList = (setUserList, userFilters) => {
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(userFilters),
-    }
-    fetch('http://localhost:8080/api/matching-profiles', options)
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            } else if (response.status === 401) {
-                window.location.href = '/'
-            } else throw new Error('Something went wrong ...')
-        })
+    ApiService.post('/matching-profiles', userFilters)
         .then((data) => {
             setUserList(data.results)
         })
@@ -68,21 +54,7 @@ const getProfileList = (setUserList, userFilters) => {
 }
 
 const sendLike = async (receiver) => {
-    return fetch('http://localhost:8080/api/like', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({ receiver }),
-    })
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            } else if (response.status === 401) {
-                window.location.href = '/'
-            } else throw new Error('Something went wrong ...')
-        })
+    return ApiService.post('/like', { receiver })
         .then((data) => {
             return data
         })
@@ -137,21 +109,17 @@ const ProfileMatching = () => {
             const loc = await getUserLocation()
             if (loc.lat !== null && loc.lng !== null) {
                 setLoading(true)
-                const option = {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        lat: loc.lat,
-                        lng: loc.lng,
-                    }),
-                    credentials: 'include',
-                }
 
-                fetch('http://localhost:8080/api/location', option).then(
-                    (res) => {
-                        if (res.ok) getProfileList(setUserList, userFilters)
-                    }
-                )
+                ApiService.get('/location', {
+                    lat: loc.lat,
+                    lng: loc.lng,
+                })
+                    .then(() => {
+                        getProfileList(setUserList, userFilters)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
             }
         }
         getLocation()

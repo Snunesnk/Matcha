@@ -146,6 +146,12 @@
     filter: drop-shadow(0px 0px 4px rgba(0, 0, 0, 1));
 }
 
+@media screen and (max-width: 450px) {
+    #onboarding_email_validation {
+        font-size: 17px;
+    }
+}
+
 #onboarding_email_validation p b {
     font-size: 1.2em;
     color: white;
@@ -260,6 +266,15 @@ label.Mui-focused {
 
 .css-11v1qwh-MuiInputBase-root-MuiFilledInput-root:after {
     border-bottom: 2px solid #ba7300 !important;
+}
+
+.onboarding_tags_content p {
+    margin-bottom: 0;
+}
+
+.onboarding_tags_content i {
+    color: #ffffff80;
+    font-size: 0.9rem;
 }
 
 /**** ************** ****/

@@ -7,6 +7,9 @@ export default class {
     try {
       const newMatches = await Match.getMatches(user.login);
 
+      if (!newMatches) {
+        return res.status(200).send([]);
+      }
       newMatches.forEach((match) => {
         match.online = false;
         const status = checkIfUserIsOnline(match.login);

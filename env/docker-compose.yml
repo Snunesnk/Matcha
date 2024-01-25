@@ -53,6 +53,7 @@ services:
     working_dir: /front/src
     volumes:
       - ../front:/front/src
+    env_file: ../front/.env
     networks:
       - public
 

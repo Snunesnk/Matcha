@@ -1,12 +1,10 @@
 import { Autocomplete, Chip, TextField } from '@mui/material'
 import { useEffect, useState } from 'react'
 import './TagsAutocomplete.css'
+import ApiService from '../../Services/api.service'
 
 const getMatchingTags = (userInput, setMatchingTags) => {
-    fetch('http://localhost:8080/api/tag?prefix=' + userInput, {
-        method: 'GET',
-    })
-        .then((response) => response.json())
+    ApiService.get('/tag?prefix=' + userInput)
         .then((data) => {
             // Add user input if not empty so it is always a choice
             if (
@@ -15,6 +13,9 @@ const getMatchingTags = (userInput, setMatchingTags) => {
             ) {
                 setMatchingTags([{ bwid: userInput }, ...data])
             } else setMatchingTags(data)
+        })
+        .catch((error) => {
+            console.log(error)
         })
 }
 
@@ -40,7 +41,9 @@ const TagsAutocomplete = ({ value, setValue }) => {
     }, [userInput])
 
     return (
-        <Autocomplete multiple freeSolo
+        <Autocomplete
+            multiple
+            freeSolo
             id="tags_autocomplete"
             value={value}
             options={matchingTags.map((tag) => tag.bwid)}
@@ -54,7 +57,9 @@ const TagsAutocomplete = ({ value, setValue }) => {
                     />
                 ))
             }}
-            onInputChange={(event, newInputValue) => {setUserInput(newInputValue)}}
+            onInputChange={(event, newInputValue) => {
+                setUserInput(newInputValue)
+            }}
             onChange={setValue}
             renderInput={(params) => (
                 <TextField

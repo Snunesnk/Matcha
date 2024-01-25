@@ -19,13 +19,14 @@
 
 @media screen and (max-width: 800px) {
     #settings-container {
-        min-width: 80%;
-        max-width: 80%;
+        min-width: 95%;
+        max-width: 95%;
         font-size: 0.85rem;
     }
 
     #user-settings-pictures-container {
         grid-template-columns: 1fr 1fr 1fr !important;
+        row-gap: 10px;
     }
 }
 

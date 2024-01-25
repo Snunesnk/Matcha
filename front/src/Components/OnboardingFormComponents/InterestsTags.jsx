@@ -27,9 +27,9 @@ const InterestsTags = () => {
     const content = (
         <div className="onboarding_tags_content">
             <p>
-                Select tags or add your own
+                Select existing tags, or add your own!
                 <br />
-                <i>1 tag min</i>
+                <i>At leat one tag is required</i>
             </p>
             <TagsAutocomplete
                 value={tags}

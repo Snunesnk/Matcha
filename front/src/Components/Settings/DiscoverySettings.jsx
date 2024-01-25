@@ -5,6 +5,7 @@ import SimpleSelect, { MultiSelect } from '../Select/Select'
 import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
 import './Settings.css'
 import { CircularProgress } from '@mui/material'
+import ApiService from '../../Services/api.service'
 
 const DIST_MIN = 1
 const DIST_MAX = 100
@@ -17,21 +18,8 @@ const GENDERS = ['Female', 'Male', 'Non-binary']
 
 const getUserSettings = (setUser, setLoading) => {
     setLoading(true)
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-    }
-    fetch('http://localhost:8080/api/user-settings', options)
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            } else if (response.status === 401) {
-                window.location.href = '/'
-            } else throw new Error('Something went wrong ...')
-        })
+
+    ApiService.get('/user-settings')
         .then((data) => {
             setUser(data)
             setLoading(false)
@@ -52,31 +40,17 @@ const savePreferences = (
     setLoading
 ) => {
     setLoading(true)
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify({
-            userPreferences,
-            distMax: maxDistance,
-            ageMin,
-            ageMax,
-            tags: searchTags,
-            fameMin,
-            fameMax,
-        }),
+    const settings = {
+        userPreferences,
+        distMax: maxDistance,
+        ageMin,
+        ageMax,
+        tags: searchTags,
+        fameMin,
+        fameMax,
     }
-    fetch('http://localhost:8080/api/user-settings', options)
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            } else if (response.status === 401) {
-                window.location.href = '/'
-            } else throw new Error('Something went wrong ...')
-        })
-        .then((data) => {
+    ApiService.post('/user-settings', settings)
+        .then(() => {
             setLoading(false)
             alert('Discovery settings saved')
         })

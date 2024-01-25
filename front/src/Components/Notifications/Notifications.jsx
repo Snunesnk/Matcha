@@ -8,6 +8,7 @@ import {
     Search,
 } from '@mui/icons-material'
 import { formatTimeDifference } from '../MessagesLeftPane/MessagesLeftPane'
+import ApiService from '../../Services/api.service'
 
 function Notifications() {
     const [notifications, setNotifications] = useState()
@@ -47,17 +48,9 @@ function Notifications() {
     }
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/notifications', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+        ApiService.get('/notifications').then((data) => {
+            setNotifications(data)
         })
-            .then((res) => res.json())
-            .then((data) => {
-                setNotifications(data)
-            })
     }, [])
 
     return (

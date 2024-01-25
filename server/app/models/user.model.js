@@ -11,29 +11,31 @@ export class User extends UserChunk {
   constructor(obj = {}) {
     super(obj);
 
-    this.bio = obj.bio || obj._bio;
-    this.gender = obj.gender || obj._gender;
+    this.bio = obj.bio;
+    this.gender = obj.gender;
 
-    this.verified = obj.verified || obj._verified;
-    this.onboarded = obj.onboarded || obj._onboarded;
-    this.lastOnline = obj.lastOnline || obj._lastOnline;
+    this.verified = obj.verified;
+    this.onboarded = obj.onboarded;
+    this.lastOnline = obj.lastOnline;
 
-    this.prefMale = obj.prefMale || obj._prefMale;
-    this.prefFemale = obj.prefFemale || obj._prefFemale;
-    this.prefEnby = obj.prefEnby || obj._prefEnby;
+    this.prefMale = obj.prefMale;
+    this.prefFemale = obj.prefFemale;
+    this.prefEnby = obj.prefEnby;
 
-    this.imgA = obj._imgA || obj.imgA;
-    this.imgB = obj._imgB || obj.imgB;
-    this.imgC = obj._imgC || obj.imgC;
-    this.imgD = obj._imgD || obj.imgD;
-    this.imgE = obj._imgE || obj.imgE;
+    this.imgA = obj.imgA;
+    this.imgB = obj.imgB;
+    this.imgC = obj.imgC;
+    this.imgD = obj.imgD;
+    this.imgE = obj.imgE;
 
-    this.tags = obj.tags || obj._tags;
+    this.tags = obj.tags;
 
-    this.latitude = obj.coordinate || obj._coordinate;
-    this.longitude = obj.coordinate || obj._coordinate;
-    this.coordinate = obj.coordinate || obj._coordinate;
-    this.distance = obj.distance || obj._distance;
+    this.latitude = obj.coordinate;
+    this.longitude = obj.coordinate;
+    this.coordinate = obj.coordinate;
+    this.distance = obj.distance;
+
+    this.rating = obj.rating;
   }
 
   get coordinate() {
@@ -246,6 +248,14 @@ export class User extends UserChunk {
     this._distance = distance;
   }
 
+  get rating() {
+    return this._rating;
+  }
+
+  set rating(rating) {
+    this._rating = rating;
+  }
+
   async passwordMatch(password) {
     return await comparePassword(password, this.password);
   }
@@ -306,7 +316,7 @@ export class User extends UserChunk {
     }
     user.password = "XXXXX";
     user.token = "YYYYY";
-    return new User(user);
+    return user;
   }
 
   static async getUserByToken(token) {
@@ -343,6 +353,7 @@ export class User extends UserChunk {
     if (data.length === 0) {
       return null;
     }
+
     let tags = [];
     try {
       const userTags = await UserTag.getUserTagsByLogin(login);
@@ -406,7 +417,7 @@ export class User extends UserChunk {
     } catch (error) {
       console.log(error);
     }
-    return await User.getUserByLogin(login);
+    return User.getUserByLogin(login);
   }
 
   static async verifyLogin(login, token) {
@@ -475,6 +486,7 @@ export class User extends UserChunk {
       latitude: this.latitude,
       longitude: this.longitude,
       distance: this.distance,
+      rating: this.rating,
     };
   }
 }

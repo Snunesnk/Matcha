@@ -5,6 +5,7 @@ import PersonIcon from '@mui/icons-material/Person'
 import './index.css'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
+import ApiService from '../../Services/api.service'
 
 const ChatComponent = ({
     user,
@@ -72,17 +73,7 @@ const ChatComponent = ({
     }
 
     useEffect(() => {
-        fetch('http://localhost:8080/api/conversations/' + user.id, {
-            method: 'GET',
-            credentials: 'include',
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json()
-                } else if (response.status === 401) {
-                    window.location.href = '/login'
-                } else throw new Error('Something went wrong ...')
-            })
+        ApiService.get('/conversations/' + user.id)
             .then((data) => {
                 setMessages(data)
             })

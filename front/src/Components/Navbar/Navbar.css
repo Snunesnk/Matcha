@@ -83,6 +83,10 @@
     }
 }
 
+#brand-name {
+    margin: 0;
+}
+
 @media screen and (max-width: 480px) {
     #brand-name {
         display: none;

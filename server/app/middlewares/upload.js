@@ -21,8 +21,12 @@ var storage = diskStorage({
       return callback(message, null);
     }
 
-    const filename =
-      file.fieldname + "-" + login + path.extname(file.originalname);
+    let ext = path.extname(file.originalname);
+    if (!ext || ext.length <= 1) {
+      ext = "." + file.mimetype.split("/")[1];
+    }
+
+    const filename = file.fieldname + "-" + login + ext;
     callback(null, filename);
   },
 });
