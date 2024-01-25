@@ -42,9 +42,11 @@
     min-height: 140px;
     background-size: cover !important;
     background-position: center !important;
+    cursor: pointer;
 }
 
-.setting-picture-container:hover .user-setting-picture {
+.setting-picture-container:hover .user-setting-picture,
+.setting-picture-container.selected .user-setting-picture {
     transform: scale(0.99);
     filter: grayscale(100%);
     -webkit-filter: grayscale(100%);
@@ -55,6 +57,7 @@
 }
 
 .user-setting-picture:hover+.setting-picture-delete,
+.setting-picture-container.selected .setting-picture-delete,
 .setting-picture-delete:hover {
     bottom: 0;
     transition: all 200ms;
