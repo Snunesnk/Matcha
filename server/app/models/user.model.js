@@ -287,9 +287,7 @@ export class User extends UserChunk {
   }
 
   static async create(newUser) {
-    console.log(newUser);
     const data = await DbRequestService.create("user", new UserChunk(newUser));
-    console.log(data);
     if (data.affectedRows === 0) {
       return null;
     }
@@ -345,6 +343,7 @@ export class User extends UserChunk {
     if (data.length === 0) {
       return null;
     }
+
     let tags = [];
     try {
       const userTags = await UserTag.getUserTagsByLogin(login);
@@ -408,7 +407,7 @@ export class User extends UserChunk {
     } catch (error) {
       console.log(error);
     }
-    return await User.getUserByLogin(login);
+    return User.getUserByLogin(login);
   }
 
   static async verifyLogin(login, token) {

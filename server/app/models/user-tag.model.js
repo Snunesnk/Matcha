@@ -34,7 +34,7 @@ export class UserTag {
       }
     } else {
       const userTag = await UserTag.getUserTagByBwid(newUserTag.tagBwid);
-      if (userTag !== null) {
+      if (userTag !== null && userTag.userLogin === newUserTag.userLogin) {
         return null;
       }
     }

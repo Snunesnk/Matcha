@@ -80,7 +80,6 @@ export async function action({ request }) {
             })
     }
 
-    console.log('return')
     return { ...data, error }
 }
 

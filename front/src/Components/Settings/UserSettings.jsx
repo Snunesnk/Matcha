@@ -38,24 +38,21 @@ const saveUserImages = async (login, pictures) => {
 
     // I need to convert url pictures to file pictures to be able to savee them
     for (let i = 0; i < pictures.length; i++) {
-        if (
-            typeof pictures[i] === 'string' &&
-            !pictures[i].startsWith('http')
+        if (typeof pictures[i] === 'string') {
+            await ApiService.fetchImage(pictures[i]).then((blob) => {
+                const name = pictures[i].substring(
+                    pictures[i].lastIndexOf('-') + 1
+                )
+                const file = new File([blob], name, {
+                    type: 'image/jpeg',
+                })
+                picturesToUplaod.push(file)
+            })
+        } else if (
+            typeof pictures[i] === 'object' &&
+            pictures[i].type.startsWith('image')
         ) {
-            await fetch('http://localhost:8080/api' + pictures[i])
-                .then((res) => {
-                    console.log(res.headers)
-                    return res.blob()
-                })
-                .then((blob) => {
-                    const name = pictures[i].substring(
-                        pictures[i].lastIndexOf('-') + 1
-                    )
-                    const file = new File([blob], name, {
-                        type: 'image/jpeg',
-                    })
-                    picturesToUplaod.push(file)
-                })
+            picturesToUplaod.push(pictures[i])
         }
     }
 
@@ -82,11 +79,6 @@ const saveUserImages = async (login, pictures) => {
 }
 
 const saveUserInfos = (userData, setUser) => {
-    console.log(userData)
-    userData.tags = userData.tags.map((tag) => {
-        return { bwid: tag }
-    })
-
     ApiService.put('/user', { user: userData })
         .then((user) => {
             setUser(user)
@@ -135,7 +127,6 @@ const UserSettings = () => {
     }, [user])
 
     const savePersonalInfos = async () => {
-        console.log(user)
         setPersonalBtnDisabled(true)
         await saveUserImages(login, personalPictures)
 
@@ -146,6 +137,11 @@ const UserSettings = () => {
             tags: personalTags,
             name: lastName,
             surname: firstName,
+            preferences: {
+                prefFemale: user.prefFemale,
+                prefMale: user.prefMale,
+                prefEnby: user.prefEnby,
+            },
         }
         saveUserInfos(userData, setUser)
     }

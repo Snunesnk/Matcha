@@ -21,7 +21,6 @@ const AllSetMessage = () => {
 
         ApiService.sendForm('/upload-pictures', formData)
             .then(() => {
-                console.log(user)
                 ApiService.put('/user', { user: user })
                     .then(() => {
                         navigate('/dashboard')

@@ -5,6 +5,8 @@ import bcrypt from "bcrypt";
 import authenticationService from "../services/authentication.service.js";
 import { getIpAddress, getIpInfo } from "../services/location.service.js";
 import { UserSetting } from "../models/user-settings.model.js";
+import { UserTag } from "../models/user-tag.model.js";
+import { Tag } from "../models/tag.model.js";
 
 export default class {
   static async login(req, res) {
@@ -393,7 +395,6 @@ export default class {
     const user = req.body.user || {};
     const login = req.decodedUser._login;
 
-    console.log(req.body);
     // check for missing data
     if (!login || Object.keys(user).length === 0) {
       res.status(400).send({
@@ -438,7 +439,9 @@ export default class {
 
     try {
       const data = await User.updateByLogin(login, user);
-      console.log(data);
+      // I don't know why tags are not retreived...
+      const tags = await UserTag.getUserTagsByLogin(login);
+      data.tags = tags.map((tag) => new Tag({ bwid: tag.tagBwid }));
       if (data === null) {
         // not found User with the login
         res.status(404).send({
