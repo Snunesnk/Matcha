@@ -16,6 +16,7 @@ import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import socket from '../../Socket/socket'
 import { Badge } from '@mui/material'
+import ApiService from '../../Services/api.service'
 
 const LOGGED_IN_ROUTES = [
     '/onboarding',
@@ -108,10 +109,7 @@ const Navbar = () => {
         dispatch({
             type: USER_STATE_ACTIONS.LOG_OUT,
         })
-        fetch('http://localhost:8080/api/user/logout', {
-            method: 'GET',
-            credentials: 'include',
-        }).then(() => {
+        ApiService.get('/user/logout').then(() => {
             navigate('/login')
         })
     }
@@ -134,31 +132,22 @@ const Navbar = () => {
 
     useEffect(() => {
         if (!onboarded) return
-        fetch('http://localhost:8080/api/notifications/count', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            credentials: 'include',
+        ApiService.get('/notifications/count').then((data) => {
+            const messageCount = data.filter(
+                (notif) => notif.type === 'message' || notif.type === 'match'
+            ).length
+            const notifCount = data.filter(
+                (notif) =>
+                    notif.type === 'like' ||
+                    notif.type === 'unlike' ||
+                    notif.type === 'match' ||
+                    notif.type === 'visit'
+            ).length
+            const onNotif = location.pathname.startsWith(NOTIFICATION_ROUTE)
+            if (!onNotif) setNewNotification(notifCount)
+            const onMessage = location.pathname.startsWith(MESSAGE_ROUTE)
+            if (!onMessage) setNewMessage(messageCount)
         })
-            .then((res) => res.json())
-            .then((data) => {
-                const messageCount = data.filter(
-                    (notif) =>
-                        notif.type === 'message' || notif.type === 'match'
-                ).length
-                const notifCount = data.filter(
-                    (notif) =>
-                        notif.type === 'like' ||
-                        notif.type === 'unlike' ||
-                        notif.type === 'match' ||
-                        notif.type === 'visit'
-                ).length
-                const onNotif = location.pathname.startsWith(NOTIFICATION_ROUTE)
-                if (!onNotif) setNewNotification(notifCount)
-                const onMessage = location.pathname.startsWith(MESSAGE_ROUTE)
-                if (!onMessage) setNewMessage(messageCount)
-            })
     }, [onboarded])
 
     return (

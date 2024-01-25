@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router'
 import './OnboardingForm.css'
+import ApiService from '../../Services/api.service'
 
 const setListenerForValidation = (setVerified) => {
     const verifChannel = new BroadcastChannel('email_verification')
@@ -28,18 +29,16 @@ const EmailValidation = () => {
     }, [verified])
 
     const resendMail = () => {
-        fetch('http://localhost:8080/api/user/verify/' + userInfos.email, {
-            method: 'POST',
-        })
-            .then(async (res) => {
-                switch (res.status) {
-                    case 200:
-                        setMessage(
-                            'Email sent! Please wait 5 minutes before sending a new one'
-                        )
-                        break
+        ApiService.post('/user/verify/' + userInfos.email)
+            .then(() => {
+                setMessage(
+                    'Email sent! Please wait 5 minutes before sending a new one'
+                )
+            })
+            .catch(async (error) => {
+                switch (error.status) {
                     case 400:
-                        const data = await res.json()
+                        const data = await error.response.json()
                         setMessage(
                             'Please wait ' +
                                 data?.cooldown +
@@ -51,13 +50,12 @@ const EmailValidation = () => {
                             'You are not allowed to send verification email'
                         )
                         break
-                    case 500:
                     default:
                         setMessage('Something went wrong')
+                        console.log(error)
                         break
                 }
             })
-            .catch((err) => console.log(err))
     }
 
     return (

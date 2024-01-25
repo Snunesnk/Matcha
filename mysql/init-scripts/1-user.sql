@@ -23,7 +23,8 @@ create table user (
     longitude decimal null,
     login varchar(50) not null primary key,
     password varchar(100) not null,
-    constraint login unique (email)
+    constraint login unique (login)
+    constraint email unique (email)
 );
 
 create index user_gender_idx on user(gender);

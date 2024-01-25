@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import Button from '../Button/Button'
 import ImageUpload from '../ImageUpload'
-import Select, { MultiSelect } from '../Select/Select'
+import Select from '../Select/Select'
 import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
 import './Settings.css'
+import ApiService from '../../Services/api.service'
 
 const GENDERS = [
     {
@@ -21,23 +22,10 @@ const GENDERS = [
     },
 ]
 
-const getUserSettings = (login, setUser) => {
-    const options = {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-    }
-    fetch('http://localhost:8080/api/user/' + login, options)
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            }
-            throw new Error('Something went wrong ...')
-        })
+const getUserSettings = (setUser) => {
+    ApiService.get('/user/me')
         .then((data) => {
-            setUser(data)
+            setUser(data.user)
         })
         .catch((error) => {
             console.log(error)
@@ -46,12 +34,19 @@ const getUserSettings = (login, setUser) => {
 
 const saveUserImages = async (login, pictures) => {
     if (!pictures) return
+    const picturesToUplaod = []
 
-    // I need to convert url pictures to file pictures to be able to same them
+    // I need to convert url pictures to file pictures to be able to savee them
     for (let i = 0; i < pictures.length; i++) {
-        if (typeof pictures[i] === 'string') {
+        if (
+            typeof pictures[i] === 'string' &&
+            !pictures[i].startsWith('http')
+        ) {
             await fetch('http://localhost:8080/api' + pictures[i])
-                .then((res) => res.blob())
+                .then((res) => {
+                    console.log(res.headers)
+                    return res.blob()
+                })
                 .then((blob) => {
                     const name = pictures[i].substring(
                         pictures[i].lastIndexOf('-') + 1
@@ -59,59 +54,40 @@ const saveUserImages = async (login, pictures) => {
                     const file = new File([blob], name, {
                         type: 'image/jpeg',
                     })
-                    pictures[i] = file
+                    picturesToUplaod.push(file)
                 })
         }
     }
 
     const formData = new FormData()
 
-    if (pictures.length > 0) formData.append('imgA', pictures[0])
-    if (pictures.length > 1) formData.append('imgB', pictures[1])
-    if (pictures.length > 2) formData.append('imgC', pictures[2])
-    if (pictures.length > 3) formData.append('imgD', pictures[3])
-    if (pictures.length > 4) formData.append('imgE', pictures[4])
+    if (picturesToUplaod.length > 0)
+        formData.append('imgA', picturesToUplaod[0])
+    if (picturesToUplaod.length > 1)
+        formData.append('imgB', picturesToUplaod[1])
+    if (picturesToUplaod.length > 2)
+        formData.append('imgC', picturesToUplaod[2])
+    if (picturesToUplaod.length > 3)
+        formData.append('imgD', picturesToUplaod[3])
+    if (picturesToUplaod.length > 4)
+        formData.append('imgE', picturesToUplaod[4])
 
-    const options = {
-        method: 'PUT',
-        body: formData,
-        credetials: 'include',
-    }
-
-    await fetch('http://localhost:8080/api/user/' + login, options)
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
+    if (picturesToUplaod.length > 0) {
+        await ApiService.sendForm('/upload-pictures', formData).catch(
+            (error) => {
+                console.log(error)
             }
-            throw new Error('Something went wrong ...')
-        })
-        .then((response) => {
-            return response
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+        )
+    }
 }
 
-const saveUserInfos = (login, userData, setUser) => {
+const saveUserInfos = (userData, setUser) => {
+    console.log(userData)
     userData.tags = userData.tags.map((tag) => {
         return { bwid: tag }
     })
 
-    const options = {
-        method: 'PUT',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ user: userData }),
-    }
-    fetch('http://localhost:8080/api/user/' + login, options)
-        .then((response) => {
-            if (response.ok) {
-                return response.json()
-            }
-            throw new Error('Something went wrong ...')
-        })
+    ApiService.put('/user', { user: userData })
         .then((user) => {
             setUser(user)
         })
@@ -133,7 +109,7 @@ const UserSettings = () => {
     const [personalBtnDisabled, setPersonalBtnDisabled] = useState(true)
 
     useEffect(() => {
-        getUserSettings(login, setUser)
+        getUserSettings(setUser)
     }, [])
 
     useEffect(() => {
@@ -159,6 +135,7 @@ const UserSettings = () => {
     }, [user])
 
     const savePersonalInfos = async () => {
+        console.log(user)
         setPersonalBtnDisabled(true)
         await saveUserImages(login, personalPictures)
 
@@ -170,7 +147,7 @@ const UserSettings = () => {
             name: lastName,
             surname: firstName,
         }
-        saveUserInfos(login, userData, setUser)
+        saveUserInfos(userData, setUser)
     }
 
     if (!user) return <div>Loading ... Please wait</div>
@@ -238,7 +215,7 @@ const UserSettings = () => {
 
                 <Button
                     text={'Save personal infos'}
-                    btnClass={'grey mrg-top-30'}
+                    btnClass={'white mrg-top-30'}
                     onClick={savePersonalInfos}
                     disabled={personalBtnDisabled}
                 />

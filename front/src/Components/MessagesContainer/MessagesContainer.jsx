@@ -6,6 +6,7 @@ import socket from '../../Socket/socket'
 import './MessagesContainer.css'
 import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
 import { useLocation } from 'react-router-dom'
+import ApiService from '../../Services/api.service'
 
 const COMPONENTS = {
     MESSAGE_LIST: 'MESSAGE_LIST',
@@ -109,17 +110,7 @@ const MessagesContainer = () => {
 
     useEffect(() => {
         const getMatches = async () => {
-            fetch('http://localhost:8080/api/matches', {
-                method: 'GET',
-                credentials: 'include',
-            })
-                .then((response) => {
-                    if (response.ok) {
-                        return response.json()
-                    } else if (response.status === 401) {
-                        window.location.href = '/login'
-                    } else throw new Error('Something went wrong ...')
-                })
+            ApiService.get('/matches')
                 .then((data) => {
                     const newMatches = data.filter((m) => !m.last_message_id)
                     setNewMatches(newMatches)
@@ -204,17 +195,7 @@ const MessagesContainer = () => {
             }
         })
 
-        fetch('http://localhost:8080/api/user/' + activeConversation.login, {
-            method: 'GET',
-            credentials: 'include',
-        })
-            .then((response) => {
-                if (response.ok) {
-                    return response.json()
-                } else if (response.status === 401) {
-                    window.location.href = '/login'
-                } else throw new Error('Something went wrong ...')
-            })
+        ApiService.get('/user/' + activeConversation.login)
             .then((data) => {
                 setActiveUser(data)
             })
@@ -222,14 +203,7 @@ const MessagesContainer = () => {
                 console.log(error)
             })
 
-        fetch(
-            'http://localhost:8080/api/notifications/read/' +
-                activeConversation.login,
-            {
-                method: 'PUT',
-                credentials: 'include',
-            }
-        )
+        ApiService.put('/notifications/read/' + activeConversation.login)
     }, [activeConversation])
 
     useEffect(() => {

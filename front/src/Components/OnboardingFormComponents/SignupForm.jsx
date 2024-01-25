@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux'
 import { useEffect } from 'react'
 import './OnboardingForm.css'
 import { checkPassword, hashPassword } from '../../utils'
+import ApiService from '../../Services/api.service'
 
 const checkDate = (date) => {
     const today = new Date()
@@ -32,6 +33,23 @@ const checkDate = (date) => {
     return validationErrors.noValidationError
 }
 
+const getErrorFromServerMessage = (message) => {
+    switch (message.message) {
+        case 'EMAIL_ALREADY_USED':
+            return 'Email already used'
+        case 'LOGIN_ALREADY_USED':
+            return 'Login already used'
+        case 'TOO_YOUNG':
+            return 'You are too young to use this app'
+        case 'INVALID_DATE':
+            return 'Invalid date'
+        case 'MISSING_DATA':
+            return 'Missing data, please fill in all the fields'
+        default:
+            return validationErrors.genericProfileCreationError
+    }
+}
+
 export async function action({ request }) {
     const formData = await request.formData()
     const data = {
@@ -52,33 +70,17 @@ export async function action({ request }) {
         data.password = await hashPassword(data.password)
 
         // Send data to controller to create an user
-        const options = {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(data),
-        }
-        await fetch('http://localhost:8080/api/user', options).then(
-            (response) => {
-                switch (response.status) {
-                    case 400:
-                        error = validationErrors.missingData
-                        break
-
-                    default:
-                    case 500:
-                        error = validationErrors.genericProfileCreationError
-                        break
-
-                    case 200:
-                        error = validationErrors.noValidationError
-                        break
-                }
-            }
-        )
+        await ApiService.post('/user', data)
+            .then(() => {
+                error = validationErrors.noValidationError
+            })
+            .catch(async (err) => {
+                const message = await err.response.json()
+                error = getErrorFromServerMessage(message)
+            })
     }
 
+    console.log('return')
     return { ...data, error }
 }
 

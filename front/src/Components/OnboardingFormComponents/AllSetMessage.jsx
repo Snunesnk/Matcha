@@ -3,18 +3,14 @@ import { useNavigate } from 'react-router-dom'
 import OnboardingCard from '../OnboardingCard/OnboardingCard'
 import './OnboardingForm.css'
 import { useSelector } from 'react-redux'
+import ApiService from '../../Services/api.service'
 
 const AllSetMessage = () => {
-    const [loading, setLoading] = React.useState(false)
     const navigate = useNavigate()
     const user = useSelector((state) => state.userState.userSettings)
     const [error, setError] = React.useState(null)
 
     const sendForm = () => {
-        setLoading(true)
-
-        // First API to send image
-        // If everything goes well, then second api to send user informations
         const formData = new FormData()
 
         formData.append('imgA', user.pictures.imgA)
@@ -23,57 +19,42 @@ const AllSetMessage = () => {
         formData.append('imgD', user.pictures.imgD)
         formData.append('imgE', user.pictures.imgE)
 
-        const options = {
-            method: 'PUT',
-            credentials: 'include',
-            body: formData,
-        }
-        fetch('http://localhost:8080/api/upload-pictures/', options)
-            .then((response) => {
-                if (response.ok) {
-                    const options = {
-                        method: 'PUT',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ user: user }),
-                        credentials: 'include',
-                    }
-                    fetch('http://localhost:8080/api/user/', options)
-                        .then((response) => {
-                            if (response.ok) {
-                                navigate('/dashboard')
-                            } else {
-                                if (response.status === 400) {
-                                    setError(
-                                        'Missing information. Please fill in all the fields'
-                                    )
-                                } else {
-                                    setError(
-                                        'Something went wrong ... Please try again'
-                                    )
-                                }
-                                setLoading(false)
-                            }
-                        })
-                        .catch((error) => {
-                            setError(error.message)
-                            setLoading(false)
-                        })
-                } else {
-                    if (response.status === 400) {
-                        setError(
-                            'Missing information. Please fill in all the fields'
-                        )
-                    } else {
-                        setError('Something went wrong ... Please try again')
-                    }
-                    setLoading(false)
-                }
+        ApiService.sendForm('/upload-pictures', formData)
+            .then(() => {
+                console.log(user)
+                ApiService.put('/user', { user: user })
+                    .then(() => {
+                        navigate('/dashboard')
+                    })
+                    .catch((error) => {
+                        switch (error.status) {
+                            case 400:
+                                setError(
+                                    'Missing information. Please fill in all the fields'
+                                )
+                                break
+                            case 404:
+                                setError(
+                                    'User not found. Please try to log in again'
+                                )
+                                break
+                            default:
+                                setError(
+                                    'Something went wrong ... Please try again'
+                                )
+                                break
+                        }
+                        setLoading(false)
+                    })
             })
             .catch((error) => {
-                setError(error.message)
-                setLoading(false)
+                if (error.status === 400) {
+                    setError(
+                        'Missing information. Please fill in all the fields'
+                    )
+                } else {
+                    setError('Something went wrong ... Please try again')
+                }
             })
     }
 

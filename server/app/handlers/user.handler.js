@@ -145,7 +145,15 @@ export default class {
   // Create and Save a new User
   static async create(req, res) {
     // Validate request
-    if (!req.body) {
+    if (
+      !req.body ||
+      !req.body.login ||
+      !req.body.password ||
+      !req.body.email ||
+      !req.body.name ||
+      !req.body.surname ||
+      !req.body.dateOfBirth
+    ) {
       res.status(400).send({
         message: "MISSING_DATA",
       });
@@ -153,6 +161,52 @@ export default class {
     }
 
     // TODO - Validate birthdate
+    if (isNaN(new Date(req.body.dateOfBirth))) {
+      res.status(400).send({
+        message: "INVALID_DATE",
+      });
+      return;
+    }
+
+    const ensure18 = (date) => {
+      var today = new Date();
+      var birthDate = new Date(date);
+      var age = today.getFullYear() - birthDate.getFullYear();
+      var m = today.getMonth() - birthDate.getMonth();
+      if (m < 0 || (m === 0 && today.getDate() < birthDate.getDate())) {
+        age--;
+      }
+      return age >= 18;
+    };
+    if (!ensure18(req.body.dateOfBirth)) {
+      res.status(400).send({
+        message: "TOO_YOUNG",
+      });
+      return;
+    }
+
+    const ensureUnique = async (login, email) => {
+      const user = await User.getUserByLogin(login);
+      if (user !== null) {
+        res.status(400).send({
+          message: "LOGIN_ALREADY_USED",
+        });
+        return false;
+      }
+
+      const user2 = await User.getUserByMail(email);
+      if (user2 !== null) {
+        res.status(400).send({
+          message: "EMAIL_ALREADY_USED",
+        });
+        return false;
+      }
+
+      return true;
+    };
+    if (!(await ensureUnique(req.body.login, req.body.email))) {
+      return;
+    }
 
     // TODO - test password strength
     const password = await cryptPassword(req.body.password);
@@ -310,7 +364,6 @@ export default class {
         targetCoordinates,
         userCoordinates
       );
-      console.log(data.distance);
 
       if (data === null) {
         res.status(404).send({
@@ -340,6 +393,7 @@ export default class {
     const user = req.body.user || {};
     const login = req.decodedUser._login;
 
+    console.log(req.body);
     // check for missing data
     if (!login || Object.keys(user).length === 0) {
       res.status(400).send({
@@ -384,6 +438,7 @@ export default class {
 
     try {
       const data = await User.updateByLogin(login, user);
+      console.log(data);
       if (data === null) {
         // not found User with the login
         res.status(404).send({

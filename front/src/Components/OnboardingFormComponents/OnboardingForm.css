@@ -262,6 +262,15 @@ label.Mui-focused {
     border-bottom: 2px solid #ba7300 !important;
 }
 
+.onboarding_tags_content p {
+    margin-bottom: 0;
+}
+
+.onboarding_tags_content i {
+    color: #ffffff80;
+    font-size: 0.9rem;
+}
+
 /**** ************** ****/
 /**** PICTURE UPLOAD ****/
 /**** ************** ****/
