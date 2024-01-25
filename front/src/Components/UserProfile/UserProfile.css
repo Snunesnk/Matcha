@@ -56,12 +56,23 @@
     align-items: center;
 }
 
+.main-info {
+    display: flex;
+    flex-direction: row;
+    align-items:end;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .name_and_age {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-weight: 500;
     font-size: 2em;
     color: white;
-    padding-top: 10px;
-    display: flex;
+    margin-top: 10px;
+    gap: 5px;
 }
 
 .connected-and-login {
@@ -93,20 +104,19 @@
     margin-top: 5px;
 }
 
-#user-profile-infos,
-.user-login-container {
+#user-profile-infos {
     display: flex;
     justify-content: start;
     align-items: center;
     width: 100%;
 }
 
-#user-profile-infos span {
+#gender {
     background-color: #dc21b8;
     color: white;
     padding: 0 10px;
-    margin-left: 10px;
-    border-radius: 4px;
+    margin-left: 5px;
+    border-radius: 10px;
 }
 
 #profile-disliked p {
@@ -119,11 +129,11 @@
     transform: rotate(-20deg);
 }
 
-#user-login,
-#user-email {
+#user-login {
     font-size: 0.9rem;
     font-weight: 300;
     color: #ffffff80;
+    margin-left: 5px;
 }
 
 #user-profile-bio {

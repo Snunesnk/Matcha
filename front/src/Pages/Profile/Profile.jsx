@@ -3,7 +3,8 @@ import './Profile.css'
 import UserProfile from '../../Components/UserProfile/UserProfile'
 
 const Profile = () => {
-    const [me, setMe] = useState(null)
+    const [me, setMe] = useState(null);
+    const [scroll, setScroll] = useState(0)
 
     useEffect(() => {
         fetch('http://localhost:8080/api/user/me', {
@@ -22,9 +23,13 @@ const Profile = () => {
             })
     }, [])
 
-    return (
-        <div className="profile-page">
-            {me ? <UserProfile user={me} /> : <div>Loading...</div>}
+    return(
+        <div className="profile-page" onScroll={(e) => setScroll(e.target.scrollTop)}>
+            {me ? (
+                <UserProfile user={me} scroll={scroll}/>
+            ) : (
+                <div>Loading...</div>
+            )}
         </div>
     )
 }
