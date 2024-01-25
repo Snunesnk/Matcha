@@ -14,6 +14,31 @@
     border: 2px solid white;
 }
 
+@media screen and (max-width: 768px) {
+    .onboarding_card {
+        min-width: 100%;
+        width: 100%;
+        max-width: 80%;
+        padding: 7px 20px;
+        border: none;
+        filter: none
+    }
+
+    .onboarding_card h1 {
+        font-size: 2.5rem;
+    }
+
+    #welcome_catchphrase {
+        padding-top: 0;
+    }
+
+    .content {
+        max-height: none !important;
+        min-height: 0 !important;
+    }
+
+}
+
 .onboarding_card h3,
 .onboarding_card h1 {
     margin: 0;

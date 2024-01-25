@@ -6,26 +6,19 @@
     align-items: center;
 }
 
-#cat_pic_container {
-    width: 50%;
-    height: 100%;
-    position: relative;
-    overflow: hidden;
+@media screen and (max-width: 768px) {
+    #cat_pic {
+        display: none;
+    }
 }
 
 #cat_pic {
     position: fixed;
-    /* , url('../../assets/cat_glasses.jpg'), no-repeat fixed; */
-    /* background: linear-gradient(148deg, rgba(232, 33, 184, 0.70) 0%, rgba(74, 192, 252, 0.70) 100%); */
-    /* background-size: cover;
-    background-position: 100% 50%; */
-    /* background-color: #200618; */
     height: 100dvh;
     width: 100dvw;
     top: 0;
     left: 0;
     z-index: 1;
-    /* filter: blur(2px); */
     animation: zoom-out 1s cubic-bezier(0.215, 0.61, 0.355, 1) 0ms 1 normal none;
 }
 
