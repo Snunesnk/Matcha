@@ -1,26 +1,39 @@
 import React from 'react'
 import './MessagesLeftPane.css'
 
+const COMPONENTS = {
+    MESSAGE_LIST: 'MESSAGE_LIST',
+    CHAT: 'CHAT',
+    USER_PROFILE: 'USER_PROFILE',
+}
+
 const MessagesLeftPane = ({
     newMatches,
     conversations,
     setActiveConversation,
+    setActiveComponent,
 }) => {
     return (
         <div className="chat-sidebar">
             <NewMatchesSection
                 matches={newMatches}
                 setActiveConversation={setActiveConversation}
+                setActiveComponent={setActiveComponent}
             />
             <MessagesSection
                 conversations={conversations}
                 setActiveConversation={setActiveConversation}
+                setActiveComponent={setActiveComponent}
             />
         </div>
     )
 }
 
-const NewMatchesSection = ({ matches, setActiveConversation }) => (
+const NewMatchesSection = ({
+    matches,
+    setActiveConversation,
+    setActiveComponent,
+}) => (
     <div className="new-matches-section">
         <h4>New matches</h4>
         <div className="new-matches">
@@ -30,6 +43,9 @@ const NewMatchesSection = ({ matches, setActiveConversation }) => (
                         key={i}
                         match={match}
                         setActiveConversation={setActiveConversation}
+                        onClick={() => {
+                            setActiveComponent(COMPONENTS.CHAT)
+                        }}
                     />
                 ))}
             </div>
@@ -37,11 +53,12 @@ const NewMatchesSection = ({ matches, setActiveConversation }) => (
     </div>
 )
 
-const NewMatch = ({ match, setActiveConversation }) => (
+const NewMatch = ({ match, setActiveConversation, onClick }) => (
     <div
         className="new-match"
         onClick={() => {
             setActiveConversation(match)
+            onClick()
         }}
     >
         <div className="new-match-img-container">
@@ -64,7 +81,11 @@ const NewMatch = ({ match, setActiveConversation }) => (
     </div>
 )
 
-const MessagesSection = ({ conversations, setActiveConversation }) => (
+const MessagesSection = ({
+    conversations,
+    setActiveConversation,
+    setActiveComponent,
+}) => (
     <div className="messages">
         <h4>Messages</h4>
         <div className="messages-list">
@@ -73,6 +94,9 @@ const MessagesSection = ({ conversations, setActiveConversation }) => (
                     key={i}
                     conversation={conversation}
                     setActiveConversation={setActiveConversation}
+                    onClick={() => {
+                        setActiveComponent(COMPONENTS.CHAT)
+                    }}
                 />
             ))}
         </div>
@@ -104,13 +128,14 @@ export function formatTimeDifference(dateString) {
     }
 }
 
-const MessageSnippet = ({ conversation, setActiveConversation }) => {
+const MessageSnippet = ({ conversation, setActiveConversation, onClick }) => {
     const date = formatTimeDifference(conversation.last_message_timestamp)
     return (
         <div
             className={`message ${conversation.read ? '' : 'unread'}`}
             onClick={() => {
                 setActiveConversation(conversation)
+                onClick()
             }}
         >
             <div className="message-img-container">

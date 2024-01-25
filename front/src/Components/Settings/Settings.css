@@ -139,6 +139,19 @@
     cursor: pointer;
 }
 
+@media screen and (max-width: 430px) {
+    .multi-select-item {
+        padding: 2px !important;
+    }
+}
+
+@media screen and (max-width: 550px) {
+    .multi-select-setting {
+        flex-direction: column;
+        align-items: start;
+    }
+}
+
 .multi-select .multi-select-item:hover {
     background-color: #dc21b850;
 }

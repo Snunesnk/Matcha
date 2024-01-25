@@ -12,6 +12,24 @@
     top: 0;
 }
 
+@media (max-width: 768px) {
+    #left-div {
+        display: none;
+    }
+
+    #right-div {
+        min-width: 100%;
+        max-width: 100%;
+    }
+}
+
+@media (min-width: 769px) {
+    #right-div {
+        min-width: 60%;
+        max-width: 60%;
+    }
+}
+
 #left-div {
     height: 100%;
     min-width: 40%;
@@ -21,7 +39,7 @@
     border-radius: 0px 100px 100px 0px;
 }
 
-#left-div > div {
+#left-div>div {
     background: url('../../assets/cat_glasses.jpg'), no-repeat fixed;
     background-size: cover;
     background-position: 100% 50%;
@@ -31,7 +49,7 @@
     border-radius: 0px 100px 100px 0px;
 }
 
-#left-div.left-login > div {
+#left-div.left-login>div {
     background: url('../../assets/login_cat.jpg'), no-repeat fixed;
     background-size: cover;
     background-position: 100% 50%;
@@ -43,8 +61,6 @@
 
 #right-div {
     height: 100%;
-    min-width: 60%;
-    max-width: 60%;
     z-index: 1;
     /* background: linear-gradient(148deg, rgba(232, 33, 184, 0.40) 0%, rgba(74, 192, 252, 0.40) 100%); */
     background-color: #200618;
@@ -54,15 +70,15 @@
     justify-content: center;
 }
 
-#onboarding_form > h3 {
+#onboarding_form>h3 {
     animation: appear 2s cubic-bezier(0.215, 0.61, 0.355, 1) both 250ms;
 }
 
-#onboarding_form > div {
+#onboarding_form>div {
     animation: appear 1.9s cubic-bezier(0.215, 0.61, 0.355, 1) both 450ms;
 }
 
-#onboarding_form > .signup-btn {
+#onboarding_form>.signup-btn {
     animation: appear 1.8s cubic-bezier(0.215, 0.61, 0.355, 1) both 650ms;
 }
 
@@ -84,7 +100,7 @@
     /* padding: 60px 0px; */
 }
 
-#onboarding_form > div {
+#onboarding_form>div {
     width: 95%;
     display: flex;
     justify-content: center;
