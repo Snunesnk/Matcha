@@ -1,16 +1,10 @@
 import { redirect } from 'react-router-dom'
+import ApiService from '../Services/api.service'
 
 const checkAuthStatus = async () => {
-    const response = await fetch('http://localhost:8080/api/auth/validate', {
-        credentials: 'include',
-    })
-
-    if (response.ok) {
-        const userData = await response.json()
-        return userData // Contains user data if the token is valid
-    } else {
+    return ApiService.get('/auth/validate').catch(() => {
         return redirect('/login')
-    }
+    })
 }
 
 export const emailValidationLoader = async () => {

@@ -3,6 +3,7 @@ import FormInput from '../../../Components/FormInput/FormInput'
 import { checkPassword, hashPassword } from '../../../utils'
 import { validationErrors } from '../../../constants'
 import { CircularProgress } from '@mui/material'
+import ApiService from '../../../Services/api.service'
 
 // TODO: Handle back status code response
 const ChangePassword = ({ login, token }) => {
@@ -26,16 +27,12 @@ const ChangePassword = ({ login, token }) => {
         setLoading(true)
 
         const hashedPassword = await hashPassword(newPassword)
-        const options = {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ token, login, hashedPassword }),
-        }
 
-        fetch('http://localhost:8080/api/user/reset-password', options)
-            .then((response) => {
-                return response.json()
-            })
+        ApiService.post('/user/reset-password', {
+            token,
+            login,
+            hashedPassword,
+        })
             .then((data) => {
                 console.log('response: ', data)
             })

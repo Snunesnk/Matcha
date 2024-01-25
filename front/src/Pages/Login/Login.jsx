@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { hashPassword } from '../../utils'
 import { CircularProgress } from '@mui/material'
+import ApiService from '../../Services/api.service'
 
 export async function action({ request }) {
     const formData = await request.formData()
@@ -16,19 +17,9 @@ export async function action({ request }) {
 
     data.password = await hashPassword(data.password)
 
-    const options = {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        credentials: 'include',
-        body: JSON.stringify(data),
-    }
-    const res = await fetch(
-        'http://localhost:8080/api/user/login',
-        options
-    ).then((response) => {
-        return response.json()
+    const res = ApiService.post('/user/login', data).catch((err) => {
+        console.log(err)
+        return null
     })
 
     return res

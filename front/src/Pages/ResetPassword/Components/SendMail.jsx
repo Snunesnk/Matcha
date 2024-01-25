@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import FormInput from '../../../Components/FormInput/FormInput'
+import ApiService from '../../../Services/api.service'
 
 // TODO: Handle back status code response
 const SendMail = () => {
@@ -16,17 +17,12 @@ const SendMail = () => {
         setEmailSent(true)
         setEmailList([...emailList, email])
 
-        const options = {
-            method: 'GET',
-            headers: { 'Content-Type': 'application/json' },
-        }
-
-        fetch('http://localhost:8080/api/user/reset-password/' + email, options)
-            .then((response) => {
-                return response.json()
-            })
+        ApiService.get('/user/reset-password/' + email)
             .then((data) => {
                 console.log(data)
+            })
+            .catch((error) => {
+                console.log(error)
             })
     }
 
