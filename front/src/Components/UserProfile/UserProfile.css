@@ -56,12 +56,23 @@
     align-items: center;
 }
 
+.main-info {
+    display: flex;
+    flex-direction: row;
+    align-items:end;
+    justify-content: space-between;
+    width: 100%;
+}
+
 .name_and_age {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     font-weight: 500;
     font-size: 2em;
     color: white;
-    padding-top: 10px;
-    display: flex;
+    margin-top: 10px;
+    gap: 5px;
 }
 
 .connected-and-login {
@@ -75,6 +86,8 @@
     display: flex;
     justify-content: start;
     align-items: center;
+    margin-top: 10px;
+    width: 100%;
 }
 
 .user-location-infos svg {
@@ -91,20 +104,19 @@
     margin-top: 5px;
 }
 
-#user-profile-infos,
-.user-login-container {
+#user-profile-infos {
     display: flex;
     justify-content: start;
     align-items: center;
     width: 100%;
 }
 
-#user-profile-infos span {
+#gender {
     background-color: #dc21b8;
     color: white;
     padding: 0 10px;
-    margin-left: 10px;
-    border-radius: 4px;
+    margin-left: 5px;
+    border-radius: 10px;
 }
 
 #profile-disliked p {
@@ -117,17 +129,20 @@
     transform: rotate(-20deg);
 }
 
-#user-login, #user-email {
-    width: 100%;
+#user-login {
     font-size: 0.9rem;
     font-weight: 300;
     color: #ffffff80;
+    margin-left: 5px;
 }
 
 #user-profile-bio {
     width: 100%;
     display: flex;
-    justify-content: left;
+    flex-direction: column;
+    justify-content: start;
+    margin-top: 20px;
+    margin-bottom: 20px;
     font-weight: 500;
 }
 
@@ -293,6 +308,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    margin-top: 10px;
 }
 
 .indicator-container {
@@ -308,7 +324,7 @@
     border-radius: 50%;
     width: 10px;
     height: 10px;
-    margin: 0 5px 0px 15px;
+    margin: 0 5px;
 }
 
 #user-profile-container .indicator.online {
@@ -326,37 +342,6 @@
     margin: 0;
 }
 
-.icons-bar {
-    display: flex;
-}
-    
-.info-chip-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.info-chip-container .indicator {
-    border-radius: 50%;
-    width: 10px;
-    height: 10px;
-    margin: 0 5px 0px 15px;
-}
-
-.info-chip-container .indicator.online {
-    background-color: #37c898;
-}
-
-.info-chip-container .indicator.offline {
-    background-color: red;
-}
-
-.info-chip-container p {
-    font-size: 0.8rem;
-    font-weight: 300;
-    color: #ffffff80;
-}
-
 .info-row {
     width: 100%;
     display: flex;
@@ -367,7 +352,7 @@
 
 .info-rating {
     display: flex;
-    flex-direction:row;
+    flex-direction: row;
     gap: 5px;
 }
 
