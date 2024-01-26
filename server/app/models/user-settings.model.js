@@ -168,16 +168,13 @@ export class UserSetting {
 
   static async updateUserSettingByLogin(userLogin, newUserSetting) {
     if (!newUserSetting) return null;
-    const user = new User();
-    if (user) {
-      user.prefMale = newUserSetting.userPreferences?.indexOf("Female") > -1;
-      user.prefFemale = newUserSetting.userPreferences?.indexOf("Female") > -1;
-      user.prefEnby =
-        newUserSetting.userPreferences?.indexOf("Non-binary") > -1;
+    const user = {};
+    user.prefMale = newUserSetting.userPreferences?.indexOf("Female") > -1;
+    user.prefFemale = newUserSetting.userPreferences?.indexOf("Female") > -1;
+    user.prefEnby = newUserSetting.userPreferences?.indexOf("Non-binary") > -1;
 
-      if (user.prefMale || user.prefFemale || user.prefEnby) {
-        User.updateByLogin(userLogin, user);
-      }
+    if (user.prefMale || user.prefFemale || user.prefEnby) {
+      User.updateByLogin(userLogin, user);
     }
 
     const settings = new UserSetting(newUserSetting);
