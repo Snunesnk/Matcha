@@ -114,8 +114,8 @@ async function fillRandomUserProfile() {
   // Generate a random point within 100km of the center coordinates
   // const { latitude, longitude } = generateRandomPoint(centerCoords, 100);
 
-  const lat = faker.address.latitude({ min: 43, max: 48.95 });
-  const lng = faker.address.longitude({ min: -0.36, max: 2.315 });
+  const lat = faker.address.latitude(49, 43, 4);
+  const lng = faker.address.longitude(3, -1, 4);
 
   const coordinate = { x: lng, y: lat };
 
