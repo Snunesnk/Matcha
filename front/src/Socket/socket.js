@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
+import ApiService from '../Services/api.service'
 
-const SOCKET_SERVER_URL =
-    import.meta.env.VITE_API_URL || 'http://localhost:8080'
+const SOCKET_SERVER_URL = ApiService.getApiURL()
 
 let socket = io(SOCKET_SERVER_URL, {
     withCredentials: true,

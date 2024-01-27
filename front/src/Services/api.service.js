@@ -4,6 +4,13 @@ export default class ApiService {
         this.apiURL = apiURL + '/api'
     }
 
+    static getApiURL = () => {
+        if (!this.apiURL) {
+            this.init()
+        }
+        return this.apiURL
+    }
+
     static callApi = async (url, options) => {
         if (!this.apiURL) {
             this.init()
