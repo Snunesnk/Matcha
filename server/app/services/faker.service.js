@@ -114,8 +114,8 @@ async function fillRandomUserProfile() {
   // Generate a random point within 100km of the center coordinates
   // const { latitude, longitude } = generateRandomPoint(centerCoords, 100);
 
-  const lat = faker.address.latitude();
-  const lng = faker.address.longitude();
+  const lat = faker.address.latitude({ min: 43, max: 48.95 });
+  const lng = faker.address.longitude({ min: -0.36, max: 2.315 });
 
   const coordinate = { x: lng, y: lat };
 
@@ -195,7 +195,7 @@ const populateDB = async () => {
   console.log("Populating DB");
   const userCount = await User.count();
 
-  for (let i = userCount; i < 1000; i++) {
+  for (let i = userCount; i < 2100; i++) {
     createRandomUser().then((user) => {
       User.create(user).then((newUser) => {
         fillRandomUserProfile().then((userProfile) => {
