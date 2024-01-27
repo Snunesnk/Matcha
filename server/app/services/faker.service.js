@@ -110,13 +110,14 @@ async function fillRandomUserProfile() {
 
   // Corresponds to 96 boulevard bessières, 75017 Paris
   // const centerCoords = { lat: 48.89639, lng: 2.31845 };
-  const ip = await publicIpv4();
-  const loc = await getIpInfo(ip);
-  const centerCoords = { lat: loc.lat, lng: loc.lon };
 
   // Generate a random point within 100km of the center coordinates
-  const { latitude, longitude } = generateRandomPoint(centerCoords, 100);
-  const coordinate = { x: longitude, y: latitude };
+  // const { latitude, longitude } = generateRandomPoint(centerCoords, 100);
+
+  const lat = faker.address.latitude();
+  const lng = faker.address.longitude();
+
+  const coordinate = { x: lng, y: lat };
 
   const rating = faker.datatype.number({ min: 0, max: 95 });
 
@@ -195,7 +196,7 @@ const populateDB = async () => {
   const userCount = await User.count();
 
   console.log(`Current user count: ${userCount}`);
-  for (let i = userCount; i < 500; i++) {
+  for (let i = userCount; i < 1000; i++) {
     createRandomUser().then((user) => {
       User.create(user).then((newUser) => {
         fillRandomUserProfile().then((userProfile) => {
