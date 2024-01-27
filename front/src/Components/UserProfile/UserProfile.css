@@ -24,7 +24,7 @@
     transition: all 120ms ease-in;
     opacity: 1;
 
-    min-height: calc(90vh - 50px);
+    min-height: calc(90dvh - 50px);
     width: calc(100% + 40px);
     position: relative;
 }
@@ -59,7 +59,7 @@
 .main-info {
     display: flex;
     flex-direction: row;
-    align-items:end;
+    align-items: end;
     justify-content: space-between;
     width: 100%;
 }
@@ -280,7 +280,7 @@
 
 @media screen and (min-width: 450px) {
     .card_img_container {
-        min-height: min(642px, calc(70.86vh - 50px));
+        min-height: min(642px, calc(70.86dvh - 50px));
         width: 100%;
     }
 }
