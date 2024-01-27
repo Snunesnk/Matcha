@@ -217,7 +217,7 @@ const populateDB = async () => {
   try {
     const userCount = await User.count();
     console.log(`User count: ${userCount}`);
-    for (let i = userCount; i < 2100; i += BATCH_SIZE) {
+    for (let i = userCount; i < 5000; i += BATCH_SIZE) {
       await createUsersBatch(i, Math.min(i + BATCH_SIZE, 10000));
       console.log(`Batch processed: Users ${i} to ${i + BATCH_SIZE - 1}`);
     }

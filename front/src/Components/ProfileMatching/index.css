@@ -70,9 +70,9 @@
     color: white;
     background-color: #20051850;
     border-radius: 20px;
-    height: 40px;
-    width: 40px;
-    padding: 5px;
+    height: 35px;
+    width: 35px;
+    padding: 3px;
     cursor: pointer;
     transition: all 50ms ease-in-out;
 }
