@@ -31,6 +31,8 @@
     border-radius: 50%;
     margin-right: 20px;
     object-fit: cover;
+    z-index: 2;
+    position: relative;
 }
 
 #person_info svg {
@@ -45,16 +47,53 @@
     font-weight: 600;
 }
 
-#user-chat-more {
-    color: #dc21b8;
-    cursor: pointer;
+#see-profile {
     display: flex;
-    justify-content: center;
+    flex-direction: row;
     align-items: center;
+    margin-left: 20px;
+    gap: 10px;
 }
 
-#user-chat-more svg {
-    font-size: 30px;
+#see-profile:hover .message_username {
+    background: linear-gradient(to right,
+            #dc21b8 20%,
+            #4ac0fc 40%,
+            #4ac0fc 60%,
+            #dc21b8 80%);
+
+    /* Make the gradient background larger than the element to slide it */
+    background-size: 200% auto;
+
+    /* Make the text transparent so that the gradient is visible */
+    color: transparent;
+
+    animation: sliding-gradient 1s linear infinite;
+
+    /* Ensure the gradient is in the text itself, not just behind */
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.message-img-container {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    position: relative;
+}
+
+
+#see-profile:hover .message-img-container::after {
+    position: absolute;
+    content: '';
+    top: -6%;
+    left: -6%;
+    bottom: -6%;
+    right: -6%;
+    z-index: 1;
+    background: linear-gradient(-135deg, #4ac0fc 0%, #dc21b8 100%);
+    border-radius: 50%;
 }
 
 #messages_input {
@@ -163,13 +202,13 @@
         display: block;
     }
 
-    #person_info img {
+    /* #person_info img {
         margin-left: 30px;
-    }
+    } */
 }
 
-@media screen and (min-width: 951px) {
-    #user-chat-more {
-        display: none;
+@media screen and (max-width: 951px) {
+    #see-profile {
+        cursor: pointer;
     }
 }

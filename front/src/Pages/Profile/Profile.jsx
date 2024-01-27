@@ -24,7 +24,7 @@ const Profile = () => {
     return(
         <div className="profile-page" onScroll={(e) => setScroll(e.target.scrollTop)}>
             {me ? (
-                <UserProfile user={me} scroll={scroll}/>
+                <UserProfile user={me} scroll={scroll} isMe={true}/>
             ) : (
                 <div>Loading...</div>
             )}

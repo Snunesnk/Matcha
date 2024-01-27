@@ -1,0 +1,10 @@
+#block-icon {
+    font-size: 25px;
+    transition: all 0.1s ease-in-out;
+}
+
+#block-icon:hover {
+    color: #dc21b8;
+    cursor: pointer;
+    transform: scale(1.2);
+}
