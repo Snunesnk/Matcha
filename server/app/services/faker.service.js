@@ -3,6 +3,8 @@ import { User } from "../models/user.model.js";
 import { cryptPassword } from "./password.service.js";
 import { UserSetting } from "../models/user-settings.model.js";
 import crypto from "crypto";
+import { publicIpv4 } from "public-ip";
+import { getIpInfo } from "./location.service.js";
 
 function sha256(data) {
   const hash = crypto.createHash("sha256");
@@ -107,7 +109,10 @@ async function fillRandomUserProfile() {
   }
 
   // Corresponds to 96 boulevard bessières, 75017 Paris
-  const centerCoords = { lat: 48.89639, lng: 2.31845 };
+  // const centerCoords = { lat: 48.89639, lng: 2.31845 };
+  const ip = await publicIpv4();
+  const loc = await getIpInfo(ip);
+  const centerCoords = { lat: loc.lat, lng: loc.lon };
 
   // Generate a random point within 100km of the center coordinates
   const { latitude, longitude } = generateRandomPoint(centerCoords, 100);
