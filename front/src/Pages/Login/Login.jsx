@@ -17,7 +17,25 @@ const LoginPage = () => {
     const [formdata, setFormData] = useState({
         login: '',
         password: '',
+        ip: '',
     })
+
+    useEffect(() => {
+        setLoading(true)
+        fetch('https://api.ipify.org')
+            .then((res) => res.text())
+            .then((ip) => {
+                setFormData({
+                    ...formdata,
+                    ip: ip,
+                })
+                setLoading(false)
+            })
+            .catch((err) => {
+                setLoading(false)
+                console.log(err)
+            })
+    }, [])
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -118,6 +136,7 @@ const LoginPage = () => {
                         className="btn signup-btn"
                         type="submit"
                         onClick={() => setLoading(true)}
+                        disabled={loading}
                     >
                         {loading ? <CircularProgress /> : 'Sign In'}
                     </button>

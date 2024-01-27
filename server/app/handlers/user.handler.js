@@ -10,7 +10,7 @@ import { Tag } from "../models/tag.model.js";
 
 export default class {
   static async login(req, res) {
-    const { login, password } = req.body;
+    const { login, password, ip } = req.body;
     let rememberMe = req.body.rememberMe;
 
     if (!login || !password) {
@@ -53,7 +53,7 @@ export default class {
       }
 
       try {
-        await getIpAddress(req).then(async (ip) => {
+        if (ip) {
           const loc = await getIpInfo(ip);
           if (loc) {
             const userLoc = {
@@ -64,7 +64,20 @@ export default class {
             };
             await User.updateByLogin(user.login, userLoc);
           }
-        });
+        } else {
+          await getIpAddress(req).then(async (ip) => {
+            const loc = await getIpInfo(ip);
+            if (loc) {
+              const userLoc = {
+                coordinate: {
+                  y: loc.lat,
+                  x: loc.lon,
+                },
+              };
+              await User.updateByLogin(user.login, userLoc);
+            }
+          });
+        }
       } catch (err) {
         console.log("error while getting ip address", err);
       }
