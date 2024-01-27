@@ -175,7 +175,7 @@ const addAdminUser = async () => {
   const userSettings = {
     userLogin: newUser.login,
     ageMin: 18,
-    ageMax: 99,
+    ageMax: 55,
     distMin: 0,
     distMax: 100,
     fameMin: 0,

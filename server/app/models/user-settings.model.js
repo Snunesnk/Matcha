@@ -8,7 +8,7 @@ export class UserSetting {
     this.ageMin = obj.ageMin || 18;
     if (this.ageMin < 18) this.ageMin = 18;
     this.ageMax = obj.ageMax || 55;
-    if (this.ageMax > 55) this.ageMax = 5;
+    if (this.ageMax > 55) this.ageMax = 55;
     this.distMin = obj.distMin || 0;
     if (this.distMin < 0) this.distMin = 0;
     this.distMax = obj.distMax || 100;
