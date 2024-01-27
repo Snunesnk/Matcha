@@ -120,7 +120,14 @@ const ChatComponent = ({
                             setActiveComponent(components.MESSAGE_LIST)
                         }}
                     />
-                    <img src={user.imgA} alt="profile_pic" />
+                    <img
+                        src={
+                            user.imgA.startsWith('http')
+                                ? user.imgA
+                                : 'http://localhost:8080/api' + user.imgA
+                        }
+                        alt="profile_pic"
+                    />
                     <div className="message_username">{user.name}</div>
                 </div>
                 <div id="user-chat-more">
