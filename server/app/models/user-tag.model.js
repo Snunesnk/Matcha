@@ -29,7 +29,6 @@ export class UserTag {
     if (tag === null) {
       const newTag = await Tag.create(new Tag({ bwid: newUserTag.tagBwid }));
       if (newTag === null) {
-        console.log("Tag didn't exist, but couldn't create it");
         return null;
       }
     } else {

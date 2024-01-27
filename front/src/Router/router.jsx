@@ -36,10 +36,9 @@ import UserSettings from '../Components/Settings/UserSettings'
 import DiscoverySettings from '../Components/Settings/DiscoverySettings'
 import Notifications from '../Components/Notifications/Notifications'
 import ProfileMatching from '../Components/ProfileMatching'
-import LoginPage, { action as loginAction } from '../Pages/Login/Login'
+import LoginPage from '../Pages/Login/Login'
 import ResetPasswordPage from '../Pages/ResetPassword/ResetPassword'
 import Profile from '../Pages/Profile/Profile'
-
 
 const router = createBrowserRouter([
     {
@@ -54,7 +53,6 @@ const router = createBrowserRouter([
             {
                 path: 'login',
                 element: <LoginPage />,
-                action: loginAction,
                 loader: loginLoader,
             },
             {

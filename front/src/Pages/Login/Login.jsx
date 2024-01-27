@@ -1,6 +1,6 @@
 import FormInput from '../../Components/FormInput/FormInput'
 import './Login.css'
-import { Form, useActionData, useNavigate } from 'react-router-dom'
+import { Form, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { useEffect, useState } from 'react'
 import { USER_STATE_ACTIONS } from '../../constants'
@@ -8,67 +8,59 @@ import { hashPassword } from '../../utils'
 import { CircularProgress } from '@mui/material'
 import ApiService from '../../Services/api.service'
 
-export async function action({ request }) {
-    const formData = await request.formData()
-    const data = {
-        login: formData.get('login'),
-        password: formData.get('password'),
-    }
-
-    data.password = await hashPassword(data.password)
-
-    const res = ApiService.post('/user/login', data).catch((err) => {
-        console.log(err)
-        return null
-    })
-
-    return res
-}
-
 // TODO: Handle back status code response
 const LoginPage = () => {
-    const formResult = useActionData()
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const [error, setError] = useState('')
     const [loading, setLoading] = useState(false)
+    const [formdata, setFormData] = useState({
+        login: '',
+        password: '',
+    })
 
-    useEffect(() => {
-        if (!formResult) return
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+        setLoading(true)
 
-        switch (formResult.message) {
-            case 'MISSING_DATA':
-                setError('Missing data')
+        const data = { ...formdata }
+        data.password = await hashPassword(data.password)
+
+        ApiService.post('/user/login', data)
+            .then((res) => {
                 setLoading(false)
-                break
-            case 'WRONG_CREDENTIALS':
-                setError('Login or password incorrect')
-                setLoading(false)
-                break
-            case 'COULD_NOT_LOGIN':
-                setError('Could not login')
-                setLoading(false)
-                break
-            case 'EMAIL_NOT_VERIFIED':
-            case 'LOG_IN_SUCCESS':
                 dispatch({
                     type: USER_STATE_ACTIONS.LOG_IN,
                     payload: {
-                        email: formResult.email,
-                        name: formResult.name,
-                        login: formResult.login,
-                        imgA: formResult.imgA,
+                        email: res.email,
+                        name: res.name,
+                        login: res.login,
+                        imgA: res.imgA,
                     },
                 })
-                if (formResult.message === 'EMAIL_NOT_VERIFIED')
+                if (res.message === 'EMAIL_NOT_VERIFIED')
                     navigate('/validation')
                 else navigate('/dashboard')
-                break
-            default:
-                console.log('Unknown message')
+            })
+            .catch((err) => {
                 setLoading(false)
-        }
-    }, [formResult])
+
+                switch (err.status) {
+                    case 400:
+                        setError('Please fill in all the fields')
+                        break
+                    case 401:
+                        setError('Please verify your email')
+                        break
+                    case 404:
+                        setError('Login or password incorrect')
+                        break
+                    default:
+                        setError('Something went wrong ... Please try again')
+                        break
+                }
+            })
+    }
 
     return (
         <div id="test-div">
@@ -76,7 +68,7 @@ const LoginPage = () => {
                 <div></div>
             </div>
             <div id="right-div">
-                <Form id="onboarding_form" method="post">
+                <Form id="onboarding_form" onSubmit={handleSubmit}>
                     <h3 id="signup_title">
                         Welcome back! Please enter your credentials.
                     </h3>
@@ -84,7 +76,13 @@ const LoginPage = () => {
                         <FormInput
                             placeholder="Login or email"
                             name="login"
-                            required={true}
+                            value={formdata.login}
+                            updateValue={(value) => {
+                                setFormData({
+                                    ...formdata,
+                                    login: value,
+                                })
+                            }}
                         />
                     </div>
                     <div id="login-password">
@@ -92,7 +90,13 @@ const LoginPage = () => {
                             placeholder="Password"
                             name="password"
                             type="password"
-                            required={true}
+                            value={formdata.password}
+                            updateValue={(value) =>
+                                setFormData({
+                                    ...formdata,
+                                    password: value,
+                                })
+                            }
                         />
                         <div id="login-error">{error}</div>
                     </div>

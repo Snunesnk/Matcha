@@ -2,6 +2,9 @@ export default class ApiService {
     static init = () => {
         const apiURL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
         this.apiURL = apiURL + '/api'
+        if (apiURL.startsWith('https')) {
+            this.apiURL = apiURL.replace('https', 'wss')
+        } else this.socketUrl = apiURL.replace('http', 'ws')
     }
 
     static getApiURL = () => {
@@ -9,6 +12,13 @@ export default class ApiService {
             this.init()
         }
         return this.apiURL
+    }
+
+    static getSocketURL = () => {
+        if (!this.socketUrl) {
+            this.init()
+        }
+        return this.socketUrl
     }
 
     static callApi = async (url, options) => {

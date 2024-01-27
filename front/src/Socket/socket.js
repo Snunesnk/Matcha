@@ -1,7 +1,7 @@
 import io from 'socket.io-client'
 import ApiService from '../Services/api.service'
 
-const SOCKET_SERVER_URL = ApiService.getApiURL()
+const SOCKET_SERVER_URL = ApiService.getSocketURL()
 
 let socket = io(SOCKET_SERVER_URL, {
     withCredentials: true,

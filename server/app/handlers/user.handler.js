@@ -43,7 +43,7 @@ export default class {
       }
 
       if (user.verified !== true) {
-        res.status(401).send({
+        res.status(200).send({
           message: "EMAIL_NOT_VERIFIED",
           email: user.email,
           name: user.name,
