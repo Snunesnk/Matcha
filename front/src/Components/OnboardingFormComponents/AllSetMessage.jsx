@@ -43,7 +43,6 @@ const AllSetMessage = () => {
                                 )
                                 break
                         }
-                        setLoading(false)
                     })
             })
             .catch((error) => {
