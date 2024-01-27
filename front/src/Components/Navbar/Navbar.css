@@ -27,7 +27,7 @@
 }
 
 .navTitle:hover {
-    color: #ef99de;
+    color: #dc21b8;
 }
 
 .navbar-menu {
@@ -38,11 +38,11 @@
 }
 
 .navbar-menu a:hover svg {
-    color: #ef99de;
+    color: #dc21b8;
 }
 
 .nav-user-account:hover>svg {
-    color: #ef99de;
+    color: black;
     cursor: pointer;
 }
 
@@ -97,9 +97,10 @@
     position: absolute;
     right: 20px;
     top: 68px;
-    background-color: #20051897;
+    background-color: #200618E0;
     box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
     z-index: 1;
+    border-radius: 4px
 }
 
 .dropdown-menu a {
@@ -108,9 +109,12 @@
     display: flex;
     align-items: center;
     gap: 0.5em;
+    cursor: pointer;
+    transition: all 0.1s ease-out;
 }
 
 .dropdown-menu a:hover {
     background-color: #f1f1f1;
     color: #dc21b8;
+    border-radius: 4px;
 }
