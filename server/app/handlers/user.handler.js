@@ -23,12 +23,15 @@ export default class {
     if (!rememberMe) rememberMe = false;
 
     try {
-      const user = await User.getFullUserByLogin(login);
+      let user = await User.getFullUserByLogin(login);
       if (user === null) {
-        res.status(404).send({
-          message: "WRONG_CREDENTIALS",
-        });
-        return;
+        user = await User.getUserByMail(login);
+        if (!user) {
+          res.status(404).send({
+            message: "WRONG_CREDENTIALS",
+          });
+          return;
+        }
       }
 
       const isPasswordMatch = await user.passwordMatch(password);
