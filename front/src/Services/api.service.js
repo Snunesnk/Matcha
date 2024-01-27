@@ -108,7 +108,7 @@ export default class ApiService {
     }
 
     static getImgPath = (img) => {
-        if (img.startsWith('http')) return img
+        if (!img || img.startsWith('http')) return img
         return `${this.apiURL}${img}`
     }
 }

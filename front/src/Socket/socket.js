@@ -1,6 +1,7 @@
 import io from 'socket.io-client'
 
-const SOCKET_SERVER_URL = 'http://localhost:8080'
+const SOCKET_SERVER_URL =
+    import.meta.env.VITE_API_URL || 'http://localhost:8080'
 
 let socket = io(SOCKET_SERVER_URL, {
     withCredentials: true,
