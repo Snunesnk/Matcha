@@ -5,6 +5,9 @@ export default class ApiService {
     }
 
     static callApi = async (url, options) => {
+        if (!this.apiURL) {
+            this.init()
+        }
         return fetch(`${this.apiURL}${url}`, options).then((response) => {
             if (response.ok) {
                 const contentType = response.headers.get('content-type')
@@ -102,5 +105,10 @@ export default class ApiService {
         }
 
         return this.callApi(url, options)
+    }
+
+    static getImgPath = (img) => {
+        if (img.startsWith('http')) return img
+        return `${this.apiURL}${img}`
     }
 }

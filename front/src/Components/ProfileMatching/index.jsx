@@ -302,12 +302,7 @@ const ProfileMatching = () => {
                         <div className="match-animation-container">
                             <div className="match-animation-img-container">
                                 <img
-                                    src={
-                                        (actualUser.imgA?.includes('http')
-                                            ? ''
-                                            : 'http://localhost:8080/api') +
-                                        actualUser.imgA
-                                    }
+                                    src={ApiService.getImgPath(actualUser.imgA)}
                                     alt="user avatar"
                                     className="avatar"
                                 />
