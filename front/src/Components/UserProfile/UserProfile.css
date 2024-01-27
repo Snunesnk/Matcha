@@ -7,6 +7,12 @@
     align-items: center;
 }
 
+@media screen and (max-width: 449px) {
+    #user-profile-container {
+        height: 100%;
+    }
+}
+
 .no-overflow {
     overflow: hidden;
     height: 100%;

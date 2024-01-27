@@ -4,7 +4,6 @@ export default class {
   // Find and return given image
   static getImage = async (req, res) => {
     const image = req.params.image;
-    console.log(image);
 
     if (!image) {
       res.status(400).send({
