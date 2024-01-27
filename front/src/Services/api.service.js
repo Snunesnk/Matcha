@@ -3,7 +3,7 @@ export default class ApiService {
         const apiURL = import.meta.env.VITE_API_URL || 'http://localhost:8080'
         this.apiURL = apiURL + '/api'
         if (apiURL.startsWith('https')) {
-            this.apiURL = apiURL.replace('https', 'wss')
+            this.socketUrl = apiURL.replace('https', 'wss')
         } else this.socketUrl = apiURL.replace('http', 'ws')
     }
 
