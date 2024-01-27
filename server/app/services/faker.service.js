@@ -198,7 +198,8 @@ const populateDB = async () => {
   console.log("Populating DB");
   const userCount = await User.count();
 
-  for (let i = userCount; i < 2100; i++) {
+  for (let i = userCount; i < 10000; i++) {
+    if (i % 500 === 0) console.log(`Populating DB: ${i} users created`);
     createRandomUser().then((user) => {
       User.create(user).then((newUser) => {
         fillRandomUserProfile().then((userProfile) => {
