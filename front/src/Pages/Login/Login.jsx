@@ -76,7 +76,7 @@ const LoginPage = () => {
                         <FormInput
                             placeholder="Login or email"
                             name="login"
-                            value={formdata.login}
+                            defaultValue={formdata.login}
                             updateValue={(value) => {
                                 setFormData({
                                     ...formdata,
@@ -90,7 +90,7 @@ const LoginPage = () => {
                             placeholder="Password"
                             name="password"
                             type="password"
-                            value={formdata.password}
+                            defaultValue={formdata.password}
                             updateValue={(value) =>
                                 setFormData({
                                     ...formdata,
