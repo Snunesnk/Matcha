@@ -1,5 +1,6 @@
 import React from 'react'
 import './MessagesLeftPane.css'
+import ApiService from '../../Services/api.service'
 
 const COMPONENTS = {
     MESSAGE_LIST: 'MESSAGE_LIST',
@@ -63,11 +64,7 @@ const NewMatch = ({ match, setActiveConversation, onClick }) => (
     >
         <div className="new-match-img-container">
             <img
-                src={
-                    match.imgA.startsWith('http')
-                        ? match.imgA
-                        : 'http://localhost:8080/api' + match.imgA
-                }
+                src={ApiService.getImgPath(match.imgA)}
                 alt={`${match.name}'s avatar`}
                 className="avatar"
             />
@@ -140,11 +137,7 @@ const MessageSnippet = ({ conversation, setActiveConversation, onClick }) => {
         >
             <div className="message-img-container">
                 <img
-                    src={
-                        conversation.imgA.startsWith('http')
-                            ? conversation.imgA
-                            : 'http://localhost:8080/api' + conversation.imgA
-                    }
+                    src={ApiService.getImgPath(conversation.imgA)}
                     alt="user avatar"
                     className="avatar"
                 />

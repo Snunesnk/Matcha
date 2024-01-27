@@ -5,9 +5,6 @@ import { RouterProvider } from 'react-router-dom'
 import { Provider } from 'react-redux'
 import router from './Router/router'
 import './index.css'
-import ApiService from './Services/api.service'
-
-ApiService.init()
 
 ReactDOM.createRoot(document.getElementById('app')).render(
     // <React.StrictMode>

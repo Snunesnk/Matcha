@@ -195,12 +195,7 @@ const Navbar = () => {
                     <div ref={dropdownRef} className="nav-user-account">
                         {userImage ? (
                             <img
-                                src={
-                                    userImage.startsWith('http')
-                                        ? userImage
-                                        : 'http://localhost:8080/api' +
-                                          userImage
-                                }
+                                src={ApiService.getImgPath(userImage)}
                                 className="avatar"
                                 onClick={toggleDropdown}
                             />

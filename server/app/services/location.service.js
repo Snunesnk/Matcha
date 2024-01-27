@@ -13,9 +13,8 @@ export const getIpAddress = async (req) => {
 
   try {
     // Get external IP address
-    if (ipAddr.includes("192.168.")) {
-      ipAddr = await publicIpv4();
-    }
+    const publicIp = await publicIpv4();
+    if (publicIp) ipAddr = publicIp;
   } catch (err) {
     console.log(err);
   }

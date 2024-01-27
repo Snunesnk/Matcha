@@ -74,7 +74,9 @@ function Notifications() {
                             <div className="notification-list_content">
                                 <div className="notification-list_img">
                                     <img
-                                        src={notification.imgA}
+                                        src={ApiService.getImgPath(
+                                            notification.imgA
+                                        )}
                                         alt={notification.name}
                                     />
                                 </div>

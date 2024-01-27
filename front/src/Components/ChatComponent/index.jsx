@@ -120,7 +120,10 @@ const ChatComponent = ({
                             setActiveComponent(components.MESSAGE_LIST)
                         }}
                     />
-                    <img src={user.imgA} alt="profile_pic" />
+                    <img
+                        src={ApiService.getImgPath(user.imgA)}
+                        alt="profile_pic"
+                    />
                     <div className="message_username">{user.name}</div>
                 </div>
                 <div id="user-chat-more">

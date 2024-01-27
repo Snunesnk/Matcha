@@ -113,6 +113,8 @@ async function fillRandomUserProfile() {
   const { latitude, longitude } = generateRandomPoint(centerCoords, 100);
   const coordinate = { x: longitude, y: latitude };
 
+  const rating = faker.datatype.number({ min: 0, max: 95 });
+
   return {
     bio,
     gender,
@@ -129,6 +131,7 @@ async function fillRandomUserProfile() {
     imgE,
     tags,
     coordinate,
+    rating,
   };
 }
 

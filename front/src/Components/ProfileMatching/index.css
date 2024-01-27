@@ -85,7 +85,7 @@
 }
 
 #profile_matching-container .matching-settings:hover {
-    background-color: #200618;
+    background-color: black;
 }
 
 #profile_matching-container #user-profile-container {
@@ -227,7 +227,7 @@
 
 .match-animation {
     position: absolute;
-    z-index: 4;
+    z-index: 6;
     top: 0;
     width: 100%;
     height: 100%;

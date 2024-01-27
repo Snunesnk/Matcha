@@ -82,7 +82,7 @@ const LoginPage = () => {
                     </h3>
                     <div>
                         <FormInput
-                            placeholder="Login"
+                            placeholder="Login or email"
                             name="login"
                             required={true}
                         />
