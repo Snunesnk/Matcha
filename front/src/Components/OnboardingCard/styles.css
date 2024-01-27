@@ -21,7 +21,9 @@
         max-width: 80%;
         padding: 7px 20px;
         border: none;
-        filter: none
+        filter: none;
+        justify-content: start;
+        gap: 6%
     }
 
     .onboarding_card h1 {
