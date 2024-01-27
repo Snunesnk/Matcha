@@ -199,13 +199,15 @@ const populateDB = async () => {
   const userCount = await User.count();
 
   for (let i = userCount; i < 10000; i++) {
-    if (i % 500 === 0) console.log(`Populating DB: ${i} users created`);
     createRandomUser().then((user) => {
       User.create(user).then((newUser) => {
         fillRandomUserProfile().then((userProfile) => {
           User.updateByLogin(newUser.login, userProfile).then(() => {
             const userSettings = fillRandomUserSettings(newUser.login);
-            UserSetting.create(userSettings);
+            UserSetting.create(userSettings).then(() => {
+              if (i % 500 === 0)
+                console.log(`Populating DB: ${i} users created`);
+            });
           });
         });
       });
