@@ -1,6 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react'
 import './index.css'
 import '../Settings/Settings.css'
+import ApiService from '../../Services/api.service'
 
 const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
     const [imgs, setImgs] = useState(defaultImages)
@@ -74,9 +75,7 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
                         const imgUrl =
                             img.name !== undefined
                                 ? URL.createObjectURL(img)
-                                : img.includes('http')
-                                ? img
-                                : 'http://localhost:8080/api' + img
+                                : ApiService.getImgPath(img)
 
                         return (
                             <div

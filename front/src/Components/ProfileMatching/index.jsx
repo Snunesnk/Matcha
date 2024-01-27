@@ -282,10 +282,7 @@ const ProfileMatching = () => {
                         style={{
                             background:
                                 'url(' +
-                                (nextUser.imgA?.includes('http')
-                                    ? ''
-                                    : 'http://localhost:8080/api') +
-                                nextUser.imgA +
+                                ApiService.getImgPath(nextUser.imgA) +
                                 ') 50% 50% / cover no-repeat',
                         }}
                     >

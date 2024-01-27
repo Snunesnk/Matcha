@@ -21,6 +21,7 @@ import socket from '../../Socket/socket'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { formatTimeDifference } from '../MessagesLeftPane/MessagesLeftPane'
+import ApiService from '../../Services/api.service'
 
 const updateOnlineStatus = (status, actualUser, setCurrentOnline) => {
     if (actualUser?.login === status.login) {
@@ -148,10 +149,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 style={{
                     background:
                         'url(' +
-                        (user.imgA?.includes('http')
-                            ? ''
-                            : 'http://localhost:8080/api') +
-                        user.imgA +
+                        ApiService.getImgPath(user.imgA) +
                         ') 50% 50% / cover no-repeat',
                 }}
             >
@@ -211,10 +209,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         style={{
                             background:
                                 'url(' +
-                                (!img || img.includes('http')
-                                    ? ''
-                                    : 'http://localhost:8080/api') +
-                                img +
+                                ApiService.getImgPath(img) +
                                 ') center',
                         }}
                         onClick={() => setSelectedPicture(i)}
@@ -249,12 +244,9 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 style={{
                     background:
                         'url(' +
-                        (selectedPicture >= imgs.length ||
-                        selectedPicture == -1 ||
-                        imgs[selectedPicture].indexOf('http') > -1
+                        (selectedPicture >= imgs.length || selectedPicture == -1
                             ? ''
-                            : 'http://localhost:8080/api') +
-                        imgs[selectedPicture] +
+                            : ApiService.getImgPath(imgs[selectedPicture])) +
                         ') 50% 50% / cover no-repeat',
                 }}
             >
