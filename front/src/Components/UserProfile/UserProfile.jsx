@@ -5,10 +5,6 @@ import {
     ArrowRight,
     Clear,
     Place,
-    Favorite,
-    FavoriteBorder,
-    Block,
-    ReportOff,
     Star,
     StarBorder,
     StarHalf,
@@ -22,6 +18,7 @@ import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { formatTimeDifference } from '../MessagesLeftPane/MessagesLeftPane'
 import ApiService from '../../Services/api.service'
+import ReportPopup from '../ReportPopUp/ReportPopUp'
 
 const updateOnlineStatus = (status, actualUser, setCurrentOnline) => {
     if (actualUser?.login === status.login) {
@@ -41,13 +38,9 @@ const StarRating = ({ percentage }) => {
 
     return (
         <div>
-            {fullStarsElements.map((star, i) => (
-                <Star key={i} />
-            ))}
+            {fullStarsElements.map((star, i) => (<Star key={i} />))}
             {halfStarElement && <StarHalf />}
-            {emptyStarsElements.map((star, i) => (
-                <StarBorder key={i} />
-            ))}
+            {emptyStarsElements.map((star, i) => (<StarBorder key={i} />))}
         </div>
     )
 }
@@ -74,7 +67,7 @@ function calculateAge(birthdate) {
     return age
 }
 
-const UserProfile = ({ user, scroll = 0 }) => {
+const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false}) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
     const [currentOnline, setCurrentOnline] = useState(false)
     const profileRef = useRef(null)
@@ -117,6 +110,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
             setSelectedPicture(selectedPicture - 1)
         }
     }
+
     const nextPicture = () => {
         if (selectedPicture === imgs.length - 1) {
             setSelectedPicture(0)
@@ -140,12 +134,8 @@ const UserProfile = ({ user, scroll = 0 }) => {
     }
 
     return (
-        <div
-            id="user-profile-container"
-            className={selectedPicture !== -1 ? 'no-overflow' : ''}
-        >
-            <div
-                className="card_img_container"
+        <div id="user-profile-container" className={selectedPicture !== -1 ? 'no-overflow' : ''} >
+            <div className="card_img_container"
                 style={{
                     background:
                         'url(' +
@@ -170,8 +160,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         <div className="location">
                             <Place /> {Math.floor(user.distance)}km away
                             <div className="indicator-container">
-                                <div
-                                    className={
+                                <div className={
                                         'indicator' +
                                         (currentOnline.online
                                             ? ' online'
@@ -181,9 +170,7 @@ const UserProfile = ({ user, scroll = 0 }) => {
                                 <p className="last-online">
                                     {currentOnline.online
                                         ? 'Connected'
-                                        : formatTimeDifference(
-                                              currentOnline.lastOnline
-                                          )}
+                                        : formatTimeDifference(currentOnline.lastOnline)}
                                 </p>
                             </div>
                         </div>
@@ -192,8 +179,11 @@ const UserProfile = ({ user, scroll = 0 }) => {
             </div>
 
             <div id="user-profile-infos">
-                {user.surname} {user.name}
-                <i id="user-login">@{user.login}</i>
+                <div>
+                    {user.surname} {user.name}
+                    <i id="user-login">@{user.login}</i>
+                </div>
+                {isMe ? <></> : <ReportPopup/>}
             </div>
 
             <div id="user-profile-bio">
@@ -235,12 +225,8 @@ const UserProfile = ({ user, scroll = 0 }) => {
                         </div>
                     ))}
             </div>
-            <div
-                id="display-user-picture"
-                className={
-                    'card_img_container' +
-                    (selectedPicture === -1 ? ' hidden' : '')
-                }
+            <div id="display-user-picture"
+                className={'card_img_container' +(selectedPicture === -1 ? ' hidden' : '')}
                 style={{
                     background:
                         'url(' +
@@ -251,35 +237,20 @@ const UserProfile = ({ user, scroll = 0 }) => {
                 }}
             >
                 <div id="picture-navigation">
-                    <div
-                        className="user-picture-nav user-picture-prev"
-                        onClick={prevPicture}
-                    >
+                    <div className="user-picture-nav user-picture-prev" onClick={prevPicture} >
                         <ArrowLeft />
                     </div>
                     {imgs.map((img, i) => (
-                        <div
-                            className={
-                                'img-indicator' +
-                                (selectedPicture === i ? ' img-selected' : '')
-                            }
-                            key={i}
-                            onClick={() => {
-                                setSelectedPicture(i)
-                            }}
-                        ></div>
+                        <div key={i}
+                            className={ 'img-indicator' + (selectedPicture === i ? ' img-selected' : '')}
+                            onClick={() => {setSelectedPicture(i)}}
+                       ></div>
                     ))}
-                    <div
-                        className="user-picture-nav user-picture-next"
-                        onClick={nextPicture}
-                    >
+                    <div className="user-picture-nav user-picture-next" onClick={nextPicture}>
                         <ArrowRight />
                     </div>
                 </div>
-                <button
-                    id="btn-close-magnify-picture"
-                    onClick={() => setSelectedPicture(-1)}
-                >
+                <button id="btn-close-magnify-picture" onClick={() => setSelectedPicture(-1)}>
                     <Clear />
                 </button>
             </div>

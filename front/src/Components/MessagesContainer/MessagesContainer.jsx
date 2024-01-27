@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import ChatComponent from '../ChatComponent'
 import UserProfile from '../UserProfile/UserProfile'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import {ArrowBack,} from '@mui/icons-material'
 import socket from '../../Socket/socket'
 import './MessagesContainer.css'
 import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
@@ -269,20 +269,13 @@ const MessagesContainer = () => {
                 >
                     {activeUser ? (
                         <>
+                            
                             <UserProfile user={activeUser} />
                             <div className="user-profile-go-back">
-                                <ArrowBackIcon
-                                    onClick={() => {
-                                        setActiveComponent(COMPONENTS.CHAT)
-                                    }}
-                                />
+                                <ArrowBack onClick={() => {setActiveComponent(COMPONENTS.CHAT)}}/>
                             </div>
                         </>
-                    ) : (
-                        <div className="no-conversation">
-                            {/* <p>Still waiting for the purr-fect match ?</p> */}
-                        </div>
-                    )}
+                        ) : (<></>)}
                 </div>
             </div>
         </div>

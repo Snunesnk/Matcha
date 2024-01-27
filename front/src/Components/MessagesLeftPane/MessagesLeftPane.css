@@ -171,7 +171,7 @@
     margin-left: 1%;
 }
 
-.message:hover .message-img-container:after {
+.message:hover .message-img-container::after {
     position: absolute;
     content: '';
     top: -4%;
