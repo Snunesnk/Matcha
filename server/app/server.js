@@ -69,7 +69,10 @@ if (
   process.argv.length >= 3 &&
   (process.argv[2] === "--populate-db" || process.argv[2] === "-p")
 ) {
-  populateDB();
+  console.time("Populate DB");
+  populateDB().then(() => {
+    console.timeEnd("Populate DB");
+  });
 }
 
 // set port, listen for requests

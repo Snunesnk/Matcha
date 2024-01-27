@@ -3,19 +3,19 @@ import { User } from "../models/user.model.js";
 import { cryptPassword } from "./password.service.js";
 import { UserSetting } from "../models/user-settings.model.js";
 import crypto from "crypto";
-import { publicIpv4 } from "public-ip";
-import { getIpInfo } from "./location.service.js";
 
-function sha256(data) {
-  const hash = crypto.createHash("sha256");
-  hash.update(Buffer.from(data));
-  const digest = hash.digest("hex");
-  return digest;
+async function sha256Async(data) {
+  return new Promise((resolve, reject) => {
+    const hash = crypto.createHash("sha256");
+    hash.update(Buffer.from(data));
+    const digest = hash.digest("hex");
+    resolve(digest);
+  });
 }
 
 async function createRandomUser() {
   const login = faker.helpers.unique(faker.internet.userName);
-  const hashedPassword = sha256(login);
+  const hashedPassword = await sha256Async(login);
   const password = await cryptPassword(hashedPassword);
   const name = faker.name.firstName();
   const surname = faker.name.lastName();
@@ -81,7 +81,7 @@ function generateRandomPoint(center, radius) {
   };
 }
 
-async function fillRandomUserProfile() {
+async function createUserProfile() {
   const bioLength = faker.datatype.number({ min: 1, max: 3 });
   const bio = faker.lorem.sentences(bioLength);
   const gender = faker.name.sex() === "male" ? "m" : "f";
@@ -110,17 +110,21 @@ async function fillRandomUserProfile() {
 
   // Corresponds to 96 boulevard bessières, 75017 Paris
   // const centerCoords = { lat: 48.89639, lng: 2.31845 };
+  const cities = [
+    { lat: 48.89639, lng: 2.31845 }, // Paris
+    { lat: 43.60426, lng: 1.44367 }, // Toulouse
+    { lat: 43.0794693, lng: 0.4419014 }, // Tuzaguet
+    { lat: 43.2957547, lng: -0.3685668 }, // Pau
+    { lat: 43.6463558, lng: 0.5850507 }, // Auch
+    { lat: 43.0090629, lng: 1.1195059 }, // Lorp-Sentaraille
+  ];
 
+  const centerCoords =
+    cities[faker.datatype.number({ min: 0, max: cities.length - 1 })];
   // Generate a random point within 100km of the center coordinates
-  // const { latitude, longitude } = generateRandomPoint(centerCoords, 100);
+  const { latitude, longitude } = generateRandomPoint(centerCoords, 100);
 
-  // const lat = faker.address.latitude(49, 43, 1);
-  // const lng = faker.address.longitude(3, -1, 1);
-
-  const lat = 43 + Math.random() * (49 - 43); // Latitude between 43 and 49
-  const lng = -1 + Math.random() * (3 + 1); // Longitude between -1 and 3
-
-  const coordinate = { x: lng, y: lat };
+  const coordinate = { x: longitude, y: latitude };
 
   const rating = faker.datatype.number({ min: 0, max: 95 });
 
@@ -144,7 +148,7 @@ async function fillRandomUserProfile() {
   };
 }
 
-function fillRandomUserSettings(login) {
+function createUserSettings(login) {
   const ageMin = 18;
   const ageMax = 55;
   const distMin = 0;
@@ -164,63 +168,69 @@ function fillRandomUserSettings(login) {
 }
 
 const addAdminUser = async () => {
-  const adminUser = await createRandomUser();
-  adminUser.login = "admin";
-  const hashedPassword = sha256("admin");
-  adminUser.password = await cryptPassword(hashedPassword);
-
-  const adminProfile = await fillRandomUserProfile();
-  adminProfile.prefMale = true;
-  adminProfile.prefFemale = true;
-  adminProfile.prefEnby = true;
-
-  const newUser = await User.create(adminUser);
   try {
+    const adminUser = await createRandomUser();
+    adminUser.login = "admin";
+    const hashedPassword = await sha256Async("admin");
+    adminUser.password = await cryptPassword(hashedPassword);
+
+    const adminProfile = await createUserProfile();
+    adminProfile.prefMale = true;
+    adminProfile.prefFemale = true;
+    adminProfile.prefEnby = true;
+
+    const newUser = await User.create(adminUser);
     await User.updateByLogin(newUser.login, adminProfile);
+
+    await UserSetting.create(createUserSettings(newUser.login));
+    console.log("Admin user created");
   } catch (err) {
     console.log(err);
   }
-
-  const userSettings = {
-    userLogin: newUser.login,
-    ageMin: 18,
-    ageMax: 55,
-    distMin: 0,
-    distMax: 100,
-    fameMin: 0,
-    fameMax: 100,
-  };
-  await UserSetting.create(userSettings);
-  console.log("Admin user created");
 };
+
+async function createUsersBatch(startIndex, endIndex) {
+  const userPromises = [];
+  for (let i = startIndex; i < endIndex; i++) {
+    userPromises.push(createUserWithSettings());
+  }
+  return Promise.all(userPromises);
+}
+
+async function createUserWithSettings() {
+  try {
+    const user = await createRandomUser();
+    await User.create(user);
+    const userProfile = await createUserProfile();
+    await User.updateByLogin(user.login, userProfile);
+    const userSettings = createUserSettings(user.login);
+    await UserSetting.create(userSettings);
+  } catch (err) {
+    console.error("Error in user creation:", err);
+  }
+}
+
+const BATCH_SIZE = 100;
 
 const populateDB = async () => {
   console.log("Populating DB");
-  const userCount = await User.count();
+  try {
+    const userCount = await User.count();
+    console.log(`User count: ${userCount}`);
+    for (let i = userCount; i < 2100; i += BATCH_SIZE) {
+      await createUsersBatch(i, Math.min(i + BATCH_SIZE, 10000));
+      console.log(`Batch processed: Users ${i} to ${i + BATCH_SIZE - 1}`);
+    }
 
-  for (let i = userCount; i < 10000; i++) {
-    createRandomUser().then((user) => {
-      User.create(user).then((newUser) => {
-        fillRandomUserProfile().then((userProfile) => {
-          User.updateByLogin(newUser.login, userProfile).then(() => {
-            const userSettings = fillRandomUserSettings(newUser.login);
-            UserSetting.create(userSettings).then(() => {
-              if (i % 500 === 0)
-                console.log(`Populating DB: ${i} users created`);
-            });
-          });
-        });
-      });
-    });
+    const adminExists = await User.getUserByLogin("admin");
+    if (!adminExists) {
+      await addAdminUser();
+    }
+
+    console.log("DB populated");
+  } catch (err) {
+    console.error("Error populating DB:", err);
   }
-
-  // Check if there's "admin" user
-  const admin = await User.getUserByLogin("admin");
-  if (!admin) {
-    await addAdminUser();
-  }
-
-  console.log("DB populated");
 };
 
 export default populateDB;

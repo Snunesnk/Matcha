@@ -134,6 +134,10 @@ export class User extends UserChunk {
   }
 
   set bio(bio) {
+    // if bio is more than 100 characters, cut it
+    if (bio && bio.length > 100) {
+      bio = bio.substring(0, 100);
+    }
     this._bio = bio;
   }
 
