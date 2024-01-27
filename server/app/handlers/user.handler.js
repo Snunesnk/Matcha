@@ -454,7 +454,9 @@ export default class {
     user.onboarded = true;
 
     try {
+      console.log("user", user)
       const data = await User.updateByLogin(login, user);
+      console.log("data", data)
       // I don't know why tags are not retreived...
       const tags = await UserTag.getUserTagsByLogin(login);
       data.tags = tags.map((tag) => new Tag({ bwid: tag.tagBwid }));

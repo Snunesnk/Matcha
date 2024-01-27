@@ -37,8 +37,7 @@ const LoginPage = () => {
             })
     }, [])
 
-    const handleSubmit = async (e) => {
-        e.preventDefault()
+    const handleSubmit = async () => {
         setLoading(true)
 
         const data = { ...formdata }
@@ -134,8 +133,7 @@ const LoginPage = () => {
 
                     <button
                         className="btn signup-btn"
-                        type="submit"
-                        onClick={() => setLoading(true)}
+                        onClick={() => {setLoading(true); handleSubmit()}}
                         disabled={loading}
                     >
                         {loading ? <CircularProgress /> : 'Sign In'}

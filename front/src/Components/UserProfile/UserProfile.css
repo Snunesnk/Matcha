@@ -166,7 +166,7 @@
     margin-top: 20px;
     padding: 20px 0;
     justify-content: center;
-    padding-bottom: calc(10vh + 70px);
+    padding-bottom: calc(10dvh + 70px);
 }
 
 .user-profile-tag {

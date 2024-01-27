@@ -14,7 +14,7 @@
     #profile_matching {
         position: relative;
         width: 450px;
-        height: min(calc(642px + 10vh + 50px), 80.86vh);
+        height: min(calc(642px + 10dvh + 50px), 80.86dvh);
         box-sizing: content-box;
         border: 4px solid white;
         overflow: hidden;
@@ -32,7 +32,7 @@
     }
 
     .card_img_container {
-        min-height: calc(90vh - 50px - 68px);
+        min-height: calc(90dvh - 50px - 68px);
     }
 }
 
@@ -171,8 +171,8 @@
     bottom: 0;
     z-index: 3;
     width: 100%;
-    padding-bottom: 5vh;
-    padding-top: 6.4vh;
+    padding-bottom: 5dvh;
+    padding-top: 6.4dvh;
     background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #200618 25%);
 }
 
