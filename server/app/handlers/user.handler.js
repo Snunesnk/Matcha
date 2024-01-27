@@ -45,15 +45,15 @@ export default class {
       if (user.verified !== true) {
         res.status(401).send({
           message: "EMAIL_NOT_VERIFIED",
-          email: user._email,
-          name: user._name,
-          login: user._login,
+          email: user.email,
+          name: user.name,
+          login: user.login,
         });
         return;
       }
 
       try {
-        getIpAddress(req).then(async (ip) => {
+        await getIpAddress(req).then(async (ip) => {
           const loc = await getIpInfo(ip);
           if (loc) {
             const userLoc = {
@@ -62,7 +62,7 @@ export default class {
                 x: loc.lon,
               },
             };
-            User.updateByLogin(login, userLoc);
+            await User.updateByLogin(user.login, userLoc);
           }
         });
       } catch (err) {

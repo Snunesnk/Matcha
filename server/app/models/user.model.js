@@ -49,8 +49,12 @@ export class User extends UserChunk {
       this._longitude !== undefined
     ) {
       this._coordinate = `POINT(${this._longitude} ${this._latitude})`;
-    } else {
-      this._coordinate = coordinate;
+    } else if (
+      coordinate &&
+      coordinate.x !== undefined &&
+      coordinate.y !== undefined
+    ) {
+      this._coordinate = `POINT(${coordinate.x} ${coordinate.y})`;
     }
   }
 
