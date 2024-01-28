@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 import SendIcon from '@mui/icons-material/Send'
-import PersonIcon from '@mui/icons-material/Person'
 import './index.css'
 import { useDispatch } from 'react-redux'
 import { USER_STATE_ACTIONS } from '../../constants'
@@ -80,6 +79,7 @@ const ChatComponent = ({
             .catch((error) => {
                 console.log(error)
             })
+            console.log(user)
     }, [user])
 
     useEffect(() => {
