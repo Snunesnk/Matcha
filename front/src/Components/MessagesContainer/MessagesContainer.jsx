@@ -269,8 +269,7 @@ const MessagesContainer = () => {
                 >
                     {activeUser ? (
                         <>
-                            
-                            <UserProfile user={activeUser} />
+                            <UserProfile user={activeUser} unlikable={true} />
                             <div className="user-profile-go-back">
                                 <ArrowBack onClick={() => {setActiveComponent(COMPONENTS.CHAT)}}/>
                             </div>
