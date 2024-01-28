@@ -6,6 +6,7 @@ const router = express.Router();
 
 // Create a new Like
 router.post("/like/", needOnboardedMiddleware, likeHandler.create);
+router.post("/dislike/", needOnboardedMiddleware, likeHandler.dislike);
 
 // Retrieve all received Likes for a user
 router.get("/like/:receiver", likeHandler.getReceivedLikes);
