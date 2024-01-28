@@ -53,6 +53,10 @@ const getProfileList = (setUserList, userFilters) => {
         })
 }
 
+const sendDislike = async (receiver) => {
+    ApiService.post("/dislike", {receiver}).catch(err => {console.log(err)})
+}
+
 const sendLike = async (receiver) => {
     return ApiService.post('/like', { receiver })
         .then((data) => {
@@ -176,6 +180,8 @@ const ProfileMatching = () => {
                 return
             }
         }
+        else if (state === 'disliked')
+            sendDislike(actualUser.login)
 
         transition(state)
     }

@@ -32,6 +32,12 @@ export default class {
       return;
     }
 
+    // like ok, update userRating
+    const receiverUser = await User.getFullUserByLogin(receiver);
+    if (receiverUser && receiverUser.rating < 100) {
+      User.updateByLogin(receiver, {...receiverUser, rating: receiverUser.rating + 1})
+    }
+
     const match = await User.checkBiDirectionnalMatch(issuer, receiver);
     if (!match || match.match_count === 0) {
       res.status(400).send({
@@ -103,6 +109,32 @@ export default class {
     }
   }
 
+
+  static async dislike(req, res) {
+    const issuer = req.decodedUser._login;
+    const receiver = req.body?.receiver;
+
+    if (!receiver) {
+      res.status(400).send({
+        message: "MISSING_DATA",
+      });
+      return;
+    }
+
+    if (issuer === receiver) {
+      res.status(400).send({
+        message: "CANNOT_DISLIKE_YOURSELF",
+      });
+      return;
+    }
+
+    // like ok, update userRating
+    const dislikedUser = await User.getFullUserByLogin(receiver);
+    if (dislikedUser && dislikedUser.rating > 0) {
+      User.updateByLogin(receiver, {...dislikedUser, rating: dislikedUser.rating - 1})
+    }
+  }
+  
   // Find a single Like with a login
   static getReceivedLikes = async (req, res) => {
     const receiver = req.params.receiver;
