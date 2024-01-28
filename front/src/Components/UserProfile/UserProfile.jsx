@@ -15,9 +15,11 @@ import {
 import './UserProfile.css'
 import socket from '../../Socket/socket'
 import { useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { formatTimeDifference } from '../MessagesLeftPane/MessagesLeftPane'
 import ReportPopup from '../ReportPopUp/ReportPopUp'
+import ApiService from '../../Services/api.service'
 
 const updateOnlineStatus = (status, actualUser, setCurrentOnline) => {
     if (actualUser?.login === status.login) {
@@ -73,6 +75,7 @@ function calculateAge(birthdate) {
 const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false }) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
     const [currentOnline, setCurrentOnline] = useState(false)
+    const navigate = useNavigate()
     const profileRef = useRef(null)
     const infosRef = useRef(null)
     const dispatch = useDispatch()
@@ -157,11 +160,17 @@ const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false }) => {
                         <button className="info-chip" onClick={toggleScroll}>
                             {scroll <= 50 ? 'Info +' : <ArrowDropUp />}
                         </button>
-                        {unlikable &&
-                        <button id="unlike-btn" onClick={toggleScroll}>
-                            Unlike
-                        </button>
-                        }
+
+                        {unlikable && 
+                        <button id="unlike-btn" 
+                            onClick={ () => ApiService.delete(`/like/${user.login}`)
+                            .then((response) => {
+                                navigate('/dashboard/messages')
+                            })
+                            .catch((error) => {
+                                console.log(error)
+                            })}
+                        >Unlike</button>}
                     </div>
 
                     <div className="main-info">

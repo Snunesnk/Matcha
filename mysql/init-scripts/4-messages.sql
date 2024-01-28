@@ -5,7 +5,7 @@ CREATE TABLE messages (
     receiver VARCHAR(50) NOT NULL,
     message_content TEXT,
     timestamp DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-    FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id),
+    FOREIGN KEY (conversation_id) REFERENCES conversations(conversation_id) ON DELETE CASCADE,
     FOREIGN KEY (sender) REFERENCES user(login) ON DELETE CASCADE,
     FOREIGN KEY (receiver) REFERENCES user(login) ON DELETE CASCADE
 );

@@ -15,6 +15,6 @@ router.get("/like/:receiver", likeHandler.getReceivedLikes);
 router.get("/like/:receiver", likeHandler.getMatches);
 
 // Delete a Like with issuer and reveiver logins
-router.delete("/like/:issuer/:reveiver", likeHandler.delete);
+router.delete("/like/:receiver", needOnboardedMiddleware, likeHandler.delete);
 
 export default router;
