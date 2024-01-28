@@ -146,12 +146,7 @@ const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false, setUnl
                 className="card_img_container"
                 style={{
                     background:
-                        'url(' +
-                        (user.imgA?.includes('http')
-                            ? ''
-                            : 'http://localhost:8080/api') +
-                        user.imgA +
-                        ') 50% 50% / cover no-repeat',
+                        'url(' + ApiService.getImgPath(user.imgA) + ') 50% 50% / cover no-repeat',
                 }}
             >
                 <div className="name_and_age_container">
@@ -226,10 +221,8 @@ const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false, setUnl
                         style={{
                             background:
                                 'url(' +
-                                (!img || img.includes('http')
-                                    ? ''
-                                    : 'http://localhost:8080/api') +
-                                img +
+                                (!img ? ''
+                                    : ApiService.getImgPath(img)) +
                                 ') center',
                         }}
                         onClick={() => setSelectedPicture(i)}
@@ -265,11 +258,9 @@ const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false, setUnl
                     background:
                         'url(' +
                         (selectedPicture >= imgs.length ||
-                        selectedPicture == -1 ||
-                        imgs[selectedPicture].indexOf('http') > -1
-                            ? ''
-                            : 'http://localhost:8080/api') +
-                        imgs[selectedPicture] +
+                        selectedPicture == -1 ? ''
+                            : ApiService.getImgPath(imgs[selectedPicture]))
+                         +
                         ') 50% 50% / cover no-repeat',
                 }}
             >
