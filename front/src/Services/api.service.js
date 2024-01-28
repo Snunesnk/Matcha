@@ -78,6 +78,17 @@ export default class ApiService {
         return this.callApi(url, options)
     }
 
+    static delete = async (url) => {
+        const options = {
+            method: 'DELETE',
+            credentials: 'include',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        }
+        return this.callApi(url, options)
+    }
+
     static put = async (url, data = {}) => {
         const options = {
             method: 'PUT',

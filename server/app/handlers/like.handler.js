@@ -209,10 +209,10 @@ export default class {
 
   // Delete a Like with the specified login in the request
   static delete = async (req, res) => {
-    const issuer = req.params.issuer;
-    const receiver = req.params.receiver;
+    const user = req.decodedUser.login;
+    const receiver = req.params.receiver
 
-    if (!issuer || !receiver) {
+    if (!user || !receiver) {
       res.status(400).send({
         message: `Missing issuer or receiver`,
       });
@@ -220,10 +220,10 @@ export default class {
     }
 
     try {
-      const data = await Like.delete(issuer, receiver);
+      const data = await Like.delete(receiver, user);
       if (data === null) {
         res.status(404).send({
-          message: `Could not find Like with for issuer ${issuer} and receiver ${receiver}`,
+          message: `Could not find Like with for issuer ${user} and receiver ${receiver}`,
         });
         return;
       }
@@ -231,7 +231,7 @@ export default class {
       res.status(200).send({ message: "Like was deleted successfully!" });
     } catch (error) {
       res.status(500).send({
-        message: `Could not delete Like for issuer ${issuer} and receiver ${receiver}`,
+        message: `Could not delete Like for issuer ${user} and receiver ${receiver}`,
       });
     }
   };

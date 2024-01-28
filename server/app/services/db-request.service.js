@@ -166,16 +166,17 @@ export class DbRequestService {
     });
   }
 
-  static async delete(tableName, condition) {
+  static async delete(tableName, filters ={}) {
     return new Promise((resolve, reject) => {
       if (!this.allowedTableUse.includes(tableName)) {
         reject(new Error("Table does not exist in database"));
       }
 
-      const query = `DELETE FROM ${tableName} WHERE ?`;
-      const params = [condition];
+      const { queryCondition, queryFilters } =
+        this._computeQueryCondition(filters);
+      const query = `DELETE FROM \`${tableName}\`` + queryCondition;
 
-      connection.query(query, params, (err, res) => {
+      connection.query(query, queryFilters, (err, res) => {
         if (err) {
           reject(err);
           return;
