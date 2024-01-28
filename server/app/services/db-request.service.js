@@ -25,6 +25,7 @@ export class DbRequestService {
     "matches",
     "conversations",
     "messages",
+    "blocked",
   ];
 
   /*
