@@ -32,6 +32,12 @@ export default class {
       return;
     }
 
+    // like ok, update userRating
+    const receiverUser = await User.getFullUserByLogin(receiver);
+    if (receiverUser && receiverUser.rating < 100) {
+      User.updateByLogin(receiver, {...receiverUser, rating: receiverUser.rating + 1})
+    }
+
     const match = await User.checkBiDirectionnalMatch(issuer, receiver);
     if (!match || match.match_count === 0) {
       res.status(400).send({
