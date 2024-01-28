@@ -154,7 +154,7 @@ const Navbar = () => {
         <div id="navbar">
             <Link to={loggedIn ? '/dashboard' : '/'}>
                 <div className="navTitle">
-                    <Pets fontSize="large"></Pets>
+                    <img src="/vite.svg" />
                     <h4 id="brand-name">MatChat</h4>
                 </div>
             </Link>

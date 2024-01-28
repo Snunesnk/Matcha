@@ -1,34 +1,56 @@
-import jwt from "jsonwebtoken";
+import { Blocked } from "../models/blocked.model.js";
+import { Like } from "../models/like.model.js";
 import { User } from "../models/user.model.js";
 
 export default class {
-  static validate = async (req, res) => {
-    const token = req.cookies.remember_me;
-    jwt.verify(token, process.env.JWT_SECRET, async (err, decoded) => {
-      if (err) {
-        const user = { loggedIn: false, onboarded: false, verified: false };
-        res.json(user);
-      } else {
-        const user = await User.getUserByLogin(decoded.login);
-        if (!user) {
-          return res.status(401).send({ message: "Unauthorized!" });
-        }
+  static block = async (req, res) => {
+    const blockedLogin = req.body.blockedLogin;
+    const user = req.decodedUser.login;
 
-        // Issue new token for sliding session
-        const newToken = await authenticationService.generateToken(user);
-        res.cookie("remember_me", newToken, {
-          maxAge: 1000 * 60 * 15,
-          httpOnly: true,
-          path: "/",
-          sameSite: "strict",
-        });
+    if (!blockedLogin) {
+      res.status(400).send({
+        message: `Missing blockedLogin parameter`,
+      });
+      return;
+    }
 
-        res.json({
-          loggedIn: true,
-          onboarded: user.onboarded || false,
-          verified: user.verified || false,
+    try {
+      const blockedUser = await User.getFullUserByLogin(blockedLogin);
+      if (!blockedUser) {
+        res.status(404).send({
+          message: `User ${blockedLogin} not found`,
         });
+        return;
       }
-    });
+
+      const blockedByUser = await Blocked.getAllBlockedByLogin(user);
+
+      if (
+        blockedByUser.find((blocked) => blocked.blockedLogin === blockedLogin)
+      ) {
+        res.status(400).send({
+          message: `User ${user} already blocked ${blockedLogin}`,
+        });
+        return;
+      }
+
+      await Blocked.create({
+        userLogin: user,
+        blockedLogin: blockedLogin,
+      });
+
+      await Like.delete({
+        userLogin: user,
+        likedLogin: blockedLogin,
+      });
+
+      res.status(200).send({
+        message: `User ${user} blocked ${blockedLogin}`,
+      });
+    } catch (error) {
+      res.status(500).send({
+        message: `Error blocking user ${blockedLogin}`,
+      });
+    }
   };
 }

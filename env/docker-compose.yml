@@ -39,7 +39,7 @@ services:
       - public
     healthcheck:
       test: "mysqladmin ping -h $$MYSQL_HOST -p$$MYSQL_ROOT_PASSWORD"
-      interval: 2s
+      interval: 5s
       retries: 20
       start_period: 5s
       timeout: 2s
