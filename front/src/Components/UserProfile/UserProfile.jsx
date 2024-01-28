@@ -72,10 +72,9 @@ function calculateAge(birthdate) {
     return age
 }
 
-const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false }) => {
+const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false, setUnlike= () => {} }) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
     const [currentOnline, setCurrentOnline] = useState(false)
-    const navigate = useNavigate()
     const profileRef = useRef(null)
     const infosRef = useRef(null)
     const dispatch = useDispatch()
@@ -164,8 +163,8 @@ const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false }) => {
                         {unlikable && 
                         <button id="unlike-btn" 
                             onClick={ () => ApiService.delete(`/like/${user.login}`)
-                            .then((response) => {
-                                navigate('/dashboard/messages')
+                            .then(() => {
+                                setUnlike(user.login)
                             })
                             .catch((error) => {
                                 console.log(error)

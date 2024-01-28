@@ -1,5 +1,7 @@
 import { DbRequestService } from "../services/db-request.service.js";
 import { Match } from "./matches.model.js"
+import { Notifications } from "./notifications.model.js";
+import { NOTIFICATION_TYPE, sendNotification } from "../socket/socket.js";
 export class Like {
   constructor(obj = {}) {
     this.receiver = obj.receiver;
@@ -106,19 +108,26 @@ export class Like {
   }
 
   static async delete(receiver, issuer) {
-    // const data = DbRequestService.delete("like", {
-    //   receiver: `${receiver}`,
-    //   issuer: `${issuer}`,
-    // });
-    // if (data.affectedRows === 0) {
-    //   return null;
-    // }
+    const data = DbRequestService.delete("like", {
+      receiver: `${receiver}`,
+      issuer: `${issuer}`,
+    });
+    if (data.affectedRows === 0) {
+      return null;
+    }
 
     const match = await Match.getMatch(receiver, issuer);
-    console.log(match);
+
     if (match) {
       Match.deleteMatch(match.user1, match.user2);
     }
+
+    Notifications.create({
+      login: receiver,
+      trigger_login: issuer,
+      type: NOTIFICATION_TYPE.UNLIKE,
+      message: `${issuer} unliked you!`,
+    });
     return true;
   }
 

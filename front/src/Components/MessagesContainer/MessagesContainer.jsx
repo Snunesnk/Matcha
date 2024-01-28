@@ -20,7 +20,9 @@ const handleSocketMessage = (
     activeConversation,
     setSocketMessage,
     setConversations,
-    setNewMatches
+    setNewMatches,
+    activeUser,
+    setActiveConversation,
 ) => {
     const matchUser = newMatches.find((match) => match.login === message.from)
     if (matchUser) {
@@ -37,6 +39,12 @@ const handleSocketMessage = (
             },
             ...prev,
         ])
+        setActiveConversation({
+            ...matchUser,
+            last_message_content: message.content,
+            last_message_timestamp: new Date(Date.now()),
+            read: activeUser.login === message.from,
+        })
     } else {
         setSocketMessage(message)
         setConversations((prev) => {
@@ -84,26 +92,29 @@ const handleSocketStatus = (status, setNewMatches, setConversations) => {
 }
 
 const MessagesContainer = () => {
-    const [activeComponent, setActiveComponent] = useState(
-        COMPONENTS.MESSAGE_LIST
-    )
+    const [activeComponent, setActiveComponent] = useState(COMPONENTS.MESSAGE_LIST)
     const [conversations, setConversations] = useState([])
     const [newMatches, setNewMatches] = useState([])
     const [activeConversation, setActiveConversation] = useState(null)
     const [activeUser, setActiveUser] = useState(null)
     const [socketMessage, setSocketMessage] = useState(null)
-
+    const [unlike, setUnlike] = useState(null)
     const location = useLocation()
     const searchParams = new URLSearchParams(location.search)
     const user = searchParams.get('user')
 
     const checkForNewMatch = (message) => {
-        if (message.type !== 'match') return
+        if (message.type === 'unlike')
+            setUnlike(message.payload)
+
+        if (message.type !== 'match')
+            return
 
         const matchUser = newMatches.find(
             (match) => match.name === message.payload.name
         )
-        if (matchUser) return
+        if (matchUser)
+            return
 
         setNewMatches((prev) => [message.payload, ...prev])
     }
@@ -153,7 +164,14 @@ const MessagesContainer = () => {
                 })
         }
         getMatches()
-    }, [])
+    }, [unlike])
+
+    useEffect(() => {
+        setActiveComponent(null)
+        setActiveConversation(null)
+        setActiveUser(null)
+        setConversations([])
+    }, [unlike])
 
     useEffect(() => {
         const handleSocketMessageEvent = (message) => {
@@ -163,7 +181,9 @@ const MessagesContainer = () => {
                 activeConversation,
                 setSocketMessage,
                 setConversations,
-                setNewMatches
+                setNewMatches,
+                activeUser,
+                setActiveConversation
             )
         }
         const handleSocketStatusEvent = (status) => {
@@ -180,8 +200,10 @@ const MessagesContainer = () => {
         }
     }, [socket, newMatches, activeConversation])
 
+
     useEffect(() => {
-        if (!activeConversation) return
+        if (!activeConversation) 
+            return
 
         setConversations((prev) => {
             const conversation = prev.find(
@@ -197,6 +219,8 @@ const MessagesContainer = () => {
 
         ApiService.get('/user/' + activeConversation.login)
             .then((data) => {
+                console.log(data)
+                console.log(activeConversation)
                 setActiveUser(data)
             })
             .catch((error) => {
@@ -228,8 +252,7 @@ const MessagesContainer = () => {
     return (
         <div id="message-pannel">
             <div id="messages_component_container">
-                <div
-                    id="chat_list_container"
+                <div id="chat_list_container"
                     data-active={
                         activeComponent === COMPONENTS.MESSAGE_LIST ||
                         activeComponent === COMPONENTS.NOTIFICATION
@@ -243,8 +266,7 @@ const MessagesContainer = () => {
                         setActiveComponent={setActiveComponent}
                     />
                 </div>
-                <div
-                    id="chat_container"
+                <div id="chat_container"
                     data-active={activeComponent === COMPONENTS.CHAT}
                     className="responsive-component"
                 >
@@ -269,7 +291,7 @@ const MessagesContainer = () => {
                 >
                     {activeUser ? (
                         <>
-                            <UserProfile user={activeUser} unlikable={true} />
+                            <UserProfile user={activeUser} unlikable={true} setUnlike={setUnlike} />
                             <div className="user-profile-go-back">
                                 <ArrowBack onClick={() => {setActiveComponent(COMPONENTS.CHAT)}}/>
                             </div>
