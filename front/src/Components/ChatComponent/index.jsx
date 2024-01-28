@@ -118,7 +118,7 @@ const ChatComponent = ({
                     <ArrowBackIcon onClick={() => {setActiveComponent(components.MESSAGE_LIST)}}/>
                     <div id="see-profile" onClick={() => setActiveComponent(components.USER_PROFILE)}> 
                         <div className="message-img-container">
-                            <img src={user.imgA} alt="profile_pic" />
+                            <img src={ApiService.getImgPath(user.imgA)} alt="profile_pic" />
                         </div>
                         <div className="message_username">{user.name}</div>
                     </div>

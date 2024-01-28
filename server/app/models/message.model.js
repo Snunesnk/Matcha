@@ -82,6 +82,9 @@ export class Message {
         newMessage.from
       );
     }
+    else {
+      conv = new Conversation(conv)
+    }
 
     const message = new Message({
       conversation_id: conv.conversation_id,

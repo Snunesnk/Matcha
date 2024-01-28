@@ -357,7 +357,9 @@ export class User extends UserChunk {
   }
 
   static async getFullUserByLogin(login) {
+    console.log("user: ", login)
     const data = await DbRequestService.read("user", { login: `${login}` });
+    console.log("data", data)
     if (data.length === 0) {
       return null;
     }

@@ -191,6 +191,7 @@
     border-radius: 50%;
     position: relative;
     z-index: 2;
+    object-fit: cover;
 }
 
 .message .message-info {
