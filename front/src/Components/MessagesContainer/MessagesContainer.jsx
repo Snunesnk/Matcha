@@ -167,6 +167,7 @@ const MessagesContainer = () => {
     }, [unlike])
 
     useEffect(() => {
+        if (!unlike) return;
         setActiveComponent(null)
         setActiveConversation(null)
         setActiveUser(null)
