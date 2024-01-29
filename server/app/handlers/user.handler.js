@@ -180,7 +180,7 @@ export default class {
     }
 
     // Trim fields
-    const userChunk = new UserChunk(req.body)
+    const userChunk = new UserChunk(req.body);
 
     // TODO - Validate birthdate
     if (isNaN(new Date(userChunk.dateOfBirth))) {
@@ -240,7 +240,7 @@ export default class {
     }
 
     // Create a User
-    userChunk.password = password
+    userChunk.password = password;
 
     try {
       // Save User in the database
@@ -257,7 +257,7 @@ export default class {
         message: "COULD_NOT_CREATE",
       });
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).send({
         message: error.message || "Error occurred while creating the User.",
       });
@@ -409,8 +409,6 @@ export default class {
     const user = req.body.user || {};
     const login = req.decodedUser._login;
 
-    console.log("updating")
-
     // check for missing data
     if (!login || Object.keys(user).length === 0) {
       res.status(400).send({
@@ -467,7 +465,7 @@ export default class {
       }
       res.status(200).send(data);
     } catch (error) {
-      console.log(error)
+      console.log(error);
       res.status(500).send({
         error: { ...error },
         message: `Error updating User with login: ${login}`,

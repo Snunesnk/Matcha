@@ -167,7 +167,7 @@ export class DbRequestService {
     });
   }
 
-  static async delete(tableName, filters ={}) {
+  static async delete(tableName, filters = {}) {
     return new Promise((resolve, reject) => {
       if (!this.allowedTableUse.includes(tableName)) {
         reject(new Error("Table does not exist in database"));
