@@ -16,7 +16,7 @@ import {
 import './ReportPopUp.css'
 import ApiService from '../../Services/api.service'
 
-function ReportPopup({ user, transition = () => {} }) {
+function ReportPopup({ user, setUnlike, transition = () => {} }) {
     const [open, setOpen] = useState(false)
     const [reason, setReason] = useState('fake_profile')
 
@@ -32,12 +32,14 @@ function ReportPopup({ user, transition = () => {} }) {
         // Handle the confirmation action, for example, by sending data to the server
         console.log(reason) // This would be replaced by an actual function call
         setOpen(false)
-        ApiService.post('/report', { blockedLogin: user.login }).catch(
-            (error) => {
+        ApiService.post('/report', { blockedLogin: user.login })
+            .then(() => {
+                transition('disliked')
+                setUnlike(user.login)
+            })
+            .catch((error) => {
                 console.log(error)
-            }
-        )
-        transition('disliked')
+            })
     }
 
     return (

@@ -35,8 +35,6 @@ export class Blocked {
       }
     );
 
-    console.log(data);
-
     if (data.affectedRows === 0) {
       return null;
     }

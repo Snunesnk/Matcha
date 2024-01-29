@@ -24,7 +24,6 @@ export default class {
       }
 
       const blockedByUser = await Blocked.getAllBlockedByLogin(user);
-      console.log(blockedByUser);
       if (blockedByUser) {
         const test = blockedByUser.find((blk) => blk.blocked === blocked);
         if (test) {
@@ -40,10 +39,7 @@ export default class {
         blocked: blocked,
       });
 
-      await Like.delete({
-        userLogin: user,
-        likedLogin: blocked,
-      });
+      await Like.delete(blocked, user, false);
 
       res.status(200).send({
         message: `User ${user} blocked ${blocked}`,

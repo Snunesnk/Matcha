@@ -220,7 +220,13 @@ const UserProfile = ({
                     {user.surname} {user.name}
                     <i id="user-login">@{user.login}</i>
                 </div>
-                {!isMe && <ReportPopup user={user} transition={transition} />}
+                {!isMe && (
+                    <ReportPopup
+                        user={user}
+                        transition={transition}
+                        setUnlike={setUnlike}
+                    />
+                )}
             </div>
 
             <div id="user-profile-bio">

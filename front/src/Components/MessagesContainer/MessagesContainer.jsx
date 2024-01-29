@@ -169,10 +169,37 @@ const MessagesContainer = () => {
 
     useEffect(() => {
         if (!unlike) return
+        console.log('unlike', unlike)
+
         setActiveComponent(null)
+        // Remove active conversation from conversations if it was unliked
+        if (activeConversation && activeConversation.login === unlike) {
+            setConversations((prev) => {
+                const conversation = prev.find(
+                    (c) => c.login === activeConversation.login
+                )
+                if (conversation) {
+                    const copy = [...prev]
+                    copy.splice(copy.indexOf(conversation), 1)
+                    return copy
+                } else {
+                    return prev
+                }
+            })
+        }
         setActiveConversation(null)
         setActiveUser(null)
-        setConversations([])
+        // Delete match from newMatches if it was unliked
+        setNewMatches((prev) => {
+            const match = prev.find((m) => m.login === unlike)
+            if (match) {
+                const copy = [...prev]
+                copy.splice(copy.indexOf(match), 1)
+                return copy
+            } else {
+                return prev
+            }
+        })
     }, [unlike])
 
     useEffect(() => {
