@@ -54,7 +54,7 @@ const getProfileList = (setUserList, userFilters) => {
 }
 
 const sendDislike = async (receiver) => {
-    ApiService.post("/dislike", {receiver}).catch(err => {console.log(err)})
+    ApiService.post("/dislike", { receiver }).catch(err => { console.log(err) })
 }
 
 const sendLike = async (receiver) => {
@@ -111,19 +111,21 @@ const ProfileMatching = () => {
 
         const getLocation = async () => {
             const loc = await getUserLocation()
-            if (loc.lat !== null && loc.lng !== null) {
-                setLoading(true)
+            console.log(loc)
 
+            if (loc.lat !== null && loc.lng !== null) {
                 ApiService.get('/location', {
                     lat: loc.lat,
                     lng: loc.lng,
                 })
-                    .then(() => {
-                        getProfileList(setUserList, userFilters)
-                    })
-                    .catch((error) => {
-                        console.log(error)
-                    })
+                .then(() => {
+                    getProfileList(setUserList, userFilters)
+                    setLoading(false)
+                })
+                .catch((error) => {
+                    console.log(error)
+                    setLoading(false)
+                })
             }
         }
         getLocation()
