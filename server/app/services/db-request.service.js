@@ -367,9 +367,6 @@ WHERE
 
       query += `, u.rating DESC, commonTagsCount DESC`;
 
-      console.log("query", query)
-      console.log("parameter", parameters)
-
       connection.query(query, parameters, (err, res) => {
         if (err) {
           console.log(err)

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
-import Button from '../Button/Button'
 import ImageUpload from '../ImageUpload'
 import Select from '../Select/Select'
 import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
 import './Settings.css'
 import ApiService from '../../Services/api.service'
+import { CircularProgress } from '@mui/material'
 
 const GENDERS = [
     {
@@ -78,14 +78,8 @@ const saveUserImages = async (login, pictures) => {
     }
 }
 
-const saveUserInfos = (userData, setUser) => {
-    ApiService.put('/user', { user: userData })
-        .then((user) => {
-            setUser(user)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+const saveUserInfos = async (userData) => {
+    return ApiService.put('/user', { user: userData })
 }
 
 const UserSettings = () => {
@@ -135,15 +129,23 @@ const UserSettings = () => {
                 ?.key,
             bio: personalBio,
             tags: personalTags,
-            name: lastName,
-            surname: firstName,
+            name: firstName,
+            surname: lastName,
+            email: email,
             preferences: {
                 prefFemale: user.prefFemale,
                 prefMale: user.prefMale,
                 prefEnby: user.prefEnby,
             },
         }
-        saveUserInfos(userData, setUser)
+        saveUserInfos(userData, setUser).then(user => {
+            setUser(user);
+            setPersonalBtnDisabled(false)
+            alert("Settings saved !")
+        }).catch(err => {
+            console.log(err)
+            alert("An error occured.")
+        })
     }
 
     if (!user) return <div>Loading ... Please wait</div>
@@ -208,13 +210,20 @@ const UserSettings = () => {
                         setValue={(e, tagsList) => setPersonalTags(tagsList)}
                     />
                 </div>
-
+{/* 
                 <Button
                     text={'Save personal infos'}
                     btnClass={'white mrg-top-30'}
                     onClick={savePersonalInfos}
                     disabled={personalBtnDisabled}
-                />
+                /> */}
+                    <button
+                        className="btn mrg-top-30 sm"
+                        onClick={savePersonalInfos}
+                        disabled={personalBtnDisabled}
+                    >
+                        {personalBtnDisabled ? <CircularProgress /> : 'Save informations'}
+                    </button>
             </div>
         </div>
     )
