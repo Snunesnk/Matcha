@@ -31,7 +31,7 @@ services:
       dockerfile: ./Dockerfile
     restart: always
     volumes:
-      - ../mysql/data:/var/lib/mysql
+      - matcha-mysql-data:/var/lib/mysql
     env_file: ../server/.env
     ports:
       - 3306:3306
@@ -43,7 +43,7 @@ services:
       retries: 20
       start_period: 5s
       timeout: 2s
-      
+
   matcha_frontend:
     container_name: matcha_frontend
     build:
@@ -58,7 +58,7 @@ services:
       - public
     depends_on:
       matcha_backend:
-          condition: service_healthy
+        condition: service_healthy
 
 networks:
   public:

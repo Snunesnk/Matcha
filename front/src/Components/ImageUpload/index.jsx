@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react'
 import './index.css'
 import '../Settings/Settings.css'
 import ApiService from '../../Services/api.service'
+import Pica from 'pica'
 
 const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
     const [imgs, setImgs] = useState(defaultImages)
@@ -25,24 +26,42 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
         }
     }, [imgRef])
 
-    const onChange = (e) => {
-        const fileList = e.target.files;
+    const onChange = async (e) => {
+        const fileList = e.target.files
+        const pica = Pica()
 
-        setFileList((currentFiles) => {
-            const updatedFiles = [...currentFiles];
-            for (let i = 0; i < fileList.length && currentFiles.length + i < 5; i++) {
-                updatedFiles.push(fileList[i]);
-            }
-            return updatedFiles;
-        });
+        const resizedImages = await Promise.all(
+            Array.from(fileList).map((file) => {
+                return new Promise((resolve, reject) => {
+                    const img = new Image()
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas')
+                        const maxSide = 600
+                        const scale = Math.min(
+                            maxSide / img.width,
+                            maxSide / img.height
+                        )
+                        canvas.width = img.width * scale
+                        canvas.height = img.height * scale
 
-        setImgs((currentImgs) => {
-            const updatedImgs = [...currentImgs];
-            for (let i = 0; i < fileList.length && currentImgs.length + i < 5; i++) {
-                updatedImgs.push(URL.createObjectURL(fileList[i]));
-            }
-            return updatedImgs;
-        });
+                        pica.resize(img, canvas)
+                            .then((result) =>
+                                pica.toBlob(result, file.type, 0.9)
+                            )
+                            .then((blob) => resolve(blob))
+                            .catch((error) => reject(error))
+                    }
+                    img.src = URL.createObjectURL(file)
+                })
+            })
+        )
+
+        setFileList((currentFiles) => [...currentFiles, ...resizedImages])
+
+        setImgs((currentImgs) => [
+            ...currentImgs,
+            ...resizedImages.map((blob) => URL.createObjectURL(blob)),
+        ])
     }
 
     const removeImg = (img) => {
