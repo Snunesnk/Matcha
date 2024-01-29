@@ -38,7 +38,7 @@ class AuthenticationService {
         next();
       })
       .catch((err) => {
-        res.status(403).json({ message: "Invalid token.", error: err });
+        res.status(401).json({ message: "Invalid token.", error: err });
       });
   }
 }

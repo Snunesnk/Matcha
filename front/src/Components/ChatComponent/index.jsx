@@ -79,7 +79,6 @@ const ChatComponent = ({
             .catch((error) => {
                 console.log(error)
             })
-            console.log(user)
     }, [user])
 
     useEffect(() => {
@@ -117,10 +116,22 @@ const ChatComponent = ({
         <div id="messages_container">
             <div id="chat_header">
                 <div id="person_info">
-                    <ArrowBackIcon onClick={() => {setActiveComponent(components.MESSAGE_LIST)}}/>
-                    <div id="see-profile" onClick={() => setActiveComponent(components.USER_PROFILE)}> 
+                    <ArrowBackIcon
+                        onClick={() => {
+                            setActiveComponent(components.MESSAGE_LIST)
+                        }}
+                    />
+                    <div
+                        id="see-profile"
+                        onClick={() =>
+                            setActiveComponent(components.USER_PROFILE)
+                        }
+                    >
                         <div className="message-img-container">
-                            <img src={ApiService.getImgPath(user.imgA)} alt="profile_pic" />
+                            <img
+                                src={ApiService.getImgPath(user.imgA)}
+                                alt="profile_pic"
+                            />
                         </div>
                         <div className="message_username">{user.name}</div>
                     </div>

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import ChatComponent from '../ChatComponent'
 import UserProfile from '../UserProfile/UserProfile'
-import {ArrowBack,} from '@mui/icons-material'
+import { ArrowBack } from '@mui/icons-material'
 import socket from '../../Socket/socket'
 import './MessagesContainer.css'
 import MessagesLeftPane from '../MessagesLeftPane/MessagesLeftPane'
@@ -22,7 +22,7 @@ const handleSocketMessage = (
     setConversations,
     setNewMatches,
     activeUser,
-    setActiveConversation,
+    setActiveConversation
 ) => {
     const matchUser = newMatches.find((match) => match.login === message.from)
     if (matchUser) {
@@ -35,7 +35,9 @@ const handleSocketMessage = (
                 ...matchUser,
                 last_message_content: message.content,
                 last_message_timestamp: new Date(Date.now()),
-                read: activeConversation && activeConversation.login === message.from,
+                read:
+                    activeConversation &&
+                    activeConversation.login === message.from,
             },
             ...prev,
         ])
@@ -92,7 +94,9 @@ const handleSocketStatus = (status, setNewMatches, setConversations) => {
 }
 
 const MessagesContainer = () => {
-    const [activeComponent, setActiveComponent] = useState(COMPONENTS.MESSAGE_LIST)
+    const [activeComponent, setActiveComponent] = useState(
+        COMPONENTS.MESSAGE_LIST
+    )
     const [conversations, setConversations] = useState([])
     const [newMatches, setNewMatches] = useState([])
     const [activeConversation, setActiveConversation] = useState(null)
@@ -104,17 +108,14 @@ const MessagesContainer = () => {
     const user = searchParams.get('user')
 
     const checkForNewMatch = (message) => {
-        if (message.type === 'unlike')
-            setUnlike(message.payload)
+        if (message.type === 'unlike') setUnlike(message.payload)
 
-        if (message.type !== 'match')
-            return
+        if (message.type !== 'match') return
 
         const matchUser = newMatches.find(
             (match) => match.name === message.payload.name
         )
-        if (matchUser)
-            return
+        if (matchUser) return
 
         setNewMatches((prev) => [message.payload, ...prev])
     }
@@ -167,11 +168,38 @@ const MessagesContainer = () => {
     }, [unlike])
 
     useEffect(() => {
-        if (!unlike) return;
+        if (!unlike) return
+        console.log('unlike', unlike)
+
         setActiveComponent(null)
+        // Remove active conversation from conversations if it was unliked
+        if (activeConversation && activeConversation.login === unlike) {
+            setConversations((prev) => {
+                const conversation = prev.find(
+                    (c) => c.login === activeConversation.login
+                )
+                if (conversation) {
+                    const copy = [...prev]
+                    copy.splice(copy.indexOf(conversation), 1)
+                    return copy
+                } else {
+                    return prev
+                }
+            })
+        }
         setActiveConversation(null)
         setActiveUser(null)
-        setConversations([])
+        // Delete match from newMatches if it was unliked
+        setNewMatches((prev) => {
+            const match = prev.find((m) => m.login === unlike)
+            if (match) {
+                const copy = [...prev]
+                copy.splice(copy.indexOf(match), 1)
+                return copy
+            } else {
+                return prev
+            }
+        })
     }, [unlike])
 
     useEffect(() => {
@@ -201,10 +229,8 @@ const MessagesContainer = () => {
         }
     }, [socket, newMatches, activeConversation])
 
-
     useEffect(() => {
-        if (!activeConversation) 
-            return
+        if (!activeConversation) return
 
         setConversations((prev) => {
             const conversation = prev.find(
@@ -220,8 +246,6 @@ const MessagesContainer = () => {
 
         ApiService.get('/user/' + activeConversation.login)
             .then((data) => {
-                console.log(data)
-                console.log(activeConversation)
                 setActiveUser(data)
             })
             .catch((error) => {
@@ -253,7 +277,8 @@ const MessagesContainer = () => {
     return (
         <div id="message-pannel">
             <div id="messages_component_container">
-                <div id="chat_list_container"
+                <div
+                    id="chat_list_container"
                     data-active={
                         activeComponent === COMPONENTS.MESSAGE_LIST ||
                         activeComponent === COMPONENTS.NOTIFICATION
@@ -267,7 +292,8 @@ const MessagesContainer = () => {
                         setActiveComponent={setActiveComponent}
                     />
                 </div>
-                <div id="chat_container"
+                <div
+                    id="chat_container"
                     data-active={activeComponent === COMPONENTS.CHAT}
                     className="responsive-component"
                 >
@@ -292,12 +318,22 @@ const MessagesContainer = () => {
                 >
                     {activeUser ? (
                         <>
-                            <UserProfile user={activeUser} unlikable={true} setUnlike={setUnlike} />
+                            <UserProfile
+                                user={activeUser}
+                                unlikable={true}
+                                setUnlike={setUnlike}
+                            />
                             <div className="user-profile-go-back">
-                                <ArrowBack onClick={() => {setActiveComponent(COMPONENTS.CHAT)}}/>
+                                <ArrowBack
+                                    onClick={() => {
+                                        setActiveComponent(COMPONENTS.CHAT)
+                                    }}
+                                />
                             </div>
                         </>
-                        ) : (<></>)}
+                    ) : (
+                        <></>
+                    )}
                 </div>
             </div>
         </div>

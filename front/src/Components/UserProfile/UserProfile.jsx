@@ -72,7 +72,14 @@ function calculateAge(birthdate) {
     return age
 }
 
-const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false, setUnlike= () => {} }) => {
+const UserProfile = ({
+    user,
+    scroll = 0,
+    unlikable = false,
+    isMe = false,
+    setUnlike = () => {},
+    transition = () => {},
+}) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
     const [currentOnline, setCurrentOnline] = useState(false)
     const profileRef = useRef(null)
@@ -146,25 +153,33 @@ const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false, setUnl
                 className="card_img_container"
                 style={{
                     background:
-                        'url(' + ApiService.getImgPath(user.imgA) + ') 50% 50% / cover no-repeat',
+                        'url(' +
+                        ApiService.getImgPath(user.imgA) +
+                        ') 50% 50% / cover no-repeat',
                 }}
             >
                 <div className="name_and_age_container">
-                    <div id='btn-row'>
+                    <div id="btn-row">
                         <button className="info-chip" onClick={toggleScroll}>
                             {scroll <= 50 ? 'Info +' : <ArrowDropUp />}
                         </button>
 
-                        {unlikable && 
-                        <button id="unlike-btn" 
-                            onClick={ () => ApiService.delete(`/like/${user.login}`)
-                            .then(() => {
-                                setUnlike(user.login)
-                            })
-                            .catch((error) => {
-                                console.log(error)
-                            })}
-                        >Unlike</button>}
+                        {unlikable && (
+                            <button
+                                id="unlike-btn"
+                                onClick={() =>
+                                    ApiService.delete(`/like/${user.login}`)
+                                        .then(() => {
+                                            setUnlike(user.login)
+                                        })
+                                        .catch((error) => {
+                                            console.log(error)
+                                        })
+                                }
+                            >
+                                Unlike
+                            </button>
+                        )}
                     </div>
 
                     <div className="main-info">
@@ -205,7 +220,13 @@ const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false, setUnl
                     {user.surname} {user.name}
                     <i id="user-login">@{user.login}</i>
                 </div>
-                {!isMe && <ReportPopup />}
+                {!isMe && (
+                    <ReportPopup
+                        user={user}
+                        transition={transition}
+                        setUnlike={setUnlike}
+                    />
+                )}
             </div>
 
             <div id="user-profile-bio">
@@ -221,8 +242,7 @@ const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false, setUnl
                         style={{
                             background:
                                 'url(' +
-                                (!img ? ''
-                                    : ApiService.getImgPath(img)) +
+                                (!img ? '' : ApiService.getImgPath(img)) +
                                 ') center',
                         }}
                         onClick={() => setSelectedPicture(i)}
@@ -257,10 +277,9 @@ const UserProfile = ({ user, scroll = 0, unlikable = false, isMe = false, setUnl
                 style={{
                     background:
                         'url(' +
-                        (selectedPicture >= imgs.length ||
-                        selectedPicture == -1 ? ''
-                            : ApiService.getImgPath(imgs[selectedPicture]))
-                         +
+                        (selectedPicture >= imgs.length || selectedPicture == -1
+                            ? ''
+                            : ApiService.getImgPath(imgs[selectedPicture])) +
                         ') 50% 50% / cover no-repeat',
                 }}
             >

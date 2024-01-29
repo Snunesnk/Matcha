@@ -30,13 +30,9 @@ async function removeOldPictures(user, login) {
 export default async function (req, res) {
   const login = req.decodedUser._login;
 
-  console.log("test")
   try {
-    console.log("up")
     await upload(req, res);
     if (Object.keys(req.files).length === 0) {
-      console.log("hoho")
-      console.log(res)
       return res
         .status(400)
         .send({ message: "Please upload at least one file." });
@@ -55,10 +51,8 @@ export default async function (req, res) {
     if (req.files.imgC) user.imgC = req.files.imgC[0].path;
     if (req.files.imgD) user.imgD = req.files.imgD[0].path;
     if (req.files.imgE) user.imgE = req.files.imgE[0].path;
-    console.log("user", user)
     await removeOldPictures(user, login);
 
-    console.log("removed")
     const data = await User.updateByLogin(login, user);
     if (data === null) {
       // not found User with the login

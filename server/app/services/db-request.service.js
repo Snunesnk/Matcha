@@ -167,7 +167,7 @@ export class DbRequestService {
     });
   }
 
-  static async delete(tableName, filters ={}) {
+  static async delete(tableName, filters = {}) {
     return new Promise((resolve, reject) => {
       if (!this.allowedTableUse.includes(tableName)) {
         reject(new Error("Table does not exist in database"));
@@ -222,12 +222,14 @@ SELECT DISTINCT
   COALESCE(matchingTags.tagCount, 0) AS commonTagsCount,
   ST_Distance_Sphere(u.coordinate, currentUser.coordinate) * 0.001 AS distance
 FROM
-    user u
+  user u
   INNER JOIN userSettings us ON u.login = us.userLogin
   INNER JOIN user currentUser ON currentUser.login = ?
   INNER JOIN userSettings currentUs ON currentUser.login = currentUs.userLogin
   LEFT JOIN userTag ut ON u.login = ut.userLogin
   LEFT JOIN notifications n ON u.login = n.login AND n.type = 'visit' AND n.trigger_login = currentUser.login
+  LEFT JOIN blocked b1 ON u.login = b1.blocked AND currentUser.login = b1.blocker
+  LEFT JOIN blocked b2 ON currentUser.login = b2.blocked AND u.login = b2.blocker
   LEFT JOIN (
     SELECT
       ut.userLogin,
@@ -244,7 +246,7 @@ FROM
         query += `)\n`;
       }
       query += `
-            GROUP BY ut.userLogin
+    GROUP BY ut.userLogin
   ) tc ON tc.userLogin = u.login
   LEFT JOIN (
     SELECT 
@@ -259,11 +261,12 @@ FROM
     GROUP BY 
       ut1.userLogin
   ) matchingTags ON u.login = matchingTags.userLogin
-  WHERE
-      u.login <> currentUser.login
-      AND u.verified = 1
-      AND u.onboarded = 1
-      AND u.gender IN (?`;
+WHERE
+    u.login <> currentUser.login
+    AND b1.blocker IS NULL AND b2.blocker IS NULL
+    AND u.verified = 1
+    AND u.onboarded = 1
+    AND u.gender IN (?`;
       for (let i = 1; i < genderPreferences.length; i++) {
         query += ", ?";
       }
@@ -274,8 +277,8 @@ FROM
       OR currentUs.ageMax IS NULL
       OR TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) <= currentUs.ageMax
     )
-      AND u.rating BETWEEN currentUs.fameMin AND currentUs.fameMax
-      AND ST_Distance_Sphere(u.coordinate, currentUser.coordinate) BETWEEN currentUs.distMin * 1000 AND currentUs.distMax * 1000\n`;
+    AND u.rating BETWEEN currentUs.fameMin AND currentUs.fameMax
+    AND ST_Distance_Sphere(u.coordinate, currentUser.coordinate) BETWEEN currentUs.distMin * 1000 AND currentUs.distMax * 1000\n`;
 
       if (matchingParameters.tags.length > 0) {
         query += `
@@ -384,8 +387,11 @@ FROM
     INNER JOIN userSettings likerSettings ON liker.login = likerSettings.userLogin
     INNER JOIN user likee ON likee.login = ?
     LEFT JOIN userSettings likeeSettings ON likee.login = likeeSettings.userLogin
+    LEFT JOIN blocked b1 ON likee.login = b1.blocked AND liker.login = b1.blocker
+    LEFT JOIN blocked b2 ON liker.login = b2.blocked AND likee.login = b2.blocker
 WHERE
     liker.login = ?
+    AND b1.blocker IS NULL AND b2.blocker IS NULL
     AND (
         (liker.gender = 'm' AND likee.prefMale) OR
         (liker.gender = 'f' AND likee.prefFemale) OR

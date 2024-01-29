@@ -14,8 +14,9 @@ import {
     FormLabel,
 } from '@mui/material'
 import './ReportPopUp.css'
+import ApiService from '../../Services/api.service'
 
-function ReportPopup() {
+function ReportPopup({ user, setUnlike, transition = () => {} }) {
     const [open, setOpen] = useState(false)
     const [reason, setReason] = useState('fake_profile')
 
@@ -31,6 +32,14 @@ function ReportPopup() {
         // Handle the confirmation action, for example, by sending data to the server
         console.log(reason) // This would be replaced by an actual function call
         setOpen(false)
+        ApiService.post('/report', { blockedLogin: user.login })
+            .then(() => {
+                transition('disliked')
+                setUnlike(user.login)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }
 
     return (

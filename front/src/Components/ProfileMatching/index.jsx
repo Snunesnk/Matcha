@@ -54,7 +54,9 @@ const getProfileList = (setUserList, userFilters) => {
 }
 
 const sendDislike = async (receiver) => {
-    ApiService.post("/dislike", { receiver }).catch(err => { console.log(err) })
+    ApiService.post('/dislike', { receiver }).catch((err) => {
+        console.log(err)
+    })
 }
 
 const sendLike = async (receiver) => {
@@ -118,14 +120,14 @@ const ProfileMatching = () => {
                     lat: loc.lat,
                     lng: loc.lng,
                 })
-                .then(() => {
-                    getProfileList(setUserList, userFilters)
-                    setLoading(false)
-                })
-                .catch((error) => {
-                    console.log(error)
-                    setLoading(false)
-                })
+                    .then(() => {
+                        getProfileList(setUserList, userFilters)
+                        setLoading(false)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        setLoading(false)
+                    })
             }
         }
         getLocation()
@@ -166,28 +168,6 @@ const ProfileMatching = () => {
         }
     }, [profileRef.current])
 
-    const setCardState = async (state) => {
-        dispatch({
-            type: USER_STATE_ACTIONS.SEND_VISIT,
-            payload: {
-                to: actualUser.login,
-            },
-        })
-
-        if (state === 'liked') {
-            const res = await sendLike(actualUser.login)
-            if (res.match) {
-                setMatch(true)
-                setEvaluation('liked')
-                return
-            }
-        }
-        else if (state === 'disliked')
-            sendDislike(actualUser.login)
-
-        transition(state)
-    }
-
     const transition = (state) => {
         let firstTimeout = 100
 
@@ -217,6 +197,26 @@ const ProfileMatching = () => {
                 }, 200)
             }, 200)
         }, firstTimeout)
+    }
+
+    const setCardState = async (state) => {
+        dispatch({
+            type: USER_STATE_ACTIONS.SEND_VISIT,
+            payload: {
+                to: actualUser.login,
+            },
+        })
+
+        if (state === 'liked') {
+            const res = await sendLike(actualUser.login)
+            if (res.match) {
+                setMatch(true)
+                setEvaluation('liked')
+                return
+            }
+        } else if (state === 'disliked') sendDislike(actualUser.login)
+
+        transition(state)
     }
 
     useEffect(() => {
@@ -269,7 +269,11 @@ const ProfileMatching = () => {
                     </div>
                 ) : (
                     actualUser && (
-                        <UserProfile scroll={scroll} user={actualUser} />
+                        <UserProfile
+                            scroll={scroll}
+                            user={actualUser}
+                            transition={transition}
+                        />
                     )
                 )}
                 {!loading && !actualUser && (

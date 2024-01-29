@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react'
 import './index.css'
 import '../Settings/Settings.css'
 import ApiService from '../../Services/api.service'
-import Pica from 'pica'
 
 const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
     const [imgs, setImgs] = useState(defaultImages)
@@ -26,42 +25,41 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
         }
     }, [imgRef])
 
+    const resizeImage = (imgFile, maxWidth) => {
+        return new Promise((resolve, reject) => {
+            const img = new Image()
+            img.onload = () => {
+                const canvas = document.createElement('canvas')
+                const ctx = canvas.getContext('2d')
+                const aspectRatio = img.width / img.height
+                canvas.width = maxWidth
+                canvas.height = maxWidth / aspectRatio
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+                canvas.toBlob((blob) => resolve(blob), imgFile.type)
+            }
+            img.onerror = reject
+            img.src = URL.createObjectURL(imgFile)
+        })
+    }
+
     const onChange = async (e) => {
-        const fileList = e.target.files
-        const pica = Pica()
+        const fileList = Array.from(e.target.files)
+        const maxWidth = 800 // Set the maximum width for the images
 
-        const resizedImages = await Promise.all(
-            Array.from(fileList).map((file) => {
-                return new Promise((resolve, reject) => {
-                    const img = new Image()
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas')
-                        const maxSide = 600
-                        const scale = Math.min(
-                            maxSide / img.width,
-                            maxSide / img.height
-                        )
-                        canvas.width = img.width * scale
-                        canvas.height = img.height * scale
+        try {
+            const resizedImages = await Promise.all(
+                fileList.map((file) => resizeImage(file, maxWidth))
+            )
 
-                        pica.resize(img, canvas)
-                            .then((result) =>
-                                pica.toBlob(result, file.type, 0.9)
-                            )
-                            .then((blob) => resolve(blob))
-                            .catch((error) => reject(error))
-                    }
-                    img.src = URL.createObjectURL(file)
-                })
-            })
-        )
+            setFileList((currentFiles) => [...currentFiles, ...resizedImages])
 
-        setFileList((currentFiles) => [...currentFiles, ...resizedImages])
-
-        setImgs((currentImgs) => [
-            ...currentImgs,
-            ...resizedImages.map((blob) => URL.createObjectURL(blob)),
-        ])
+            setImgs((currentImgs) => [
+                ...currentImgs,
+                ...resizedImages.map((blob) => URL.createObjectURL(blob)),
+            ])
+        } catch (error) {
+            console.error('Error resizing images:', error)
+        }
     }
 
     const removeImg = (img) => {
@@ -99,7 +97,7 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
                     imgs.map((img, i) => {
                         // Create URL if it not a URL
                         const imgUrl =
-                            img.name !== undefined
+                            img instanceof Blob
                                 ? URL.createObjectURL(img)
                                 : ApiService.getImgPath(img)
 
