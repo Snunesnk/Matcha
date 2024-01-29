@@ -273,7 +273,7 @@ WHERE
       query += `)\n
     AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) >= currentUs.ageMin
     AND (
-      currentUs.ageMax < 55 
+      currentUs.ageMax >= 55 
       OR currentUs.ageMax IS NULL
       OR TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) <= currentUs.ageMax
     )
@@ -304,7 +304,7 @@ WHERE
       )
       AND TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) >= us.ageMin
       AND (
-        us.ageMax < 55 
+        us.ageMax >= 55 
         OR us.ageMax IS NULL
         OR TIMESTAMPDIFF(YEAR, currentUser.dateOfBirth, CURDATE()) <= us.ageMax
       )
@@ -367,8 +367,12 @@ WHERE
 
       query += `, u.rating DESC, commonTagsCount DESC`;
 
+      console.log("query", query)
+      console.log("parameter", parameters)
+
       connection.query(query, parameters, (err, res) => {
         if (err) {
+          console.log(err)
           reject(err);
           return;
         }
@@ -399,7 +403,7 @@ WHERE
     )
     AND TIMESTAMPDIFF(YEAR, liker.dateOfBirth, CURDATE()) >= likeeSettings.ageMin
     AND (
-      likeeSettings.ageMax < 55 
+      likeeSettings.ageMax >= 55 
       OR likeeSettings.ageMax IS NULL
       OR TIMESTAMPDIFF(YEAR, liker.dateOfBirth, CURDATE()) <= likeeSettings.ageMax
     )
@@ -412,7 +416,7 @@ WHERE
     )
     AND TIMESTAMPDIFF(YEAR, likee.dateOfBirth, CURDATE()) >= likerSettings.ageMin
     AND (
-      likerSettings.ageMax < 55 
+      likerSettings.ageMax >= 55 
       OR likerSettings.ageMax IS NULL
       OR TIMESTAMPDIFF(YEAR, likee.dateOfBirth, CURDATE()) <= likerSettings.ageMax
     )
