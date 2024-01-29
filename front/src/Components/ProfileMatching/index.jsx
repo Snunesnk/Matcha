@@ -113,10 +113,9 @@ const ProfileMatching = () => {
 
         const getLocation = async () => {
             const loc = await getUserLocation()
-            console.log(loc)
 
             if (loc.lat !== null && loc.lng !== null) {
-                ApiService.get('/location', {
+                ApiService.post('/location', {
                     lat: loc.lat,
                     lng: loc.lng,
                 })
