@@ -7,6 +7,7 @@ const SendMail = () => {
     const [emailSent, setEmailSent] = useState(false)
     const [email, setEmail] = useState('')
     const [emailList, setEmailList] = useState([])
+    const [alreadySent, setAlreadySent] = useState(false)
 
     const handleChange = (e) => {
         setEmail(e)
@@ -14,15 +15,16 @@ const SendMail = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        setEmailSent(true)
         setEmailList([...emailList, email])
 
         ApiService.get('/user/reset-password/' + email)
             .then((data) => {
                 console.log(data)
+                setEmailSent(true)
             })
             .catch((error) => {
                 console.log(error)
+                setAlreadySent(true)
             })
     }
 
@@ -51,8 +53,11 @@ const SendMail = () => {
                 disabled={emailSent}
             >
                 Send an email to reset your password
-            </button>
+            </button>   
+
             <p className="send-mail-label">{emailSent && 'Email sent'}</p>
+            <p className="send-mail-label">{alreadySent && 'Email already sent'}</p>
+
         </div>
     )
 }

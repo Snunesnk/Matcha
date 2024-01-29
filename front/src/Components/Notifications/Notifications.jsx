@@ -64,21 +64,10 @@ function Notifications() {
                 )}
                 {notifications &&
                     notifications.map((notification, index) => (
-                        <div
-                            key={index}
-                            className={
-                                'notification-list' +
-                                (notification.read ? ' read' : '')
-                            }
-                        >
+                        <div key={index} className={'notification-list' + (notification.read ? ' read' : '')} >
                             <div className="notification-list_content">
                                 <div className="notification-list_img">
-                                    <img
-                                        src={ApiService.getImgPath(
-                                            notification.imgA
-                                        )}
-                                        alt={notification.name}
-                                    />
+                                    <img src={ApiService.getImgPath(notification.imgA)} alt={notification.name} />
                                 </div>
 
                                 <div className="notification-list_detail">
@@ -88,9 +77,7 @@ function Notifications() {
                                     </p>
                                     <p>
                                         <small>
-                                            {formatTimeDifference(
-                                                notification.created_at
-                                            )}
+                                            {formatTimeDifference(notification.created_at)}
                                         </small>
                                     </p>
                                 </div>

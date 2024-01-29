@@ -83,9 +83,11 @@ const ChatComponent = ({
     }, [user])
 
     useEffect(() => {
-        if (!socketMessage) return
+        if (!socketMessage)
+            return
 
-        if (socketMessage.from !== user.login) return
+        if (socketMessage.from !== user.login)
+            return
 
         setMessages((prev) => {
             if (!prev) {

@@ -18,9 +18,16 @@ router.get(
 );
 
 router.put(
+  "/notifications/read/",
+  needOnboardedMiddleware,
+  notificationsHandler.readMessages
+);
+
+router.put(
   "/notifications/read/:login",
   needOnboardedMiddleware,
-  notificationsHandler.readNotification
+  notificationsHandler.readConvFromLogin
 );
+
 
 export default router;

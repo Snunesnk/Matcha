@@ -11,6 +11,7 @@ const ChangePassword = ({ login, token }) => {
     const [confirmPassword, setConfirmPassword] = useState('')
     const [passwordError, setPasswordError] = useState('')
     const [loading, setLoading] = useState(false)
+    const [confirmChange, setConfirmChange] = useState(false)
 
     useEffect(() => {
         const res = checkPassword(newPassword)
@@ -33,16 +34,31 @@ const ChangePassword = ({ login, token }) => {
             login,
             hashedPassword,
         })
-            .then((data) => {
-                console.log('response: ', data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+        .then((data) => {
+            console.log('response: ', data)
+            setLoading(false)
+            setConfirmChange(true)
+        })
+        .catch((error) => {
+            console.log(error)
+            switch (error.status) {
+                case 401:
+                    setPasswordError('Invalid token.')
+                    break
+                case 404:
+                    setPasswordError('User not found.')
+                    break
+                case 400:
+                    setPasswordError('Missing field.')
+                    break
+                default:
+                    setPasswordError('Something went wrong.')
+            }
+            setLoading(false)
+        })
     }
 
-    const passwordsMatch =
-        newPassword && confirmPassword && newPassword === confirmPassword
+    const passwordsMatch = newPassword && confirmPassword && newPassword === confirmPassword
 
     return (
         <div>
@@ -68,20 +84,22 @@ const ChangePassword = ({ login, token }) => {
                         type="password"
                     />
                     <label className="password-error">
-                        {newPassword &&
-                            confirmPassword &&
-                            passwordError === '' &&
-                            !passwordsMatch &&
-                            'Passwords do not match.'}
+                        { passwordError === '' && !passwordsMatch && 'Passwords do not match.'}
+                    </label>
+                    <label className='password-change'>
+                        {confirmChange && 'Password changed successfully.'}
                     </label>
                 </div>
-                <button
-                    type="submit"
-                    disabled={!passwordsMatch || loading}
-                    className="btn signup-btn reset-password-btn"
-                >
-                    {loading ? <CircularProgress /> : 'Change password'}
-                </button>
+                {!confirmChange ? (
+                    <button type="submit" disabled={!passwordsMatch || loading} className="btn signup-btn reset-password-btn">
+                        {loading ? <CircularProgress /> : 'Change password'}
+                    </button>
+                ) : (
+                    <button  className="btn signup-btn reset-password-btn pink">
+                        Go to login
+                    </button>
+                )}
+
             </form>
         </div>
     )

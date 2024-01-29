@@ -27,7 +27,7 @@ export default class {
     else res.json(notifications);
   }
 
-  static async readNotification(req, res) {
+  static async readConvFromLogin(req, res) {
     const login = req.decodedUser._login;
     const login2 = req.params.login;
     const notif = new Notifications({ trigger_login: login2 });
@@ -36,6 +36,19 @@ export default class {
     const data = await Notifications.updateNotifications(notif, {
       type: "message",
       trigger_login: login2,
+      login: login,
+    });
+
+    res.status(200).send({ count: data?.affectedRows });
+  }
+
+  static async readMessages(req, res) {
+    const login = req.decodedUser._login;
+    const notif = new Notifications({ login: login });
+    notif.created_at = undefined;
+
+    const data = await Notifications.updateNotifications(notif, {
+      type: "message",
       login: login,
     });
 

@@ -31,16 +31,14 @@ const NOTIFICATION_ROUTE = '/dashboard/notifications'
 const MESSAGE_ROUTE = '/dashboard/messages'
 
 const checkIfLoggedInRoute = (path) => {
-    if (LOGGED_IN_ROUTES.some((route) => path.startsWith(route))) {
+    if (LOGGED_IN_ROUTES.some((route) => path.startsWith(route)))
         return true
-    }
     return false
 }
 
 const checkIfOnboardedRoute = (path) => {
-    if (ONBOARDED_ROUTES.some((route) => path.startsWith(route))) {
+    if (ONBOARDED_ROUTES.some((route) => path.startsWith(route)))
         return true
-    }
     return false
 }
 
@@ -61,19 +59,18 @@ const Navbar = () => {
         const onNotif = currentLocation.pathname.startsWith(NOTIFICATION_ROUTE)
         const onMessage = currentLocation.pathname.startsWith(MESSAGE_ROUTE)
 
-        if (
-            notif.type === 'like' ||
-            notif.type === 'unlike' ||
-            notif.type === 'visit' ||
-            notif.type === 'interested'
-        ) {
-            if (!onNotif) setNewNotification((prev) => prev + 1)
+        if (notif.type === 'like' || notif.type === 'unlike' || notif.type === 'visit' || notif.type === 'interested') {
+            if (!onNotif)
+                setNewNotification((prev) => prev + 1)
         } else if (notif.type === 'message' && !onMessage) {
             setNewMessage((prev) => prev + 1)
         } else if (notif.type === 'match') {
-            if (!onNotif) setNewMessage((prev) => prev + 1)
-            if (!onMessage) setNewNotification((prev) => prev + 1)
+            if (!onNotif)
+                setNewMessage((prev) => prev + 1)
+            if (!onMessage)
+                setNewNotification((prev) => prev + 1)
         }
+
     }
 
     useEffect(() => {
@@ -82,7 +79,8 @@ const Navbar = () => {
     }, [location])
 
     useEffect(() => {
-        if (!onboarded) return
+        if (!onboarded)
+            return
 
         const userInfos = sessionStorage.getItem('user_infos')
         if (userInfos) {
@@ -106,9 +104,7 @@ const Navbar = () => {
     const toggleDropdown = () => setIsDropdownOpen(!isDropdownOpen)
 
     const handleLogout = () => {
-        dispatch({
-            type: USER_STATE_ACTIONS.LOG_OUT,
-        })
+        dispatch({type: USER_STATE_ACTIONS.LOG_OUT})
         ApiService.get('/user/logout').then(() => {
             navigate('/login')
         })
@@ -117,12 +113,8 @@ const Navbar = () => {
     // Effet pour gérer le clic à l'extérieur du menu déroulant
     useEffect(() => {
         const handleOutsideClick = (event) => {
-            if (
-                dropdownRef.current &&
-                !dropdownRef.current.contains(event.target)
-            ) {
+            if ( dropdownRef.current && !dropdownRef.current.contains(event.target))
                 setIsDropdownOpen(false) // Ferme le menu si un clic en dehors est détecté
-            }
         }
         document.addEventListener('mousedown', handleOutsideClick)
         return () => {
@@ -131,24 +123,34 @@ const Navbar = () => {
     }, [])
 
     useEffect(() => {
-        if (!onboarded) return
+        if (!onboarded)
+            return
+        
         ApiService.get('/notifications/count').then((data) => {
-            const messageCount = data.filter(
-                (notif) => notif.type === 'message' || notif.type === 'match'
+            const messageCount = data.filter((notif) => notif.type === 'message' || notif.type === 'match').length
+            const notifCount = data.filter( (notif) => 
+                notif.type === 'like' || 
+                notif.type === 'unlike' || 
+                notif.type === 'match' || 
+                notif.type === 'visit'
             ).length
-            const notifCount = data.filter(
-                (notif) =>
-                    notif.type === 'like' ||
-                    notif.type === 'unlike' ||
-                    notif.type === 'match' ||
-                    notif.type === 'visit'
-            ).length
+    
             const onNotif = location.pathname.startsWith(NOTIFICATION_ROUTE)
-            if (!onNotif) setNewNotification(notifCount)
+            if (!onNotif) 
+                setNewNotification(notifCount)
+
             const onMessage = location.pathname.startsWith(MESSAGE_ROUTE)
-            if (!onMessage) setNewMessage(messageCount)
+            if (!onMessage) 
+                setNewMessage(messageCount)
         })
     }, [onboarded])
+
+    const handleClickMessage = () => {
+        setNewMessage(0)
+        ApiService.put("/notifications/read/").catch(() => {
+            console.log("error")
+        })
+    }
 
     return (
         <div id="navbar">
@@ -169,10 +171,7 @@ const Navbar = () => {
             )}
             {loggedIn && onboarded && (
                 <div className="navbar-menu">
-                    <Link
-                        to="/dashboard/notifications"
-                        onClick={() => setNewNotification(0)}
-                    >
+                    <Link to="/dashboard/notifications" onClick={() => setNewNotification(0)}>
                         <Badge badgeContent={newNotification} color="error">
                             <Notifications
                                 fontSize="large"
@@ -180,10 +179,8 @@ const Navbar = () => {
                             ></Notifications>
                         </Badge>
                     </Link>
-                    <Link
-                        to="/dashboard/messages"
-                        onClick={() => setNewMessage(0)}
-                    >
+
+                    <Link to="/dashboard/messages" onClick={handleClickMessage} >
                         <Badge badgeContent={newMessage} color="error">
                             <Chat
                                 fontSize="large"

@@ -616,8 +616,9 @@ export default class {
       user.password = password;
       user.token = crypto.randomBytes(64).toString("base64url");
       user.token += "_mail_timestamp_" + Date.now();
-      await User.updateByLogin(login, user);
-
+      const userChange = await User.updateByLogin(login, user);
+      console.log(userChange)
+      
       res.status(200).send({
         message: "SUCCESS",
       });
