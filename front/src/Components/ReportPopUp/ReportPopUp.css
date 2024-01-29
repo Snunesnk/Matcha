@@ -8,3 +8,21 @@
     cursor: pointer;
     transform: scale(1.2);
 }
+
+.css-1t1j96h-MuiPaper-root-MuiDialog-paper {
+    background-color: #200618 !important;
+    color: white !important;
+    border: 1px solid #4ac0fc !important;
+}
+
+.css-qfso29-MuiTypography-root-MuiDialogContentText-root {
+    color: #ffffff80 !important;
+}
+
+.css-vqmohf-MuiButtonBase-root-MuiRadio-root {
+    color: #dc21b8 !important;
+}
+
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root {
+    color: #4ac0fc !important;
+}

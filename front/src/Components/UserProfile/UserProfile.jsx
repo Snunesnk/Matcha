@@ -184,7 +184,7 @@ const UserProfile = ({
 
                     <div className="main-info">
                         <div ref={profileRef} className="name_and_age">
-                            {user.surname}, {userAge}{' '}
+                            {user.name}, {userAge}{' '}
                             <GenderIcon gender={user.gender} />
                         </div>
                         <StarRating percentage={user.rating} />
@@ -217,7 +217,7 @@ const UserProfile = ({
 
             <div id="user-profile-infos">
                 <div>
-                    {user.surname} {user.name}
+                    {user.name} {user.surname}
                     <i id="user-login">@{user.login}</i>
                 </div>
                 {!isMe && (

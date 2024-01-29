@@ -50,7 +50,9 @@ function ReportPopup({ user, setUnlike, transition = () => {} }) {
                 style={{ cursor: 'pointer' }}
             />
             <Dialog open={open} onClose={handleClose} color="dark">
-                <DialogTitle>Report & Block User</DialogTitle>
+                <DialogTitle>
+                    Report and block <b>{user.name}</b>
+                </DialogTitle>
                 <DialogContent>
                     <DialogContentText>
                         Warning: This action is not reversible.
