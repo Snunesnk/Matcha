@@ -16,7 +16,7 @@ import {
 import './ReportPopUp.css'
 import ApiService from '../../Services/api.service'
 
-function ReportPopup({ user }) {
+function ReportPopup({ user, transition = () => {} }) {
     const [open, setOpen] = useState(false)
     const [reason, setReason] = useState('fake_profile')
 
@@ -37,6 +37,7 @@ function ReportPopup({ user }) {
                 console.log(error)
             }
         )
+        transition('disliked')
     }
 
     return (

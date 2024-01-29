@@ -78,6 +78,7 @@ const UserProfile = ({
     unlikable = false,
     isMe = false,
     setUnlike = () => {},
+    transition = () => {},
 }) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
     const [currentOnline, setCurrentOnline] = useState(false)
@@ -219,7 +220,7 @@ const UserProfile = ({
                     {user.surname} {user.name}
                     <i id="user-login">@{user.login}</i>
                 </div>
-                {!isMe && <ReportPopup user={user} />}
+                {!isMe && <ReportPopup user={user} transition={transition} />}
             </div>
 
             <div id="user-profile-bio">
