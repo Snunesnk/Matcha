@@ -51,6 +51,7 @@ const AllSetMessage = () => {
                         'Missing information. Please fill in all the fields'
                     )
                 } else {
+                    alert(error)
                     setError('Something went wrong ... Please try again')
                 }
             })

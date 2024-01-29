@@ -26,16 +26,23 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
     }, [imgRef])
 
     const onChange = (e) => {
-        const fileList = e.target.files
-        const imgCount = imgs.length
+        const fileList = e.target.files;
 
-        for (let i = 0; i < fileList.length && i + imgCount < 5; i++) {
-            setFileList((files) => [...files, fileList[i]])
+        setFileList((currentFiles) => {
+            const updatedFiles = [...currentFiles];
+            for (let i = 0; i < fileList.length && currentFiles.length + i < 5; i++) {
+                updatedFiles.push(fileList[i]);
+            }
+            return updatedFiles;
+        });
 
-            setImgs((prev) => {
-                return [...prev, URL.createObjectURL(fileList[i])]
-            })
-        }
+        setImgs((currentImgs) => {
+            const updatedImgs = [...currentImgs];
+            for (let i = 0; i < fileList.length && currentImgs.length + i < 5; i++) {
+                updatedImgs.push(URL.createObjectURL(fileList[i]));
+            }
+            return updatedImgs;
+        });
     }
 
     const removeImg = (img) => {

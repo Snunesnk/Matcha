@@ -17,7 +17,8 @@ export class UserChunk {
   }
 
   set login(login) {
-    this._login = login;
+    if (login)
+      this._login = login.trim();
   }
 
   get password() {
@@ -49,7 +50,8 @@ export class UserChunk {
   }
 
   set email(email) {
-    this._email = email;
+    if (email)
+      this._email = email.trim();
   }
 
   get name() {
@@ -57,7 +59,8 @@ export class UserChunk {
   }
 
   set name(name) {
-    this._name = name;
+    if (name)
+      this._name = name.trim();
   }
 
   get surname() {
@@ -65,7 +68,8 @@ export class UserChunk {
   }
 
   set surname(surname) {
-    this._surname = surname;
+    if (surname)
+      this._surname = surname.trim();
   }
 
   toJSON() {

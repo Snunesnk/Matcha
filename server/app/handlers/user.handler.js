@@ -7,6 +7,7 @@ import { getIpAddress, getIpInfo } from "../services/location.service.js";
 import { UserSetting } from "../models/user-settings.model.js";
 import { UserTag } from "../models/user-tag.model.js";
 import { Tag } from "../models/tag.model.js";
+import { UserChunk } from "../models/user-chunk.model.js";
 
 export default class {
   static async login(req, res) {
@@ -178,8 +179,11 @@ export default class {
       return;
     }
 
+    // Trim fields
+    const userChunk = new UserChunk(req.body)
+
     // TODO - Validate birthdate
-    if (isNaN(new Date(req.body.dateOfBirth))) {
+    if (isNaN(new Date(userChunk.dateOfBirth))) {
       res.status(400).send({
         message: "INVALID_DATE",
       });
@@ -196,7 +200,7 @@ export default class {
       }
       return age >= 18;
     };
-    if (!ensure18(req.body.dateOfBirth)) {
+    if (!ensure18(userChunk.dateOfBirth)) {
       res.status(400).send({
         message: "TOO_YOUNG",
       });
@@ -222,12 +226,12 @@ export default class {
 
       return true;
     };
-    if (!(await ensureUnique(req.body.login, req.body.email))) {
+    if (!(await ensureUnique(userChunk.login, userChunk.email))) {
       return;
     }
 
     // TODO - test password strength
-    const password = await cryptPassword(req.body.password);
+    const password = await cryptPassword(userChunk.password);
     if (password === null) {
       res.status(500).send({
         message: "PASSWORD_ENCRYPTION_ERROR",
@@ -236,20 +240,13 @@ export default class {
     }
 
     // Create a User
-    const user = {
-      login: req.body.login,
-      password: password,
-      email: req.body.email,
-      name: req.body.name,
-      surname: req.body.surname,
-      dateOfBirth: req.body.dateOfBirth,
-    };
+    userChunk.password = password
 
     try {
       // Save User in the database
       const userToken = crypto.randomBytes(64).toString("base64url");
-      user.token = userToken + "_mail_timestamp_" + Date.now();
-      const result = await User.create(user);
+      userChunk.token = userToken + "_mail_timestamp_" + Date.now();
+      const result = await User.create(userChunk);
       if (result !== null) {
         User.sendVerificationMail(result, userToken);
 
@@ -260,6 +257,7 @@ export default class {
         message: "COULD_NOT_CREATE",
       });
     } catch (error) {
+      console.log(error)
       res.status(500).send({
         message: error.message || "Error occurred while creating the User.",
       });
@@ -411,6 +409,8 @@ export default class {
     const user = req.body.user || {};
     const login = req.decodedUser._login;
 
+    console.log("updating")
+
     // check for missing data
     if (!login || Object.keys(user).length === 0) {
       res.status(400).send({
@@ -467,6 +467,7 @@ export default class {
       }
       res.status(200).send(data);
     } catch (error) {
+      console.log(error)
       res.status(500).send({
         error: { ...error },
         message: `Error updating User with login: ${login}`,

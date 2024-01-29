@@ -31,6 +31,7 @@ export const needOnboardedMiddleware = async (req, res, next) => {
 export const needVerifiedMiddleware = async (req, res, next) => {
   const token = req.cookies.remember_me;
 
+  console.log("heyy")
   if (!token) {
     return res.status(401).send({ message: "Unauthorized!" });
   }

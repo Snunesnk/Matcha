@@ -35,7 +35,7 @@ const handleSocketMessage = (
                 ...matchUser,
                 last_message_content: message.content,
                 last_message_timestamp: new Date(Date.now()),
-                read: activeUser.login === message.from,
+                read: activeConversation && activeConversation.login === message.from,
             },
             ...prev,
         ])

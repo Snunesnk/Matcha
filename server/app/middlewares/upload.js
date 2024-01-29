@@ -15,6 +15,7 @@ var storage = diskStorage({
   filename: (req, file, callback) => {
     const match = ["image/png", "image/jpeg", "image/jpg"];
     const login = req.decodedUser._login;
+    console.log("file", file)
 
     if (match.indexOf(file.mimetype) === -1) {
       var message = `${file.originalname} is invalid. Only accept png/jpeg/jpg.`;
