@@ -38,6 +38,7 @@ const AllSetMessage = () => {
                                 )
                                 break
                             default:
+                                zz
                                 setError(
                                     'Something went wrong ... Please try again'
                                 )
