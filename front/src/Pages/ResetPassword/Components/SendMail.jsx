@@ -7,7 +7,7 @@ const SendMail = () => {
     const [emailSent, setEmailSent] = useState(false)
     const [email, setEmail] = useState('')
     const [emailList, setEmailList] = useState([])
-    const [alreadySent, setAlreadySent] = useState(false)
+    const [error, setError] = useState(false)
 
     const handleChange = (e) => {
         setEmail(e)
@@ -19,12 +19,23 @@ const SendMail = () => {
 
         ApiService.get('/user/reset-password/' + email)
             .then((data) => {
-                console.log(data)
                 setEmailSent(true)
             })
             .catch((error) => {
                 console.log(error)
-                setAlreadySent(true)
+                switch (error.response.status) {
+                    case 404:
+                        setError('Email not found')
+                        break
+                    case 401:
+                        setError('Email not verified')
+                        break
+                    case 400:
+                        setError('Email already sent')
+                        break
+                    default:
+                        setError('An error occured')
+                }
             })
     }
 
@@ -42,7 +53,7 @@ const SendMail = () => {
             </p>
             <FormInput
                 placeholder="Email"
-                name=""
+                name="email"
                 required={true}
                 updateValue={handleChange}
             />
@@ -53,11 +64,10 @@ const SendMail = () => {
                 disabled={emailSent}
             >
                 Send an email to reset your password
-            </button>   
+            </button>
 
             <p className="send-mail-label">{emailSent && 'Email sent'}</p>
-            <p className="send-mail-label">{alreadySent && 'Email already sent'}</p>
-
+            <p className="send-mail-label">{error}</p>
         </div>
     )
 }
