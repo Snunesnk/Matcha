@@ -318,27 +318,24 @@ WHERE
 
       // Apply all filters
       if (userFilters.ageMin) {
-        query +=
-          `
-          AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) >= ` +
-          userFilters.ageMin;
+        query += `
+          AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) >= ?`;
+        parameters.push(userFilters.ageMin);
       }
       if (userFilters.ageMax && userFilters.ageMax < 55) {
-        query +=
-          `
-          AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) <= ` +
-          userFilters.ageMax;
+        query += `
+          AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) <= ?`;
+        parameters.push(userFilters.ageMax);
       }
       if (userFilters.distMax) {
-        query +=
-          `
-          AND ST_Distance_Sphere(u.coordinate, currentUser.coordinate) <= ` +
-          userFilters.distMax * 1000;
+        query += `
+          AND ST_Distance_Sphere(u.coordinate, currentUser.coordinate) <= ?`;
+        parameters.push(userFilters.distMax * 1000);
       }
       if (userFilters.fameMin) {
-        query +=
-          `
-          AND u.rating >= ` + userFilters.fameMin;
+        query += `
+          AND u.rating >= ?`;
+        parameters.push(userFilters.fameMin);
       }
 
       query += `
@@ -362,9 +359,11 @@ WHERE
           query += " u.rating";
       }
 
-      query += userFilters.sortDirection
-        ? " " + userFilters.sortDirection
-        : " DESC";
+      if (userFilters.sortDirection && userFilters.sortDirection === "ASC") {
+        query += " ASC";
+      } else {
+        query += " DESC";
+      }
 
       query += `, u.rating DESC, commonTagsCount DESC`;
 
