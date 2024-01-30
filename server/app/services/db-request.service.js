@@ -216,6 +216,8 @@ SELECT DISTINCT
   u.bio,
   u.rating,
   u.gender,
+  u.latitude,
+  u.longitude,
   GROUP_CONCAT(ut.tagBwid ORDER BY ut.tagBwid ASC SEPARATOR ', ') AS tags,
   CASE WHEN n.type IS NULL THEN 0 ELSE 1 END AS alreadySeen,
   COALESCE(tc.tagCount, 0) AS tagMatchCount,

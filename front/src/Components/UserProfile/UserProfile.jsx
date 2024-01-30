@@ -19,6 +19,7 @@ import { USER_STATE_ACTIONS } from '../../constants'
 import { formatTimeDifference } from '../MessagesLeftPane/MessagesLeftPane'
 import ReportPopup from '../ReportPopUp/ReportPopUp'
 import ApiService from '../../Services/api.service'
+import { MapContainer, TileLayer, Marker } from 'react-leaflet'
 
 const updateOnlineStatus = (status, actualUser, setCurrentOnline) => {
     if (actualUser?.login === status.login) {
@@ -259,6 +260,22 @@ const UserProfile = ({
                 ))}
             </div>
 
+            <MapContainer
+                center={[user.latitude, user.longitude]}
+                zoom={13}
+                scrollWheelZoom={false}
+            >
+                <TileLayer
+                    lat={user.latitude}
+                    lng={user.longitude}
+                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                />
+                <Marker
+                    position={{ lat: user.latitude, lng: user.longitude }}
+                ></Marker>
+            </MapContainer>
+
             <div id="user-profile-tags">
                 {user.tags &&
                     typeof user.tags === 'string' &&
@@ -277,6 +294,7 @@ const UserProfile = ({
                         </div>
                     ))}
             </div>
+
             <div
                 id="display-user-picture"
                 className={
