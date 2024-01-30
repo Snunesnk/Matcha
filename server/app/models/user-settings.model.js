@@ -169,7 +169,6 @@ export class UserSetting {
   static async updateUserSettingByLogin(userLogin, newUserSetting) {
     if (!newUserSetting) return null;
     const user = {};
-    console.log(newUserSetting);
     user.prefMale = newUserSetting.userPreferences?.indexOf("Male") > -1;
     user.prefFemale = newUserSetting.userPreferences?.indexOf("Female") > -1;
     user.prefEnby = newUserSetting.userPreferences?.indexOf("Non-binary") > -1;
