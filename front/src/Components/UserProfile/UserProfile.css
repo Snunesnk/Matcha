@@ -21,6 +21,7 @@
 
 #user-profile-container .card_img_container {
     width: calc(100% + 40px);
+    z-index: 1043;
 }
 
 .card_img_container {

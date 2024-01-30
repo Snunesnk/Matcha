@@ -30,7 +30,6 @@ function ReportPopup({ user, setUnlike, transition = () => {} }) {
 
     const handleConfirm = () => {
         // Handle the confirmation action, for example, by sending data to the server
-        console.log(reason) // This would be replaced by an actual function call
         setOpen(false)
         ApiService.post('/report', { blockedLogin: user.login })
             .then(() => {
