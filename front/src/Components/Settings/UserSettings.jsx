@@ -203,6 +203,7 @@ const UserSettings = () => {
                         className="setting-input"
                         value={lastName}
                         onChange={(e) => setLastName(e.target.value)}
+                        name="lastName"
                     />
                 </div>
 
@@ -212,6 +213,7 @@ const UserSettings = () => {
                         className="setting-input"
                         value={firstName}
                         onChange={(e) => setFirstName(e.target.value)}
+                        name="firstName"
                     />
                 </div>
 
@@ -221,6 +223,8 @@ const UserSettings = () => {
                         className="setting-input"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
+                        name="email"
+                        autoComplete="email"
                     />
                 </div>
 
@@ -239,6 +243,7 @@ const UserSettings = () => {
                         className="setting-biography"
                         value={personalBio}
                         onChange={(e) => setPersonalBio(e.target.value)}
+                        name="bio"
                     ></textarea>
                 </div>
 

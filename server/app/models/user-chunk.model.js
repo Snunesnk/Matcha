@@ -41,8 +41,7 @@ export class UserChunk {
   }
 
   set dateOfBirth(dateOfBirth) {
-    if (dateOfBirth && dateOfBirth instanceof Date)
-      this._dateOfBirth = dateOfBirth;
+    if (dateOfBirth && Date.parse(dateOfBirth)) this._dateOfBirth = dateOfBirth;
   }
 
   get email() {

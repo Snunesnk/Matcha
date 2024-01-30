@@ -3,7 +3,12 @@ import './Select.css'
 
 const SimpleSelect = ({ options, defaultSelected, onChange }) => {
     return (
-        <select className="select" onChange={onChange} value={defaultSelected}>
+        <select
+            className="select"
+            onChange={onChange}
+            value={defaultSelected}
+            name="select"
+        >
             {options.map((option, index) => (
                 <option key={index} value={option}>
                     {option}
@@ -32,7 +37,7 @@ export const MultiSelect = ({ options, defaultSelected, onChange }) => {
                         checked={defaultSelected.includes(option)}
                         onChange={() => onChange(option)}
                     />
-                    <label>{option}</label>
+                    <span>{option}</span>
                 </div>
             ))}
         </div>

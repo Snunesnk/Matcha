@@ -148,7 +148,7 @@ export class User extends UserChunk {
   }
 
   set gender(gender) {
-    if (gener) this._gender = gender.trim().substring(0, 3);
+    if (gender) this._gender = gender.trim().substring(0, 3);
   }
 
   get prefMale() {

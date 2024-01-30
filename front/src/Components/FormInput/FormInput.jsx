@@ -28,6 +28,7 @@ const FormInput = ({
                     name={name}
                     required={required}
                     pattern={pattern}
+                    autoComplete="on"
                 ></input>
             </div>
         )

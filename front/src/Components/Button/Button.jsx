@@ -13,7 +13,7 @@ export const AlreadyHaveAccountBtn = () => {
 
     return (
         <div id="already_have_account">
-            <label id="alreadyHaveLabel">Already a cool cat?</label>
+            <p id="alreadyHaveLabel">Already a cool cat?</p>
             <Button
                 btnClass="alreadyHaveButton"
                 text="Log in"
@@ -32,7 +32,7 @@ export const CreateAccountButton = () => {
 
     return (
         <div id="already_have_account">
-            <label id="alreadyHaveLabel">New here?</label>
+            <p id="alreadyHaveLabel">New here?</p>
             <Button
                 btnClass="alreadyHaveButton"
                 text="Create account"
