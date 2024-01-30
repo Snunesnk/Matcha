@@ -27,7 +27,7 @@ export class Notifications {
   }
 
   set login(login) {
-    this._login = login;
+    if (login) this._login = login.trim().substring(0, 50);
   }
 
   get trigger_login() {
@@ -35,7 +35,8 @@ export class Notifications {
   }
 
   set trigger_login(trigger_login) {
-    this._trigger_login = trigger_login;
+    if (trigger_login)
+      this._trigger_login = trigger_login.trim().substring(0, 50);
   }
 
   get type() {
@@ -43,7 +44,7 @@ export class Notifications {
   }
 
   set type(type) {
-    this._type = type;
+    if (type) this._type = type.trim().substring(0, 50);
   }
 
   get created_at() {

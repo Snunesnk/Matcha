@@ -148,7 +148,7 @@ export class User extends UserChunk {
   }
 
   set gender(gender) {
-    this._gender = gender;
+    if (gener) this._gender = gender.trim().substring(0, 3);
   }
 
   get prefMale() {
@@ -201,7 +201,7 @@ export class User extends UserChunk {
   }
 
   set imgA(imgA) {
-    this._imgA = imgA;
+    if (imgA) this._imgA = imgA.trim().substring(0, 200);
   }
 
   get imgB() {
@@ -209,7 +209,7 @@ export class User extends UserChunk {
   }
 
   set imgB(imgB) {
-    this._imgB = imgB;
+    if (imgB) this._imgB = imgB.trim().substring(0, 200);
   }
 
   get imgC() {
@@ -217,7 +217,7 @@ export class User extends UserChunk {
   }
 
   set imgC(imgC) {
-    this._imgC = imgC;
+    if (imgC) this._imgC = imgC.trim().substring(0, 200);
   }
 
   get imgD() {
@@ -225,7 +225,7 @@ export class User extends UserChunk {
   }
 
   set imgD(imgD) {
-    this._imgD = imgD;
+    if (imgD) this._imgD = imgD.trim().substring(0, 200);
   }
 
   get imgE() {
@@ -233,7 +233,7 @@ export class User extends UserChunk {
   }
 
   set imgE(imgE) {
-    this._imgE = imgE;
+    if (imgE) this._imgE = imgE.trim().substring(0, 200);
   }
 
   get tags() {

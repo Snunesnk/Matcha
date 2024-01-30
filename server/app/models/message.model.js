@@ -35,7 +35,7 @@ export class Message {
   }
 
   set sender(sender) {
-    this._sender = sender;
+    if (sender) this._sender = sender.trim().substring(0, 50);
   }
 
   get receiver() {
@@ -43,7 +43,7 @@ export class Message {
   }
 
   set receiver(receiver) {
-    this._receiver = receiver;
+    if (receiver) this._receiver = receiver.trim().substring(0, 50);
   }
 
   get message_content() {
@@ -59,7 +59,7 @@ export class Message {
   }
 
   set timestamp(timestamp) {
-    this._timestamp = timestamp;
+    if (timestamp && timestamp instanceof Date) this._timestamp = timestamp;
   }
 
   get read_status() {
@@ -81,9 +81,8 @@ export class Message {
         newMessage.to,
         newMessage.from
       );
-    }
-    else {
-      conv = new Conversation(conv)
+    } else {
+      conv = new Conversation(conv);
     }
 
     const message = new Message({

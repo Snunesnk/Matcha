@@ -18,7 +18,7 @@ const router = express.Router();
 router.post("/user/", userHandler.create);
 
 // Retrieve all Users
-router.get("/user/", userHandler.getAllUsers);
+router.get("/user/", needOnboardedMiddleware, userHandler.getAllUsers);
 
 // Login
 router.post("/user/login", userHandler.login);
@@ -30,7 +30,11 @@ router.get("/user/verify/:login/:token", userHandler.verifyUser);
 router.post("/user/verify/:email", userHandler.resendVerificationMail);
 
 // Retrieve all verified Users
-router.get("/user/verified", userHandler.getAllVerified);
+router.get(
+  "/user/verified",
+  needOnboardedMiddleware,
+  userHandler.getAllVerified
+);
 
 // Send a reset password mail
 router.get("/user/reset-password/:email", userHandler.sendResetPasswordMail);

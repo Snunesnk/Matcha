@@ -1,9 +1,10 @@
 import express from "express";
-import tagHandler from "../handlers/tag.handler.js"
+import tagHandler from "../handlers/tag.handler.js";
+import { needVerifiedMiddleware } from "../middlewares/authentication-middleware.js";
 
 const router = express.Router();
 
 // Retrieve all Tags
-router.get("/tag/", tagHandler.getTagsTypeAhead);
+router.get("/tag/", needVerifiedMiddleware, tagHandler.getTagsTypeAhead);
 
-export default router
+export default router;

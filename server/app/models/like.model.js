@@ -13,7 +13,7 @@ export class Like {
   }
 
   set receiver(receiver) {
-    this._receiver = receiver;
+    if (receiver) this._receiver = receiver.trim().substring(0, 50);
   }
 
   get issuer() {
@@ -21,7 +21,7 @@ export class Like {
   }
 
   set issuer(issuer) {
-    this._issuer = issuer;
+    if (issuer) this._issuer = issuer.trim().substring(0, 50);
   }
 
   static async create(newLike) {

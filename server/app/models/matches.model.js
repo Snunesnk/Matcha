@@ -26,7 +26,7 @@ export class Match {
   }
 
   set user1(user1) {
-    this._user1 = user1;
+    if (user1) this._user1 = user1.trim().substring(0, 50);
   }
 
   get user2() {
@@ -34,7 +34,7 @@ export class Match {
   }
 
   set user2(user2) {
-    this._user2 = user2;
+    if (user2) this._user2 = user2.trim().substring(0, 50);
   }
 
   get id() {
@@ -50,7 +50,7 @@ export class Match {
   }
 
   set created_at(created_at) {
-    this._created_at = created_at;
+    if (created_at && created_at instanceof Date) this._created_at = created_at;
   }
 
   get last_message_id() {

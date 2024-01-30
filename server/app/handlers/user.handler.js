@@ -179,10 +179,8 @@ export default class {
       return;
     }
 
-    // Trim fields
     const userChunk = new UserChunk(req.body);
 
-    // TODO - Validate birthdate
     if (isNaN(new Date(userChunk.dateOfBirth))) {
       res.status(400).send({
         message: "INVALID_DATE",
@@ -230,7 +228,6 @@ export default class {
       return;
     }
 
-    // TODO - test password strength
     const password = await cryptPassword(userChunk.password);
     if (password === null) {
       res.status(500).send({

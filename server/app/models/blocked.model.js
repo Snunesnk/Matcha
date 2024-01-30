@@ -11,7 +11,7 @@ export class Blocked {
   }
 
   set blocker(blocker) {
-    this._blocker = blocker;
+    if (blocker) this._blocker = blocker.trim().substring(0, 50);
   }
 
   get blocked() {
@@ -19,7 +19,7 @@ export class Blocked {
   }
 
   set blocked(blocked) {
-    this._blocked = blocked;
+    if (blocked) this._blocked = blocked.trim().substring(0, 50);
   }
 
   static async create(newBlocked) {

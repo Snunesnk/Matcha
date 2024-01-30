@@ -20,7 +20,7 @@ export class UserTag {
   }
 
   set tagBwid(tagBwid) {
-    this._tagBwid = tagBwid;
+    if (tagBwid) this._tagBwid = tagBwid.trim().substring(0, 100);
   }
 
   static async create(newUserTag) {
