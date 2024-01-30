@@ -189,16 +189,10 @@ export class DbRequestService {
 
   static async getMatchList(matchingParameters, userFilters) {
     return new Promise((resolve, reject) => {
-      const genderPreferences = [];
-      if (matchingParameters.enby) genderPreferences.push("nb");
-      if (matchingParameters.male) genderPreferences.push("m");
-      if (matchingParameters.female) genderPreferences.push("f");
-
       const parameters = [
         matchingParameters.login,
         ...userFilters.tags,
         matchingParameters.login,
-        ...genderPreferences,
         ...matchingParameters.tags,
       ];
 
@@ -273,11 +267,11 @@ WHERE
     AND b1.blocker IS NULL AND b2.blocker IS NULL
     AND u.verified = 1
     AND u.onboarded = 1
-    AND u.gender IN (?`;
-      for (let i = 1; i < genderPreferences.length; i++) {
-        query += ", ?";
-      }
-      query += `)\n
+    AND (
+        (u.gender = 'm' AND currentUser.prefMale) OR
+        (u.gender = 'f' AND currentUser.prefFemale) OR
+        (u.gender = 'nb' AND currentUser.prefEnby)
+    )
     AND TIMESTAMPDIFF(YEAR, u.dateOfBirth, CURDATE()) >= currentUs.ageMin
     AND (
       currentUs.ageMax >= 55 

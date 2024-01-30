@@ -39,6 +39,7 @@
     width: 70px;
     border-radius: 50px;
     margin-right: 20px;
+    object-fit: cover;
 }
 
 .notification-list_detail {

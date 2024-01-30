@@ -84,7 +84,9 @@ function generateRandomPoint(center, radius) {
 async function createUserProfile() {
   const bioLength = faker.datatype.number({ min: 1, max: 3 });
   const bio = faker.lorem.sentences(bioLength);
-  const gender = faker.name.sex() === "male" ? "m" : "f";
+  const genders = ["m", "f", "nb"];
+  const genderType = faker.datatype.number({ min: 0, max: 2 });
+  const gender = genders[genderType];
 
   const verified = true;
   const onboarded = true;

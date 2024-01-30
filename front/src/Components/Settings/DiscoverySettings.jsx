@@ -80,8 +80,7 @@ const DiscoverySettings = () => {
         const userPref = [...GENDERS]
         if (!user.prefMale) userPref.splice(userPref.indexOf('Male'), 1)
         if (!user.prefFemale) userPref.splice(userPref.indexOf('Female'), 1)
-        if (!user.prefNonBinary)
-            userPref.splice(userPref.indexOf('Non-binary'), 1)
+        if (!user.prefEnby) userPref.splice(userPref.indexOf('Non-binary'), 1)
         setUserPreferences(userPref)
         setMaxDistance(user.distMax)
         setAgeMin(user.ageMin)
