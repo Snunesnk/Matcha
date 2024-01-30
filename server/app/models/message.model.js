@@ -85,6 +85,10 @@ export class Message {
       conv = new Conversation(conv);
     }
 
+    if (!conv) {
+      return null;
+    }
+
     const message = new Message({
       conversation_id: conv.conversation_id,
       sender: newMessage.from,

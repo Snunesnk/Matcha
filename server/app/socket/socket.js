@@ -144,6 +144,8 @@ const sendVisit = async (io, visit) => {
 const sendMessage = async (io, message) => {
   const newMessage = await Message.create(message);
 
+  if (!message.to || !message.from || !message.message_id) return;
+
   const userConnected = isUserConnected(io, message.to);
 
   if (userConnected) {
