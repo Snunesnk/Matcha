@@ -46,9 +46,14 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
         const fileList = Array.from(e.target.files)
         const maxWidth = 800 // Set the maximum width for the images
 
+        // Filter out non-image files
+        const imageFiles = fileList.filter((file) =>
+            file.type.startsWith('image/')
+        )
+
         try {
             const resizedImages = await Promise.all(
-                fileList.map((file) => resizeImage(file, maxWidth))
+                imageFiles.map((file) => resizeImage(file, maxWidth))
             )
 
             setFileList((currentFiles) => [...currentFiles, ...resizedImages])

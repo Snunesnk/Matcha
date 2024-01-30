@@ -60,6 +60,7 @@
     border-radius: 50%;
     margin-bottom: 5px;
     border: 2px solid white;
+    object-fit: cover;
 }
 
 .new-match:hover .new-match-img-container img.avatar {
@@ -139,11 +140,13 @@
 
 .new-match:hover .name,
 .messages .message:hover .conv-name {
-    background: linear-gradient(to right,
-            #dc21b8 20%,
-            #4ac0fc 40%,
-            #4ac0fc 60%,
-            #dc21b8 80%);
+    background: linear-gradient(
+        to right,
+        #dc21b8 20%,
+        #4ac0fc 40%,
+        #4ac0fc 60%,
+        #dc21b8 80%
+    );
 
     /* Make the gradient background larger than the element to slide it */
     background-size: 200% auto;
