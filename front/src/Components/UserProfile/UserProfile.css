@@ -35,6 +35,16 @@
     position: relative;
 }
 
+#user-profile-has-liked {
+    position: absolute;
+    top: 10px;
+    left: -55px;
+}
+
+#user-profile-has-liked img {
+    width: 200px;
+}
+
 .name_and_age_container {
     width: 100%;
     position: absolute;
@@ -110,9 +120,7 @@
     justify-content: space-between;
     align-items: center;
     width: 100%;
-
 }
-
 
 #user-login {
     font-size: 0.9rem;
@@ -133,7 +141,6 @@
 
 #user-profile-bio b {
     color: #4ac0fc;
-
 }
 
 #user-profile-pictures-container {
@@ -304,7 +311,6 @@
     margin-left: 10px;
 }
 
-
 #user-profile-container .indicator {
     border-radius: 50%;
     width: 10px;
@@ -336,11 +342,11 @@
 }
 
 #unlike-btn {
-background-color: #930a0a;
+    background-color: #930a0a;
     color: white;
     border-radius: 15px;
     width: 70px;
     height: 20px;
     justify-content: center;
-    align-items: center;    
+    align-items: center;
 }

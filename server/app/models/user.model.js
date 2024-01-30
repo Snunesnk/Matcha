@@ -36,6 +36,8 @@ export class User extends UserChunk {
     this.distance = obj.distance;
 
     this.rating = obj.rating;
+
+    this.userLiked = obj.userLiked;
   }
 
   get coordinate() {
@@ -262,6 +264,14 @@ export class User extends UserChunk {
 
   set rating(rating) {
     this._rating = rating;
+  }
+
+  get userLiked() {
+    return this._userLiked;
+  }
+
+  set userLiked(userLiked) {
+    this._userLiked = userLiked;
   }
 
   async passwordMatch(password) {
@@ -495,6 +505,7 @@ export class User extends UserChunk {
       longitude: this.longitude,
       distance: this.distance,
       rating: this.rating,
+      userLiked: this.userLiked,
     };
   }
 }

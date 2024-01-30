@@ -220,7 +220,11 @@ SELECT DISTINCT
   CASE WHEN n.type IS NULL THEN 0 ELSE 1 END AS alreadySeen,
   COALESCE(tc.tagCount, 0) AS tagMatchCount,
   COALESCE(matchingTags.tagCount, 0) AS commonTagsCount,
-  ST_Distance_Sphere(u.coordinate, currentUser.coordinate) * 0.001 AS distance
+  ST_Distance_Sphere(u.coordinate, currentUser.coordinate) * 0.001 AS distance,
+  CASE
+    WHEN l.receiver IS NOT NULL THEN 'true'
+    ELSE 'false'
+  END AS userLiked
 FROM
   user u
   INNER JOIN userSettings us ON u.login = us.userLogin
@@ -230,6 +234,7 @@ FROM
   LEFT JOIN notifications n ON u.login = n.login AND n.type = 'visit' AND n.trigger_login = currentUser.login
   LEFT JOIN blocked b1 ON u.login = b1.blocked AND currentUser.login = b1.blocker
   LEFT JOIN blocked b2 ON currentUser.login = b2.blocked AND u.login = b2.blocker
+  LEFT JOIN \`like\` l ON u.login = l.issuer AND currentUser.login = l.receiver
   LEFT JOIN (
     SELECT
       ut.userLogin,
@@ -369,7 +374,7 @@ WHERE
 
       connection.query(query, parameters, (err, res) => {
         if (err) {
-          console.log(err)
+          console.log(err);
           reject(err);
           return;
         }

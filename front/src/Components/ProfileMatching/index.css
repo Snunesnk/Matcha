@@ -190,6 +190,7 @@
     border: none;
     padding: 10px;
     height: fit-content;
+    z-index: 2;
 }
 
 .profile_matching_btn:hover {

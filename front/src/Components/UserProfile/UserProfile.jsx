@@ -15,7 +15,6 @@ import {
 import './UserProfile.css'
 import socket from '../../Socket/socket'
 import { useDispatch } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { USER_STATE_ACTIONS } from '../../constants'
 import { formatTimeDifference } from '../MessagesLeftPane/MessagesLeftPane'
 import ReportPopup from '../ReportPopUp/ReportPopUp'
@@ -82,6 +81,8 @@ const UserProfile = ({
 }) => {
     const [selectedPicture, setSelectedPicture] = useState(-1)
     const [currentOnline, setCurrentOnline] = useState(false)
+    const [userLiked, setUserLiked] = useState(false)
+
     const profileRef = useRef(null)
     const infosRef = useRef(null)
     const dispatch = useDispatch()
@@ -95,6 +96,7 @@ const UserProfile = ({
     if (user.imgE) imgs.push(user.imgE)
 
     useEffect(() => {
+        if (!user) return
         const handleOnlineStatus = (status) => {
             updateOnlineStatus(status, user, setCurrentOnline)
         }
@@ -109,6 +111,8 @@ const UserProfile = ({
                 },
             })
         }
+
+        setUserLiked(user.userLiked)
 
         return () => {
             socket.off('online-status', handleOnlineStatus)
@@ -158,6 +162,11 @@ const UserProfile = ({
                         ') 50% 50% / cover no-repeat',
                 }}
             >
+                {userLiked && (
+                    <div id="user-profile-has-liked">
+                        <img src="./heart.svg" alt="heart" />
+                    </div>
+                )}
                 <div className="name_and_age_container">
                     <div id="btn-row">
                         <button className="info-chip" onClick={toggleScroll}>
