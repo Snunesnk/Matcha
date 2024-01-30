@@ -42,30 +42,29 @@ const ImageUpload = ({ defaultImages = [], setFileList = () => {} }) => {
         })
     }
 
-    const onChange = async (e) => {
-        const fileList = Array.from(e.target.files)
-        const maxWidth = 800 // Set the maximum width for the images
+const onChange = async (e) => {
+    // Filter out non-image files first
+    const imageFiles = Array.from(e.target.files).filter(file => file.type.startsWith('image/'));
 
-        // Filter out non-image files
-        const imageFiles = fileList.filter((file) =>
-            file.type.startsWith('image/')
-        )
+    // Then take only the first 5 images
+    const firstFiveImages = imageFiles.slice(0, 5);
+    const maxWidth = 800; // Set the maximum width for the images
 
-        try {
-            const resizedImages = await Promise.all(
-                imageFiles.map((file) => resizeImage(file, maxWidth))
-            )
+    try {
+        const resizedImages = await Promise.all(
+            firstFiveImages.map(file => resizeImage(file, maxWidth))
+        );
 
-            setFileList((currentFiles) => [...currentFiles, ...resizedImages])
+        setFileList(currentFiles => [...currentFiles, ...resizedImages]);
 
-            setImgs((currentImgs) => [
-                ...currentImgs,
-                ...resizedImages.map((blob) => URL.createObjectURL(blob)),
-            ])
-        } catch (error) {
-            console.error('Error resizing images:', error)
-        }
+        setImgs(currentImgs => [
+            ...currentImgs,
+            ...resizedImages.map(blob => URL.createObjectURL(blob)),
+        ]);
+    } catch (error) {
+        console.error('Error resizing images:', error);
     }
+};
 
     const removeImg = (img) => {
         const index = imgs.indexOf(img)
