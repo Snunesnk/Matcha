@@ -83,6 +83,7 @@ const UserProfile = ({
     const [selectedPicture, setSelectedPicture] = useState(-1)
     const [currentOnline, setCurrentOnline] = useState(false)
     const [userLiked, setUserLiked] = useState(false)
+    const [location, setLocation] = useState(null)
 
     const profileRef = useRef(null)
     const infosRef = useRef(null)
@@ -114,6 +115,7 @@ const UserProfile = ({
         }
 
         setUserLiked(user.userLiked)
+        setLocation({ lat: user.latitude, lng: user.longitude })
 
         return () => {
             socket.off('online-status', handleOnlineStatus)
@@ -260,21 +262,23 @@ const UserProfile = ({
                 ))}
             </div>
 
-            <MapContainer
-                center={[user.latitude, user.longitude]}
-                zoom={13}
-                scrollWheelZoom={false}
-            >
-                <TileLayer
-                    lat={user.latitude}
-                    lng={user.longitude}
-                    attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-                    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                />
-                <Marker
-                    position={{ lat: user.latitude, lng: user.longitude }}
-                ></Marker>
-            </MapContainer>
+            {location && (
+                <div className="map-container">
+                    <MapContainer
+                        center={[location.lat, location.lng]}
+                        zoom={13}
+                        scrollWheelZoom={false}
+                    >
+                        <TileLayer
+                            lat={location.lat}
+                            lng={location.lng}
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <Marker position={location}></Marker>
+                    </MapContainer>
+                </div>
+            )}
 
             <div id="user-profile-tags">
                 {user.tags &&
