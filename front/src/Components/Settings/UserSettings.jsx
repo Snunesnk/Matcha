@@ -6,6 +6,14 @@ import TagsAutocomplete from '../TagsAutocomplete/TagsAutocomplete'
 import './Settings.css'
 import ApiService from '../../Services/api.service'
 import { CircularProgress } from '@mui/material'
+import {
+    MapContainer,
+    TileLayer,
+    Marker,
+    Popup,
+    useMapEvent,
+    useMap,
+} from 'react-leaflet'
 
 const GENDERS = [
     {
@@ -82,6 +90,31 @@ const saveUserInfos = async (userData) => {
     return ApiService.put('/user', { user: userData })
 }
 
+function LocationMarker({ position, setPosition }) {
+    const map = useMapEvent({
+        click(e) {
+            setPosition(e.latlng)
+        },
+        locationfound(e) {
+            setPosition(e.latlng)
+            map.flyTo(e.latlng, map.getZoom())
+        },
+    })
+
+    const map2 = useMap()
+
+    return position === null ? null : (
+        <Marker position={position}>
+            <Popup>
+                You clicked at:
+                <br />
+                Latitude: {position.lat.toFixed(3)},<br />
+                Longitude: {position.lng.toFixed(3)}
+            </Popup>
+        </Marker>
+    )
+}
+
 const UserSettings = () => {
     const login = useSelector((state) => state.userState.userInfos.login)
     const [user, setUser] = useState(null)
@@ -93,6 +126,7 @@ const UserSettings = () => {
     const [firstName, setFirstName] = useState('')
     const [email, setEmail] = useState('')
     const [personalBtnDisabled, setPersonalBtnDisabled] = useState(true)
+    const [location, setLocation] = useState(null)
 
     useEffect(() => {
         getUserSettings(setUser)
@@ -115,6 +149,7 @@ const UserSettings = () => {
             setLastName(user.name)
             setFirstName(user.surname)
             setEmail(user.email)
+            setLocation({ lat: user.latitude, lng: user.longitude })
 
             setPersonalBtnDisabled(false)
         }
@@ -137,15 +172,19 @@ const UserSettings = () => {
                 prefMale: user.prefMale,
                 prefEnby: user.prefEnby,
             },
+            coordinate: { y: location.lat, x: location.lng },
         }
-        saveUserInfos(userData, setUser).then(user => {
-            setUser(user);
-            setPersonalBtnDisabled(false)
-            alert("Settings saved !")
-        }).catch(err => {
-            console.log(err)
-            alert("An error occured.")
-        })
+        saveUserInfos(userData, setUser)
+            .then((user) => {
+                setUser(user)
+                setPersonalBtnDisabled(false)
+                alert('Settings saved !')
+            })
+            .catch((err) => {
+                console.log(err)
+                alert('An error occured.')
+                setPersonalBtnDisabled(false)
+            })
     }
 
     if (!user) return <div>Loading ... Please wait</div>
@@ -210,20 +249,38 @@ const UserSettings = () => {
                         setValue={(e, tagsList) => setPersonalTags(tagsList)}
                     />
                 </div>
-{/* 
-                <Button
-                    text={'Save personal infos'}
-                    btnClass={'white mrg-top-30'}
+
+                <div className="setting complex-setting personal-setting map">
+                    <div className="setting-infos">Your location</div>
+                    <MapContainer
+                        center={[user.latitude, user.longitude]}
+                        zoom={13}
+                        // scrollWheelZoom={false}
+                    >
+                        <TileLayer
+                            lat={user.latitude}
+                            lng={user.longitude}
+                            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                        />
+                        <LocationMarker
+                            position={location}
+                            setPosition={setLocation}
+                        />
+                    </MapContainer>
+                </div>
+
+                <button
+                    className="btn mrg-top-30 sm"
                     onClick={savePersonalInfos}
                     disabled={personalBtnDisabled}
-                /> */}
-                    <button
-                        className="btn mrg-top-30 sm"
-                        onClick={savePersonalInfos}
-                        disabled={personalBtnDisabled}
-                    >
-                        {personalBtnDisabled ? <CircularProgress /> : 'Save informations'}
-                    </button>
+                >
+                    {personalBtnDisabled ? (
+                        <CircularProgress />
+                    ) : (
+                        'Save informations'
+                    )}
+                </button>
             </div>
         </div>
     )

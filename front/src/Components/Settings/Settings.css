@@ -170,7 +170,12 @@
     background-color: #dc21b8a0;
 }
 
-#user-settings .btn.sm {
+.leaflet-container {
+    height: 250px;
+    width: 100%;
+}
+
+#user-settings .btn.mrg-top-30.sm {
     width: 100%;
     margin-top: 15px;
     margin-bottom: 15px;
