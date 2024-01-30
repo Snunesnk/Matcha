@@ -114,8 +114,8 @@ const UserProfile = ({
             })
         }
 
-        setUserLiked(user.userLiked)
         setLocation({ lat: user.latitude, lng: user.longitude })
+        if (user.userLiked) setUserLiked(user.userLiked === 'true')
 
         return () => {
             socket.off('online-status', handleOnlineStatus)
@@ -170,6 +170,7 @@ const UserProfile = ({
                         <img src="./heart.svg" alt="heart" />
                     </div>
                 )}
+
                 <div className="name_and_age_container">
                     <div id="btn-row">
                         <button className="info-chip" onClick={toggleScroll}>

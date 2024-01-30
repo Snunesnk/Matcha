@@ -178,6 +178,7 @@
     padding: 20px 0;
     justify-content: center;
     padding-bottom: calc(10dvh + 70px);
+    width: 100%;
 }
 
 .user-profile-tag {
