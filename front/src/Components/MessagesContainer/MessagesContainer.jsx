@@ -169,7 +169,6 @@ const MessagesContainer = () => {
 
     useEffect(() => {
         if (!unlike) return
-        console.log('unlike', unlike)
 
         setActiveComponent(null)
         // Remove active conversation from conversations if it was unliked
