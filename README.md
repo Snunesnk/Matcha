@@ -1,4 +1,4 @@
-# MATCHA
+# MATCHAT to Match a Cat 😻
 
 ## Usefull env-dev commands:
 
